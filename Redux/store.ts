@@ -1,12 +1,17 @@
+// store.ts
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './features/user/userSlice'
-export default function makeStore() {
-  return configureStore({
-    reducer: {
-      user: userReducer,
-    },
-    devTools: process.env.NODE_ENV !== 'production',
-  });
-}
+import { userApi } from '@/services/user';
 
-export const store = makeStore();
+export const store = configureStore({
+  reducer: {
+    [userApi.reducerPath]: userApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(userApi.middleware),
+});
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export default store;

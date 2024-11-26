@@ -1,13 +1,16 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import Marketing from "./Dashboard/UI/Marketing";
-import { fetchApi } from "@/utils/helpers";
+import { useFetchUserProfileQuery } from "@/services/user";
 
-const Page = async () => {
-  useEffect(() => {
-      fetchApi("/api/user");
-  }, []);
-  return <Marketing />;
+const Page = () => {
+  const { data: user } = useFetchUserProfileQuery();
+
+  return (
+    <div>
+      <Marketing />
+    </div>
+  );
 };
 
 export default Page;
