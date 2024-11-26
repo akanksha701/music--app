@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html,
+body,
+:root {
+  height: 100%;
+}
+
+/* datepicker.css */
+.datepicker-input {
+  width: 100%;
+  padding: 10px; /* Match the padding of NextUI inputs */
+  border: 1px solid #e0e0e0; /* Match border style */
+  border-radius: 4px; /* Match border radius */
+  font-size: 14px; /* Match font size */
+  box-shadow: none; /* Remove box shadow */
+  transition: border-color 0.2s ease; /* Smooth border color transition */
+}
+
+.datepicker-input:focus {
+  border-color: #0072f5; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Additional styles for the DatePicker dropdown */
+.react-datepicker {
+  border-radius: 8px; /* Match modal border radius */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Add some shadow */
+}
+
+.react-datepicker__header {
+  background-color: #0072f5; /* Header background color */
+  color: white; /* Header text color */
+}
+
+.react-datepicker__day--selected {
+  background-color: #0072f5; /* Selected day color */
+  color: white; /* Selected day text color */
+}
+
+.react-datepicker__day:hover {
+  background-color: rgba(0, 114, 245, 0.1); /* Hover effect */
+}
