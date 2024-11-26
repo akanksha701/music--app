@@ -7,9 +7,7 @@ import { fetchApi } from '@/utils/helpers';
 const MusicPage = async() => {
   const res = await fetch('http://localhost:3000/api/marketing');
   const data = await res.json();
-  
-  
-  return (
+    return (
     <div className='min-h-screen'>
       <section
         className='text-black py-20'

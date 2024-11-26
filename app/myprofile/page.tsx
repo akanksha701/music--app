@@ -5,7 +5,6 @@ import Loading from "../loading";
 import AvatarUploader from "@/common/inputs/avatar-uploader";
 import EditProfile from "../EditProfile";
 import { useForm } from "react-hook-form";
-import { fetchApi } from "@/utils/helpers";
 
 
 const MyProfile = () => {
@@ -13,11 +12,6 @@ const MyProfile = () => {
   const { setValue } = useForm({});
   const [image, setImage] = useState("");
   
-  useEffect(() => {
-    (async () => {
-      await fetchApi("/api/user", "GET");
-    })();
-  }, []);
   
   if (!isLoaded || !isSignedIn) {
     return (

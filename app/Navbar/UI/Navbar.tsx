@@ -4,13 +4,14 @@ import Image from 'next/image';
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
 import NavItemList from './UtilityComponent/NavItemList';
 import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DropDown from './UtilityComponent/DropDown/DropDown';
+import { fetchApi } from '@/utils/helpers';
 
 export default function NavbarPage() {
   const [user, setUser] = useState();
   useFetchUserDetails(setUser);
-
+  
   return (
     <Navbar isBordered>
       <NavbarContent justify='start'>
