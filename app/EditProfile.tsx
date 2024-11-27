@@ -6,16 +6,16 @@ import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
 import { CalendarDate } from "@internationalized/date";
 import Loading from "@/app/loading";
 import { UserData } from "@clerk/types";
-import { fetchUsers } from "@/Redux/features/user/userSlice";
-import { useDispatch } from "react-redux";
+import {  useSelector } from "react-redux";
 import NextDatePicker from "@/common/inputs/DatePicker";
 import SelectMenu from "@/common/inputs/SelectMenu";
 import { fetchApi } from "@/utils/helpers";
+import { useLazyFetchUserProfileQuery } from "@/services/user";
 
 const EditProfile = (props: EditProfileProps) => {
+  const data = useSelector((state:any)=> state)
   const { setImage } = props;
   const [user, setUser] = useState<UserDetails>();
-
   useFetchUserDetails(setUser);
   const {
     register,
@@ -24,6 +24,8 @@ const EditProfile = (props: EditProfileProps) => {
     control,
     formState: { errors },
   } = useForm({});
+
+  console.log(data,"data")
 
   const setUserDetails = useCallback(() => {
     {

@@ -1,8 +1,11 @@
 // services/user.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { UserResponse } from './types';
-
-
+import { createEntityAdapter } from '@reduxjs/toolkit';
+const entryAdapter = createEntityAdapter()
+const initialState = entryAdapter.getInitialState({
+  userData:{}
+})
 
 export const userApi = createApi({
   reducerPath: 'userApi',
@@ -13,8 +16,8 @@ export const userApi = createApi({
     fetchUserProfile: builder.query<UserResponse, void>({ // void means no argument needed
       query: () => 'api/user',
     }),
+   
   }),
 });
 
-// Export the generated hooks
 export const { useLazyFetchUserProfileQuery } = userApi;
