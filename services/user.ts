@@ -8,7 +8,6 @@ export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({ 
     baseUrl: 'http://localhost:3000/',
-    // credentials: 'include', // Important for auth cookies
   }),
   endpoints: (builder) => ({
     fetchUserProfile: builder.query<UserResponse, void>({ // void means no argument needed
@@ -18,4 +17,4 @@ export const userApi = createApi({
 });
 
 // Export the generated hooks
-export const { useFetchUserProfileQuery } = userApi;
+export const { useLazyFetchUserProfileQuery } = userApi;

@@ -1,7 +1,5 @@
 {
   "/api/marketing/route": "app/api/marketing/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/user/route": "app/api/user/route.js",
   "/page": "app/page.js",
   "/Signin/page": "app/Signin/page.js"
 }
