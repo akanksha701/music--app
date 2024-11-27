@@ -1,13 +1,13 @@
 import { EmailAddressResource } from '@clerk/types';
 import { CalendarDate } from '@internationalized/date';
 
-export interface DateOfBirth {
+export interface IDateOfBirth {
   day?: number;
   month?: number;
   year?: number;
 }
 
-export interface UserDetails {
+export interface IUserDetails {
   id?: string;
   firstName?: string;
   lastName?: string;
@@ -18,20 +18,20 @@ export interface UserDetails {
   unsafeMetadata: {
     gender?: string;
     imageUrl?: string;
-    dob?: DateOfBirth; // Optional property for date of birth
+    dob?: IDateOfBirth; // Optional property for date of birth
   };
 }
 
 export interface User {
   isLoaded?: boolean;
   isSignedIn?: boolean;
-  userDetails?: UserDetails;
+  userDetails?: IUserDetails;
 }
 
-export interface State {
+export interface IState {
   user: User;
 }
 
-export interface EditProfileProps {
+export interface IEditProfileProps {
   setImage: Function;
 }

@@ -1,7 +1,6 @@
 import NextInput from '@/common/inputs/Input';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { EditProfileProps, UserDetails } from './MyProfile/types/types';
 import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
 import { CalendarDate } from '@internationalized/date';
 import Loading from '@/app/loading';
@@ -9,11 +8,12 @@ import { UserData } from '@clerk/types';
 import NextDatePicker from '@/common/inputs/DatePicker';
 import SelectMenu from '@/common/inputs/SelectMenu';
 import { fetchApi } from '@/utils/helpers';
+import { IEditProfileProps, IUserDetails } from './types/types';
 
-const EditProfile = (props: EditProfileProps) => {
+const EditProfile = (props: IEditProfileProps) => {
   // const userDetails = useSelector((state: RootState) => state?.userReducer?.userDetails);
   const { setImage } = props;
-  const [user, setUser] = useState<UserDetails>();
+  const [user, setUser] = useState<IUserDetails>();
   useFetchUserDetails(setUser);
   const {
     register,
@@ -26,7 +26,7 @@ const EditProfile = (props: EditProfileProps) => {
   const setUserDetails = useCallback(() => {
     {
       if (user) {
-        const dob = (user?.unsafeMetadata as UserDetails)?.dob;
+        const dob = (user?.unsafeMetadata as IUserDetails)?.dob;
         const day = dob?.day || new Date().getDate();
         const year = dob?.year || new Date().getFullYear();
         const month = dob?.month || new Date().getMonth();

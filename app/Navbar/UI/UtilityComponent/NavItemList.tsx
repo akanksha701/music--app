@@ -10,7 +10,6 @@ interface Item {
 const NavItemList: React.FC = () => {
   const navItems: Item[] = [
     { label: 'Home', route: '/Home' },
-    { label: 'My Playlists', route: '/my-playlists' },
   ];
 
   return (

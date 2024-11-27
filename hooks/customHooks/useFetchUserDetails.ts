@@ -25,7 +25,6 @@ const useFetchUserDetails = (setUser: Function) => {
         const data = await res.json();
         setUser(data);
       } catch (error) {
-        console.error("Error fetching user:", error);
         setUser(null);
       }
     };

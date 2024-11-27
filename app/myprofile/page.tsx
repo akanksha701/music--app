@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import Loading from '../loading';
 import AvatarUploader from '@/common/inputs/avatar-uploader';
-import EditProfile from '../EditProfile';
 import { useForm } from 'react-hook-form';
+import EditProfile from './EditProfile';
 
 
 const MyProfile = () => {
