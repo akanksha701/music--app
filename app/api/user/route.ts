@@ -6,6 +6,7 @@ import dbConnect from "@/lib/DbConnection/dbConnection";
 import User from "@/lib/models/User";
 import { revalidatePath } from "next/cache";
 import { getUser } from "@/app/actions/getUser";
+import { redirect } from "next/navigation";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -16,10 +17,9 @@ cloudinary.config({
 export async function POST(req: any, res: NextApiResponse) {
   try {
     await dbConnect();
-    const { userId } = await auth();
     const body = await req.json();
-    if (!userId) {
-      return NextResponse.redirect("/Signin");
+    if (!body.userId) {
+      return redirect("/Signin");
     }
     const params = {
       firstName: body?.firstName,
@@ -31,26 +31,24 @@ export async function POST(req: any, res: NextApiResponse) {
       },
     };
     const client = await clerkClient();
-    const date = new Date(
+    const date = await new Date(
       `${body?.dob?.year}-${body?.dob?.month}-${body?.dob?.day}`
     );
-    const updatedUser = await client.users.updateUser(userId, params);
+    const updatedUser = await client.users.updateUser(body.userId, params);
     if (updatedUser) {
-      const updatedUserDetails = await User.findOneAndUpdate(
-        { clerkUserId: userId },
+      User.findOneAndUpdate(
+        { clerkUserId: body?.userId },
         {
           gender: body?.gender,
-          dateOfBirth: date,
+          // dateOfBirth: date,
           imageUrl: body?.imageUrl,
           firstName: body?.firstName,
           lastName: body?.lastName,
         },
-        {
-          new: true,
-        }
-      );
-      await revalidatePath("/myprofile", "page");
-      return NextResponse.json({ status: 200, updatedUserDetails });
+        { new: true }
+      )
+      await revalidatePath("/MyProfile", "page");
+      return NextResponse.json({data:updatedUser, status: 200,  });
     }
   } catch (error) {
     return NextResponse.json({ error: error, status: 500 });
@@ -59,14 +57,10 @@ export async function POST(req: any, res: NextApiResponse) {
 
 export async function GET() {
   try {
-    const user = await getUser()
+    const user = await getUser();
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-
     return NextResponse.json(user);
   } catch (error) {
     console.error("Error fetching user:", error);

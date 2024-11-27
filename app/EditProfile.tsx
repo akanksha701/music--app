@@ -14,7 +14,6 @@ import { fetchApi } from "@/utils/helpers";
 
 const EditProfile = (props: EditProfileProps) => {
   const { setImage } = props;
-  const dispatch = useDispatch();
   const [user, setUser] = useState<UserDetails>();
 
   useFetchUserDetails(setUser);
@@ -34,7 +33,7 @@ const EditProfile = (props: EditProfileProps) => {
         const year = dob?.year || new Date().getFullYear();
         const month = dob?.month || new Date().getMonth();
         const date = new CalendarDate(year, month, day);
-        console.log(user?.emailAddresses);
+        setValue("userId", user?.id);
         setValue("firstName", user?.firstName);
         setValue("lastName", user?.lastName);
         setValue("gender", user?.unsafeMetadata.gender);
@@ -56,16 +55,11 @@ const EditProfile = (props: EditProfileProps) => {
   const onSubmit = async (data: UserData) => {
     try {
       const response = await fetchApi("/api/user", "POST", data);
-      if (response) {
-        // Optionally dispatch the updated user data
-        // await dispatch(fetchUsers(response));
-        console.log("Profile updated successfully:", response);
-      }
+      console.log(await response, "=====");
     } catch (error) {
-      console.error("Failed to update profile:", error);
-      // Handle error appropriately (e.g., show error message to user)
+      console.error("Submission error:", error);
     }
-  };
+  }
 
   if (!user) {
     return <Loading />;

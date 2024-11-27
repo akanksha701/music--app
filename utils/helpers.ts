@@ -66,17 +66,26 @@ export async function uploadAudio(audio: any) {
   });
 }
 
-export const fetchApi = async (apiUrl: string) => {
-  const url = await new URL(apiUrl, process.env.APP_URL || "http://localhost:3000" );
+export const fetchApi = async (
+  apiUrl: string,
+  method: string,
+  body: object
+) => {
+  const url = await new URL(
+    apiUrl,
+    process.env.APP_URL || "http://localhost:3000"
+  );
   try {
-    fetch(url.toString(), { method: "GET" })
-      .then(async (res) => {
-        const data = await res.json();
-        return NextResponse.json(data)
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
+    const res = await fetch(url.toString(), {
+      method: method.toString(),
+      body: JSON.stringify(body),
+    });
+    
+    if (!res.ok) {
+      const errorResponse = await res.json();
+      throw new Error(`Error: ${res.status} ${res.statusText} - ${errorResponse.message || "Unknown error"}`);
+    }
+    return res.json();
   } catch (error) {
     console.error("Error fetching user data:", error);
     throw error;
