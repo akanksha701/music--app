@@ -1,6 +1,6 @@
-import React from "react";
-import { Feature, SectionProps } from "../../types/types";
-import Image from "next/image";
+import React from 'react';
+import { Feature, SectionProps } from '../../types/types';
+import Image from 'next/image';
 const Section = (props: SectionProps) => {
   const { data } = props;
   return (

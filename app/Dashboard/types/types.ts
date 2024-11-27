@@ -11,7 +11,7 @@ export interface PricingPlan {
     features: string[];
   }
   
-  export interface SectionProps
+export interface SectionProps
   {
      data: Feature[]
   }

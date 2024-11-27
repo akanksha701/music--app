@@ -5,7 +5,7 @@ import Section from './UtilityComponent/Section';
 const MusicPage = async() => {
   const res = await fetch('http://localhost:3000/api/marketing');
   const data = await res.json();
-    return (
+  return (
     <div className='min-h-screen'>
       <section
         className='text-black py-20'
@@ -35,7 +35,7 @@ const MusicPage = async() => {
         </div>
       </section>
 
-    <Section data={data.feature}/>
+      <Section data={data.feature}/>
 
       <section className='bg-gray-100 py-20'>
         <div className='container mx-auto px-6'>

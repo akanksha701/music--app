@@ -27,7 +27,7 @@ const userSlice = createSlice({
     builder.addMatcher(
       userApi.endpoints.fetchUserProfile.matchRejected,
       (state, action) => {
-        state.loading = false;
+        state.loading = false
       }
     );
   },

@@ -1,16 +1,16 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import Loading from "../loading";
-import AvatarUploader from "@/common/inputs/avatar-uploader";
-import EditProfile from "../EditProfile";
-import { useForm } from "react-hook-form";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useUser } from '@clerk/nextjs';
+import Loading from '../loading';
+import AvatarUploader from '@/common/inputs/avatar-uploader';
+import EditProfile from '../EditProfile';
+import { useForm } from 'react-hook-form';
 
 
 const MyProfile = () => {
   const { isLoaded, isSignedIn } = useUser();
   const { setValue } = useForm({});
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   
   
   if (!isLoaded || !isSignedIn) {
@@ -32,7 +32,7 @@ const MyProfile = () => {
                 <AvatarUploader
                   onChange={(url) => {
                     setImage(url as string);
-                    setValue("imageUrl", url as string);
+                    setValue('imageUrl', url as string);
                   }}
                   value={image}
                 />

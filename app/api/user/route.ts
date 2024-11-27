@@ -1,12 +1,12 @@
-import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
-import { NextApiResponse } from "next";
-import { v2 as cloudinary } from "cloudinary";
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import User from "@/lib/models/User";
-import { revalidatePath } from "next/cache";
-import { getUser } from "@/app/actions/getUser";
-import { redirect } from "next/navigation";
+import { auth, clerkClient, currentUser } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+import { NextApiResponse } from 'next';
+import { v2 as cloudinary } from 'cloudinary';
+import dbConnect from '@/lib/DbConnection/dbConnection';
+import User from '@/lib/models/User';
+import { revalidatePath } from 'next/cache';
+import { getUser } from '@/app/actions/getUser';
+import { redirect } from 'next/navigation';
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -19,7 +19,7 @@ export async function POST(req: any, res: NextApiResponse) {
     await dbConnect();
     const body = await req.json();
     if (!body.userId) {
-      return redirect("/Signin");
+      return redirect('/Signin');
     }
     const params = {
       firstName: body?.firstName,
@@ -46,7 +46,7 @@ export async function POST(req: any, res: NextApiResponse) {
           lastName: body?.lastName,
         },
         { new: true }
-      )
+      );
       return NextResponse.json({data:updatedUser, status: 200,  });
     }
   } catch (error) {
@@ -58,13 +58,13 @@ export async function GET() {
   try {
     const user = await getUser();
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
     return NextResponse.json(user);
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.error('Error fetching user:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

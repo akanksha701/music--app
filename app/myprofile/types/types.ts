@@ -1,5 +1,5 @@
-import { EmailAddressResource } from "@clerk/types";
-import { CalendarDate } from "@internationalized/date";
+import { EmailAddressResource } from '@clerk/types';
+import { CalendarDate } from '@internationalized/date';
 
 export interface DateOfBirth {
   day?: number;

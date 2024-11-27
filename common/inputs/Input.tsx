@@ -18,7 +18,7 @@ interface NextInputProps<T extends FieldValues> {
   register: UseFormRegister<UserData>;
   errors: FieldErrors<T>;
   disabled?: boolean;
-  options?: Object;
+  options?: object;
   name?: string;
 }
 
