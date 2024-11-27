@@ -15,6 +15,7 @@ export const userApi = createApi({
   endpoints: (builder) => ({
     fetchUserProfile: builder.query<UserResponse, void>({ // void means no argument needed
       query: () => 'api/user',
+      
     }),
    
   }),
