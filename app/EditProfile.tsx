@@ -6,14 +6,12 @@ import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
 import { CalendarDate } from "@internationalized/date";
 import Loading from "@/app/loading";
 import { UserData } from "@clerk/types";
-import {  useSelector } from "react-redux";
 import NextDatePicker from "@/common/inputs/DatePicker";
 import SelectMenu from "@/common/inputs/SelectMenu";
 import { fetchApi } from "@/utils/helpers";
-import { useLazyFetchUserProfileQuery } from "@/services/user";
 
 const EditProfile = (props: EditProfileProps) => {
-  const data = useSelector((state:any)=> state)
+  // const userDetails = useSelector((state: RootState) => state?.userReducer?.userDetails);
   const { setImage } = props;
   const [user, setUser] = useState<UserDetails>();
   useFetchUserDetails(setUser);
@@ -24,8 +22,6 @@ const EditProfile = (props: EditProfileProps) => {
     control,
     formState: { errors },
   } = useForm({});
-
-  console.log(data,"data")
 
   const setUserDetails = useCallback(() => {
     {
@@ -54,7 +50,6 @@ const EditProfile = (props: EditProfileProps) => {
   const onSubmit = async (data: UserData) => {
     try {
       const response = await fetchApi("/api/user", "POST", data);
-      console.log(response, "in Edit component");
     } catch (error) {
       console.error("Error submitting form", error);
     }

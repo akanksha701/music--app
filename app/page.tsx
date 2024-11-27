@@ -4,7 +4,7 @@ import Marketing from "./Dashboard/UI/Marketing";
 import { useLazyFetchUserProfileQuery } from "@/services/user";
 
 const Page = () => {
-  const [fetchUserProfile, { data: user, error, isLoading }] = useLazyFetchUserProfileQuery();
+  const [fetchUserProfile, { data: user, error, isLoading }] = useLazyFetchUserProfileQuery({});
   const handleFetchUserProfile = () => {
     fetchUserProfile(); 
   };

@@ -1,9 +1,10 @@
 // store.ts
-import { configureStore } from '@reduxjs/toolkit';
-import { userApi } from '@/services/user';
-
+import { configureStore } from "@reduxjs/toolkit";
+import { userApi } from "@/services/user";
+import userSlice from "./features/user/userSlice";
 export const store = configureStore({
   reducer: {
+    userReducer: userSlice,
     [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

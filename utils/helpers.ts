@@ -73,7 +73,6 @@ export const fetchApi = async (
   body: object
 ) => {
   const url = new URL(apiUrl, process.env.APP_URL || "http://localhost:3000");
-
   try {
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),
@@ -93,7 +92,6 @@ export const fetchApi = async (
     }
 
     const data = await res.json();
-    console.log("API Response:", data);
     return data;
   } catch (error) {
     console.error("Error fetching user data:", error);

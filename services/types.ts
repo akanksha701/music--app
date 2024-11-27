@@ -1,8 +1,6 @@
-// Define the response type
 export interface UserResponse {
     id: string;
     name?: string;
     email?: string;
     firstName?:string
-    // Add other fields as needed
   }

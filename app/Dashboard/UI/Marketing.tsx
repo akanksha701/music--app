@@ -1,7 +1,5 @@
 import { PricingPlan } from '../types/types';
 import Section from './UtilityComponent/Section';
-import { useEffect } from 'react';
-import { fetchApi } from '@/utils/helpers';
 
 
 const MusicPage = async() => {
