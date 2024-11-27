@@ -1,14 +1,14 @@
-import NextInput from "@/common/inputs/Input";
-import React, { useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { EditProfileProps, UserDetails } from "./MyProfile/types/types";
-import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
-import { CalendarDate } from "@internationalized/date";
-import Loading from "@/app/loading";
-import { UserData } from "@clerk/types";
-import NextDatePicker from "@/common/inputs/DatePicker";
-import SelectMenu from "@/common/inputs/SelectMenu";
-import { fetchApi } from "@/utils/helpers";
+import NextInput from '@/common/inputs/Input';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { EditProfileProps, UserDetails } from './MyProfile/types/types';
+import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
+import { CalendarDate } from '@internationalized/date';
+import Loading from '@/app/loading';
+import { UserData } from '@clerk/types';
+import NextDatePicker from '@/common/inputs/DatePicker';
+import SelectMenu from '@/common/inputs/SelectMenu';
+import { fetchApi } from '@/utils/helpers';
 
 const EditProfile = (props: EditProfileProps) => {
   // const userDetails = useSelector((state: RootState) => state?.userReducer?.userDetails);
@@ -31,13 +31,13 @@ const EditProfile = (props: EditProfileProps) => {
         const year = dob?.year || new Date().getFullYear();
         const month = dob?.month || new Date().getMonth();
         const date = new CalendarDate(year, month, day);
-        setValue("userId", user?.id);
-        setValue("firstName", user?.firstName);
-        setValue("lastName", user?.lastName);
-        setValue("gender", user?.unsafeMetadata.gender);
-        setValue("dob", date);
-        setValue("imageUrl", user?.unsafeMetadata?.imageUrl);
-        setValue("emailAddresses", user?.emailAddresses[0].emailAddress);
+        setValue('userId', user?.id);
+        setValue('firstName', user?.firstName);
+        setValue('lastName', user?.lastName);
+        setValue('gender', user?.unsafeMetadata.gender);
+        setValue('dob', date);
+        setValue('imageUrl', user?.unsafeMetadata?.imageUrl);
+        setValue('emailAddresses', user?.emailAddresses[0].emailAddress);
         setImage(user?.unsafeMetadata?.imageUrl as string);
       }
     }
@@ -49,9 +49,9 @@ const EditProfile = (props: EditProfileProps) => {
 
   const onSubmit = async (data: UserData) => {
     try {
-      const response = await fetchApi("/api/user", "POST", data);
+      const response = await fetchApi('/api/user', 'POST', data);
     } catch (error) {
-      console.error("Error submitting form", error);
+      console.error('Error submitting form', error);
     }
   };
 
@@ -74,7 +74,7 @@ const EditProfile = (props: EditProfileProps) => {
               required
               placeholder="Enter your first name"
               errors={errors}
-              options={{ required: "First name is required" }}
+              options={{ required: 'First name is required' }}
             />
           </div>
 
@@ -86,7 +86,7 @@ const EditProfile = (props: EditProfileProps) => {
               required
               placeholder="Enter your last name"
               errors={errors}
-              options={{ required: "Last name is required" }}
+              options={{ required: 'Last name is required' }}
             />
           </div>
 
@@ -101,10 +101,10 @@ const EditProfile = (props: EditProfileProps) => {
               placeholder="Enter your email address"
               errors={errors}
               options={{
-                required: "Email is required",
+                required: 'Email is required',
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email address",
+                  message: 'Invalid email address',
                 },
               }}
             />
@@ -115,7 +115,7 @@ const EditProfile = (props: EditProfileProps) => {
               name="dob"
               label="Date of Birth"
               control={control}
-              rules={{ required: "Date of birth is required" }}
+              rules={{ required: 'Date of birth is required' }}
               error={errors.dob?.message}
             />
           </div>
@@ -125,12 +125,12 @@ const EditProfile = (props: EditProfileProps) => {
               name="gender"
               label="Select Gender"
               control={control}
-              rules={{ required: "Gender is required" }}
+              rules={{ required: 'Gender is required' }}
               error={errors.gender?.message as string}
               items={[
-                { id: "male", name: "Male" },
-                { id: "female", name: "Female" },
-                { id: "other", name: "Other" },
+                { id: 'male', name: 'Male' },
+                { id: 'female', name: 'Female' },
+                { id: 'other', name: 'Other' },
               ]}
             />
           </div>
