@@ -47,7 +47,6 @@ export async function POST(req: any, res: NextApiResponse) {
         },
         { new: true }
       )
-      await revalidatePath("/MyProfile", "page");
       return NextResponse.json({data:updatedUser, status: 200,  });
     }
   } catch (error) {

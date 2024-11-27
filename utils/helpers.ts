@@ -1,6 +1,7 @@
 "use server";
 import { Roles } from "../globals";
 import { auth } from "@clerk/nextjs/server";
+import { UserData } from "@clerk/types";
 import cloudinary from "cloudinary";
 import { NextResponse } from "next/server";
 
@@ -71,21 +72,29 @@ export const fetchApi = async (
   method: string,
   body: object
 ) => {
-  const url = await new URL(
-    apiUrl,
-    process.env.APP_URL || "http://localhost:3000"
-  );
+  const url = new URL(apiUrl, process.env.APP_URL || "http://localhost:3000");
+
   try {
     const res = await fetch(url.toString(), {
-      method: method.toString(),
+      method: method.toUpperCase(),
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
     });
-    
+
     if (!res.ok) {
       const errorResponse = await res.json();
-      throw new Error(`Error: ${res.status} ${res.statusText} - ${errorResponse.message || "Unknown error"}`);
+      throw new Error(
+        `Error: ${res.status} ${res.statusText} - ${
+          errorResponse.message || "Unknown error"
+        }`
+      );
     }
-    return res.json();
+
+    const data = await res.json();
+    console.log("API Response:", data);
+    return data;
   } catch (error) {
     console.error("Error fetching user data:", error);
     throw error;

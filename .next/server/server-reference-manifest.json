@@ -65,6 +65,17 @@
       "layer": {
         "app/MyProfile/page": "action-browser"
       }
+    },
+    "00a9d40bc9a323ef55905312e6586a0080bd3561c9": {
+      "workers": {
+        "app/api/user/route": {
+          "moduleId": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fakanksha%2FDesktop%2Fmusic--app%2Fapp%2Factions%2FgetUser.ts%22%2C%5B%5B%2200a9d40bc9a323ef55905312e6586a0080bd3561c9%22%2C%22getUser%22%5D%5D%5D%5D&__client_imported__=!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/api/user/route": "rsc"
+      }
     }
   },
   "edge": {},

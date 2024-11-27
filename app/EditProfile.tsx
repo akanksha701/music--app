@@ -49,17 +49,14 @@ const EditProfile = (props: EditProfileProps) => {
     setUserDetails();
   }, [user]);
 
-
-  
-
   const onSubmit = async (data: UserData) => {
     try {
       const response = await fetchApi("/api/user", "POST", data);
-      console.log(await response, "=====");
+      console.log(response, "in Edit component");
     } catch (error) {
-      console.error("Submission error:", error);
+      console.error("Error submitting form", error);
     }
-  }
+  };
 
   if (!user) {
     return <Loading />;
