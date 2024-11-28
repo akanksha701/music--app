@@ -10,6 +10,7 @@ import SelectMenu from '@/common/inputs/SelectMenu';
 import { fetchApi } from '@/utils/helpers';
 import { IEditProfileProps, IUserDetails } from '../../types/types';
 import toast from 'react-hot-toast';
+import Button from '@/common/buttons/Button';
 
 const EditProfile = (props: IEditProfileProps) => {
   // const userDetails = useSelector((state: RootState) => state?.userReducer?.userDetails);
@@ -140,12 +141,11 @@ const EditProfile = (props: IEditProfileProps) => {
           </div>
         </div>
         <div className="pt-4 flex items-center space-x-4">
-          <button
+          <Button
             type="submit"
-            className="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none hover:bg-blue-600"
-          >
-            Save
-          </button>
+            name='Save'
+          />
+            
         </div>
       </form>
     </>

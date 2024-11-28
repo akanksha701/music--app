@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { IFooterProps } from "../../types/types";
+import { IFooterProps } from "../Home/types/types";
 import { FaYoutube } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa6";
 import { FaTiktok } from "react-icons/fa";

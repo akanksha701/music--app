@@ -1,16 +1,19 @@
-import { ClerkProvider } from '@clerk/nextjs';
-import './globals.css';
-import { NextUIProvider } from '@nextui-org/react';
-import { Toaster } from 'react-hot-toast';
-import ReduxProvider from '@/Redux/storeProvider';
-import NavbarPage from './Navbar/index';
-import { ThemeProvider } from 'next-themes';
+import { ClerkProvider } from "@clerk/nextjs";
+import "./globals.css";
+import { NextUIProvider } from "@nextui-org/react";
+import { Toaster } from "react-hot-toast";
+import ReduxProvider from "@/Redux/storeProvider";
+import NavbarPage from "./Navbar/index";
+import { ThemeProvider } from "next-themes";
+import Footer from "./Footer/Footer";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const res = await fetch("http://localhost:3000/api/marketing");
+  const data = await res.json();
   return (
     <ClerkProvider>
       <ReduxProvider>
@@ -18,11 +21,12 @@ export default function RootLayout({
           <body>
             {/* <ThemeProvider attribute="class"> */}
 
-              <Toaster position="top-center" />
-              <NavbarPage />
-              <NextUIProvider>{children}</NextUIProvider>
-            {/* </ThemeProvider> */}
+            <Toaster position="top-center" />
+            <NavbarPage />
+            <NextUIProvider>{children}</NextUIProvider>
+            <Footer data={data?.footerContent} />
 
+            {/* </ThemeProvider> */}
           </body>
         </html>
       </ReduxProvider>

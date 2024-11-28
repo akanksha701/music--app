@@ -1,8 +1,8 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 // Define private routes that require authentication
-const isPrivateRoute = createRouteMatcher(['/','/Browse','/MyProfile']);
+const isPrivateRoute = createRouteMatcher(["/", "/Browse", "/MyProfile"]);
 
 export default clerkMiddleware(async (auth, request) => {
   try {
@@ -12,10 +12,10 @@ export default clerkMiddleware(async (auth, request) => {
       await auth.protect();
     }
   } catch (error) {
-    console.error('Authentication error:', error);
+    console.error("Authentication error:", error);
 
     // Optionally redirect to a login page or handle the error as needed
-    return NextResponse.redirect(new URL('/Signin', request.url));
+    return NextResponse.redirect(new URL("/Signin", request.url));
   }
 });
 
@@ -23,8 +23,8 @@ export default clerkMiddleware(async (auth, request) => {
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     // Always run for API routes
-    '/(api|trpc)(.*)',
+    "/(api|trpc)(.*)",
   ],
 };

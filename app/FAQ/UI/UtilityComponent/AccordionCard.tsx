@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { IAccoridionProps } from "@/app/FAQ/types/types";
+import { IAccoridionProps } from "../../types/types";
 const AccordionCard = (props: IAccoridionProps) => {
   const { data } = props;
   return (

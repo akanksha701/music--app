@@ -9,53 +9,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { ICarousalProps } from "../../types/types";
 
-const CarouselPopularTracks = () => {
+const CarouselPopularTracks = (props: ICarousalProps) => {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
-
-  // Array of video elements
-  const videos = [
-    <video className="w-full" autoPlay loop muted key="video-1">
-      <source
-        src="https://tecdn.b-cdn.net/img/video/Tropical.mp4"
-        type="video/mp4"
-      />
-    </video>,
-    <video className="w-full" autoPlay loop muted key="video-2">
-      <source
-        src="https://tecdn.b-cdn.net/img/video/forest.mp4"
-        type="video/mp4"
-      />
-    </video>,
-    <video className="w-full" autoPlay loop muted key="video-3">
-      <source
-        src="https://tecdn.b-cdn.net/img/video/Agua-natural.mp4"
-        type="video/mp4"
-      />
-    </video>,
-    <video className="w-full" autoPlay loop muted key="video-1">
-      <source
-        src="https://tecdn.b-cdn.net/img/video/Tropical.mp4"
-        type="video/mp4"
-      />
-      ,
-    </video>,
-    <video className="w-full" autoPlay loop muted key="video-2">
-      <source
-        src="https://tecdn.b-cdn.net/img/video/forest.mp4"
-        type="video/mp4"
-      />
-    </video>,
-    <video className="w-full" autoPlay loop muted key="video-3">
-      <source
-        src="https://tecdn.b-cdn.net/img/video/Agua-natural.mp4"
-        type="video/mp4"
-      />
-    </video>,
-  ];
-
+  const { data } = props;
   return (
     <Carousel
       plugins={[plugin.current]}
@@ -63,13 +23,15 @@ const CarouselPopularTracks = () => {
       onMouseLeave={plugin.current.reset}
     >
       <CarouselContent>
-        {videos.map((video, index) => (
+        {data.map((video, index) => (
           <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4">
             <div>
               {/* <Card> */}
-                {/* <CardContent className="flex aspect-square items-center justify-center p-6"> */}
-                  {video}
-                {/* </CardContent> */}
+              {/* <CardContent className="flex aspect-square items-center justify-center p-6"> */}
+              <video className="w-full" autoPlay loop muted key={index}>
+                <source src={video} type="video/mp4" />
+              </video>
+              {/* </CardContent> */}
               {/* </Card> */}
             </div>
           </CarouselItem>
