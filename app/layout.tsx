@@ -16,12 +16,12 @@ export default function RootLayout({
       <ReduxProvider>
         <html lang="en">
           <body>
-            <ThemeProvider attribute="class">
+            {/* <ThemeProvider attribute="class"> */}
 
               <Toaster position="top-center" />
               <NavbarPage />
               <NextUIProvider>{children}</NextUIProvider>
-            </ThemeProvider>
+            {/* </ThemeProvider> */}
 
           </body>
         </html>
