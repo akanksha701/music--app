@@ -8,7 +8,7 @@ export interface IButtonProps {
     type: 'button' | 'submit' | 'reset';
 }
 
-export interface IconProps {
+export interface IIconProps {
     size?: number
     width?: number
     height?: number
@@ -59,3 +59,15 @@ export interface IDatePickerType {
     id?: string;
   }
   
+  export interface IPlusIconProps
+{
+    size ?:number;
+     width?:number,
+      height?:number
+}
+
+export interface IPauseCircleIconProps {
+    size?: number
+    width?: number
+    height?: number
+}

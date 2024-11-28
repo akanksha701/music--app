@@ -1,11 +1,11 @@
-import { IconProps } from '../types/types';
+import { IIconProps } from "../types/types";
 
 export const VerticalDotsIcon = ({
   size = 24,
   width,
   height,
   ...props
-}: IconProps) => (
+}: IIconProps) => (
   <svg
     aria-hidden='true'
     fill='none'
