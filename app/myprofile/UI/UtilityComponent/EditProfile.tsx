@@ -8,7 +8,7 @@ import { UserData } from '@clerk/types';
 import NextDatePicker from '@/common/inputs/DatePicker';
 import SelectMenu from '@/common/inputs/SelectMenu';
 import { fetchApi } from '@/utils/helpers';
-import { IEditProfileProps, IUserDetails } from './types/types';
+import { IEditProfileProps, IUserDetails } from '../../types/types';
 import toast from 'react-hot-toast';
 
 const EditProfile = (props: IEditProfileProps) => {

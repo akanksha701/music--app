@@ -6,7 +6,7 @@ import { IItem } from '../../types/types';
 
 const NavItemList: React.FC = () => {
   const navItems: IItem[] = [
-    { label: 'Home', route: '/Home' },
+    { label: 'Browse', route: '/Browse' },
   ];
 
   return (

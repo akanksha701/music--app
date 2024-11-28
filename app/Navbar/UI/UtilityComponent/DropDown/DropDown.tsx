@@ -1,4 +1,4 @@
-import { useClerk, useUser } from '@clerk/nextjs';
+import {  useUser } from '@clerk/nextjs';
 import {
   Avatar,
   Dropdown,

@@ -12,11 +12,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // secondary: {
-        //   100: '#9353D3',
-        //   200: '#17C964',
-        //   300: '#FFFFFF',
-        // }
+        secondary: {
+          100: '#9353D3',
+          200: '#17C964',
+          300: '#FFFFFF',
+        }
       },
       backgroundImage: {
         'profile-bg': 'url(\'/images/profile-bg.jpg\')',

@@ -1,13 +1,17 @@
-export interface ImusicProps {
-  musicId?: string;
-  name?: string;
-  coverUrl?: string;
-  artist?: string;
-}
-export interface IBoxTypes {
-  data: Array<{ name: string; image: string }>;
-  className: string;
-}
-export interface IMusicPlayCardProps {
-  data: Array<ImusicProps>;
-}
+export interface Feature {
+    title: string;
+    description: string;
+    image: string;
+  }
+  
+export interface PricingPlan {
+    title: string;
+    description: string;
+    price: string;
+    features: string[];
+  }
+  
+export interface SectionProps
+  {
+     data: Feature[]
+  }

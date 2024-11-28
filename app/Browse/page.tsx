@@ -1,9 +1,9 @@
 import React from 'react';
-import Home from '@/app/Home/UI/index';
+import Browse from "./index"
 const Page = () => {
   return (
     <>
-      <Home />
+    <Browse/>
     </>
   );
 };

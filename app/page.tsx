@@ -1,6 +1,6 @@
 import React from 'react';
-import Marketing from './Dashboard/UI/Marketing';
 import { useLazyFetchUserProfileQuery } from '@/services/user';
+import Marketing from './Home/UI/Marketing';
 
 const Page = () => {
   // const [fetchUserProfile, { data: user, error, isLoading }] = useLazyFetchUserProfileQuery({});

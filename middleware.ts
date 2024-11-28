@@ -2,7 +2,7 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 // Define private routes that require authentication
-const isPrivateRoute = createRouteMatcher(['/','/Home','/MyProfile']);
+const isPrivateRoute = createRouteMatcher(['/','/Browse','/MyProfile']);
 
 export default clerkMiddleware(async (auth, request) => {
   try {

@@ -32,7 +32,7 @@ export default function NavbarPage() {
       </NavbarContent>
 
       <NavbarContent as="div" className="items-center " justify="end">
-        <ThemeButton />
+        {/* <ThemeButton /> */}
         <DropDown />
       </NavbarContent>
     </Navbar>
