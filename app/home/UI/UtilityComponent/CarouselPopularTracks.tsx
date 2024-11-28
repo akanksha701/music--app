@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -26,13 +25,9 @@ const CarouselPopularTracks = (props: ICarousalProps) => {
         {data.map((video, index) => (
           <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4">
             <div>
-              {/* <Card> */}
-              {/* <CardContent className="flex aspect-square items-center justify-center p-6"> */}
               <video className="w-full" autoPlay loop muted key={index}>
                 <source src={video} type="video/mp4" />
               </video>
-              {/* </CardContent> */}
-              {/* </Card> */}
             </div>
           </CarouselItem>
         ))}

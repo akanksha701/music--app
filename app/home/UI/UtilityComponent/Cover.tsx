@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 
 const Cover = (props: ICoverProps) => {
   const { data } = props;
-  console.log(data);
   return (
     <>
       <section

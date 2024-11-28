@@ -5,7 +5,6 @@ import Image from "next/image";
 const Section = (props: ISectionProps) => {
   const { data } = props;
 
-  // Memoize the entire rendering of the section based on the `data` prop
   const memoizedSection = useMemo(() => {
     return (
       <div>
@@ -31,7 +30,7 @@ const Section = (props: ISectionProps) => {
         </section>
       </div>
     );
-  }, [data]); // Only re-render the section if `data` changes
+  }, [data]); 
 
   return memoizedSection;
 };
