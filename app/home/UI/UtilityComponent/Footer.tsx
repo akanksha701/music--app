@@ -16,9 +16,9 @@ const Footer = (props: IFooterProps) => {
 
   const renderedLinks = useMemo(() => {
     return (
-      <div className="flex flex-col md:flex-row md:space-x-8 text-center md:text-left">
+      <div className="flex flex-col md:flex-row md:space-x-8 text-center md:text-left ">
         <div className="flex flex-row items-center justify-center space-x-5 my-5">
-          <div className="my-2 px-2 text-2xl font-semibold text-yellow-500">
+          <div className="my-2 px-2 text-2xl font-semibold text-purple-600">
             Spotify
           </div>
 
@@ -27,7 +27,7 @@ const Footer = (props: IFooterProps) => {
 
         {data?.map((link, index: number) => (
           <div key={index} className="p-2">
-            <div className="text-xl text-yellow-500 font-semibold">
+            <div className="text-xl text-purple-600 font-semibold">
               {link?.title}
             </div>
             {link.links?.map((linkName, indx) => (
@@ -42,7 +42,7 @@ const Footer = (props: IFooterProps) => {
   }, [data]);
 
   return (
-    <div className="p-4 bg-gray-800 text-white">
+    <div className="p-4 bg-slate-900 text-white">
       <hr className="my-8 border-t border-gray-600" />
 
       <div className="flex flex-col items-center justify-center p-4">
@@ -51,7 +51,7 @@ const Footer = (props: IFooterProps) => {
       <hr className="my-8 border-t border-gray-600" />
 
       <div className="mt-4 text-center">
-        <div className="text-sm text-gray-400">© 2024 Your Company</div>
+        <div className="text-sm text-gray-400">© 2024 Sportify</div>
         <div className="text-sm text-gray-400">All rights reserved.</div>
       </div>
     </div>

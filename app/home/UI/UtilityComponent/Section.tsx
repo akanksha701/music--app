@@ -9,7 +9,7 @@ const Section = (props: ISectionProps) => {
   const memoizedSection = useMemo(() => {
     return (
       <div>
-        <section className="py-10">
+        <section>
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {data?.map((feature: IFeature, index: number) => (

@@ -5,7 +5,7 @@ const Plans = (props: IPlans) => {
   const { data } = props;
   const memoizedPlans = useMemo(() => {
     return (
-      <section className="bg-gray-100 py-20">
+      <section className="bg-gray-100 py-20" id="pricing-section">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">
             Choose Your Plan

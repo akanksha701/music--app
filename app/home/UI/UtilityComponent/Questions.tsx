@@ -1,9 +1,8 @@
 "use client";
-
 import React, { useMemo } from "react";
 import { IQuestionProps } from "../../types/types";
 import AccordionCard from "./AccordionCard";
-
+import Button from "@/common/buttons/Button";
 const Questions = (props: IQuestionProps) => {
   const { data } = props;
 
@@ -13,7 +12,7 @@ const Questions = (props: IQuestionProps) => {
         <div className="rounded p-4 relative w-full md:w-1/2">
           <div className="flex flex-col items-center justify-center">
             <p className="text-5xl ml-12 ">
-              Frequently <span className="text-orange-300">Asked</span>
+              Frequently <span className="text-purple-600">Asked</span>
               <span className="ml-2">Questions</span>
             </p>
             <p className="p-2 mt-4">
@@ -24,6 +23,9 @@ const Questions = (props: IQuestionProps) => {
             </p>
           </div>
           <AccordionCard data={data} />
+        </div>
+        <div className="p-5">
+          <Button name="Read More" />
         </div>
       </div>
     );

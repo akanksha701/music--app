@@ -1,16 +1,17 @@
-'use client';
+"use client";
+import { Button as ShadCNButton } from "@/components/ui/button";
+import { IButtonProps } from "../types/types";
 
-import { ButtonProps } from '@nextui-org/react';
-
-export default function Button(buttonProps: ButtonProps) {
+export default function Button(buttonProps: IButtonProps) {
   const { name, onClick, type } = buttonProps;
   return (
-    <button
+    <ShadCNButton
       type={type}
-      className=' transition duration-150 ease-in-out  bg-pink-500 hover:bg-pink-400 text-white font-bold py-2 px-4 rounded hover:opacity-80 '
+      variant="destructive"
+      className="transition duration-150 ease-in-out  bg-purple-600 hover:bg-purple-400 text-white font-bold py-2 px-4 rounded hover:opacity-80 "
       onClick={onClick}
     >
       {name}
-    </button>
+    </ShadCNButton>
   );
 }
