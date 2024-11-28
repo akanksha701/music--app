@@ -23,7 +23,7 @@ const MyProfile = () => {
 
 
   return (
-    <div className="bg-gray-100 flex flex-col justify-center bg-cover bg-mk-bg">
+    <div className="bg-gray-100 flex flex-col justify-center bg-cover bg-mk-bg p-6">
       <div className="w-full sm:max-w-xl sm:mx-auto">
         <div className="bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
           <div className="max-w-md mx-auto">
