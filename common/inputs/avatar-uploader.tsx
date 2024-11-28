@@ -2,13 +2,13 @@
 import React from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
-import { ImageUploadProps } from "../types/types";
+import { IImageUploadProps } from "../types/types";
 
 declare global {
   var cloudinary: string;
 }
 
-const AvatarUploader = ({ onChange, value }: ImageUploadProps) => {
+const AvatarUploader = ({ onChange, value }: IImageUploadProps) => {
   return (
     <CldUploadWidget
       onSuccess={(result: any) => {

@@ -1,13 +1,13 @@
-export interface musicProps {
+export interface ImusicProps {
   musicId?: string;
   name?: string;
   coverUrl?: string;
   artist?: string;
 }
-export interface BoxTypes {
+export interface IBoxTypes {
   data: Array<{ name: string; image: string }>;
   className: string;
 }
-export interface MusicPlayCardProps {
-  data: Array<musicProps>;
+export interface IMusicPlayCardProps {
+  data: Array<ImusicProps>;
 }

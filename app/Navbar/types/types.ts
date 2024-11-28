@@ -1,8 +1,8 @@
-export interface Item {
+export interface IItem {
   label?: string;
   route?: any;
   key?: string;
 }
-export interface DropDownItemProps {
-    menus: Item[]; 
+export interface IDropDownItemProps {
+    menus: IItem[]; 
 }

@@ -1,13 +1,12 @@
-"use client";
-import SpotifyLogo from "@/public/spotify.svg";
-import Image from "next/image";
-import { Navbar, NavbarBrand, NavbarContent, Switch } from "@nextui-org/react";
-import NavItemList from "./UtilityComponent/NavItemList";
-import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
-import { useEffect, useState } from "react";
-import DropDown from "./UtilityComponent/DropDown/DropDown";
-import { fetchApi } from "@/utils/helpers";
-import ThemeButton from "@/common/buttons/ThemeButton";
+'use client';
+import SpotifyLogo from '@/public/spotify.svg';
+import Image from 'next/image';
+import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
+import NavItemList from './UtilityComponent/NavItemList';
+import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
+import { useState } from 'react';
+import DropDown from './UtilityComponent/DropDown/DropDown';
+import ThemeButton from '@/common/buttons/ThemeButton';
 
 export default function NavbarPage() {
   const [user, setUser] = useState();

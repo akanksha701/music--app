@@ -8,9 +8,9 @@ import {
 } from '@nextui-org/react';
 import React from 'react';
 import DropDownItem from './DropDownItem';
-import { Item } from '../../types/types';
+import { IItem } from '../../types/types';
 
-const menus:Item[] = [
+const menus:IItem[] = [
   { label: 'My profile', key: 'my_profile', route: '/myprofile' },
 ];
 const DropDownMenu = () => {

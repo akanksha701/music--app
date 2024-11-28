@@ -1,13 +1,13 @@
 import { DropdownItem } from '@nextui-org/react';
 import React from 'react';
 import { redirect } from 'next/navigation';
-import { DropDownItemProps, Item } from '../../types/types';
+import { IDropDownItemProps, IItem } from '../../types/types';
 
-const DropDownItem = ({ menus }: DropDownItemProps) => {
+const DropDownItem = ({ menus }: IDropDownItemProps) => {
   return (
     <>
       {menus.length > 0 &&
-        menus.map((ele: Item, index: number) => (
+        menus.map((ele: IItem, index: number) => (
           <DropdownItem key={ele.key} onClick={() => redirect(ele.route)}>
             {ele.label}
           </DropdownItem>

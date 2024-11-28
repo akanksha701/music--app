@@ -22,14 +22,14 @@ export interface IUserDetails {
   };
 }
 
-export interface User {
+export interface IUser {
   isLoaded?: boolean;
   isSignedIn?: boolean;
   userDetails?: IUserDetails;
 }
 
 export interface IState {
-  user: User;
+  user: IUser;
 }
 
 export interface IEditProfileProps {

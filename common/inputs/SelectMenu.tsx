@@ -1,16 +1,8 @@
 import { Select, SelectItem } from '@nextui-org/react';
 import React from 'react';
-import { Controller, FieldValues, Path } from 'react-hook-form';
+import { Controller, FieldValues } from 'react-hook-form';
+import { ISelectProps } from '../types/types';
 
-interface SelectProps<T extends FieldValues> {
-  control: any;
-  name: Path<T>;
-  label?: string;
-  items: Array<{ id: string; name: string }>; // Define the structure of items
-  rules?: any;
-  error?: string;
-  id?: string;
-}
 
 const SelectMenu = <T extends FieldValues>({
   control,
@@ -20,7 +12,7 @@ const SelectMenu = <T extends FieldValues>({
   rules,
   error,
   id,
-}: SelectProps<T>) => {
+}: ISelectProps<T>) => {
   return (
     <div className='flex flex-col'>
       {label && (

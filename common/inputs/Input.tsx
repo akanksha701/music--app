@@ -1,44 +1,26 @@
-'use client';
-import React from 'react';
-import {
-  UseFormRegister,
-  FieldErrors,
-  Path,
-  FieldValues,
-} from 'react-hook-form';
-import { Input as NextUIInput } from '@nextui-org/react';
-import { UserData } from '@clerk/types';
-
-interface NextInputProps<T extends FieldValues> {
-  label?: string;
-  placeholder?: string;
-  required?: boolean;
-  type?: string;
-  id: any;
-  register: UseFormRegister<UserData>;
-  errors: FieldErrors<T>;
-  disabled?: boolean;
-  options?: object;
-  name?: string;
-}
+"use client";
+import React from "react";
+import { FieldValues } from "react-hook-form";
+import { Input as NextUIInput } from "@nextui-org/react";
+import { INextInputProps } from "../types/types";
 
 const NextInput = <T extends FieldValues>({
   label,
   placeholder,
   required,
-  type = 'text',
+  type = "text",
   id,
   register,
   errors,
   disabled,
   options,
-}: NextInputProps<T>) => {
+}: INextInputProps<T>) => {
   return (
-    <div className='mb-3'>
+    <div className="mb-3">
       {label && (
-        <label className='block mb-2 text-sm font-medium text-gray-900'>
+        <label className="block mb-2 text-sm font-medium text-gray-900">
           {label}
-          {required && <span className='text-red-500'>*</span>}
+          {required && <span className="text-red-500">*</span>}
         </label>
       )}
       <NextUIInput
@@ -48,7 +30,7 @@ const NextInput = <T extends FieldValues>({
         type={type}
         disabled={disabled}
         fullWidth
-        color={errors[id] ? 'danger' : 'default'} // Use 'danger' for error color
+        color={errors[id] ? "danger" : "default"} // Use 'danger' for error color
       />
     </div>
   );

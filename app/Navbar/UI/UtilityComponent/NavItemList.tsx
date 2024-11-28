@@ -1,20 +1,17 @@
 import { NavbarItem, Link } from '@nextui-org/react';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { IItem } from '../../types/types';
 
-interface Item {
-  label: string;
-  route: string;
-}
 
 const NavItemList: React.FC = () => {
-  const navItems: Item[] = [
+  const navItems: IItem[] = [
     { label: 'Home', route: '/Home' },
   ];
 
   return (
     <>
-      {navItems.map((item: Item) => (
+      {navItems.map((item: IItem) => (
         <NavbarItem key={item.route}> {/* Use a unique identifier as the key */}
           <Link
             onClick={() => redirect(item.route)}
