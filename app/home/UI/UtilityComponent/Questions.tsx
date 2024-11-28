@@ -9,7 +9,7 @@ const Questions = (props: IQuestionProps) => {
 
   const memoizedComponent = useMemo(() => {
     return (
-      <div className="flex flex-col items-center justify-center p-3">
+      <div className="flex flex-col items-center justify-center p-3 ">
         <div className="rounded p-4 relative w-full md:w-1/2">
           <div className="flex flex-col items-center justify-center">
             <p className="text-5xl ml-12 ">

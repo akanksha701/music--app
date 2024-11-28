@@ -4,27 +4,35 @@ import { FaYoutube } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa6";
 import { FaTiktok } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
+
 const Footer = (props: IFooterProps) => {
   const { data } = props;
+  const icons = [
+    <FaYoutube key="youtube" size={30} />,
+    <FaInstagram key="instagram" size={30} />,
+    <FaTiktok key="tiktok" size={30} />,
+    <FaFacebook key="facebook" size={30} />,
+  ];
 
   const renderedLinks = useMemo(() => {
     return (
       <div className="flex flex-col md:flex-row md:space-x-8 text-center md:text-left">
-        <div className="p-2 flex flex-row p-5">
-          <div className="my-2 px-2 text-2xl"> Spotify</div>
-          <FaYoutube size={30} className="ml-3 mt-2 " />
-          <FaInstagram size={30} className="ml-3 mt-2" />
-          <FaTiktok size={30} className="ml-3 mt-2" />
-          <FaFacebook size={30} className="ml-3 mt-2" />
-          <div></div>
+        <div className="flex flex-row items-center justify-center space-x-5 my-5">
+          <div className="my-2 px-2 text-2xl font-semibold text-yellow-500">
+            Spotify
+          </div>
+
+          <div className="flex space-x-3 cursor-pointer">{icons}</div>
         </div>
 
         {data?.map((link, index: number) => (
-          <div key={index}>
-            <div className="p-2 text-xl text-yellow-500">{link?.title}</div>
+          <div key={index} className="p-2">
+            <div className="text-xl text-yellow-500 font-semibold">
+              {link?.title}
+            </div>
             {link.links?.map((linkName, indx) => (
-              <div key={indx}>
-                <div className="cursor-pointer hover:underline mt-2">{linkName}</div>
+              <div key={indx} className="cursor-pointer hover:underline mt-2">
+                {linkName}
               </div>
             ))}
           </div>
@@ -32,12 +40,15 @@ const Footer = (props: IFooterProps) => {
       </div>
     );
   }, [data]);
+
   return (
     <div className="p-4 bg-gray-800 text-white">
       <hr className="my-8 border-t border-gray-600" />
+
       <div className="flex flex-col items-center justify-center p-4">
         {renderedLinks}
       </div>
+      <hr className="my-8 border-t border-gray-600" />
 
       <div className="mt-4 text-center">
         <div className="text-sm text-gray-400">© 2024 Your Company</div>

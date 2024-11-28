@@ -12,9 +12,9 @@ const MusicPage = async () => {
     <div className="min-h-screen">
       <Cover />
       <Section data={data.feature} />
+      <Plans data={data?.pricingPlans} />
       <Questions data={data?.questions} />
       <DowloadSection/>
-      <Plans data={data?.pricingPlans} />
       <Footer data={data?.footerContent}/>
     </div>
   );
