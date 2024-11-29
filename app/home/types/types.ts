@@ -1,3 +1,7 @@
+import exp from "constants";
+import { title } from "process";
+import { string } from "zod";
+
 export interface IFeature {
   title: string;
   description: string;
@@ -25,6 +29,7 @@ export interface IPlans {
 
 export interface IPopularTracksTypes {
   data: Array<string>;
+  users: Array<string>;
 }
 
 export interface IFooterProps {
@@ -36,4 +41,11 @@ export interface ICarousalProps {
 }
 export interface ICoverProps {
   data: { title?: string; description?: string };
+}
+
+export interface IViewProps {
+  title?: string;
+  viewImg: string;
+  points: Array<string>;
+  views: Array<{ title?: string; views?: string; color?: string }>;
 }
