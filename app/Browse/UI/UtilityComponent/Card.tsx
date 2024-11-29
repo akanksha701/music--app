@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { Card, CardBody } from '@nextui-org/react';
 import Image from 'next/image'; // Importing the Image component from Next.js
-import { BoxTypes } from '../../types/types';
+import { IBoxTypes } from '../../types/types';
 
-const Box = (props: BoxTypes) => {
+const Box = (props: IBoxTypes) => {
   const { data, className } = props;
 
   // Memoize the rendering of the cards

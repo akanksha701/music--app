@@ -1,38 +1,38 @@
 import { EmailAddressResource } from '@clerk/types';
 import { CalendarDate } from '@internationalized/date';
 
-export interface DateOfBirth {
-    day?: number;
-    month?: number;
-    year?: number;
-  }
+export interface IDateOfBirth {
+  day?: number;
+  month?: number;
+  year?: number;
+}
 
-export interface UserDetails {
-    firstName?: string;
-    lastName?: string;
-    imageUrl?: string;
-    emailAddresses: EmailAddressResource[];
+export interface IUserDetails {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  imageUrl?: string;
+  emailAddresses: EmailAddressResource[];
+  gender?: string;
+  dob?: CalendarDate;
+  unsafeMetadata: {
     gender?: string;
-    dob?: CalendarDate;
-    unsafeMetadata: {
-      gender?: string;
-      imageUrl?: string;
-      dob?: DateOfBirth; // Optional property for date of birth
-    };
-  }
-  
-export interface User {
-    isLoaded?: boolean;
-    isSignedIn?: boolean;
-    userDetails?: UserDetails;
-  }
-  
-export interface State {
-    user: User;
-  }
+    imageUrl?: string;
+    dob?: IDateOfBirth; // Optional property for date of birth
+  };
+}
 
+export interface IUser {
+  isLoaded?: boolean;
+  isSignedIn?: boolean;
+  userDetails?: IUserDetails;
+}
 
-  export interface EditProfileProps
-  {
-    setImage:Function
-  }
+export interface IState {
+  user: IUser;
+}
+
+export interface IEditProfileProps {
+  setImage: Function;
+  image:string
+}

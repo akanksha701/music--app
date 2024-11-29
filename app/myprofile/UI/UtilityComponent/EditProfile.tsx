@@ -1,22 +1,21 @@
 import NextInput from "@/common/inputs/Input";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { EditProfileProps, UserDetails } from "./MyProfile/types/types";
 import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
 import { CalendarDate } from "@internationalized/date";
 import Loading from "@/app/loading";
 import { UserData } from "@clerk/types";
-import { fetchUsers } from "@/Redux/features/user/userSlice";
-import { useDispatch } from "react-redux";
 import NextDatePicker from "@/common/inputs/DatePicker";
 import SelectMenu from "@/common/inputs/SelectMenu";
 import { fetchApi } from "@/utils/helpers";
+import { IEditProfileProps, IUserDetails } from "../../types/types";
+import toast from "react-hot-toast";
+import Button from "@/common/buttons/Button";
 
-const EditProfile = (props: EditProfileProps) => {
-  const { setImage } = props;
-  const dispatch = useDispatch();
-  const [user, setUser] = useState<UserDetails>();
-
+const EditProfile = (props: IEditProfileProps) => {
+  // const userDetails = useSelector((state: RootState) => state?.userReducer?.userDetails);
+  const { setImage, image } = props;
+  const [user, setUser] = useState<IUserDetails>();
   useFetchUserDetails(setUser);
   const {
     register,
@@ -25,16 +24,15 @@ const EditProfile = (props: EditProfileProps) => {
     control,
     formState: { errors },
   } = useForm({});
-
   const setUserDetails = useCallback(() => {
     {
       if (user) {
-        const dob = (user?.unsafeMetadata as UserDetails)?.dob;
+        const dob = (user?.unsafeMetadata as IUserDetails)?.dob;
         const day = dob?.day || new Date().getDate();
         const year = dob?.year || new Date().getFullYear();
         const month = dob?.month || new Date().getMonth();
         const date = new CalendarDate(year, month, day);
-        console.log(user?.emailAddresses);
+        setValue("userId", user?.id);
         setValue("firstName", user?.firstName);
         setValue("lastName", user?.lastName);
         setValue("gender", user?.unsafeMetadata.gender);
@@ -50,20 +48,17 @@ const EditProfile = (props: EditProfileProps) => {
     setUserDetails();
   }, [user]);
 
-
-  
-
   const onSubmit = async (data: UserData) => {
     try {
-      const response = await fetchApi("/api/user", "POST", data);
-      if (response) {
-        // Optionally dispatch the updated user data
-        // await dispatch(fetchUsers(response));
-        console.log("Profile updated successfully:", response);
+      const response = await fetchApi("/api/user", "POST", {
+        ...data,
+        imageUrl: image,
+      });
+      if (response.status === 200) {
+        toast.success("profile updated successfully");
       }
     } catch (error) {
-      console.error("Failed to update profile:", error);
-      // Handle error appropriately (e.g., show error message to user)
+      console.error("Error submitting form", error);
     }
   };
 
@@ -148,12 +143,7 @@ const EditProfile = (props: EditProfileProps) => {
           </div>
         </div>
         <div className="pt-4 flex items-center space-x-4">
-          <button
-            type="submit"
-            className="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none hover:bg-blue-600"
-          >
-            Save
-          </button>
+          <Button type="submit" name="Save" />
         </div>
       </form>
     </>

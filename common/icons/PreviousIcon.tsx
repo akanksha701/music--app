@@ -1,8 +1,8 @@
 import React from 'react';
-import { IconProps } from '../types/types';
+import {  IIconProps } from '../types/types';
 
 
-export const PreviousIcon = ({ size = 24, width, height, ...props }: IconProps) => (
+export const PreviousIcon = ({ size = 24, width, height, ...props }: IIconProps) => (
   <svg
     aria-hidden='true'
     fill='none'

@@ -3,9 +3,9 @@ import Image from 'next/image';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import PlayButton from '@/common/buttons/PlayButton';
-import { MusicPlayCardProps } from '../../types/types';
+import { IMusicPlayCardProps } from '../../types/types';
 
-const MusicPlayCard = (props: MusicPlayCardProps) => {
+const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const router = useRouter();
   const { data } = props;
   return (

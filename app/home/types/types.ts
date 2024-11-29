@@ -1,13 +1,51 @@
-export interface musicProps {
-  musicId?: string;
-  name?: string;
-  coverUrl?: string;
-  artist?: string;
+import exp from "constants";
+import { title } from "process";
+import { string } from "zod";
+
+export interface IFeature {
+  title: string;
+  description: string;
+  image: string;
 }
-export interface BoxTypes {
-  data: Array<{ name: string; image: string }>;
-  className: string;
+
+export interface IPricingPlan {
+  title: string;
+  description: string;
+  price: string;
+  features: string[];
 }
-export interface MusicPlayCardProps {
-  data: Array<musicProps>;
+
+export interface IfooterLinks {
+  title?: string;
+  links?: Array<string>;
+}
+export interface ISectionProps {
+  data: IFeature[];
+}
+
+export interface IPlans {
+  data?: IPricingPlan[];
+}
+
+export interface IPopularTracksTypes {
+  data: Array<string>;
+  users: Array<string>;
+}
+
+export interface IFooterProps {
+  data?: IfooterLinks[];
+}
+
+export interface ICarousalProps {
+  data: Array<string>;
+}
+export interface ICoverProps {
+  data: { title?: string; description?: string };
+}
+
+export interface IViewProps {
+  title?: string;
+  viewImg: string;
+  points: Array<string>;
+  views: Array<{ title?: string; views?: string; color?: string }>;
 }

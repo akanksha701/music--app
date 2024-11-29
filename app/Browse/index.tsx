@@ -1,9 +1,9 @@
 'use client';
 import { useUser } from '@clerk/nextjs';
-import MusicPlayCard from './UtilityComponent/MusicPlayCard';
-import HeadLine from './UtilityComponent/HeadLine';
-import Box from './UtilityComponent/Card';
 import Loading from '@/app/loading';
+import HeadLine from './UI/UtilityComponent/HeadLine';
+import MusicPlayCard from './UI/UtilityComponent/MusicPlayCard';
+import Box from './UI/UtilityComponent/Card';
 
 
 export const dummyMusics = [

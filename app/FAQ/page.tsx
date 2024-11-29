@@ -1,10 +1,12 @@
 import React from "react";
-import Home from "@/app/Home/UI/index";
+import FAQ from ".";
+
 const Page = () => {
   return (
     <>
-      <Home />
+      <FAQ />
     </>
   );
 };
+
 export default Page;

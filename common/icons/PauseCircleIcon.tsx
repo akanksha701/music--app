@@ -1,11 +1,8 @@
 import React from 'react';
-interface PauseCircleIconProps {
-    size?: number
-    width?: number
-    height?: number
-}
+import { IPauseCircleIconProps } from '../types/types';
 
-export const PauseCircleIcon = ({ size = 24, width, height, ...props }: PauseCircleIconProps) => (
+
+export const PauseCircleIcon = ({ size = 24, width, height, ...props }: IPauseCircleIconProps) => (
   <svg
     aria-hidden='true'
     fill='none'

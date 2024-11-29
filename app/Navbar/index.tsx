@@ -1,13 +1,12 @@
-'use client'
-import React, { useEffect } from 'react'
-import Navbar from './UI/Navbar'
-import { fetchApi } from '@/utils/helpers';
+'use client';
+import React from 'react';
+import Navbar from './UI/Navbar';
 
 const Index = () => {
   
   return (
     <Navbar/>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

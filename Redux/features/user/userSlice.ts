@@ -1,40 +1,36 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import toast from 'react-hot-toast';
-export const fetchUsers: any = createAsyncThunk(
-  'users/updatedUserDetails',
-  async(body: any, thunkApi) => {
-    const response = await fetch('/api/user', {
-      method: 'POST',
-      body,
-    });
-
-    const data = await response.json();
-    if (data?.status === 200) {
-      toast.success('profile updated successfully!');
-    }
-    return data;
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { userApi } from "@/services/user";
 
 const initialState = {
   userDetails: {},
   loading: false,
-  value: 10,
 };
 
 const userSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchUsers.fulfilled, (state: any, action: any) => {
-      state.loading = false;
-      state.userDetails = action.payload.updatedUserDetails;
-    });
-    builder.addCase(fetchUsers.pending, (state, action) => {
-      state.loading = true;
-    });
+    builder.addMatcher(
+      userApi.endpoints.fetchUserProfile.matchFulfilled,
+      (state, action) => {
+        state.userDetails = action.payload;
+        state.loading = false;
+      }
+    );
+    builder.addMatcher(
+      userApi.endpoints.fetchUserProfile.matchPending,
+      (state) => {
+        state.loading = true;
+      }
+    );
+    builder.addMatcher(
+      userApi.endpoints.fetchUserProfile.matchRejected,
+      (state, action) => {
+        state.loading = false
+      }
+    );
   },
 });
 
-export default userSlice.reducer;
+export default userSlice.reducer; // Make sure to export the reducer correctly

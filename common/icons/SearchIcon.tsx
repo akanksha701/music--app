@@ -1,6 +1,6 @@
-import { IconProps } from '../types/types';
+import { IIconProps } from "../types/types";
 
-export const SearchIcon = (props:IconProps) => (
+export const SearchIcon = (props:IIconProps) => (
   <svg
     aria-hidden='true'
     fill='none'

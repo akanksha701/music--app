@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconProps } from '../types/types';
+import { IIconProps } from '../types/types';
 
 
 export const HeartIcon = ({
@@ -9,7 +9,7 @@ export const HeartIcon = ({
   strokeWidth = 1.5,
   fill = 'none',
   ...props
-}: IconProps) => (
+}: IIconProps) => (
   <svg
     aria-hidden='true'
     fill={fill}

@@ -14,6 +14,7 @@ const nextConfig = {
   },
   images: {
     domains: [
+      'plus.unsplash.com',
       'cdn.pixabay.com',
       'img.clerk.com',
       'wallpapercave.com',

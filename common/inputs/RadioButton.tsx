@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import { RadioButtonProps } from '../types/types';
+import { IRadioButtonProps } from '../types/types';
 
-const RadioButton = (props: RadioButtonProps) => {
+const RadioButton = (props: IRadioButtonProps) => {
   const { radioOptions, radioLabel } = props;
   return (
     <>

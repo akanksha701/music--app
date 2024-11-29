@@ -2,16 +2,11 @@ import React from 'react';
 import { DatePicker } from '@nextui-org/react';
 import { Controller } from 'react-hook-form';
 import { CalendarDate } from '@internationalized/date';
+import { IDatePickerType } from '../types/types';
 
-interface PropsType {
-  control?: any;
-  label?: string;
-  name?: string;
-  rules?: object;
-  error?: any;
-}
 
-const NextDatePicker = (props: PropsType) => {
+
+const NextDatePicker = (props: IDatePickerType) => {
   const { control, label, name, rules, error } = props;
 
   return (
