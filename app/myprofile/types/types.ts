@@ -34,4 +34,5 @@ export interface IState {
 
 export interface IEditProfileProps {
   setImage: Function;
+  image:string
 }
