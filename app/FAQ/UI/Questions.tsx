@@ -1,11 +1,10 @@
 "use client";
 import React, { useMemo } from "react";
-import AccordionCard from "./AccordionCard";
+import AccordionCard from "./UtilityComponent/AccordionCard";
 import Button from "@/common/buttons/Button";
-import { IQuestionProps } from "../../types/types";
+import { IQuestionProps } from "../types/types";
 const Questions = (props: IQuestionProps) => {
-  const { data } = props;
-
+  const { data,faqDescription } = props;
   const memoizedComponent = useMemo(() => {
     return (
       <div className="flex flex-col items-center justify-center p-3 ">
@@ -16,20 +15,14 @@ const Questions = (props: IQuestionProps) => {
               <span className="ml-2">Questions</span>
             </p>
             <p className="p-2 mt-4">
-              Beat licensing can be confusing. You might have a bunch of
-              questions about it. We want to make sure that you're informed
-              correctly. If you still have questions, don't hesitate to contact
-              us. We're always here to help.
+              {faqDescription?.description}
             </p>
           </div>
           <AccordionCard data={data} />
         </div>
-        <div className="p-5">
-          <Button name="Read More" />
-        </div>
       </div>
     );
-  }, [data]);
+  }, [data,faqDescription]);
 
   return memoizedComponent;
 };

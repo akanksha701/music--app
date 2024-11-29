@@ -4,6 +4,7 @@ export interface IQuestionData {
 }
 export interface IQuestionProps {
   data?: IQuestionData[];
+  faqDescription: { description: string };
 }
 export interface IAccoridionProps {
   data?: IQuestionData[];

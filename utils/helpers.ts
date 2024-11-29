@@ -70,7 +70,7 @@ export async function uploadAudio(audio: any) {
 export const fetchApi = async (
   apiUrl: string,
   method: string,
-  body: object
+  body?: object
 ) => {
   const url = new URL(apiUrl, process.env.APP_URL || "http://localhost:3000");
   try {

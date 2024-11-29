@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "types.d.ts", "src/app/music/[slug]", "eslint.config.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "types.d.ts", "src/app/music/[slug]", "eslint.config.js", "app/Pricing/index.tsx"],
   "exclude": ["node_modules"]
 }

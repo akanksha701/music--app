@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import FAQ from ".";
 
 const Page = () => {
   return (
-    <div>Page</div>
-  )
-}
+    <>
+      <FAQ />
+    </>
+  );
+};
 
-export default Page
+export default Page;

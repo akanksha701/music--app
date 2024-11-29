@@ -6,6 +6,7 @@ export async function GET() {
       title: "Amplify your music authenticity, visit",
       description: "Stream millions of songs and podcasts, anytime, anywhere.",
     };
+    const faqDescription={ description:"Beat licensing can be confusing. You might have a bunch of questions about it. We want to make sure that you're informed correctly. If you still have questions, don't hesitate to contact us. We're always here to help."}
     const features = [
       {
         id: 1,
@@ -37,9 +38,78 @@ export async function GET() {
           "✓ Ad-supported listening",
           "✓ Basic audio quality",
           "✓ Shuffle play",
+          "✓ Limited skips",
+          "✓ Access to curated playlists",
+        ],
+      },
+      {
+        id: 2,
+        title: "Basic",
+        description: "Ideal for casual music lovers",
+        price: "$5/month",
+        features: [
+          "✓ Ad-free listening",
+          "✓ High-quality audio",
+          "✓ Unlimited skips",
+          "✓ Access to all playlists",
+          "✓ Offline listening (up to 10 playlists)",
+        ],
+      },
+      {
+        id: 3,
+        title: "Premium",
+        description: "For the true music enthusiast",
+        price: "$15/month",
+        features: [
+          "✓ All features from Basic plan",
+          "✓ Premium audio quality (320kbps)",
+          "✓ Download unlimited music for offline listening",
+          "✓ No ads and no interruptions",
+          "✓ High-fidelity audio streaming (Hi-Fi)",
+          "✓ Access to exclusive content (Live sessions, interviews)",
+        ],
+      },
+      {
+        id: 4,
+        title: "Family",
+        description: "Perfect for music lovers with family or friends",
+        price: "$20/month",
+        features: [
+          "✓ All features from Premium plan",
+          "✓ Up to 6 accounts per family",
+          "✓ Family-friendly playlist recommendations",
+          "✓ Family plan management tools",
+          "✓ Customizable user profiles",
+        ],
+      },
+      {
+        id: 5,
+        title: "Student",
+        description: "For students who want all the music for a lower price",
+        price: "$7/month",
+        features: [
+          "✓ All features from Premium plan",
+          "✓ 50% discount on Premium plan",
+          "✓ Unlimited skips and offline listening",
+          "✓ Access to exclusive student-only content",
+        ],
+      },
+      {
+        id: 6,
+        title: "VIP",
+        description: "For serious music lovers and audiophiles",
+        price: "$30/month",
+        features: [
+          "✓ All features from Premium plan",
+          "✓ Lossless audio streaming (FLAC)",
+          "✓ VIP-only content (Early access to albums and concerts)",
+          "✓ Personal music assistant",
+          "✓ Priority customer support",
+          "✓ Virtual concerts and exclusive events",
         ],
       },
     ];
+    
     const questions = [
       {
         question: "What type of vocals do we use?",
@@ -163,6 +233,7 @@ export async function GET() {
       questions,
       footerContent,
       popularTrackVideos,
+      faqDescription
     });
   } catch (error) {
     console.error("Error fetching marketing data:", error);

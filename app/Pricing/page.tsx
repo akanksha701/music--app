@@ -1,8 +1,8 @@
 import React from 'react'
-
+import Pricing from "./index"
 const Page = () => {
   return (
-    <div>Page</div>
+    <div><Pricing/></div>
   )
 }
 
