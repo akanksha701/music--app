@@ -8,7 +8,7 @@ import EditProfile from './UtilityComponent/EditProfile';
 
 
 const MyProfile = () => {
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn ,user} = useUser();
   const { setValue } = useForm({});
   const [image, setImage] = useState('');
   

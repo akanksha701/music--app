@@ -6,7 +6,7 @@ import { CalendarDate } from "@internationalized/date";
 import Loading from "@/app/loading";
 import NextDatePicker from "@/common/inputs/DatePicker";
 import SelectMenu from "@/common/inputs/SelectMenu";
-import { fetchApi } from "@/utils/helpers";
+import { fetchApi, getDateObject } from "@/utils/helpers";
 import { IEditProfileProps, IUserDetails } from "../../types/types";
 import toast from "react-hot-toast";
 import Button from "@/common/buttons/Button";
@@ -29,7 +29,7 @@ const EditProfile = (props: IEditProfileProps) => {
         const day = dob?.day || new Date().getDate();
         const year = dob?.year || new Date().getFullYear();
         const month = dob?.month || new Date().getMonth();
-        const date = new CalendarDate(year, month, day);
+        const date = new CalendarDate(year, month + 1, day);
         setValue("userId", user?.id);
         setValue("firstName", user?.firstName);
         setValue("lastName", user?.lastName);
@@ -45,12 +45,12 @@ const EditProfile = (props: IEditProfileProps) => {
   useEffect(() => {
     setUserDetails();
   }, [user]);
+  
   const onSubmit = handleSubmit(async (data) => {
     try {
       const year = data?.dob?.year as number;
       const month = data?.dob?.month as number;
       const day = data?.dob?.day as number;
-
       const response = await fetchApi("/api/user", "POST", {
         ...data,
         imageUrl: image,

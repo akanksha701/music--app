@@ -1,12 +1,11 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-import { NextApiResponse } from "next";
 import { v2 as cloudinary } from "cloudinary";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import User from "@/lib/models/User";
 import { getUser } from "@/app/actions/getUser";
 import { redirect } from "next/navigation";
-import { CalendarDate, parseDate } from "@internationalized/date";
+import { getCalendarDate, getDateObject } from "@/utils/helpers";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -21,16 +20,13 @@ export async function POST(req: NextRequest) {
     if (!body.userId) {
       return redirect("/Signin");
     }
-    const day = new Date(body?.dob).getDate();
-    const month = new Date(body?.dob).getMonth();
-    const year = new Date(body?.dob).getFullYear();
 
     const params = {
       firstName: body?.firstName,
       lastName: body?.lastName,
       unsafeMetadata: {
         gender: body?.gender,
-        dob: new CalendarDate(year, month, day),
+        dob: await getCalendarDate(body?.dob),
         imageUrl: body?.imageUrl,
       },
     };
@@ -41,7 +37,7 @@ export async function POST(req: NextRequest) {
         { clerkUserId: body?.userId },
         {
           gender: body?.gender,
-          dateOfBirth: body?.date,
+          dateOfBirth: await getDateObject(body?.dob),
           imageUrl: body?.imageUrl,
           firstName: body?.firstName,
           lastName: body?.lastName,

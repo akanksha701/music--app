@@ -1,9 +1,22 @@
 "use server";
 import { Roles } from "../globals";
 import { auth } from "@clerk/nextjs/server";
-import { UserData } from "@clerk/types";
+import { CalendarDate } from "@internationalized/date";
 import cloudinary from "cloudinary";
-import { NextResponse } from "next/server";
+
+export async function getCalendarDate(date: any) {
+  const day = (await new Date(date).getDate()) || new Date().getDate();
+  const month = (await new Date(date).getMonth()) || new Date().getMonth();
+  const year = (await new Date(date).getFullYear()) || new Date().getFullYear();
+  const calendarDate = await new CalendarDate(year, month, day);
+  return calendarDate;
+}
+export async function getDateObject(date: CalendarDate) {
+  const year = (await date.year) || new Date().getFullYear();
+  const month = (await date.month) || new Date().getMonth();
+  const day = (await date.day) || new Date().getDate();
+  return new Date(`${year}-${month}-${day}`);
+}
 
 export default async function checkRole(role: Roles) {
   const { sessionClaims } = await auth();
