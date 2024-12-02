@@ -1,4 +1,5 @@
 "use server";
+import { Method } from "@/app/About/types/types";
 import { Roles } from "../globals";
 import { auth } from "@clerk/nextjs/server";
 import { CalendarDate } from "@internationalized/date";
@@ -82,7 +83,7 @@ export async function uploadAudio(audio: any) {
 
 export const fetchApi = async (
   apiUrl: string,
-  method: string,
+  method: Method,
   body?: object
 ) => {
   const url = new URL(apiUrl, process.env.APP_URL || "http://localhost:3000");
