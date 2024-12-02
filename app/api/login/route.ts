@@ -31,7 +31,7 @@ const users: User[] = [
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, mobileNumber ,firstName, lastName,gender,dateOfBirth,isActive,isDeleted, } = body;
+    const { email, password} = body;
 
     // Find user with matching credentials
     const user = users.find(u =>  u.email === email);

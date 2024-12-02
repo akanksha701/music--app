@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/DbConnection/dbConnection';
 import Language from '@/lib/models/Language';
 
-export async function GET(req: NextRequest, res: any) {
+export async function GET() {
   try {
     await dbConnect();
     const languageList = await Language.find({});

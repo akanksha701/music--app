@@ -1,5 +1,5 @@
 import { clerkClient } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { NextApiResponse } from "next";
 import { v2 as cloudinary } from "cloudinary";
 import dbConnect from "@/lib/DbConnection/dbConnection";
@@ -14,7 +14,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function POST(req: any, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();

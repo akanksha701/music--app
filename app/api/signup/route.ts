@@ -1,8 +1,7 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import User from '@/lib/models/User';
-import { NextApiResponse } from 'next';
 import dbConnect from '@/lib/DbConnection/dbConnection';
-export async function POST(req: any, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();

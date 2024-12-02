@@ -1,8 +1,8 @@
 import { NextApiResponse } from 'next';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/DbConnection/dbConnection';
 import Music from '@/lib/models/Music';
-export async function POST(req: any, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
@@ -19,7 +19,6 @@ export async function POST(req: any, res: NextApiResponse) {
     });
     return NextResponse.json({ status: 200, data: newMusic });
   } catch (error) {
-    console.log(error, '---');
     return NextResponse.json({ error: error, status: 500 });
   }
 }
