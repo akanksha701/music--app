@@ -6,10 +6,12 @@ import { CalendarDate } from "@internationalized/date";
 import Loading from "@/app/loading";
 import NextDatePicker from "@/common/inputs/DatePicker";
 import SelectMenu from "@/common/inputs/SelectMenu";
-import { fetchApi, getDateObject } from "@/utils/helpers";
+import { fetchApi } from "@/utils/helpers";
 import { IEditProfileProps, IUserDetails } from "../../types/types";
 import toast from "react-hot-toast";
 import Button from "@/common/buttons/Button";
+import { Method } from "@/app/About/types/types";
+import { userApi } from "@/utils/apiRoutes";
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;
@@ -51,7 +53,7 @@ const EditProfile = (props: IEditProfileProps) => {
       const year = data?.dob?.year as number;
       const month = data?.dob?.month as number;
       const day = data?.dob?.day as number;
-      const response = await fetchApi("/api/user", "POST", {
+      const response = await fetchApi(userApi, Method.POST, {
         ...data,
         imageUrl: image,
         dob: new Date(`${year}-${month}-${day}`),

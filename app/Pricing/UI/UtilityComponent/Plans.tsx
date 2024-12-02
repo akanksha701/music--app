@@ -53,10 +53,7 @@ const Plans = (props: IPlans) => {
                   </ul>
                 </CardContent>
                 <CardFooter className="p-4">
-                  <Button
-                    // variant="solid"
-                    className="w-full bg-purple-600 text-white py-3 rounded-lg shadow-md hover:bg-purple-700 transition-all duration-300 ease-in-out"
-                  >
+                  <Button className="w-full bg-purple-600 text-white py-3 rounded-lg shadow-md hover:bg-purple-700 transition-all duration-300 ease-in-out">
                     Get Started
                   </Button>
                 </CardFooter>

@@ -33,11 +33,11 @@ export interface IRadioButtonProps {
 }
 
 export interface IDatePickerType {
-  control?: object;
+  control?: any;
   label?: string;
   name?: string;
   rules?: object;
-  error?: object;
+  error?: any;
   register: UseFormRegister<UserData>;
 
 }
@@ -56,7 +56,7 @@ export interface INextInputProps<T extends FieldValues> {
 }
 
 export interface ISelectProps<T extends FieldValues> {
-  control: object;
+  control: any;
   name: Path<T>;
   label?: string;
   items: Array<{ id: string; name: string }>; // Define the structure of items

@@ -5,9 +5,11 @@ import Questions from "@/app/FAQ/UI/Questions";
 import { fetchApi } from "@/utils/helpers";
 import ReadMore from "./UtilityComponent/ReadMore";
 import Views from "./UtilityComponent/Views";
+import { Method } from "@/app/About/types/types";
+import { getMarketingDetails } from "@/utils/apiRoutes";
 
 const Marketing = async () => {
-  const data = await fetchApi("/api/marketing", "GET");
+  const data = await fetchApi(getMarketingDetails, Method.GET);
   return (
     <>
       <div className="min-h-screen scroll-smooth">

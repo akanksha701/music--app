@@ -5,7 +5,7 @@ import { CalendarDate } from "@internationalized/date";
 import { IDatePickerType } from "../types/types";
 
 const NextDatePicker = (props: IDatePickerType) => {
-  const { control, label, name, rules, error,register } = props;
+  const { control, label, name, rules, error } = props;
 
   return (
     <Controller
