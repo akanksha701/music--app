@@ -19,14 +19,12 @@ export default async function RootLayout({
       <ReduxProvider>
         <html lang="en">
           <body>
-            {/* <ThemeProvider attribute="class"> */}
 
             <Toaster position="top-center" />
             <NavbarPage />
             <NextUIProvider>{children}</NextUIProvider>
             <Footer data={data?.footerContent} />
 
-            {/* </ThemeProvider> */}
           </body>
         </html>
       </ReduxProvider>
