@@ -1,20 +1,18 @@
-import React from 'react';
-import { DatePicker } from '@nextui-org/react';
-import { Controller } from 'react-hook-form';
-import { CalendarDate } from '@internationalized/date';
-import { IDatePickerType } from '../types/types';
-
-
+import React from "react";
+import { DatePicker } from "@nextui-org/react";
+import { Controller } from "react-hook-form";
+import { CalendarDate } from "@internationalized/date";
+import { IDatePickerType } from "../types/types";
 
 const NextDatePicker = (props: IDatePickerType) => {
-  const { control, label, name, rules, error } = props;
+  const { control, label, name, rules, error,register } = props;
 
   return (
     <Controller
       control={control}
       rules={rules}
-      name={name || ''}
-      render={({ field: { value, onChange } }) => {
+      name={name || ""}
+      render={({ field: { value, onChange,ref } }) => {
         const today = new CalendarDate(
           new Date().getFullYear(),
           new Date().getMonth() + 1,
@@ -26,15 +24,12 @@ const NextDatePicker = (props: IDatePickerType) => {
             name={name}
             maxValue={today}
             value={value}
-            onChange={(date) =>
-            {  
+            onChange={(date) => {
               onChange(
-                date
-                  ? new CalendarDate(date.year, date.month, date.day)
-                  : null
-              );}
-            }
-            color={error ? 'danger' : 'default'}
+                date ? new CalendarDate(date.year, date.month, date.day) : null
+              );
+            }}
+            color={error ? "danger" : "default"}
           />
         );
       }}

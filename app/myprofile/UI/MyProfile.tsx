@@ -44,7 +44,7 @@ const MyProfile = () => {
                 </p>
               </div>
             </div>
-            <EditProfile setImage={setImage} image={image} />
+            <EditProfile setImage={setImage} image={image}  />
           </div>
         </div>
       </div>

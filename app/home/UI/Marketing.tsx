@@ -16,7 +16,12 @@ const Marketing = async () => {
           data={data?.popularTrackVideos}
           users={data?.users}
         />
-        <Views title={data?.views[0].title} viewImg={data?.views[0]?.viewImg || null} views={data?.views[1].views} points={data?.views[2].points}/>
+        <Views
+          title={data?.views[0].title}
+          viewImg={data?.views[0]?.viewImg || null}
+          views={data?.views[1].views}
+          points={data?.views[2].points}
+        />
         <Section data={data.feature} />
         <Questions
           data={data?.questions.slice(0, 5)}

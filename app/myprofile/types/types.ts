@@ -2,9 +2,9 @@ import { EmailAddressResource } from '@clerk/types';
 import { CalendarDate } from '@internationalized/date';
 
 export interface IDateOfBirth {
-  day?: number;
-  month?: number;
-  year?: number;
+  day: number;
+  month: number;
+  year: number;
 }
 
 export interface IUserDetails {
@@ -15,7 +15,7 @@ export interface IUserDetails {
   emailAddresses: EmailAddressResource[];
   gender?: string;
   dob?: CalendarDate;
-  unsafeMetadata: {
+  unsafeMetadata?: {
     gender?: string;
     imageUrl?: string;
     dob?: IDateOfBirth; // Optional property for date of birth
@@ -34,5 +34,5 @@ export interface IState {
 
 export interface IEditProfileProps {
   setImage: Function;
-  image:string
+  image:string;
 }

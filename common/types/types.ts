@@ -38,6 +38,8 @@ export interface IDatePickerType {
   name?: string;
   rules?: object;
   error?: any;
+  register: UseFormRegister<UserData>;
+
 }
 
 export interface INextInputProps<T extends FieldValues> {

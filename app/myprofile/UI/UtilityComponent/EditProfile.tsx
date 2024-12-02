@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
 import { CalendarDate } from "@internationalized/date";
 import Loading from "@/app/loading";
-import { UserData } from "@clerk/types";
 import NextDatePicker from "@/common/inputs/DatePicker";
 import SelectMenu from "@/common/inputs/SelectMenu";
 import { fetchApi } from "@/utils/helpers";
@@ -13,7 +12,6 @@ import toast from "react-hot-toast";
 import Button from "@/common/buttons/Button";
 
 const EditProfile = (props: IEditProfileProps) => {
-  // const userDetails = useSelector((state: RootState) => state?.userReducer?.userDetails);
   const { setImage, image } = props;
   const [user, setUser] = useState<IUserDetails>();
   useFetchUserDetails(setUser);
@@ -35,10 +33,10 @@ const EditProfile = (props: IEditProfileProps) => {
         setValue("userId", user?.id);
         setValue("firstName", user?.firstName);
         setValue("lastName", user?.lastName);
-        setValue("gender", user?.unsafeMetadata.gender);
+        setValue("gender", user?.unsafeMetadata?.gender);
         setValue("dob", date);
         setValue("imageUrl", user?.unsafeMetadata?.imageUrl);
-        setValue("emailAddresses", user?.emailAddresses[0].emailAddress);
+        setValue("emailAddresses", user.emailAddresses[0].emailAddress);
         setImage(user?.unsafeMetadata?.imageUrl as string);
       }
     }
@@ -47,12 +45,16 @@ const EditProfile = (props: IEditProfileProps) => {
   useEffect(() => {
     setUserDetails();
   }, [user]);
-
-  const onSubmit = async (data: UserData) => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
+      const year = data?.dob?.year as number;
+      const month = data?.dob?.month as number;
+      const day = data?.dob?.day as number;
+
       const response = await fetchApi("/api/user", "POST", {
         ...data,
         imageUrl: image,
+        dob: new Date(`${year}-${month}-${day}`),
       });
       if (response.status === 200) {
         toast.success("profile updated successfully");
@@ -60,17 +62,13 @@ const EditProfile = (props: IEditProfileProps) => {
     } catch (error) {
       console.error("Error submitting form", error);
     }
-  };
-
+  });
   if (!user) {
     return <Loading />;
   }
   return (
     <>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="divide-y divide-gray-200"
-      >
+      <form onSubmit={onSubmit} className="divide-y divide-gray-200">
         <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
           <div className="flex flex-col">
             <NextInput
@@ -121,6 +119,7 @@ const EditProfile = (props: IEditProfileProps) => {
             <NextDatePicker
               name="dob"
               label="Date of Birth"
+              register={register}
               control={control}
               rules={{ required: "Date of birth is required" }}
               error={errors.dob?.message}
