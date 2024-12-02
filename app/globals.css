@@ -3,12 +3,8 @@
 @tailwind utilities;
 
 
-@layer {
-  html,
-body,
-:root {
-  height: 100%;
-}}
+
+
 
 /* datepicker.css */
 .datepicker-input {

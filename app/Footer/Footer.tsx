@@ -1,18 +1,15 @@
-'use client';  
 import React, { useMemo } from "react";
 import { IFooterProps } from "../Home/types/types";
 import { FaYoutube, FaInstagram, FaTiktok, FaFacebook } from "react-icons/fa";
 const Footer = (props: IFooterProps) => {
   const { data } = props;
- 
-  
   const icons = [
     <FaYoutube key="youtube" size={30} />,
     <FaInstagram key="instagram" size={30} />,
     <FaTiktok key="tiktok" size={30} />,
     <FaFacebook key="facebook" size={30} />,
   ];
-  
+
   const renderedLinks = useMemo(() => {
     return (
       <div className="flex flex-col md:flex-row md:space-x-8 text-center md:text-left">
@@ -40,7 +37,7 @@ const Footer = (props: IFooterProps) => {
   }, [data]);
 
   return (
-    <div className="p-4 bg-slate-900 text-white">
+    <div className="mt-auto p-4 bg-slate-900 text-white">
       <hr className="my-8 border-t border-gray-600" />
       <div className="flex flex-col items-center justify-center p-4">
         {renderedLinks}

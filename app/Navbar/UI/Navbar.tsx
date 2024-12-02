@@ -13,7 +13,7 @@ export default function NavbarPage() {
   useFetchUserDetails(setUser);
 
   return (
-    <Navbar isBordered>
+    <Navbar isBordered className="sticky top-0 z-10">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
           <Image

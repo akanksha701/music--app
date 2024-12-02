@@ -14,17 +14,18 @@ export default async function RootLayout({
 }>) {
   const res = await fetch("http://localhost:3000/api/marketing");
   const data = await res.json();
+
   return (
     <ClerkProvider>
       <ReduxProvider>
         <html lang="en">
-          <body>
-
+          <body className="min-h-screen flex flex-col">
             <Toaster position="top-center" />
-            <NavbarPage />
-            <NextUIProvider>{children}</NextUIProvider>
-            <Footer data={data?.footerContent} />
-
+              <NavbarPage />
+            <NextUIProvider>
+                {children}
+            </NextUIProvider>
+              <Footer data={data?.footerContent} />
           </body>
         </html>
       </ReduxProvider>
