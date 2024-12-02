@@ -2,9 +2,7 @@
 import React, { useMemo } from "react";
 import { IFooterProps } from "../Home/types/types";
 import { FaYoutube, FaInstagram, FaTiktok, FaFacebook } from "react-icons/fa";
-import usePageLoading from "@/hooks/customHooks/usePageLoading"
 const Footer = (props: IFooterProps) => {
-  usePageLoading()
   const { data } = props;
  
   
