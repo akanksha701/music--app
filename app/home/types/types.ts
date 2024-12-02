@@ -23,6 +23,23 @@ export interface ISectionProps {
   data: IFeature[];
 }
 
+export interface ICategoryProps
+{
+  moodList:Array<{
+    id:string,
+    mood:string,
+    imageUrl:string
+  }>
+}
+export interface IArtistProps
+{
+  artistsData:Array<{
+    id:string,
+    mood:string,
+    imageUrl:string
+  }>
+}
+
 export interface IPlans {
   data?: IPricingPlan[];
 }

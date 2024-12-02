@@ -28,6 +28,8 @@ const nextConfig = {
       'media.gettyimages.com',
       'www.bollywoodhungama.com',
       'stat4.bollywoodhungama.in',
+      'images.pexels.com',
+      "media.istockphoto.com" 
       // Added for Pinterest images
     ],
     remotePatterns: [

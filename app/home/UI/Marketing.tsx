@@ -7,7 +7,8 @@ import ReadMore from "./UtilityComponent/ReadMore";
 import Views from "./UtilityComponent/Views";
 import { Method } from "@/app/About/types/types";
 import { getMarketingDetails } from "@/utils/apiRoutes";
-import Loading from "@/app/loading";
+import CategoryCard from "./UtilityComponent/CategoryCard";
+import Artists from "./UtilityComponent/Artists";
 
 const Marketing = async () => {
   const data = await fetchApi(getMarketingDetails, Method.GET);
@@ -31,6 +32,8 @@ const Marketing = async () => {
           faqDescription={data?.faqDescription}
         />
         <ReadMore />
+        <CategoryCard moodList={data.moodList} />
+        <Artists artistsData={data.moodList} />
       </div>
     </>
   );
