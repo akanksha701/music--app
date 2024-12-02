@@ -7,6 +7,7 @@ import ReadMore from "./UtilityComponent/ReadMore";
 import Views from "./UtilityComponent/Views";
 import { Method } from "@/app/About/types/types";
 import { getMarketingDetails } from "@/utils/apiRoutes";
+import Loading from "@/app/loading";
 
 const Marketing = async () => {
   const data = await fetchApi(getMarketingDetails, Method.GET);

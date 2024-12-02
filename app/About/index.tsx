@@ -6,6 +6,7 @@ import { getAboutDetails } from "@/utils/apiRoutes";
 import { Method } from "./types/types";
 export const Index = async () => {
   const data = await fetchApi(getAboutDetails, Method.GET);
+  
   return (
     <div>
       <div className="p-20">
