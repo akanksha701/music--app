@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import marketingData from "./marketing.json"
+import { NextResponse } from 'next/server';
+import marketingData from './marketing.json';
 export async function GET() {
   try {
    
@@ -24,7 +24,7 @@ export async function GET() {
       artistTitle:marketingData.artistTitle
     });
   } catch (error) {
-    console.error("Error fetching marketing data:", error);
-    return NextResponse.json({ status: 500, message: "Internal Server Error" });
+    console.error('Error fetching marketing data:', error);
+    return NextResponse.json({ status: 500, message: 'Internal Server Error' });
   }
 }

@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
-import { IPlans, IPricingPlan } from "../../../Home/types/types";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import React, { useMemo } from 'react';
+import { IPlans, IPricingPlan } from '../../../Home/types/types';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 const Plans = (props: IPlans) => {
   const { data } = props;

@@ -1,5 +1,5 @@
-import React from "react";
-import { FaMusic } from "react-icons/fa"; // Import FaMusic from react-icons/fa
+import React from 'react';
+import { FaMusic } from 'react-icons/fa'; // Import FaMusic from react-icons/fa
 
 const Loading = () => {
   return (

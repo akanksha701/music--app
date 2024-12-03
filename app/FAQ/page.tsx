@@ -1,5 +1,5 @@
-import React from "react";
-import FAQ from ".";
+import React from 'react';
+import FAQ from '.';
 
 const Page = () => {
   return <FAQ />;

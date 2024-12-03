@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
-import { IFeature, ISectionProps } from "../../types/types";
-import Image from "next/image";
+import React, { useMemo } from 'react';
+import { IFeature, ISectionProps } from '../../types/types';
+import Image from 'next/image';
 
 const Section = (props: ISectionProps) => {
   const { data } = props;

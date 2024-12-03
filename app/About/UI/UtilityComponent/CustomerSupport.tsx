@@ -1,6 +1,6 @@
-import React from "react";
-import { useMemo } from "react";
-import { ICustomerSupportProps } from "../../types/types";
+import React from 'react';
+import { useMemo } from 'react';
+import { ICustomerSupportProps } from '../../types/types';
 
 const CustomerSupport = (props: ICustomerSupportProps) => {
   const { CustomerServiceAndSupport, serviceTitle } = props;

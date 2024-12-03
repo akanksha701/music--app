@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import CarouselPopularTracks from "./CarouselPopularTracks";
-import { IPopularTracksTypes } from "../../types/types";
-import Pandora from "@/public/pandora.svg";
-import Image from "next/image";
+import React, { useMemo } from 'react';
+import CarouselPopularTracks from './CarouselPopularTracks';
+import { IPopularTracksTypes } from '../../types/types';
+import Pandora from '@/public/pandora.svg';
+import Image from 'next/image';
 
 const PopularTrackCoverPage = (props: IPopularTracksTypes) => {
   const { data, users,title,popularTrackTitle } = props;
@@ -30,7 +30,7 @@ const PopularTrackCoverPage = (props: IPopularTracksTypes) => {
             <h3 className="text-3xl font-semibold
             text-slate-900 mb-8 sm:text-4xl md:text-5xl lg:text-4xl text-transparent bg-gradient-to-r from-indigo-500 via-pink-500 to-purple-600 bg-clip-text
             ">
-             {title}
+              {title}
             </h3>
             <hr className="my-5 border-t border-purple-600" />
             <CarouselPopularTracks data={data} />

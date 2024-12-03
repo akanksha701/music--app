@@ -1,15 +1,15 @@
-"use client";
-import Button from "@/common/buttons/Button";
-import { useSelectCard } from "@/hooks/useSelectCard";
-import { redirect } from "next/navigation";
-import queryString from "query-string";
-import React from "react";
+'use client';
+import Button from '@/common/buttons/Button';
+import { useSelectCard } from '@/hooks/useSelectCard';
+import { redirect } from 'next/navigation';
+import queryString from 'query-string';
+import React from 'react';
 
 const Next = () => {
   const { artist, category } = useSelectCard();
   const url = queryString.stringifyUrl(
     {
-      url: `http://localhost:3000/Browse`,
+      url: 'http://localhost:3000/Browse',
       query: {
         artist: artist,
         catgeory: category,

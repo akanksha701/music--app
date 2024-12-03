@@ -1,10 +1,10 @@
-"use client";
-import React, { useMemo } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import Image from "next/image";
-import { ICategoryProps } from "../../types/types";
-import queryString from "query-string";
-import { Name, useSelectCard } from "@/hooks/useSelectCard";
+'use client';
+import React, { useMemo } from 'react';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import Image from 'next/image';
+import { ICategoryProps } from '../../types/types';
+import queryString from 'query-string';
+import { Name, useSelectCard } from '@/hooks/useSelectCard';
 
 const CategoryCard = (props: ICategoryProps) => {
   const { moodList,title } = props;
@@ -14,12 +14,12 @@ const CategoryCard = (props: ICategoryProps) => {
     () => (
       <div className="mt-10 w-full flex flex-col items-center justify-center rounded-md">
         <h3 className="text-center text-3xl font-semibold text-slate-900 ">
-       {title}
+          {title}
         </h3>
         <div className="rounded-md h-[500px] w-full sm:w-[300px] md:w-[450px] lg:w-[1250px]  p-10 bg-indigo-600 bg-opacity-25 opacity-100 overflow-y-auto scroll-smooth mt-10  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 items-center justify-center">
           {moodList.map((mood, index) => {
             const bgColor =
-            selectedIndexCategory === index ? "bg-purple-600 text-white" : "bg-white";
+            selectedIndexCategory === index ? 'bg-purple-600 text-white' : 'bg-white';
             return (
               <Card
                 key={index}

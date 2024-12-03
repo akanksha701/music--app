@@ -1,11 +1,11 @@
-import { clerkClient } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
-import { v2 as cloudinary } from "cloudinary";
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import User from "@/lib/models/User";
-import { getUser } from "@/app/actions/getUser";
-import { redirect } from "next/navigation";
-import { getCalendarDate, getDateObject } from "@/utils/helpers";
+import { clerkClient } from '@clerk/nextjs/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { v2 as cloudinary } from 'cloudinary';
+import dbConnect from '@/lib/DbConnection/dbConnection';
+import User from '@/lib/models/User';
+import { getUser } from '@/app/actions/getUser';
+import { redirect } from 'next/navigation';
+import { getCalendarDate, getDateObject } from '@/utils/helpers';
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     await dbConnect();
     const body = await req.json();
     if (!body.userId) {
-      return redirect("/Signin");
+      return redirect('/Signin');
     }
 
     const params = {
@@ -57,13 +57,13 @@ export async function GET() {
   try {
     const user = await getUser();
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
     return NextResponse.json(user);
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.error('Error fetching user:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

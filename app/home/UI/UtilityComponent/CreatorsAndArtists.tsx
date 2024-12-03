@@ -1,6 +1,6 @@
-import React from "react";
-import Image from "next/image"; // If using Next.js for optimized images
-import { ICreatorsAndArtists } from "../../types/types";
+import React from 'react';
+import Image from 'next/image'; // If using Next.js for optimized images
+import { ICreatorsAndArtists } from '../../types/types';
 
 const CreatorsAndArtists = (props: ICreatorsAndArtists) => {
   const { creatorsAndArtists,title } = props;
@@ -8,7 +8,7 @@ const CreatorsAndArtists = (props: ICreatorsAndArtists) => {
   return (
     <div className="flex flex-col rounded-lg mt-10 px-4 md:px-10">
       <h3 className="text-center text-3xl font-semibold text-slate-900 mb-8 sm:text-4xl md:text-5xl lg:text-3xl text-transparent bg-gradient-to-r from-purple-600 via-indigo-500 to-pink-500 bg-clip-text">
-       {title}
+        {title}
       </h3>
 
       {creatorsAndArtists.map((item, index) => (
@@ -18,7 +18,7 @@ const CreatorsAndArtists = (props: ICreatorsAndArtists) => {
         >
           <div
             className={`flex flex-row items-center justify-between w-full max-w-4xl mx-auto mt-10 ${
-              index % 2 !== 0 ? "flex-row-reverse" : ""
+              index % 2 !== 0 ? 'flex-row-reverse' : ''
             }`}
           >
             <div className="mx-10 w-1/2 relative h-64 sm:h-80">

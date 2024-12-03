@@ -1,7 +1,7 @@
-'use client'
-import React from "react";
-import { ICoverProps } from "../../types/types";
-import { redirect } from "next/navigation";
+'use client';
+import React from 'react';
+import { ICoverProps } from '../../types/types';
+import { redirect } from 'next/navigation';
 
 const Cover = (props: ICoverProps) => {
   const { data } = props;
@@ -10,9 +10,9 @@ const Cover = (props: ICoverProps) => {
       <section
         className="text-black py-20"
         style={{
-          backgroundImage: "url('/images/MarketingBG.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundImage: 'url(\'/images/MarketingBG.jpg\')',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
         <div className="container mx-auto px-6 text-center">
@@ -28,8 +28,8 @@ const Cover = (props: ICoverProps) => {
           </h1>
           <p className="text-xl mb-8">{data?.description}</p>
           <button 
-          onClick={()=> redirect('/Browse')}
-          className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100">
+            onClick={()=> redirect('/Browse')}
+            className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100">
             Start Listening Free
           </button>
         </div>

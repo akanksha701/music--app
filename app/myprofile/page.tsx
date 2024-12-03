@@ -1,5 +1,5 @@
-import React from "react";
-import MyProfile from "./index";
+import React from 'react';
+import MyProfile from './index';
 export const Page = () => {
   return (
     <>
@@ -8,4 +8,4 @@ export const Page = () => {
   );
 };
 
-export default Page
+export default Page;

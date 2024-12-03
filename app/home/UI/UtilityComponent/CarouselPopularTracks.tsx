@@ -1,14 +1,14 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import { ICarousalProps } from "../../types/types";
+} from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import { ICarousalProps } from '../../types/types';
 
 const CarouselPopularTracks = (props: ICarousalProps) => {
   const plugin = React.useRef(

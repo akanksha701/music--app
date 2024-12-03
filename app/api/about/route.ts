@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import aboutData from "./about.json";
+import { NextResponse } from 'next/server';
+import aboutData from './about.json';
 export async function GET() {
   try {
     return NextResponse.json({
@@ -10,7 +10,7 @@ export async function GET() {
       aboutImage:aboutData.aboutImage
     });
   } catch (error) {
-    console.error("Error fetching about data:", error);
-    return NextResponse.json({ status: 500, message: "Internal Server Error" });
+    console.error('Error fetching about data:', error);
+    return NextResponse.json({ status: 500, message: 'Internal Server Error' });
   }
 }

@@ -1,6 +1,6 @@
-import exp from "constants";
-import { title } from "process";
-import { string } from "zod";
+import exp from 'constants';
+import { title } from 'process';
+import { string } from 'zod';
 
 export interface IFeature {
   title: string;

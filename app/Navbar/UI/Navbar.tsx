@@ -1,12 +1,12 @@
-"use client";
-import SpotifyLogo from "@/public/spotify.svg";
-import Image from "next/image";
-import { Link, Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
-import NavItemList from "./UtilityComponent/NavItemList";
-import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
-import { useState } from "react";
-import DropDown from "./UtilityComponent/DropDown/DropDown";
-import { redirect } from "next/navigation";
+'use client';
+import SpotifyLogo from '@/public/spotify.svg';
+import Image from 'next/image';
+import { Link, Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
+import NavItemList from './UtilityComponent/NavItemList';
+import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
+import { useState } from 'react';
+import DropDown from './UtilityComponent/DropDown/DropDown';
+import { redirect } from 'next/navigation';
 
 export default function NavbarPage() {
   const [user, setUser] = useState();
@@ -22,7 +22,7 @@ export default function NavbarPage() {
             width={30}
             height={30}
             className="justify-start mr-2 cursor-pointer"
-            onClick={() => redirect("/")}
+            onClick={() => redirect('/')}
           />
 
           <p className="sm:block font-bold text-inherit mr-3">Spotify</p>

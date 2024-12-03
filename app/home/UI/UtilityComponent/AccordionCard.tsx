@@ -1,12 +1,12 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { IAccoridionProps } from "@/app/FAQ/types/types";
+} from '@/components/ui/accordion';
+import { IAccoridionProps } from '@/app/FAQ/types/types';
 const AccordionCard = (props: IAccoridionProps) => {
   const { data } = props;
   return (

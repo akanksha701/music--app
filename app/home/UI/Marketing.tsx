@@ -1,16 +1,16 @@
-import Cover from "./UtilityComponent/Cover";
-import Section from "./UtilityComponent/Section";
-import PopularTrackCoverPage from "./UtilityComponent/PopularTrackCoverPage";
-import Questions from "@/app/FAQ/UI/Questions";
-import { fetchApi } from "@/utils/helpers";
-import ReadMore from "./UtilityComponent/ReadMore";
-import Views from "./UtilityComponent/Views";
-import { Method } from "@/app/About/types/types";
-import { getMarketingDetails } from "@/utils/apiRoutes";
-import CategoryCard from "./UtilityComponent/CategoryCard";
-import Artists from "./UtilityComponent/Artists";
-import Next from "./UtilityComponent/Next";
-import CreatorsAndArtists from "./UtilityComponent/CreatorsAndArtists";
+import Cover from './UtilityComponent/Cover';
+import Section from './UtilityComponent/Section';
+import PopularTrackCoverPage from './UtilityComponent/PopularTrackCoverPage';
+import Questions from '@/app/FAQ/UI/Questions';
+import { fetchApi } from '@/utils/helpers';
+import ReadMore from './UtilityComponent/ReadMore';
+import Views from './UtilityComponent/Views';
+import { Method } from '@/app/About/types/types';
+import { getMarketingDetails } from '@/utils/apiRoutes';
+import CategoryCard from './UtilityComponent/CategoryCard';
+import Artists from './UtilityComponent/Artists';
+import Next from './UtilityComponent/Next';
+import CreatorsAndArtists from './UtilityComponent/CreatorsAndArtists';
 const Marketing = async () => {
   const data = await fetchApi(getMarketingDetails, Method.GET);
 

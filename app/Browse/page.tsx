@@ -1,9 +1,9 @@
 import React from 'react';
-import Browse from "./index"
+import Browse from './index';
 const Page = () => {
   return (
     <>
-    <Browse/>
+      <Browse/>
     </>
   );
 };

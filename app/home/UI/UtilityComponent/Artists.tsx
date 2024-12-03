@@ -1,9 +1,9 @@
-"use client";
-import React, { useMemo, useState } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import Image from "next/image";
-import { IArtistProps } from "../../types/types";
-import { Name, useSelectCard } from "@/hooks/useSelectCard";
+'use client';
+import React, { useMemo, useState } from 'react';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import Image from 'next/image';
+import { IArtistProps } from '../../types/types';
+import { Name, useSelectCard } from '@/hooks/useSelectCard';
 const Artists = (props: IArtistProps) => {
   const { artistsData ,title} = props;
   const { selectedIndexArtist, setSelectedIndex } = useSelectCard();
@@ -11,14 +11,14 @@ const Artists = (props: IArtistProps) => {
     () => (
       <div className="w-full mt-10 flex flex-col items-center justify-center rounded-md">
         <h3 className="text-center text-3xl font-semibold text-slate-900 ">
-        {title}
+          {title}
         </h3>
         <div className="rounded-md h-[500px] w-full sm:w-[300px] md:w-[350px] lg:w-[1050px] p-10 bg-yellow-500 bg-opacity-25 opacity-100 overflow-y-auto scroll-smooth mt-10  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4 items-center justify-center">
           {artistsData.map((artist, index) => {
             const bgColor =
               selectedIndexArtist === index
-                ? "bg-purple-600 text-white"
-                : "bg-white";
+                ? 'bg-purple-600 text-white'
+                : 'bg-white';
             return (
               <Card
                 key={index}

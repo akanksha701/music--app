@@ -1,9 +1,9 @@
-import React from "react";
-import Image from "next/image";
-import { fetchApi } from "@/utils/helpers";
-import CustomerSupport from "./UI/UtilityComponent/CustomerSupport";
-import { getAboutDetails } from "@/utils/apiRoutes";
-import { Method } from "./types/types";
+import React from 'react';
+import Image from 'next/image';
+import { fetchApi } from '@/utils/helpers';
+import CustomerSupport from './UI/UtilityComponent/CustomerSupport';
+import { getAboutDetails } from '@/utils/apiRoutes';
+import { Method } from './types/types';
 export const Index = async () => {
   const data = await fetchApi(getAboutDetails, Method.GET);
   
