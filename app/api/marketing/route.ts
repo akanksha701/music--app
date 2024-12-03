@@ -14,7 +14,14 @@ export async function GET() {
       faqDescription:marketingData.description,
       users:marketingData.users,
       views:marketingData.views,
-      moodList:marketingData.moodList
+      moodList:marketingData.moodList,
+      artistList:marketingData.artistList,
+      creatorsAndArtists:marketingData.creatorsAndArtists,
+      sliderTitle:marketingData.sliderTitle,
+      popularTracksTitle:marketingData.popularTrackTitle,
+      creatorArtistTitle:marketingData.creatorArtistTitle,
+      categoryTitle:marketingData.categoryTitle,
+      artistTitle:marketingData.artistTitle
     });
   } catch (error) {
     console.error("Error fetching marketing data:", error);

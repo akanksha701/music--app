@@ -14,6 +14,7 @@ const nextConfig = {
   },
   images: {
     domains: [
+      'www.gettyimages.in',
       "media.istockphoto.com" ,
       'images.pexels.com',
       'plus.unsplash.com',

@@ -25,6 +25,7 @@ export interface ISectionProps {
 
 export interface ICategoryProps
 {
+  title:string
   moodList:Array<{
     id:string,
     mood:string,
@@ -33,9 +34,10 @@ export interface ICategoryProps
 }
 export interface IArtistProps
 {
+  title:string
   artistsData:Array<{
     id:string,
-    mood:string,
+    name:string,
     imageUrl:string
   }>
 }
@@ -47,6 +49,8 @@ export interface IPlans {
 export interface IPopularTracksTypes {
   data: Array<string>;
   users: Array<string>;
+  title:string
+  popularTrackTitle:string
 }
 
 export interface IFooterProps {
@@ -65,4 +69,10 @@ export interface IViewProps {
   viewImg: string;
   points: Array<string>;
   views: Array<{ title?: string; views?: string; color?: string }>;
+}
+
+export interface ICreatorsAndArtists
+{
+  title:string
+  creatorsAndArtists :Array<{ title:string,description:string,imageUrl:string}>
 }

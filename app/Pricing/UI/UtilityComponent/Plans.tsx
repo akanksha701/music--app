@@ -28,7 +28,7 @@ const Plans = (props: IPlans) => {
                     {plan.price}
                   </p>
                   <ul className="space-y-3 mb-6 text-left">
-                    {plan.features.map((feature: any, featureIndex: number) => (
+                    {plan.features.map((feature, featureIndex: number) => (
                       <li
                         key={featureIndex}
                         className="flex items-center text-gray-600 text-lg"
