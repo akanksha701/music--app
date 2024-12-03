@@ -1,9 +1,9 @@
-"use server";
-import { Method } from "@/app/About/types/types";
-import { Roles } from "../globals";
-import { auth } from "@clerk/nextjs/server";
-import { CalendarDate } from "@internationalized/date";
-import cloudinary from "cloudinary";
+'use server';
+import { Method } from '@/app/About/types/types';
+import { Roles } from '../globals';
+import { auth } from '@clerk/nextjs/server';
+import { CalendarDate } from '@internationalized/date';
+import cloudinary from 'cloudinary';
 
 export async function getCalendarDate(date: any) {
   const day = (await new Date(date).getDate()) || new Date().getDate();
@@ -40,7 +40,7 @@ export async function uploadImage(image: any) {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.v2.uploader.upload_stream(
       {
-        resource_type: "auto",
+        resource_type: 'auto',
         upload_preset: process.env.NEXT_PUBLIC_UPLOAD_PRESET, // optional
       },
       (error, result) => {

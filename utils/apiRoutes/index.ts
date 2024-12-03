@@ -1,3 +1,3 @@
-export const getAboutDetails='/api/about'
-export const getMarketingDetails='/api/marketing'
-export const userApi="/api/user"
+export const getAboutDetails='/api/about';
+export const getMarketingDetails='/api/marketing';
+export const userApi="/api/user";
