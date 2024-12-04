@@ -77,3 +77,10 @@ export interface IPauseCircleIconProps {
   height?: number;
 }
 
+
+
+export interface IHoverCardProps
+{
+  content: React.ReactNode; 
+  children: React.ReactNode; 
+}

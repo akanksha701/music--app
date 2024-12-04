@@ -4,5 +4,11 @@ export interface IItem {
   key?: string;
 }
 export interface IDropDownItemProps {
-    menus: IItem[]; 
+  menus: IItem[];
+}
+
+export interface IHoverCardProps {
+  whatsHot?: Array<string>;
+  topPlaylists: Array<string>;
+  topArtists: Array<string>;
 }
