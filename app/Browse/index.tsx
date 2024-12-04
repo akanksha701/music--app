@@ -56,6 +56,12 @@ export const dummyMusics = [
       'https://stat4.bollywoodhungama.in/wp-content/uploads/2021/10/Ranbir-Kapoor-Aishwarya-Rai-is-like-a-GODDESS-that-woman-is-so...-Anushka-Sharma-ADHM-480x360.jpg', // Ed Sheeran
     artist: 'Arijit Singh',
   },
+  {
+    name: 'Channa Mereya',
+    coverUrl:
+      'https://stat4.bollywoodhungama.in/wp-content/uploads/2021/10/Ranbir-Kapoor-Aishwarya-Rai-is-like-a-GODDESS-that-woman-is-so...-Anushka-Sharma-ADHM-480x360.jpg', // Ed Sheeran
+    artist: 'Arijit Singh',
+  },
 ];
 const artists = [
   {
@@ -130,9 +136,7 @@ const Index = () => {
       <div className="flex flex-col ">
         <HeadLine title="Top hits" subTitle="2024" />
         <hr className="w-full p-2 border-gray-600" />
-        <div className="gap-2 grid grid-cols-2 sm:grid-cols-4 p-3 text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 rounded-lg">
           <MusicPlayCard data={dummyMusics} />
-        </div>
         <div className="mt-8 p-3">
           <HeadLine title="Featured Artists" subTitle="Discover new music" />
           <Box
