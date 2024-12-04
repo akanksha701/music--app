@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import Footer from "./Footer/Footer";
 import { Suspense } from "react";
 import Loading from "./loading";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -22,10 +23,10 @@ export default async function RootLayout({
         <html lang="en">
           <body className="min-h-screen flex flex-col">
             <Toaster position="top-center" />
-            <Tooltip/>
-            <Suspense fallback={<Loading/>}>
+            <Tooltip />
+            <Suspense fallback={<Loading />}>
               <NavbarPage />
-              <NextUIProvider>{children}</NextUIProvider>
+              <main className="flex-grow">{children}</main>
               <Footer data={data?.footerContent} />
             </Suspense>
           </body>
