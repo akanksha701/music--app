@@ -7,6 +7,7 @@ export interface ImusicProps {
 export interface IBoxTypes {
   data: Array<{ name: string; image: string }>;
   className: string;
+  title?:string
 }
 export interface IMusicPlayCardProps {
   data: Array<ImusicProps>;
