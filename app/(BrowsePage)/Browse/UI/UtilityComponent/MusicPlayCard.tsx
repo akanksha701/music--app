@@ -15,7 +15,7 @@ import {
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const router = useRouter();
   const { data } = props;
-  const itemsPerPage = 8;
+  const itemsPerPage=8
   const pages = Math.ceil(data.length / itemsPerPage);
 
   return (
@@ -26,10 +26,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
             <CarouselItem key={pageIndex}>
               <div className="grid grid-cols-4 gap-6">
                 {data
-                  .slice(
-                    pageIndex * itemsPerPage,
-                    (pageIndex + 1) * itemsPerPage
-                  )
+                  .slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage)
                   .map((item, index) => (
                     <Card
                       key={index}

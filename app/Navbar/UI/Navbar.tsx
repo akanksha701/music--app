@@ -13,30 +13,30 @@ export default function NavbarPage() {
   useFetchUserDetails(setUser);
 
   return (
-   <>
-    <Navbar isBordered className="sticky top-0 z-10">
-      <NavbarContent justify="start">
-        <NavbarBrand className="mr-4">
-          <Image
-            src={SpotifyLogo}
-            alt="Spotify Logo"
-            width={30}
-            height={30}
-            className="justify-start mr-2 cursor-pointer"
-            onClick={() => redirect("/")}
-          />
+    <>
+      <Navbar isBordered className="sticky top-0 z-10">
+        <NavbarContent justify="start">
+          <NavbarBrand className="mr-4">
+            <Image
+              src={SpotifyLogo}
+              alt="Spotify Logo"
+              width={30}
+              height={30}
+              className="justify-start mr-2 cursor-pointer"
+              onClick={() => redirect("/")}
+            />
 
-          <p className="sm:block font-bold text-inherit mr-3">Spotify</p>
-        </NavbarBrand>
-        <NavbarContent className="sm:flex gap-8">
-          <NavItemList />
+            <p className="sm:block font-bold text-inherit mr-3">Spotify</p>
+          </NavbarBrand>
+          <NavbarContent className="flex sm:flex-col md:flex-row lg:flex-row gap-2 sm:gap-2 md:gap-6 lg:gap-8">
+            <NavItemList />
+          </NavbarContent>
         </NavbarContent>
-      </NavbarContent>
 
-      <NavbarContent as="div" className="items-center " justify="end">
-        <DropDown />
-      </NavbarContent>
-    </Navbar>
-   </>
+        <NavbarContent as="div" className="items-center " justify="end">
+          <DropDown />
+        </NavbarContent>
+      </Navbar>
+    </>
   );
 }
