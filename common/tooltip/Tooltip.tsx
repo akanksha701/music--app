@@ -9,11 +9,9 @@ import { IHoverCardProps } from "../types/types";
 const Tooltip = (props: IHoverCardProps) => {
   const { content, children } = props;
   return (
-    <HoverCard openDelay={0} >
+    <HoverCard openDelay={0}>
       <HoverCardTrigger>{children}</HoverCardTrigger>
-      <HoverCardContent className="bg-white   flex justify-center items-center">
-        {content}
-      </HoverCardContent>
+      <HoverCardContent className="bg-white w-full">{content}</HoverCardContent>
     </HoverCard>
   );
 };
