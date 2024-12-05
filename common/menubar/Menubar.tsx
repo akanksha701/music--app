@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -11,38 +11,28 @@ import { Button } from "@nextui-org/react";
 import { IMenuProps } from "../types/types";
 import { useNewRelease } from "@/hooks/useNewRelease";
 import { redirect } from "next/navigation";
-import { newMusicApi, useGetnewMusicsQuery } from "@/services/newMusic";
 import queryString from "query-string";
+
 export const MenubarComponent = (props: IMenuProps) => {
   const { data: languageList } = props;
-  const { setSelectedLanguage, language } = useNewRelease();
-  
+  const { setSelectedLanguage, language, activeButtonIndex } = useNewRelease();
+
   const handleClick = useCallback(
-    (value: string) => {
+    (value: string, index: number) => {
       const newUrl = queryString.stringifyUrl(
         {
           url: "http://localhost:3000/NewRelease",
-          query: {
-            language: value,
-          },
+          query: { language: value },
         },
         { skipNull: true }
       );
-      const newApiUrl = queryString.stringifyUrl(
-        {
-          url: "http://localhost:3000/api/newRelease",
-          query: {
-            language: value,
-          },
-        },
-        { skipNull: true }
-      );
-      setSelectedLanguage(value);
+      setSelectedLanguage(value, index);
       redirect(newUrl);
     },
     [setSelectedLanguage, redirect]
   );
-  const memoerizedMenubar = useMemo(
+
+  const memoizedMenubar = useMemo(
     () => (
       <>
         <Carousel className="max-w-full">
@@ -54,8 +44,8 @@ export const MenubarComponent = (props: IMenuProps) => {
                   <div className="p-1">
                     <Button
                       radius="full"
-                      className="font-light  bg-white hover:bg-slate-300  text-black active:bg-blue-600"
-                      onClick={() => handleClick(item.name)}
+                      className={`font-light bg-white hover:bg-purple-400 text-black }`}
+                      onClick={() => handleClick(item.name, index)}
                     >
                       {item?.name}
                     </Button>
@@ -70,7 +60,8 @@ export const MenubarComponent = (props: IMenuProps) => {
     ),
     [language]
   );
-  return <> {memoerizedMenubar}</>;
+
+  return <> {memoizedMenubar} </>;
 };
 
 export default MenubarComponent;

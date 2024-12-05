@@ -35,6 +35,7 @@ const Box = (props: IBoxTypes) => {
             </CardBody>
           </Card>
         ))}
+        { data && data.length ===0 && <p>No Music Found</p>}
       </div>
     );
   }, [data]);
