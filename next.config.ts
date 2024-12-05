@@ -31,7 +31,7 @@ const nextConfig = {
       'images.pexels.com',
       "media.istockphoto.com" ,
       "www.gettyimages.in",
-      // Added for Pinterest images
+      'encrypted-tbn0.gstatic.com'
     ],
     remotePatterns: [
       {

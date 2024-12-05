@@ -54,7 +54,7 @@ export const MenubarComponent = (props: IMenuProps) => {
                   <div className="p-1">
                     <Button
                       radius="full"
-                      className="font-light  bg-white hover:bg-slate-300  text-black "
+                      className="font-light  bg-white hover:bg-slate-300  text-black active:bg-blue-600"
                       onClick={() => handleClick(item.name)}
                     >
                       {item?.name}

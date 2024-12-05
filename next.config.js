@@ -29,7 +29,8 @@ const nextConfig = {
       'www.bollywoodhungama.com',
       'stat4.bollywoodhungama.in',
       'i1.sndcdn.com',
-      'upload.wikimedia.org'
+      'upload.wikimedia.org',
+      'encrypted-tbn0.gstatic.com'
       // Added for Pinterest images
     ],
     remotePatterns: [
