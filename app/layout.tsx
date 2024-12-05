@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import Footer from "./Footer/Footer";
 import { Suspense } from "react";
 import Loading from "./loading";
+import Modal from "@/common/modal/modal";
 
 export default async function RootLayout({
   children,
@@ -24,6 +25,7 @@ export default async function RootLayout({
           <body className="min-h-screen flex flex-col">
             <Toaster position="top-center" />
             <Tooltip />
+            <Modal/>
             <Suspense fallback={<Loading />}>
               <NavbarPage />
               <main className="flex-grow">{children}</main>

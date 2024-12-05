@@ -1,12 +1,23 @@
 "use client";
 import SpotifyLogo from "@/public/spotify.svg";
 import Image from "next/image";
-import { Link, Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
 import NavItemList from "./UtilityComponent/NavItemList";
 import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
 import { useState } from "react";
 import DropDown from "./UtilityComponent/DropDown/DropDown";
 import { redirect } from "next/navigation";
+import { DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import Modal from "@/common/modal/modal";
+import { IoMdAdd } from "react-icons/io";
+import Addmusic from "./UtilityComponent/Addmusic";
 
 export default function NavbarPage() {
   const [user, setUser] = useState();
@@ -38,6 +49,17 @@ export default function NavbarPage() {
         <NavbarContent as="div" className="items-center " justify="end">
           <DropDown />
         </NavbarContent>
+        <Modal
+          title="Add New Music"
+          body={<Addmusic />}
+          children={
+            <DialogTrigger asChild>
+              <Button className="bg-purple-600 rounded-full">
+                <IoMdAdd size={50} />
+              </Button>
+            </DialogTrigger>
+          }
+        />
       </Navbar>
     </>
   );

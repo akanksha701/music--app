@@ -1,11 +1,16 @@
-import { IItem } from '@/app/Navbar/types/types';
-import { useClerk, useUser } from '@clerk/nextjs';
-import { DropdownItem, DropdownMenu } from '@nextui-org/react';
-import { redirect } from 'next/navigation';
-import React from 'react';
+import { IItem } from "@/app/Navbar/types/types";
+import Modal from "@/common/modal/modal";
+import { Button } from "@/components/ui/button";
+import { DialogTrigger } from "@/components/ui/dialog";
+import { useClerk, useUser } from "@clerk/nextjs";
+import { DropdownItem, DropdownMenu } from "@nextui-org/react";
+import { redirect } from "next/navigation";
+import React from "react";
 
 const menus: any = [
-  { label: 'My profile', key: 'my_profile', route: '/MyProfile' },
+  { label: "My profile", key: "my_profile", route: "/MyProfile" },
+  { label: "Add music", key: "add_music", route: "/AddMusic" },
+  { label: "My music", key: "my_music", route: "/MyMusic" },
 ];
 const DropDownMenu = () => {
   const { signOut } = useClerk();
@@ -13,10 +18,10 @@ const DropDownMenu = () => {
 
   return (
     <>
-      <DropdownMenu aria-label='Profile Actions' variant='flat'>
-        <DropdownItem key='profile' className='h-14 gap-2 '>
-          <p className='font-semibold '>Signed in as</p>
-          <p className='font-semibold '>
+      <DropdownMenu aria-label="Profile Actions" variant="flat">
+        <DropdownItem key="profile" className="h-14 gap-2 ">
+          <p className="font-semibold ">Signed in as</p>
+          <p className="font-semibold ">
             {user?.firstName} {user?.lastName}
           </p>
         </DropdownItem>
@@ -28,12 +33,13 @@ const DropDownMenu = () => {
         ))}
 
         <DropdownItem
-          key='logout'
-          color='danger'
-          onClick={() => signOut({ redirectUrl: '/Signin' })}
+          key="logout"
+          color="danger"
+          onClick={() => signOut({ redirectUrl: "/Signin" })}
         >
           Log Out
         </DropdownItem>
+       
       </DropdownMenu>
     </>
   );
