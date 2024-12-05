@@ -16,14 +16,16 @@ export default function NavbarPage() {
     <>
       <Navbar isBordered className="sticky top-0 z-10">
         <NavbarContent justify="start">
-          <NavbarBrand className="mr-4">
+          <NavbarBrand
+            className="mr-4 cursor-pointer "
+            onClick={() => redirect("/")}
+          >
             <Image
               src={SpotifyLogo}
               alt="Spotify Logo"
               width={30}
               height={30}
               className="justify-start mr-2 cursor-pointer"
-              onClick={() => redirect("/")}
             />
 
             <p className="sm:block font-bold text-inherit mr-3">Spotify</p>
