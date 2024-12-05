@@ -1,22 +1,23 @@
 "use client";
 import React, { useCallback } from "react";
-import NewRelease from "./UI/UtilityComponent/NewRelease";
-import MenubarComponent from "@/common/menubar/Menubar";
 import { useGetLanguageQuery } from "@/services/languages";
 import Loading from "@/app/loading";
+import MenubarComponent from "@/common/menubar/Menubar";
+import NewRelease from "../NewRelease";
 import { useNewRelease } from "@/hooks/useNewRelease";
-import queryString from "query-string";
 import { redirect } from "next/navigation";
+import queryString from "query-string";
+import TopPlayList from "./UI/UtilityComponents/TopPlayList";
 
 const Index = () => {
   const { data: languageList, isLoading } = useGetLanguageQuery(undefined);
-
   const { setSelectedLanguage } = useNewRelease();
+  
   const handleClick = useCallback(
     (value: string, index: number) => {
       const newUrl = queryString.stringifyUrl(
         {
-          url: "http://localhost:3000/NewRelease",
+          url: "http://localhost:3000/TopPlaylists",
           query: { language: value },
         },
         { skipNull: true }
@@ -38,7 +39,7 @@ const Index = () => {
           handleClick={handleClick}
         />
         <hr className="w-full border-gray-600" />
-        <NewRelease />
+        <TopPlayList />
       </div>
     </div>
   );

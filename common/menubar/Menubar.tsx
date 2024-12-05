@@ -10,28 +10,11 @@ import {
 import { Button } from "@nextui-org/react";
 import { IMenuProps } from "../types/types";
 import { useNewRelease } from "@/hooks/useNewRelease";
-import { redirect } from "next/navigation";
-import queryString from "query-string";
 
 export const MenubarComponent = (props: IMenuProps) => {
-  const { data: languageList } = props;
-  const { setSelectedLanguage, language, activeButtonIndex } = useNewRelease();
-
-  const handleClick = useCallback(
-    (value: string, index: number) => {
-      const newUrl = queryString.stringifyUrl(
-        {
-          url: "http://localhost:3000/NewRelease",
-          query: { language: value },
-        },
-        { skipNull: true }
-      );
-      setSelectedLanguage(value, index);
-      redirect(newUrl);
-    },
-    [setSelectedLanguage, redirect]
-  );
-
+  const { data: languageList, handleClick } = props;
+  const { language } = useNewRelease();
+console.log(language,"----")
   const memoizedMenubar = useMemo(
     () => (
       <>
@@ -58,7 +41,7 @@ export const MenubarComponent = (props: IMenuProps) => {
         </Carousel>
       </>
     ),
-    [language]
+    [handleClick,language]
   );
 
   return <> {memoizedMenubar} </>;

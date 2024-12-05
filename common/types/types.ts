@@ -87,5 +87,6 @@ export interface IHoverCardProps
 
 export interface IMenuProps
 {
-  data:Array<{id:number,name:string}>
+  data:Array<{id:number,name:string}>;
+  handleClick:Function
 }
