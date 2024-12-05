@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import Modal from "@/common/modal/modal";
 import { IoMdAdd } from "react-icons/io";
 import Addmusic from "./UtilityComponent/Addmusic";
+import AddCategory from "./UtilityComponent/AddCategory";
 
 export default function NavbarPage() {
   const [user, setUser] = useState();
@@ -55,7 +56,18 @@ export default function NavbarPage() {
           children={
             <DialogTrigger asChild>
               <Button className="bg-purple-600 rounded-full">
-                <IoMdAdd size={50} />
+                <IoMdAdd size={50} /> Add music
+              </Button>
+            </DialogTrigger>
+          }
+        />
+         <Modal
+          title="Add genre"
+          body={<AddCategory />}
+          children={
+            <DialogTrigger asChild>
+              <Button className="bg-purple-600 rounded-full">
+                <IoMdAdd size={50} /> Add genre
               </Button>
             </DialogTrigger>
           }

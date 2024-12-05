@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { FieldValues } from "react-hook-form";
-import { Input as NextUIInput } from "@nextui-org/react";
-import { INextInputProps } from "../types/types";
+import { Textarea as NextUITextArea } from "@nextui-org/react";
+import { INextTextAreaProps } from "../types/types";
 
-const NextInput = <T extends FieldValues>({
+const NextTextArea = <T extends FieldValues>({
   label,
   placeholder,
   required,
@@ -14,7 +14,7 @@ const NextInput = <T extends FieldValues>({
   errors,
   disabled,
   options,
-}: INextInputProps<T>) => {
+}: INextTextAreaProps<T>) => {
   return (
     <div className="mb-3">
       {/* {label && (
@@ -23,7 +23,7 @@ const NextInput = <T extends FieldValues>({
           {required && <span className="text-red-500">*</span>}
         </label>
       )} */}
-      <NextUIInput
+      <NextUITextArea
         id={id}
         {...register(id as any, options)}
         placeholder={placeholder}
@@ -36,4 +36,4 @@ const NextInput = <T extends FieldValues>({
   );
 };
 
-export default NextInput;
+export default NextTextArea;

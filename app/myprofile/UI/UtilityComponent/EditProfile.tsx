@@ -88,6 +88,7 @@ const EditProfile = (props: IEditProfileProps) => {
           <div className="flex flex-col">
             <NextInput
               label="Last Name"
+              name="Last Name"
               id="lastName"
               register={register}
               required
@@ -99,6 +100,7 @@ const EditProfile = (props: IEditProfileProps) => {
 
           <div className="flex flex-col">
             <NextInput
+              name="Email"
               disabled={true}
               label="Email"
               id="emailAddresses"

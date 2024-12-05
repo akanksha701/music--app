@@ -39,7 +39,6 @@ export interface IDatePickerType {
   rules?: object;
   error?: any;
   register: UseFormRegister<UserData>;
-
 }
 
 export interface INextInputProps<T extends FieldValues> {
@@ -52,7 +51,20 @@ export interface INextInputProps<T extends FieldValues> {
   errors: FieldErrors<T>;
   disabled?: boolean;
   options?: object;
-  name?: string;
+  name: string;
+}
+
+export interface INextTextAreaProps<T extends FieldValues> {
+  label?: string;
+  placeholder?: string;
+  required?: boolean;
+  type?: string;
+  id: string;
+  register: UseFormRegister<UserData>;
+  errors: FieldErrors<T>;
+  disabled?: boolean;
+  options?: object;
+  name: string;
 }
 
 export interface ISelectProps<T extends FieldValues> {
@@ -77,16 +89,12 @@ export interface IPauseCircleIconProps {
   height?: number;
 }
 
-
-
-export interface IHoverCardProps
-{
-  content: React.ReactNode; 
-  children: React.ReactNode; 
+export interface IHoverCardProps {
+  content: React.ReactNode;
+  children: React.ReactNode;
 }
 
-export interface IMenuProps
-{
-  data:Array<{id:number,name:string}>;
-  handleClick:Function
+export interface IMenuProps {
+  data: Array<{ id: number; name: string }>;
+  handleClick: Function;
 }
