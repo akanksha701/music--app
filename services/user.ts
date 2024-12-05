@@ -4,7 +4,7 @@ import { UserResponse } from "./types";
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000/",
+    baseUrl: process.env.APP_URL,
   }),
   endpoints: (builder) => ({
     fetchUserProfile: builder.query<UserResponse, void>({

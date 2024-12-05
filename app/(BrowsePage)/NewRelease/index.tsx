@@ -7,16 +7,16 @@ import Loading from "@/app/loading";
 import { useNewRelease } from "@/hooks/useNewRelease";
 import queryString from "query-string";
 import { redirect } from "next/navigation";
+import { newRelease } from "@/utils/apiRoutes";
 
 const Index = () => {
   const { data: languageList, isLoading } = useGetLanguageQuery(undefined);
-
   const { setSelectedLanguage } = useNewRelease();
   const handleClick = useCallback(
     (value: string, index: number) => {
       const newUrl = queryString.stringifyUrl(
         {
-          url: "http://localhost:3000/NewRelease",
+          url: newRelease,
           query: { language: value },
         },
         { skipNull: true }

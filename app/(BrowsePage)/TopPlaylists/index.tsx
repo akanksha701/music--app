@@ -3,11 +3,11 @@ import React, { useCallback } from "react";
 import { useGetLanguageQuery } from "@/services/languages";
 import Loading from "@/app/loading";
 import MenubarComponent from "@/common/menubar/Menubar";
-import NewRelease from "../NewRelease";
 import { useNewRelease } from "@/hooks/useNewRelease";
 import { redirect } from "next/navigation";
 import queryString from "query-string";
 import TopPlayList from "./UI/UtilityComponents/TopPlayList";
+import { topPlaylists } from "@/utils/apiRoutes";
 
 const Index = () => {
   const { data: languageList, isLoading } = useGetLanguageQuery(undefined);
@@ -17,7 +17,7 @@ const Index = () => {
     (value: string, index: number) => {
       const newUrl = queryString.stringifyUrl(
         {
-          url: "http://localhost:3000/TopPlaylists",
+          url: topPlaylists,
           query: { language: value },
         },
         { skipNull: true }
