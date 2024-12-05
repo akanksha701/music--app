@@ -30,7 +30,7 @@ const nextConfig = {
       'stat4.bollywoodhungama.in',
       'images.pexels.com',
       "media.istockphoto.com" ,
-      "www.gettyimages.in"
+      "www.gettyimages.in",
       // Added for Pinterest images
     ],
     remotePatterns: [

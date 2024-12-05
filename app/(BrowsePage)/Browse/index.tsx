@@ -143,7 +143,7 @@ const Index = () => {
         />
       </div>
 
-      <div className="mt-8 p-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* <div className="mt-8 p-3 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white text-black rounded-lg shadow-lg p-4">
           <HeadLine title="Featured Artists" subTitle="Discover new music" />
           <Box
@@ -158,7 +158,7 @@ const Index = () => {
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

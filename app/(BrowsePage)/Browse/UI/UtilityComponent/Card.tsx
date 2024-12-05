@@ -10,19 +10,21 @@ const Box = (props: IBoxTypes) => {
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>
-        {data.map((song, index) => (
+        {data && data.length >0 && data.map((song, index) => (
           <Card
             key={index}
             className="bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group"
+            style={{ width: "220px", height: "220px" }}
           >
-            <CardBody className="flex flex-col items-center p-4">
-              <Image
-                alt={song.name}
-                src={song.image}
-                width={180}
-                height={180}
-                className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
-              />
+            <CardBody className="flex flex-col items-center p-4 w-full h-full">
+              <div className="relative w-full h-2/3">
+                <Image
+                  alt={song.name}
+                  src={song.image}
+                  fill
+                  className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
+                />
+              </div>
               <div className="mt-4 w-full flex justify-between items-center">
                 <FaRegHeart className="text-red-500 cursor-pointer opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300" />
                 <span className="flex-1 text-center font-semibold text-xl">

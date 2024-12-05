@@ -84,3 +84,8 @@ export interface IHoverCardProps
   content: React.ReactNode; 
   children: React.ReactNode; 
 }
+
+export interface IMenuProps
+{
+  data:Array<{id:number,name:string}>
+}

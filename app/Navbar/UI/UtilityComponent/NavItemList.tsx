@@ -6,6 +6,8 @@ import Tooltip from "@/common/tooltip/Tooltip";
 import HoverCard from "./HoverCard";
 import { useGetPlayListsQuery } from "@/services/playlists";
 import { useGetartistsQuery } from "@/services/artists";
+
+
 const NavItemList: React.FC = () => {
   const navItems: IItem[] = [
     { label: "Pricing", route: "/Pricing" },
@@ -28,13 +30,13 @@ const NavItemList: React.FC = () => {
           />
         }
         children={
-          <Link
+          <button
             onClick={() => redirect("/Browse")}
             className="cursor-pointer"
             color="foreground"
           >
             Browse
-          </Link>
+          </button>
         }
       />
       {navItems.map((item: IItem) => (
