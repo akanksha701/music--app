@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
+import Genre from "./Genre";
+import Language from "./Language";
 
-const MusicSchema = new mongoose.Schema(
+const musicSchema = new mongoose.Schema(
   {
-    musicDetails: [
-      {
+    musicDetails: {
+      type: {
         name: {
           type: String,
           required: [true, "music name is required"],
@@ -11,7 +13,8 @@ const MusicSchema = new mongoose.Schema(
           trim: true,
         },
         artistId: {
-          type: String,
+          // ref:Artist
+          type: new mongoose.Types.ObjectId(),
           required: [true, "artist id  is required"],
         },
         description: {
@@ -20,12 +23,14 @@ const MusicSchema = new mongoose.Schema(
           trim: true,
         },
         genreId: {
-          type: String,
+          ref: Genre,
+          type: new mongoose.Types.ObjectId(),
           required: [true, "genre id is required"],
         },
 
         languageId: {
-          type: String,
+          ref: Language,
+          type: new mongoose.Types.ObjectId(),
           required: [true, "language is required"],
         },
         releaseDate: {
@@ -38,9 +43,9 @@ const MusicSchema = new mongoose.Schema(
           min: [0, "Duration must be a positive number"],
         },
       },
-    ],
-    audioDetails: [
-      {
+    },
+    audioDetails: {
+      type: {
         imgUrl: {
           type: String,
         },
@@ -49,10 +54,29 @@ const MusicSchema = new mongoose.Schema(
           required: [true, "music url is required"],
         },
       },
-    ],
+    },
     playTime: {
       type: Number,
       default: 0,
+    },
+    price: {
+      type: {
+        amount: {
+          type: Number,
+          enum: [0, 10, 20, 30],
+          required: true,
+        },
+        currency: {
+          type: String,
+          enum: ["USD", "EUR", "INR"],
+          required: true,
+        },
+      },
+      required: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -60,11 +84,11 @@ const MusicSchema = new mongoose.Schema(
   }
 );
 
-MusicSchema.index({ email: 1 });
-MusicSchema.index({ firstName: 1, lastName: 1 });
-MusicSchema.pre("save", function (next) {
+musicSchema.index({ email: 1 });
+musicSchema.index({ firstName: 1, lastName: 1 });
+musicSchema.pre("save", function (next) {
   this.updatedAt = new Date();
   next();
 });
 
-export default mongoose.models.Music || mongoose.model("Music", MusicSchema);
+export default mongoose.models.Music || mongoose.model("Music", musicSchema);

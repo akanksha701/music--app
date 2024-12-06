@@ -11,7 +11,7 @@ const languageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isDelete: {
+    isDeleted: {
       type: Boolean,
       default: false,
     },

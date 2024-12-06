@@ -1,12 +1,20 @@
+import Music from "./Music";
+
 const mongoose = require("mongoose");
 
-const genreSchema = new mongoose.Schema(
+const albumSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
       unique: true,
     },
+    musicIds: [
+      {
+        type: new mongoose.Types.ObjectId(),
+        ref: Music,
+      },
+    ],
     description: {
       type: String,
       required: true,
@@ -20,8 +28,8 @@ const genreSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,  // This adds createdAt and updatedAt fields
+    timestamps: true, 
   }
 );
 
-export default mongoose.models.Genre || mongoose.model("Genre", genreSchema);
+export default mongoose.models.Album || mongoose.model("Album", albumSchema);
