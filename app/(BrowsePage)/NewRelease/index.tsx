@@ -5,22 +5,15 @@ import MenubarComponent from "@/common/menubar/Menubar";
 import { useGetLanguageQuery } from "@/services/languages";
 import Loading from "@/app/loading";
 import { useNewRelease } from "@/hooks/useNewRelease";
-import queryString from "query-string";
 import { redirect } from "next/navigation";
 import { newRelease } from "@/utils/apiRoutes";
-
+import { generateUrl } from "@/utils/helpers";
 const Index = () => {
   const { data: languageList, isLoading } = useGetLanguageQuery(undefined);
   const { setSelectedLanguage } = useNewRelease();
   const handleClick = useCallback(
-    (value: string, index: number) => {
-      const newUrl = queryString.stringifyUrl(
-        {
-          url: newRelease,
-          query: { language: value },
-        },
-        { skipNull: true }
-      );
+    async (value: string, index: number) => {
+      const newUrl = await generateUrl(newRelease, { language: value });
       setSelectedLanguage(value, index);
       redirect(newUrl);
     },

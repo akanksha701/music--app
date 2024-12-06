@@ -5,23 +5,17 @@ import Loading from "@/app/loading";
 import MenubarComponent from "@/common/menubar/Menubar";
 import { useNewRelease } from "@/hooks/useNewRelease";
 import { redirect } from "next/navigation";
-import queryString from "query-string";
 import TopPlayList from "./UI/UtilityComponents/TopPlayList";
 import { topPlaylists } from "@/utils/apiRoutes";
+import { generateUrl } from "@/utils/helpers";
 
 const Index = () => {
   const { data: languageList, isLoading } = useGetLanguageQuery(undefined);
   const { setSelectedLanguage } = useNewRelease();
-  
+
   const handleClick = useCallback(
-    (value: string, index: number) => {
-      const newUrl = queryString.stringifyUrl(
-        {
-          url: topPlaylists,
-          query: { language: value },
-        },
-        { skipNull: true }
-      );
+    async (value: string, index: number) => {
+      const newUrl = await generateUrl(topPlaylists, { language: value });
       setSelectedLanguage(value, index);
       redirect(newUrl);
     },

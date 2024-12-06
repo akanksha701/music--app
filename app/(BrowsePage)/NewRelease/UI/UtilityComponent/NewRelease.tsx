@@ -9,8 +9,6 @@ const NewRelease = () => {
   const language = searchParams.get("language");
   const { data: newMusics } = useGetnewMusicsQuery(language);
 
-
-
   const memorizedNewRelease = useMemo(
     () => (
       <>
