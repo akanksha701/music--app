@@ -15,7 +15,7 @@ const Footer = (props: IFooterProps) => {
       <div className="flex flex-col md:flex-row md:space-x-8 text-center md:text-left">
         <div className="flex flex-row items-center justify-center space-x-5 my-5">
           <div className="my-2 px-2 text-2xl font-semibold text-purple-600">
-            Spotify
+            SoundScape
           </div>
           <div className="flex space-x-3 cursor-pointer">{icons}</div>
         </div>
@@ -44,7 +44,7 @@ const Footer = (props: IFooterProps) => {
       </div>
       <hr className="my-8 border-t border-gray-600" />
       <div className="mt-4 text-center">
-        <div className="text-sm text-gray-400">© 2024 Sportify</div>
+        <div className="text-sm text-gray-400">© 2024 SoundScape</div>
         <div className="text-sm text-gray-400">All rights reserved.</div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 "use client";
-import SpotifyLogo from "@/public/spotify.svg";
+import SoundScapeLogo from "@/public/SoundScapeLogo.png";
 import Image from "next/image";
 import {
   Navbar,
@@ -33,16 +33,16 @@ export default function NavbarPage() {
             onClick={() => redirect("/")}
           >
             <Image
-              src={SpotifyLogo}
-              alt="Spotify Logo"
-              width={30}
-              height={30}
+              src={SoundScapeLogo}
+              alt="SoundScape Logo"
+              width={50}
+              height={50}
               className="justify-start mr-2 cursor-pointer"
             />
 
-            <p className="sm:block font-bold text-inherit mr-3">Spotify</p>
+            <p className="sm:block font-bold text-inherit mr-3">SoundScape</p>
           </NavbarBrand>
-          <NavbarContent className="flex sm:flex-col md:flex-row lg:flex-row gap-2 sm:gap-2 md:gap-6 lg:gap-8">
+          <NavbarContent className="flex sm:flex-col md:flex-row lg:flex-row gap-2 sm:gap-2 md:gap-6 lg:gap-8 lg:mx-10">
             <NavItemList />
           </NavbarContent>
         </NavbarContent>

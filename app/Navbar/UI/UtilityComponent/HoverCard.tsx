@@ -5,7 +5,7 @@ const HoverCard = (props: IHoverCardProps) => {
   const { topPlaylists, topArtists } = props;
   return (
     <div className="p-2 mx-10">
-      <h2 className="text-2xl font-semibold ">What's Hot on Sportify</h2>
+      <h2 className="text-2xl font-semibold ">What's Hot on SoundScape</h2>
       <div className="grid grid-cols-2 mt-3 ">
         <div>
           <div>New Releases</div>

@@ -23,7 +23,7 @@ const Cover = (props: ICoverProps) => {
               target="_blank"
               className="ml-2 bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 bg-bottom bg-no-repeat bg-[length:100%_6px] hover:bg-[length:100%_100%] transition-[background-size]"
             >
-              Spotify
+              SoundScape
             </a>
           </h1>
           <p className="text-xl mb-8">{data?.description}</p>
