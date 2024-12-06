@@ -1,5 +1,5 @@
 import { NavbarItem, Link } from "@nextui-org/react";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import React from "react";
 import { IItem } from "../../types/types";
 import Tooltip from "@/common/tooltip/Tooltip";
@@ -7,13 +7,13 @@ import HoverCard from "./HoverCard";
 import { useGetPlayListsQuery } from "@/services/playlists";
 import { useGetartistsQuery } from "@/services/artists";
 
-
+const navItems: IItem[] = [
+  { label: "Pricing", route: "/Pricing" },
+  { label: "FAQ", route: "/FAQ" },
+  { label: "About", route: "/About" },
+];
 const NavItemList: React.FC = () => {
-  const navItems: IItem[] = [
-    { label: "Pricing", route: "/Pricing" },
-    { label: "FAQ", route: "/FAQ" },
-    { label: "About", route: "/About" },
-  ];
+  const pathname = usePathname();
   const { data: playLists } = useGetPlayListsQuery(undefined);
   const { data: artistList } = useGetartistsQuery(undefined);
 
@@ -32,24 +32,31 @@ const NavItemList: React.FC = () => {
         children={
           <button
             onClick={() => redirect("/Browse")}
-            className="cursor-pointer"
+            className={`${
+              pathname === "/Browse" ? "text-purple-600" : "text-black"
+            } cursor-pointer`}
             color="foreground"
           >
             Browse
           </button>
         }
       />
-      {navItems.map((item: IItem) => (
-        <NavbarItem key={item.route}>
-          <Link
-            onClick={() => redirect(item.route)}
-            className="cursor-pointer"
-            color="foreground"
-          >
-            {item.label}
-          </Link>
-        </NavbarItem>
-      ))}
+      {navItems.map((item: IItem) => {
+        const isActive = pathname === item.route;
+        return (
+          <NavbarItem key={item.route}>
+            <Link
+              onClick={() => redirect(item.route)}
+              className={`${
+                isActive ? "text-purple-600" : "text-black"
+              } cursor-pointer`}
+              color="foreground"
+            >
+              {item.label}
+            </Link>
+          </NavbarItem>
+        );
+      })}
     </>
   );
 };

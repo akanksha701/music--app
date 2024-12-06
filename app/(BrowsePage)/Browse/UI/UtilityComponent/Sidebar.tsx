@@ -7,14 +7,14 @@ import { MdPodcasts } from "react-icons/md";
 import { PiMicrophoneStageLight } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { GoPlus } from "react-icons/go";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 const Browse = [
-  { name: "New Releases", label: "NewRelease" },
-  { name: "Top Charts", label: "TopCharts" },
-  { name: "Top Playlists", label: "TopPlaylists" },
-  { name: "Podcasts", label: "Podcasts" },
-  { name: "Top Artists", label: "TopArtists" },
-  { name: "Radio", label: "Radio" },
+  { name: "New Releases", label: "NewRelease", route: "/NewRelease" },
+  { name: "Top Charts", label: "TopCharts", route: "/TopCharts" },
+  { name: "Top Playlists", label: "TopPlaylists", route: "/TopPlaylists" },
+  { name: "Podcasts", label: "Podcasts", route: "/PodCasts" },
+  { name: "Top Artists", label: "TopArtists", route: "/TopArtists" },
+  { name: "Radio", label: "Radio", route: "/Radio" },
 ];
 const Library = [
   { name: "History", icon: <TbHistory size={25} /> },
@@ -24,31 +24,43 @@ const Library = [
   { name: "Artists", icon: <PiMicrophoneStageLight size={25} /> },
 ];
 const Sidebar = () => {
+  const pathname = usePathname();
+
   return (
-    <div className="lg:flex flex-col  p-8 sm:flex flex-col items-center justify-items-center">
+    <div className="lg:flex flex-col  p-8 sm:flex flex-col items-center justify-items-center my-2">
       <div className="my-2">
         <p className="text-slate-500">Browse</p>
-        {Browse.map((item, index) => (
-          <div key={index} className="hover:text-slate-600">
-            <p
-              onClick={() => redirect(item.label)}
-              className="cursor-pointer font-light my-2"
+        {Browse.map((item, index) => {
+          const isActive = pathname === item.route;
+          return (
+            <div
+              key={index}
+              className={`${
+                isActive ? "text-purple-600" : "text-black"
+              } cursor-pointer hover:text-slate-600`}
             >
-              {item.name}
-            </p>
-          </div>
-        ))}
+              <p
+                onClick={() => redirect(item.label)}
+                className="cursor-pointer font-light my-2"
+              >
+                {item.name}
+              </p>
+            </div>
+          );
+        })}
       </div>
       <div className="my-2">
         <p className="text-slate-500">Library</p>
-        {Library.map((item, index) => (
-          <div key={index} className="flex items-center my-2">
-            {item.icon}
-            <span className="ml-2">
-              <p className="cursor-pointer font-light">{item.name}</p>
-            </span>
-          </div>
-        ))}
+        {Library.map((item, index) => {
+          return (
+              <div key={index} className="flex items-center my-2">
+                {item.icon}
+                <span className="ml-2">
+                  <p className="cursor-pointer font-light">{item.name}</p>
+                </span>
+              </div>
+          );
+        })}
       </div>
       <Button className="border-1  border-purple-400 text-purple-400 rounded-full hover:bg-purple-400 hover:text-white">
         <GoPlus size={50} /> New PlayList

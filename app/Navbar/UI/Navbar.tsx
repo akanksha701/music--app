@@ -5,8 +5,6 @@ import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  Select,
-  SelectItem,
 } from "@nextui-org/react";
 import NavItemList from "./UtilityComponent/NavItemList";
 import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
@@ -43,14 +41,14 @@ export default function NavbarPage() {
             <p className="sm:block font-bold text-inherit mr-3">SoundScape</p>
           </NavbarBrand>
           <NavbarContent className="flex sm:flex-col md:flex-row lg:flex-row gap-2 sm:gap-2 md:gap-6 lg:gap-8 lg:mx-10">
-            <NavItemList />
+            <NavItemList  />
           </NavbarContent>
         </NavbarContent>
 
         <NavbarContent as="div" className="items-center " justify="end">
           <DropDown />
         </NavbarContent>
-        <Modal
+        {/* <Modal
           title="Add New Music"
           body={<Addmusic />}
           children={
@@ -71,7 +69,7 @@ export default function NavbarPage() {
               </Button>
             </DialogTrigger>
           }
-        />
+        /> */}
       </Navbar>
     </>
   );
