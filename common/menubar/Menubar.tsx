@@ -1,5 +1,4 @@
-"use client";
-import React, { useCallback, useMemo } from "react";
+import React, {   useMemo } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -9,39 +8,57 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@nextui-org/react";
 import { IMenuProps } from "../types/types";
-import { useNewRelease } from "@/hooks/useNewRelease";
+import { useSearchParams } from "next/navigation";
 
 export const MenubarComponent = (props: IMenuProps) => {
+  const searchParams = useSearchParams();
   const { data: languageList, handleClick } = props;
-  const { language } = useNewRelease();
-console.log(language,"----")
+  const languageName = searchParams.get("language");
   const memoizedMenubar = useMemo(
     () => (
       <>
         <Carousel className="max-w-full">
           <CarouselContent className="flex gap-2">
+            <CarouselItem className="basis-1/3 flex-shrink-0">
+              <div className="p-1">
+                <Button
+                  radius="full"
+                  className={`${
+                    !languageName ? "bg-slate-200" : "bg-white" 
+                  } font-light text-black`}
+                  onClick={() => handleClick(null)}
+                >
+                  For you
+                </Button>
+              </div>
+            </CarouselItem>
             {languageList &&
               languageList.length > 0 &&
-              languageList.map((item, index) => (
-                <CarouselItem key={index} className="basis-1/3 flex-shrink-0">
-                  <div className="p-1">
-                    <Button
-                      radius="full"
-                      className={`font-light bg-white hover:bg-purple-400 text-black }`}
-                      onClick={() => handleClick(item.name, index)}
-                    >
-                      {item?.name}
-                    </Button>
-                  </div>
-                </CarouselItem>
-              ))}
+              languageList.map((item, index) => {
+                const isActive = languageName === item.name;
+                return (
+                  <CarouselItem key={index} className="basis-1/3 flex-shrink-0">
+                    <div className="p-1">
+                      <Button
+                        radius="full"
+                        className={`${
+                          isActive ? "bg-slate-200" : "bg-white" 
+                        } font-light text-black`}
+                        onClick={() => handleClick(item.name, index)}
+                      >
+                        {item?.name}
+                      </Button>
+                    </div>
+                  </CarouselItem>
+                );
+              })}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
       </>
     ),
-    [handleClick,language]
+    [handleClick, languageName]
   );
 
   return <> {memoizedMenubar} </>;
