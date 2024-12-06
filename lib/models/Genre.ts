@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const languageSchema = new mongoose.Schema(
+const GenreSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -11,15 +11,17 @@ const languageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    imgUrl: {
+      type: String,
+    },
     isDelete: {
       type: Boolean,
       default: false,
     },
   },
   {
-    timestamps: true,
+    timestamps: true,  // This adds createdAt and updatedAt fields
   }
 );
 
-export default mongoose.models.Language ||
-  mongoose.model("Language", languageSchema);
+export default mongoose.models.Genre || mongoose.model("Genre", GenreSchema);

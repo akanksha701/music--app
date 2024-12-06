@@ -26,9 +26,9 @@ export interface ISectionProps {
 export interface ICategoryProps
 {
   title:string
-  moodList:Array<{
+  genreList:Array<{
     id:string,
-    mood:string,
+    name:string,
     imageUrl:string
   }>
 }

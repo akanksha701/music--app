@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
-import Language from "@/lib/models/Language";
+import Genre from "@/lib/models/Genre";
+import { NextApiRequest } from "next";
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req?.json();
     const { name, description } = body;
-    const newLanguage = await Language.create({
+    const newGenre = await Genre.create({
       name: name,
       description: description,
     });
-    if (newLanguage) {
-      return NextResponse.json({ status: 200, data: newLanguage });
+    if (newGenre) {
+      return NextResponse.json({ status: 200, data: newGenre });
     }
     return NextResponse.json(
       { error: "error while creating genres" },
@@ -25,31 +26,28 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
 export async function PUT(req: NextRequest) {
   try {
     await dbConnect();
-
     const url = new URL(req?.url as string);
     const id = url?.searchParams?.get("id");
     const body = await req?.json();
-
     const { name, description } = body;
 
-    const updatedLanguage = await Language.findByIdAndUpdate(
+    const updatedGenre = await Genre.findByIdAndUpdate(
       id,
       { name, description },
       { new: true }
     );
 
-    if (updatedLanguage) {
+    if (updatedGenre) {
       return NextResponse.json({
         status: 200,
-        data: updatedLanguage,
+        data: updatedGenre,
       });
     }
 
-    return NextResponse.json({ error: "language not found" }, { status: 404 });
+    return NextResponse.json({ error: "genre not found" }, { status: 404 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },
@@ -61,15 +59,12 @@ export async function PUT(req: NextRequest) {
 export async function GET() {
   try {
     await dbConnect();
-    const languageList = await Language.find({});
-    if (languageList) {
-      return NextResponse.json({
-        status: 200,
-        languageList: languageList,
-      });
+    const genreList = await Genre.find({});
+    if (genreList) {
+      return NextResponse.json({ status: 200, data: genreList });
     }
     return NextResponse.json(
-      { error: "error while fetching languages" },
+      { error: "error while fetching genres" },
       { status: 400 }
     );
   } catch (error) {
@@ -80,21 +75,21 @@ export async function GET() {
   }
 }
 
-export async function DELETE(req: NextRequest) {
+export async function DELETE(req: NextApiRequest) {
   try {
     await dbConnect();
-    const url = new URL(req?.url);
+    const url = new URL(req?.url as string);
     const id = url?.searchParams?.get("id");
-    const deletedLanguage = await Language.findByIdAndDelete(id);
+    const deletedGenre = await Genre.findByIdAndDelete(id);
 
-    if (deletedLanguage) {
+    if (deletedGenre) {
       return NextResponse.json({
         status: 200,
-        message: "language deleted successfully",
+        message: "genre deleted successfully",
       });
     }
 
-    return NextResponse.json({ error: "language not found" }, { status: 404 });
+    return NextResponse.json({ error: "genre not found" }, { status: 404 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },

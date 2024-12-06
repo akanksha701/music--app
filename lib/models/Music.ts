@@ -1,47 +1,55 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const MusicSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: [true, 'Music name is required'],
-      maxLength: [100, 'Music name cannot exceed 100 characters'],
-      trim: true,
-    },
-    description: {
-      type: String,
-      maxLength: [500, 'Description cannot exceed 500 characters'],
-      trim: true,
-    },
-    coverUrl: {
-      type: String,
-    },
-    categoryId: {
-      type: String,
-      required: [true, 'Category is required'],
+    musicDetails: [
+      {
+        name: {
+          type: String,
+          required: [true, "music name is required"],
+          maxLength: [100, "music name cannot exceed 100 characters"],
+          trim: true,
+        },
+        artistId: {
+          type: String,
+          required: [true, "artist id  is required"],
+        },
+        description: {
+          type: String,
+          maxLength: [500, "description cannot exceed 500 characters"],
+          trim: true,
+        },
+        genreId: {
+          type: String,
+          required: [true, "genre id is required"],
+        },
 
-    },
-    languageId: {
-      type: String,
-      required: [true, 'Language is required'],
-    },
-    artist: {
-      type: String,
-      required: [true, 'Artist name is required'],
-    },
-    releaseDate: {
-      type: Date,
-      required: [true, 'Release date is required'],
-    },
-    duration: {
-      type: Number, // Duration in seconds
-      required: [true, 'Duration is required'],
-      min: [0, 'Duration must be a positive number'],
-    },
-    musicUrl: {
-      type: String,
-      required: [true, 'Music URL is required'],
-    },
+        languageId: {
+          type: String,
+          required: [true, "language is required"],
+        },
+        releaseDate: {
+          type: Date,
+          required: [true, "release date is required"],
+        },
+        duration: {
+          type: Number,
+          required: [true, "Duration is required"],
+          min: [0, "Duration must be a positive number"],
+        },
+      },
+    ],
+    audioDetails: [
+      {
+        imgUrl: {
+          type: String,
+        },
+        audioUrl: {
+          type: String,
+          required: [true, "music url is required"],
+        },
+      },
+    ],
     playTime: {
       type: Number,
       default: 0,
@@ -49,15 +57,14 @@ const MusicSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    versionKey: false,
   }
 );
 
 MusicSchema.index({ email: 1 });
 MusicSchema.index({ firstName: 1, lastName: 1 });
-MusicSchema.pre('save',function(next) {
+MusicSchema.pre("save", function (next) {
   this.updatedAt = new Date();
   next();
 });
 
-export default mongoose.models.Music || mongoose.model('Music', MusicSchema);
+export default mongoose.models.Music || mongoose.model("Music", MusicSchema);

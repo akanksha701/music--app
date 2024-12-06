@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import marketingData from './marketing.json';
 export async function GET() {
   try {
-   
+    
     return NextResponse.json({
       status: 200,
       coverTitle:marketingData.coverTitle,
@@ -14,7 +14,7 @@ export async function GET() {
       faqDescription:marketingData.description,
       users:marketingData.users,
       views:marketingData.views,
-      moodList:marketingData.moodList,
+      // moodList:marketingData.moodList,
       artistList:marketingData.artistList,
       creatorsAndArtists:marketingData.creatorsAndArtists,
       sliderTitle:marketingData.sliderTitle,
@@ -24,7 +24,6 @@ export async function GET() {
       artistTitle:marketingData.artistTitle
     });
   } catch (error) {
-    console.error('Error fetching marketing data:', error);
     return NextResponse.json({ status: 500, message: 'Internal Server Error' });
   }
 }

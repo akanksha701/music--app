@@ -6,14 +6,14 @@ import { fetchApi } from "@/utils/helpers";
 import ReadMore from "./UtilityComponent/ReadMore";
 import Views from "./UtilityComponent/Views";
 import { Method } from "@/app/About/types/types";
-import { getMarketingDetails } from "@/utils/apiRoutes";
+import { getGenreDetails, getMarketingDetails } from "@/utils/apiRoutes";
 import CategoryCard from "./UtilityComponent/CategoryCard";
 import Artists from "./UtilityComponent/Artists";
 import Next from "./UtilityComponent/Next";
 import CreatorsAndArtists from "./UtilityComponent/CreatorsAndArtists";
 const Marketing = async () => {
   const data = await fetchApi(getMarketingDetails, Method.GET);
-
+  const genre = await fetchApi(getGenreDetails, Method.GET);
   return (
     <>
       <div className="min-h-screen scroll-smooth">
@@ -36,7 +36,7 @@ const Marketing = async () => {
         />
         <Section data={data.feature} />
 
-        <CategoryCard moodList={data.moodList} title={data.categoryTitle} />
+        <CategoryCard genreList={genre.data} title={data.categoryTitle} />
         <Artists artistsData={data.artistList} title={data.artistTitle} />
         <Next />
         <Questions
