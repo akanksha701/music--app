@@ -15,7 +15,7 @@ import { DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Modal from "@/common/modal/modal";
 import { IoMdAdd } from "react-icons/io";
-import Addmusic from "./UtilityComponent/Addmusic";
+import Addmusic from "../../AddMusic/UI/UtilityComponent/Addmusic";
 import AddCategory from "./UtilityComponent/AddCategory";
 
 export default function NavbarPage() {

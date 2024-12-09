@@ -4,3 +4,4 @@ export const getAboutDetails = "/api/about";
 export const getMarketingDetails = "/api/marketing";
 export const userApi = "/api/user";
 export const getGenreDetails='/api/genre'
+export const getLanguageDetails='/api/language'

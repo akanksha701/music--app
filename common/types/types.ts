@@ -52,6 +52,7 @@ export interface INextInputProps<T extends FieldValues> {
   disabled?: boolean;
   options?: object;
   name: string;
+  className?: string;
 }
 
 export interface INextTextAreaProps<T extends FieldValues> {
@@ -75,6 +76,7 @@ export interface ISelectProps<T extends FieldValues> {
   rules?: object;
   error?: string;
   id?: string;
+  selectionMode: any;
 }
 
 export interface IPlusIconProps {
