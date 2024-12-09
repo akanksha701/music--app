@@ -74,7 +74,7 @@ export interface ISelectProps<T extends FieldValues> {
   label?: string;
   items: Array<{ id: string; name: string }>; // Define the structure of items
   rules?: object;
-  error?: string;
+  error?: any;
   id?: string;
   selectionMode: any;
 }

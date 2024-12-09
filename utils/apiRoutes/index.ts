@@ -5,3 +5,5 @@ export const getMarketingDetails = "/api/marketing";
 export const userApi = "/api/user";
 export const getGenreDetails='/api/genre'
 export const getLanguageDetails='/api/language'
+export const getArtistDetails='/api/artist'
+

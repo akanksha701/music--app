@@ -1,17 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Select, SelectItem } from "@nextui-org/react";
 import React from "react";
 import { IAddMusicProps } from "../../types/types";
 import NextInput from "@/common/inputs/Input";
 import { useForm } from "react-hook-form";
 import NextTextArea from "@/common/inputs/Textarea";
-import SelectMenu from "@/common/inputs/SelectMenu";
+import MultiSelect from "@/common/inputs/multiSelect";
+
 const Addmusic = (props: IAddMusicProps) => {
   const { genreList, languageList } = props;
-  // const [image, setImage] = useState<File | null>(null);
-  // const [imagePreview, setImagePreview] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -19,20 +16,9 @@ const Addmusic = (props: IAddMusicProps) => {
     control,
     formState: { errors },
   } = useForm({});
-  // Handle file change event
-  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     // Set the selected image file
-  //     setImage(file);
 
-  //     // Generate a preview URL for the selected image
-  //     const previewUrl = URL.createObjectURL(file);
-  //     setImagePreview(previewUrl);
-  //   }
-  // };
   const onSubmit = (data: any) => {
-    console.log(data); // Process the form data (imageUrl, audioFile, etc.)
+    console.log(data);
   };
 
   return (
@@ -64,20 +50,21 @@ const Addmusic = (props: IAddMusicProps) => {
           />
         </div>
         <div className="flex flex-col">
-          <SelectMenu
-            selectionMode='multiple'
-            name="gender"
-            label="Select Gender"
+          <MultiSelect
             control={control}
-            rules={{ required: "Gender is required" }}
-            error={errors.gender?.message as string}
+            name="selectedArtists"
+            label="Choose Artists"
             items={[
-              { id: "male", name: "Male" },
-              { id: "female", name: "Female" },
-              { id: "other", name: "Other" },
+              { id: "1", name: "Item 1" },
+              { id: "2", name: "Item 2" },
+              { id: "3", name: "Item 3" },
             ]}
+            error={errors}
+            rules={{ required: true }}
+            selectionMode={"multiple"}
           />
         </div>
+
         {/* <div className="flex flex-col">
           <Label className="w-24">Genre</Label>
           <Select className="p-2 border rounded-md shadow-sm w-full">
