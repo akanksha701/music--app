@@ -27,7 +27,6 @@ const Addmusic = (props: IAddMusicProps) => {
     formData.append("genre", data.genre);
     formData.append("artists", data.artists);
     formData.append("album", data.album);
-
     try {
       const res = await fetch("/api/music", {
         method: "POST",

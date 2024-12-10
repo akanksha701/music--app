@@ -9,23 +9,25 @@ const musicSchema = new mongoose.Schema(
         maxLength: [100, "music name cannot exceed 100 characters"],
         trim: true,
       },
-      artistId: {
-        type: mongoose.Schema.Types.ObjectId,  // Reference to Artist model
-        ref: "Artist",
-        required: [true, "artist id is required"],
-      },
+      artistId: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Artist",
+          required: [true, "at least one artist id is required"],
+        },
+      ],
       description: {
         type: String,
         maxLength: [500, "description cannot exceed 500 characters"],
         trim: true,
       },
       genreId: {
-        type: mongoose.Schema.Types.ObjectId,  // Reference to Genre model
+        type: mongoose.Schema.Types.ObjectId, // Reference to Genre model
         ref: "Genre",
         required: [true, "genre id is required"],
       },
       languageId: {
-        type: mongoose.Schema.Types.ObjectId,  // Reference to Language model
+        type: mongoose.Schema.Types.ObjectId, // Reference to Language model
         ref: "Language",
         required: [true, "language is required"],
       },

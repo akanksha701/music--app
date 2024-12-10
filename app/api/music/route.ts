@@ -5,6 +5,7 @@ import Music from "@/lib/models/Music";
 import path from "path";
 import fs from "fs";
 import { saveFiles } from "@/utils/helpers";
+import mongoose from "mongoose";
 
 export const config = {
   api: {
@@ -22,20 +23,26 @@ const AUDIO_UPLOAD_DIR = path.resolve(
 );
 
 export async function POST(req: Request) {
+  await dbConnect();
   const formData = await req.formData();
   const body = Object.fromEntries(formData);
   const audio = (body.audio as Blob) || null;
   const image = (body.image as Blob) || null;
-  const audioFileUrl = await saveFiles(image, AUDIO_UPLOAD_DIR);
-  const imageFileUrl = await saveFiles(audio, IMAGE_UPLOAD_DIR);
-
+  const audioFileUrl = await saveFiles(audio, AUDIO_UPLOAD_DIR);
+  const imageFileUrl = await saveFiles(image, IMAGE_UPLOAD_DIR);
+  const artistIds = body.artists
+    ? body.artists
+        .toString()
+        .split(",")
+        .map((id: string) => new mongoose.Types.ObjectId(id))
+    : [];
   const newMusic = await Music.create({
     musicDetails: {
       name: body.name,
       description: body.description,
       genreId: body.genre,
       languageId: body.language,
-      artistId: body.artists,
+      artistId: artistIds,
       releaseDate: new Date(),
       duration: Number(body?.duration || 0),
     },
@@ -49,6 +56,7 @@ export async function POST(req: Request) {
     },
   });
   return NextResponse.json({
+    status: 200,
     success: true,
     data: newMusic,
   });
