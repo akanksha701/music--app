@@ -7,6 +7,10 @@ import { useForm } from "react-hook-form";
 import NextTextArea from "@/common/inputs/Textarea";
 import MultiSelect from "@/common/inputs/MultiSelect";
 import FileUploadInput from "@/common/inputs/FileUploadInput";
+import toast from "react-hot-toast";
+import { fetchApi } from "@/utils/helpers";
+import { METHODS } from "http";
+import { Method } from "@/app/About/types/types";
 
 const Addmusic = (props: IAddMusicProps) => {
   const { genreList, languageList, artistList, albumList } = props;
@@ -28,14 +32,14 @@ const Addmusic = (props: IAddMusicProps) => {
     formData.append("artists", data.artists);
     formData.append("album", data.album);
     try {
-      const res = await fetch("/api/music", {
-        method: "POST",
-        body: formData,
-      });
-      const result = await res.json();
-      console.log(result);
+      const res = await fetchApi("/api/music",Method.POST, formData);
+
+      console.log("res.status",res.status)
+      if (res.status === 200) {
+        toast.success("profile updated successfully");
+      }
     } catch (error) {
-      console.error("Upload failed:", error);
+      toast.error('error while uploading')
     }
   };
   return (

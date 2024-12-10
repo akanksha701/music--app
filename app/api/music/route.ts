@@ -1,10 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { NextApiResponse } from "next/types";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Music from "@/lib/models/Music";
 import path from "path";
-import fs from "fs";
-import { saveFiles } from "@/utils/helpers";
+import { getAudioDuration, saveFiles } from "@/utils/helpers";
 import mongoose from "mongoose";
 
 export const config = {
@@ -13,14 +12,8 @@ export const config = {
   },
 };
 
-const IMAGE_UPLOAD_DIR = path.resolve(
-  process.env.ROOT_PATH ?? "",
-  "public/music/images"
-);
-const AUDIO_UPLOAD_DIR = path.resolve(
-  process.env.ROOT_PATH ?? "",
-  "public/music/audio"
-);
+export const IMAGE_UPLOAD_DIR = path.resolve("public/music/images");
+export const AUDIO_UPLOAD_DIR = path.resolve("public/music/audio");
 
 export async function POST(req: Request) {
   await dbConnect();
@@ -28,8 +21,7 @@ export async function POST(req: Request) {
   const body = Object.fromEntries(formData);
   const audio = (body.audio as Blob) || null;
   const image = (body.image as Blob) || null;
-  const audioFileUrl = await saveFiles(audio, AUDIO_UPLOAD_DIR);
-  const imageFileUrl = await saveFiles(image, IMAGE_UPLOAD_DIR);
+
   const artistIds = body.artists
     ? body.artists
         .toString()
@@ -44,11 +36,11 @@ export async function POST(req: Request) {
       languageId: body.language,
       artistId: artistIds,
       releaseDate: new Date(),
-      duration: Number(body?.duration || 0),
+      duration: Number((await getAudioDuration(audio)) || 0),
     },
     audioDetails: {
-      imgUrl: imageFileUrl,
-      audioUrl: audioFileUrl,
+      imgUrl: image ? await saveFiles(image, IMAGE_UPLOAD_DIR) : null,
+      audioUrl: audio ? await saveFiles(audio, AUDIO_UPLOAD_DIR) : null,
     },
     price: {
       amount: Number(body.priceAmount || 0),
@@ -57,11 +49,11 @@ export async function POST(req: Request) {
   });
   return NextResponse.json({
     status: 200,
-    success: true,
+    message: "new music created successfully",
     data: newMusic,
   });
 }
-export async function GET(req: any, res: NextApiResponse) {
+export async function GET() {
   try {
     await dbConnect();
     const musics = await Music.find({}).limit(8);

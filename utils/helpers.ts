@@ -107,14 +107,23 @@ export async function uploadAudio(audio: any) {
 export const fetchApi = async (
   apiUrl: string,
   method: Method,
-  body?: object
+  body?: object | FormData // Accept FormData as body
 ) => {
   const url = new URL(apiUrl, process.env.APP_URL || "http://localhost:3000");
+
+  const isFormData = body instanceof FormData;
+
+  const headers: HeadersInit = isFormData
+    ? {}
+    : { "Content-Type": "application/json" };
+
   try {
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),
-      body: JSON.stringify(body),
+      body: isFormData ? body : JSON.stringify(body),
+      headers: headers,
     });
+
     if (!res.ok) {
       const errorResponse = await res.json();
       throw new Error(
@@ -127,7 +136,7 @@ export const fetchApi = async (
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("Error fetching data:", error);
     throw error;
   }
 };
@@ -143,15 +152,39 @@ export const saveFiles = async (file: Blob, folderName: string) => {
     const filePath = path.resolve(folderName, (file as File).name);
 
     try {
-      await fs.promises.writeFile(filePath, buffer);  
+      await fs.promises.writeFile(filePath, buffer);
       console.log("File saved to:", filePath);
-      
+
       return filePath;
     } catch (err) {
       console.error("Error saving the file:", err);
       return null;
     }
   } else {
-    return null; 
+    return null;
   }
 };
+export async function getAudioDuration(audioBlob: Blob): Promise<number> {
+  return new Promise(async (resolve, reject) => {
+    const buffer = Buffer.from(await audioBlob.arrayBuffer());
+    const fileSize = buffer.length;
+    const magicNumber = buffer.readUInt32BE(0);
+    if (magicNumber === 0x49443303) {
+      console.log("Detected an MP3 file with ID3 header");
+    } else if (buffer[0] === 0xff && buffer[1] === 0xfb) {
+      console.log("Detected an MP3 file with frame sync");
+    } else {
+      reject(new Error("Not a valid MP3 file or missing expected header."));
+      return;
+    }
+    const bitrateIndex = buffer[2];
+    let bitrate = 128;
+
+    if (bitrateIndex === 0) bitrate = 320;
+    else if (bitrateIndex === 1) bitrate = 256;
+    else if (bitrateIndex === 2) bitrate = 192;
+    else if (bitrateIndex === 3) bitrate = 128;
+    const duration = fileSize / (bitrate * 1000);
+    resolve(duration);
+  });
+}
