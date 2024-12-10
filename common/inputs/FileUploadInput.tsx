@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 import { Input, Image } from "@nextui-org/react";
-import { IFileUploadProps } from "../types/types"; // Make sure IFileUploadProps is defined correctly
+import { IFileUploadProps } from "../types/types"; // Ensure this interface is correct
 
 const FileUploadInput = ({
   name,
@@ -12,44 +12,79 @@ const FileUploadInput = ({
   ...rest
 }: IFileUploadProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [fileType, setFileType] = useState<string | null>(null);
 
   // Handle file change and preview
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, onChange: any) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
 
-    // Set preview image if the file exists
+    // If a file is selected, generate the image preview and check the file type
     if (selectedFile) {
       const fileReader = new FileReader();
-      fileReader.onloadend = () => {
-        setImagePreview(fileReader.result as string);
-      };
-      fileReader.readAsDataURL(selectedFile);
+
+      // Check file type to determine if it's an image or audio
+      const type = selectedFile.type;
+      setFileType(type);
+
+      if (type.startsWith("image/")) {
+        // If the file is an image, create a preview
+        fileReader.onloadend = () => {
+          setImagePreview(fileReader.result as string);
+        };
+        fileReader.readAsDataURL(selectedFile);
+      } else {
+        // If it's not an image, clear the preview (you could show an icon or something else if desired)
+        setImagePreview(null);
+      }
     } else {
-      setImagePreview(null);
+      setImagePreview(null); // Reset preview if no file is selected
+      setFileType(null);
     }
 
-    // Call React Hook Form's onChange to update the form state
+    // Update form state with the selected file
     if (onChange && selectedFile) {
-      onChange(selectedFile); // Update the form state with the selected file
+      onChange(selectedFile);
     }
   };
 
   return (
-    <div>
-      {/* Render label if provided */}
+    <div className="file-upload-input">
       {label && (
-        <label className="block mb-2 text-sm font-medium text-gray-900">
-          {label}
-        </label>
+        <label className="block mb-2 text-sm font-medium text-gray-900">{label}</label>
       )}
 
-      {/* File upload input with React Hook Form Controller */}
       <Controller
         name={name}
         control={control}
-        rules={validationRules} // Apply validation rules here
+        rules={validationRules}
         render={({ field, fieldState }) => (
-          <div>
+          <div className="relative">
+            {/* The container for the upload input */}
+            <div
+              className={`
+                ${fileType?.startsWith("image/") ? "w-32 h-32 rounded-full" : "w-32 h-32 border-2"} 
+                border-dashed border-gray-300 flex items-center justify-center cursor-pointer
+              `}
+              style={{
+                backgroundColor: imagePreview ? "transparent" : "#f1f5f9",
+              }}
+            >
+              {imagePreview && fileType?.startsWith("image/") ? (
+                <Image
+                  alt="File Preview"
+                  width={100}
+                  height={100}
+                  src={imagePreview}
+                  className="rounded-full object-cover"
+                />
+              ) : fileType?.startsWith("audio/") ? (
+                <span className="text-gray-500">Audio File</span>
+              ) : (
+                <span className="text-gray-500">Upload</span> // Default text when no file is selected
+              )}
+            </div>
+
+            {/* Hidden file input */}
             <Input
               {...field}
               type="file"
@@ -58,31 +93,15 @@ const FileUploadInput = ({
               accept={accept}
               onChange={(e) => handleFileChange(e, field.onChange)} // Handle file change and update form state
               value={undefined} // Clear the value to allow file re-upload
-              style={{
-                borderColor: fieldState?.error ? "red" : undefined,
-                borderWidth: fieldState?.error ? "2px" : undefined,
-              }}
+              className="absolute inset-0 opacity-0 cursor-pointer" // Make the input invisible
             />
-            {/* Display validation error */}
+
             {fieldState?.error && (
-              <span style={{ color: "red", fontSize: "12px" }}>
-                {fieldState?.error?.message}
-              </span>
+              <span className="text-red-500 text-xs">{fieldState?.error?.message}</span>
             )}
           </div>
         )}
       />
-
-      <div style={{ marginTop: 10 }}>
-        {imagePreview && (
-          <Image
-            alt="File Preview"
-            width={200}
-            height={200}
-            src={imagePreview} 
-          />
-        )}
-      </div>
     </div>
   );
 };
