@@ -1,5 +1,5 @@
 "use client";
-import SoundScapeLogo from "@/public/SoundScapeLogo.png";
+import SoundScapeLogo from "@/public/images/SoundScapeLogo.png";
 import Image from "next/image";
 import {
   Navbar,

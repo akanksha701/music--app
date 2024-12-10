@@ -1,14 +1,17 @@
-import Music from "./Music";
 import User from "./User";
+import mongoose from 'mongoose';
+const { Schema } = mongoose;
 
-const mongoose = require("mongoose");
-
-const artistSchema = new mongoose.Schema(
+const artistSchema = new Schema(
   {
     userId: {
-      ref: User,
-      type: new mongoose.Types.ObjectId(),
+      type: Schema.Types.ObjectId,  
+      ref: 'User',                  
       required: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -16,4 +19,4 @@ const artistSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.models.Album || mongoose.model("Artist", artistSchema);
+export default mongoose.models.Artist || mongoose.model("Artist", artistSchema);

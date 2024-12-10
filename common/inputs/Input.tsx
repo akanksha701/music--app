@@ -16,7 +16,6 @@ const NextInput = <T extends FieldValues>({
   className = "",
 }: INextInputProps<T>) => {
   const hasError = errors[id] as FieldError;
-  console.log(errors,'====',);
   return (
     <div className="mb-3">
       {label && (

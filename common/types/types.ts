@@ -1,6 +1,7 @@
 import { UserData } from "@clerk/types";
 import { CloudinaryUploadWidgetResults } from "next-cloudinary";
 import {
+  Control,
   FieldErrors,
   FieldValues,
   Path,
@@ -67,7 +68,6 @@ export interface INextTextAreaProps<T extends FieldValues> {
   options?: object;
   name: string;
 }
-
 export interface ISelectProps<T extends FieldValues> {
   control: any;
   name: Path<T>;
@@ -76,7 +76,8 @@ export interface ISelectProps<T extends FieldValues> {
   rules?: object;
   error?: any;
   id?: string;
-  selectionMode: any;
+  selectionMode: any ;
+  placeholder:string
 }
 
 export interface IPlusIconProps {
@@ -99,4 +100,14 @@ export interface IHoverCardProps {
 export interface IMenuProps {
   data: Array<{ id: number; name: string }>;
   handleClick: Function;
+}
+
+export interface IFileUploadProps
+{
+  name: string; // The name of the field (used by react-hook-form)
+  control: Control<FieldValues>; // The control object from react-hook-form to manage the form state
+  rules?: any; // Optional validation rules (can be more specific based on your needs)
+  label?: string; // Optional label for the file input
+  defaultValue?: File | null; // Optional default value (default can be null, no file selected initially)
+  [key: string]: any; // Al
 }

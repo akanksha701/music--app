@@ -11,6 +11,8 @@ const MultiSelect = <T extends FieldValues>({
   rules,
   error,
   id,
+  selectionMode,
+  placeholder,
 }: ISelectProps<T>) => {
   return (
     <div className="flex flex-col">
@@ -26,13 +28,14 @@ const MultiSelect = <T extends FieldValues>({
         render={({ field: { onChange, value = [], ref } }) => {
           return (
             <Select
+              selectionMode={selectionMode}
               id={id}
               onChange={(selectedValue) => {
                 onChange(selectedValue);
               }}
               ref={ref}
-              placeholder="Select an option"
-              color={error ? "danger" : "default"}
+              placeholder={placeholder}
+              color={error[name] ? "danger" : "default"}
             >
               {items.map((item) => (
                 <SelectItem key={item.id} value={item.id}>

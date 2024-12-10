@@ -1,5 +1,3 @@
-import Music from "./Music";
-
 const mongoose = require("mongoose");
 
 const albumSchema = new mongoose.Schema(
@@ -11,8 +9,8 @@ const albumSchema = new mongoose.Schema(
     },
     musicIds: [
       {
-        type: new mongoose.Types.ObjectId(),
-        ref: Music,
+        type: mongoose.Schema.Types.ObjectId,  // Reference to Music model
+        ref: "Music",  // Name of the model to reference
       },
     ],
     description: {

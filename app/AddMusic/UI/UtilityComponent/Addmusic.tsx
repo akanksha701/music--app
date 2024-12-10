@@ -5,22 +5,40 @@ import { IAddMusicProps } from "../../types/types";
 import NextInput from "@/common/inputs/Input";
 import { useForm } from "react-hook-form";
 import NextTextArea from "@/common/inputs/Textarea";
-import MultiSelect from "@/common/inputs/multiSelect";
+import MultiSelect from "@/common/inputs/MultiSelect";
+import FileUploadInput from "@/common/inputs/FileUploadInput";
 
 const Addmusic = (props: IAddMusicProps) => {
-  const { genreList, languageList } = props;
+  const { genreList, languageList, artistList, albumList } = props;
   const {
     register,
     handleSubmit,
-    setValue,
     control,
     formState: { errors },
   } = useForm({});
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
+  const onSubmit = async (data: any) => {
+    const formData = new FormData();
+    formData.append("audio", data.audioUrl);
+    formData.append("image", data.imageUrl);
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("language", data.language);
+    formData.append("genre", data.genre);
+    formData.append("artists", data.artists);
+    formData.append("album", data.album);
 
+    try {
+      const res = await fetch("/api/music", {
+        method: "POST",
+        body: formData,
+      });
+      const result = await res.json();
+      console.log(result);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    }
+  };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <form
@@ -49,90 +67,87 @@ const Addmusic = (props: IAddMusicProps) => {
             errors={errors}
           />
         </div>
-        <div className="flex flex-col">
-          <MultiSelect
-            control={control}
-            name="selectedArtists"
-            label="Choose Artists"
-            items={[
-              { id: "1", name: "Item 1" },
-              { id: "2", name: "Item 2" },
-              { id: "3", name: "Item 3" },
-            ]}
-            error={errors}
-            rules={{ required: true }}
-            selectionMode={"multiple"}
-          />
-        </div>
 
-        {/* <div className="flex flex-col">
-          <Label className="w-24">Genre</Label>
-          <Select className="p-2 border rounded-md shadow-sm w-full">
-            {genreList &&
-              genreList.map((genre, index) => (
-                <SelectItem key={genre._id} value={genre.name}>
-                  {genre.name}
-                </SelectItem>
-              ))}
-          </Select>
-        </div> */}
-        {/* <div className="flex items-center space-x-4">
-          <Label className="w-24">Language</Label>
-          <Select className="p-2 border rounded-md shadow-sm w-full">
-            {languageList.map((language) => (
-              <SelectItem key={language._id} value={language._id}>
-                {language.name}
-              </SelectItem>
-            ))}
-          </Select>
-        </div> */}
-        {/* <div className="flex items-center space-x-4">
-          <Label className="w-24">Artists</Label>
-          <Select
-            selectionMode="multiple"
-            className="p-2 border rounded-md shadow-sm w-full"
-          >
-            {languageList.map((language) => (
-              <SelectItem key={language._id} value={language._id}>
-                {language.name}
-              </SelectItem>
-            ))}
-          </Select>
-        </div> */}
-        {/* <div className="flex items-center space-x-4">
-          <Label className="w-24">Audio File</Label>
-          <Input
-            type="file"
-            id="audioFile"
-            name="audioFile"
-            accept="audio/*"
-            className="p-2 border rounded-md shadow-sm w-full"
-          />
-        </div> */}
-
-        {/* <div className="flex items-center space-x-4">
-          <Label htmlFor="imageUrl" className="w-24">
-            Image Upload
-          </Label>
-          <Input
-            type="file"
-            id="imageUrl"
-            name="imageUrl"
-            accept="image/*"
-            className="p-2 border rounded-md shadow-sm w-full"
-          />
-        </div> */}
-
-        {/* {imagePreview && (
-          <div className="mt-4">
-            <p className="font-medium text-gray-700">Image Preview:</p>
-            <img
-              src={imagePreview}
-              alt="Selected image preview"
-              className="w-48 h-48 object-cover mt-2 rounded-md shadow-md"
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="flex flex-col">
+            <MultiSelect
+              control={control}
+              name="language"
+              label="Choose Language"
+              items={languageList.map((language) => ({
+                id: language._id,
+                name: language.name,
+              }))}
+              error={errors}
+              rules={{ required: true }}
+              selectionMode={"single"}
+              placeholder="Select Language"
             />
           </div>
-        )} */}
+          <div className="flex flex-col">
+            <MultiSelect
+              control={control}
+              name="genre"
+              label="Choose Genre"
+              items={genreList.map((genre) => ({
+                id: genre._id,
+                name: genre.name,
+              }))}
+              error={errors}
+              rules={{ required: true }}
+              selectionMode={"single"}
+              placeholder="Select Genre"
+            />
+          </div>
+          <div className="flex flex-col">
+            <MultiSelect
+              control={control}
+              name="artists"
+              label="Choose Artists"
+              items={artistList.map((artist) => ({
+                id: artist.id,
+                name: artist.fullname,
+              }))}
+              error={errors}
+              rules={{ required: true }}
+              selectionMode={"multiple"}
+              placeholder="Select Artists"
+            />
+          </div>
+          <div className="flex flex-col">
+            <MultiSelect
+              control={control}
+              name="album"
+              label="Choose Albums"
+              items={albumList.map((album) => ({
+                id: album._id,
+                name: album.name,
+              }))}
+              error={errors}
+              rules={{ required: true }}
+              selectionMode={"multiple"}
+              placeholder="Select Album"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <FileUploadInput
+            name="imageUrl"
+            control={control}
+            label="Upload an Image"
+            accept="image/png, image/jpeg"
+            validationRules={{ required: "Please upload an image." }}
+          />
+        </div>
+        <div className="flex flex-col">
+          <FileUploadInput
+            name="audioUrl"
+            control={control}
+            label="Upload an MP3"
+            accept="audio/mp3, audio/mpeg, .mp3" // Accepts MP3 files
+          />
+        </div>
 
         <div className="flex justify-center">
           <Button

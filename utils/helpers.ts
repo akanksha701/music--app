@@ -1,10 +1,18 @@
 "use server";
+import path from "path";
 import { Method } from "@/app/About/types/types";
 import { Roles } from "../globals";
 import { auth } from "@clerk/nextjs/server";
 import { CalendarDate } from "@internationalized/date";
 import cloudinary from "cloudinary";
 import queryString from "query-string";
+import mm from "music-metadata";
+import fs from "fs";
+
+export interface IAudioTypes {
+  audioDestination: string;
+  duration: number | undefined;
+}
 
 export async function generateUrl(
   url: string,
@@ -105,12 +113,8 @@ export const fetchApi = async (
   try {
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(body),
     });
-
     if (!res.ok) {
       const errorResponse = await res.json();
       throw new Error(
@@ -125,5 +129,29 @@ export const fetchApi = async (
   } catch (error) {
     console.error("Error fetching user data:", error);
     throw error;
+  }
+};
+
+export const saveFiles = async (file: Blob, folderName: string) => {
+  if (file) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    if (!fs.existsSync(folderName)) {
+      fs.mkdirSync(folderName, { recursive: true });
+    }
+
+    const filePath = path.resolve(folderName, (file as File).name);
+
+    try {
+      await fs.promises.writeFile(filePath, buffer);  
+      console.log("File saved to:", filePath);
+      
+      return filePath;
+    } catch (err) {
+      console.error("Error saving the file:", err);
+      return null;
+    }
+  } else {
+    return null; 
   }
 };

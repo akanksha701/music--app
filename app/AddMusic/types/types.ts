@@ -7,8 +7,21 @@ interface IGenre {
   updatedAt: string; // ISO 8601 formatted string (timestamp)
   __v: number; // MongoDB document version
 }
-
+interface IAlbum {
+  _id: string;
+  name: string;
+}
+interface IArtist {
+  id: string; 
+  fullname: string; 
+}
+interface ILanguage {
+  _id: string; 
+  name: string; 
+}
 export interface IAddMusicProps {
   genreList: IGenre[];
-  languageList:Array<{name:string,_id:string}>,
+  languageList: ILanguage[];
+  artistList: IArtist[];
+  albumList: IAlbum[];
 }

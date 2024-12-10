@@ -6,4 +6,7 @@ export const userApi = "/api/user";
 export const getGenreDetails='/api/genre'
 export const getLanguageDetails='/api/language'
 export const getArtistDetails='/api/artist'
+export const getAlbumDetails='/api/album'
+export const music='/api/music'
+
 

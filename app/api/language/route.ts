@@ -65,7 +65,7 @@ export async function GET() {
     if (languageList) {
       return NextResponse.json({
         status: 200,
-        languageList: languageList,
+        data: languageList,
       });
     }
     return NextResponse.json(
