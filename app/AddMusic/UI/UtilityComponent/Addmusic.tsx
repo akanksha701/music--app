@@ -41,14 +41,11 @@ const Addmusic = (props: IAddMusicProps) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 p-6 bg-white rounded-lg shadow-lg w-full sm:w-[800px] md:w-[900px] lg:w-[600px] max-w-full mx-2 sm:mx-4"
       >
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">
-          Add Music
-        </h2>
         <div className="flex flex-col w-full space-y-6">
           <div className="flex flex-col">
             <NextInput
