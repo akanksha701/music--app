@@ -5,7 +5,7 @@ export const artistApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl:   process.env.APP_URL}),
   endpoints: (builder) => ({
     getartists: builder.query({
-      query: () => "api/artists",
+      query: () => "api/artist",
     }),
   }),
 });

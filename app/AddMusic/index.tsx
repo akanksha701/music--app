@@ -7,7 +7,6 @@ import TableComp from "@/common/table/TableComp";
 import { fetchApi } from "@/utils/helpers";
 import { music } from "@/utils/apiRoutes";
 import { Method } from "../About/types/types";
-import { FaEdit } from "react-icons/fa"; // Import the icon
 
 const columns = [
   { header: "Song Title", accessor: "name" },

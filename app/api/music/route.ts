@@ -108,7 +108,8 @@ export async function GET() {
           email: { $first: "$artists.email" },
           price: { $first: "$price.amount" },
           currency: { $first: "$price.currency" },
-
+          imageUrl: { $first: "$audioDetails.imgUrl" },
+          audioUrl: { $first: "$audioDetails.audioUrl" },
         },
       },
       {

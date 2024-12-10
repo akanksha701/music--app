@@ -1,5 +1,5 @@
 import React from 'react';
-import PlayIcon from '@/public/icons8-circled-play-64.png';
+import PlayIcon from '@/public/images/icons8-circled-play-64.png';
 import Image from 'next/image';
 const PlayButton = () => {
   return (

@@ -29,7 +29,7 @@ const Index = () => {
       <div className="relative mx-10">
         <hr className="w-full border-gray-600" />
         <MenubarComponent
-          data={languageList?.languageList}
+          data={languageList?.data}
           handleClick={handleClick}
         />
         <hr className="w-full border-gray-600" />

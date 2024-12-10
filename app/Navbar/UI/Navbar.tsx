@@ -48,28 +48,6 @@ export default function NavbarPage() {
         <NavbarContent as="div" className="items-center " justify="end">
           <DropDown />
         </NavbarContent>
-        {/* <Modal
-          title="Add New Music"
-          body={<Addmusic />}
-          children={
-            <DialogTrigger asChild>
-              <Button className="bg-purple-600 rounded-full">
-                <IoMdAdd size={50} /> Add music
-              </Button>
-            </DialogTrigger>
-          }
-        />
-         <Modal
-          title="Add genre"
-          body={<AddCategory />}
-          children={
-            <DialogTrigger asChild>
-              <Button className="bg-purple-600 rounded-full">
-                <IoMdAdd size={50} /> Add genre
-              </Button>
-            </DialogTrigger>
-          }
-        /> */}
       </Navbar>
     </>
   );

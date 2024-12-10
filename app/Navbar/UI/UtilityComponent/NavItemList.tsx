@@ -8,6 +8,7 @@ import { useGetPlayListsQuery } from "@/services/playlists";
 import { useGetartistsQuery } from "@/services/artists";
 
 const navItems: IItem[] = [
+  { label: "Browse", route: "/Browse" },
   { label: "Pricing", route: "/Pricing" },
   { label: "FAQ", route: "/FAQ" },
   { label: "About", route: "/About" },
@@ -22,7 +23,7 @@ const NavItemList: React.FC = () => {
   }
   return (
     <>
-      <Tooltip
+      {/* <Tooltip
         content={
           <HoverCard
             topArtists={playLists?.topsPlaylists}
@@ -40,7 +41,7 @@ const NavItemList: React.FC = () => {
             Browse
           </button>
         }
-      />
+      /> */}
       {navItems.map((item: IItem) => {
         const isActive = pathname === item.route;
         return (

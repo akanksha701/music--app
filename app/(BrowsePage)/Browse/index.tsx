@@ -4,6 +4,10 @@ import Loading from "@/app/loading";
 import HeadLine from "./UI/UtilityComponent/HeadLine";
 import MusicPlayCard from "./UI/UtilityComponent/MusicPlayCard";
 import Box from "./UI/UtilityComponent/Card";
+import { useEffect, useState } from "react";
+import { fetchApi } from "@/utils/helpers";
+import { music } from "@/utils/apiRoutes";
+import { Method } from "@/app/About/types/types";
 export const dummyMusics = [
   {
     name: "Shape of You",
@@ -121,7 +125,24 @@ const albums = [
 ];
 
 const Index = () => {
+  const [topHits, setTopHits] = useState([]);
   const { user } = useUser();
+  useEffect(() => {
+    // Immediately invoked async function
+    (async () => {
+      try {
+        const { data } = await fetchApi(music, Method.GET);
+        console.log(data, "data");
+        if (!data) {
+          setTopHits([]); 
+        } else {
+          setTopHits(data); 
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    })();
+  }, []);
   if (!user) {
     return (
       <>
@@ -129,11 +150,12 @@ const Index = () => {
       </>
     );
   }
+  console.log(topHits, "topHits");
   return (
     <div className="flex flex-col ">
       <HeadLine title="Top hits" subTitle="2024" />
       <hr className="w-full p-2 border-gray-600" />
-      <MusicPlayCard data={dummyMusics} />
+      <MusicPlayCard data={topHits} />
 
       <div className="mt-8 p-3">
         <HeadLine title="Featured Artists" subTitle="Discover new music" />

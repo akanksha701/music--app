@@ -148,14 +148,13 @@ export const saveFiles = async (file: Blob, folderName: string) => {
     if (!fs.existsSync(folderName)) {
       fs.mkdirSync(folderName, { recursive: true });
     }
-
     const filePath = path.resolve(folderName, (file as File).name);
 
     try {
       await fs.promises.writeFile(filePath, buffer);
       console.log("File saved to:", filePath);
 
-      return filePath;
+      return filePath.split("public")[1];
     } catch (err) {
       console.error("Error saving the file:", err);
       return null;

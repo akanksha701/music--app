@@ -15,7 +15,7 @@ import {
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const router = useRouter();
   const { data } = props;
-  const itemsPerPage=8
+  const itemsPerPage = 8;
   const pages = Math.ceil(data.length / itemsPerPage);
 
   return (
@@ -26,7 +26,10 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
             <CarouselItem key={pageIndex}>
               <div className="grid grid-cols-4 gap-6">
                 {data
-                  .slice(pageIndex * itemsPerPage, (pageIndex + 1) * itemsPerPage)
+                  .slice(
+                    pageIndex * itemsPerPage,
+                    (pageIndex + 1) * itemsPerPage
+                  )
                   .map((item, index) => (
                     <Card
                       key={index}
@@ -41,7 +44,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                         <Image
                           alt={item.name || ""}
                           className="w-full object-cover h-[190px] hover:scale-125 transition-all duration-500 cursor-pointer"
-                          src={item?.coverUrl || ""}
+                          src={item.imageUrl || ''}
                           width={400}
                           height={400}
                         />
@@ -52,7 +55,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                               {item.name || ""}
                             </p>
                             <p className="relative align-end text-white font-bold opacity-50">
-                              {item.artist || ""}
+                              {item.artists || ""}
                             </p>
                           </div>
                         </div>
