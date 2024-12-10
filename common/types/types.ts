@@ -120,13 +120,15 @@ export interface ITabsProps {
 }
 
 export interface IColumn {
-  header: string;        // The column header (e.g., "Invoice", "Amount")
-  accessor: string;      // The key that corresponds to the data field (e.g., "invoice", "amount")
-  className?: string;    // Optional: Custom className for styling the column
+  header: string;
+  accessor: string;
+  className?: string;
 }
 
 export interface ITableProps {
-  message: string;      
-  columns: IColumn[];    
-  data: Record<string, any>[];  // Array of row data, each row is an object with key-value pairs
+  message: string;
+  columns: IColumn[];
+  data: Record<string, any>[];
+  handleEdit?: any;
+
 }

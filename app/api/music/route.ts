@@ -106,7 +106,9 @@ export async function GET() {
             $push: "$fullArtistName",
           },
           email: { $first: "$artists.email" },
-          price: { $first: "$price" },
+          price: { $first: "$price.amount" },
+          currency: { $first: "$price.currency" },
+
         },
       },
       {

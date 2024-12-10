@@ -1,3 +1,4 @@
+// Index.tsx (Server Component)
 import React from "react";
 import Addmusic from "./UI/UtilityComponent/Addmusic";
 import { fetchGenresAndLanguages } from "../actions/getGenresAndLanguage";
@@ -6,26 +7,24 @@ import TableComp from "@/common/table/TableComp";
 import { fetchApi } from "@/utils/helpers";
 import { music } from "@/utils/apiRoutes";
 import { Method } from "../About/types/types";
+import { FaEdit } from "react-icons/fa"; // Import the icon
+
 const columns = [
   { header: "Song Title", accessor: "name" },
-  { header: "Artist(s)", accessor: "artistDetails" },
+  { header: "Artist(s)", accessor: "artists" },
   { header: "Price", accessor: "price", className: "text-right" },
-  { header: "Description", accessor: "description" },
-  { header: "ID", accessor: "_id" }
-];
-
-const data = [
   {
-    title: "Tum Hi Ho Bandhu",
-    artists: "Akanksha, Neha", // List of artist names
-    price: "$0.00", // Price as USD amount
+    header: "Edit",
+    accessor: "edit", 
+    className: "text-center", // Center align the edit button
   },
 ];
+
+
 const Index = async () => {
   const { genreList, languageList, artistList, albumList } =
     await fetchGenresAndLanguages();
-    const { data } = await fetchApi(music,Method.GET);
-    console.log(data,"---")
+  const { data } = await fetchApi(music, Method.GET);
   if (!genreList || !languageList || !artistList || !albumList || !data) {
     return null;
   }
@@ -38,6 +37,7 @@ const Index = async () => {
           message="A list of your recent invoices."
           columns={columns}
           data={data}
+          // handleEdit={handleEdit} // Pass the handleEdit function to the TableComp
         />
       ),
     },

@@ -1,3 +1,7 @@
+"use client"; // Add this line to mark the file as a client component
+
+import React from "react";
+import { ITableProps } from "../types/types";
 import {
   Table,
   TableBody,
@@ -7,15 +11,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React from "react";
-import { ITableProps } from "../types/types";
 import PaginationComp from "../pagination/paginationComp";
+import { FaEdit } from "react-icons/fa"; // Import the edit icon
 
 const TableComp = ({ message, columns, data }: ITableProps) => {
+  const handleEdit = (rowData: any) => {
+    console.log("Editing row:", rowData);
+  };
+
   return (
     <>
       <Table>
-        <TableCaption>{message}</TableCaption>
+        {/* <TableCaption>{message}</TableCaption> */}
         <TableHeader>
           <TableRow>
             {columns.map((column, index) => (
@@ -30,14 +37,25 @@ const TableComp = ({ message, columns, data }: ITableProps) => {
             <TableRow key={rowIndex}>
               {columns.map((column, colIndex) => (
                 <TableCell key={colIndex} className={column.className}>
-                  {row[column.accessor] || "-"}{" "}
+                  {column.accessor === "edit" ? (
+                    <button
+                      className="text-purple-500"
+                      onClick={() => handleEdit(row)}
+                    >
+                      <FaEdit />
+                    </button>
+                  ) : (
+                    row[column.accessor] || "-"
+                  )}
                 </TableCell>
               ))}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <PaginationComp page={1} totalPages={7} onPageChange={()=>{} } />
+      <div className="mt-10">
+        <PaginationComp page={2} totalPages={4} onPageChange={() => {}} />
+      </div>
     </>
   );
 };
