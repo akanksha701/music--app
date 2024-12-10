@@ -5,6 +5,7 @@ import Music from "@/lib/models/Music";
 import path from "path";
 import { getAudioDuration, saveFiles } from "@/utils/helpers";
 import mongoose from "mongoose";
+import { Description } from "@radix-ui/react-dialog";
 
 export const config = {
   api: {
@@ -56,9 +57,80 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     await dbConnect();
-    const musics = await Music.find({}).limit(8);
+    const musics = await Music.aggregate([
+      {
+        $lookup: {
+          from: "artists",
+          localField: "musicDetails.artistId",
+          foreignField: "userId",
+          as: "artistDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$artistDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "artistDetails.userId",
+          foreignField: "_id",
+          as: "artists",
+        },
+      },
+      {
+        $unwind: {
+          path: "$artists",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          fullArtistName: {
+            $concat: [
+              { $ifNull: ["$artists.firstName", ""] },
+              " ",
+              { $ifNull: ["$artists.lastName", ""] },
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$musicDetails.name" },
+          description: { $first: "$musicDetails.description" },
+          artists: {
+            $push: "$fullArtistName",
+          },
+          email: { $first: "$artists.email" },
+          price: { $first: "$price" },
+        },
+      },
+      {
+        $addFields: {
+          artists: {
+            $reduce: {
+              input: "$artists",
+              initialValue: "",
+              in: {
+                $cond: {
+                  if: { $eq: ["$$value", ""] },
+                  then: "$$this",
+                  else: { $concat: ["$$value", ", ", "$$this"] },
+                },
+              },
+            },
+          },
+        },
+      },
+    ]);
+
     return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
-    return NextResponse.json({ error: error, status: 500 });
+    console.error("Error:", error);
+    return NextResponse.json({ status: 500, message: "Error occurred" });
   }
 }

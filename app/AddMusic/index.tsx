@@ -3,32 +3,30 @@ import Addmusic from "./UI/UtilityComponent/Addmusic";
 import { fetchGenresAndLanguages } from "../actions/getGenresAndLanguage";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
+import { fetchApi } from "@/utils/helpers";
+import { music } from "@/utils/apiRoutes";
+import { Method } from "../About/types/types";
 const columns = [
-  { header: "Invoice", accessor: "invoice", className: "w-[100px]" },
-  { header: "Status", accessor: "status" },
-  { header: "Method", accessor: "method" },
-  { header: "Amount", accessor: "amount", className: "text-right" },
+  { header: "Song Title", accessor: "name" },
+  { header: "Artist(s)", accessor: "artistDetails" },
+  { header: "Price", accessor: "price", className: "text-right" },
+  { header: "Description", accessor: "description" },
+  { header: "ID", accessor: "_id" }
 ];
 
 const data = [
   {
-    invoice: "INV001",
-    status: "Paid",
-    method: "Credit Card",
-    amount: "$250.00",
-  },
-  { invoice: "INV002", status: "Pending", method: "PayPal", amount: "$180.00" },
-  {
-    invoice: "INV003",
-    status: "Paid",
-    method: "Bank Transfer",
-    amount: "$400.00",
+    title: "Tum Hi Ho Bandhu",
+    artists: "Akanksha, Neha", // List of artist names
+    price: "$0.00", // Price as USD amount
   },
 ];
 const Index = async () => {
   const { genreList, languageList, artistList, albumList } =
     await fetchGenresAndLanguages();
-  if (!genreList || !languageList || !artistList || !albumList) {
+    const { data } = await fetchApi(music,Method.GET);
+    console.log(data,"---")
+  if (!genreList || !languageList || !artistList || !albumList || !data) {
     return null;
   }
   const tabsData = [
