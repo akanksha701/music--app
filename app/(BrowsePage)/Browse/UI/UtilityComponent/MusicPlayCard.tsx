@@ -11,6 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { FaEllipsisH, FaRegHeart } from "react-icons/fa";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const router = useRouter();
@@ -19,12 +20,12 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const pages = Math.ceil(data.length / itemsPerPage);
 
   return (
-    <div className="p-10">
+    <div className="p-4 sm:p-6 md:p-10">
       <Carousel>
         <CarouselContent>
           {Array.from({ length: pages }).map((_, pageIndex) => (
             <CarouselItem key={pageIndex}>
-              <div className="grid grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
                 {data
                   .slice(
                     pageIndex * itemsPerPage,
@@ -32,35 +33,36 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                   )
                   .map((item, index) => (
                     <Card
-                      key={index}
-                      shadow="sm"
-                      isPressable
-                      className="bg-transparent"
-                      onClick={() => {
-                        router.push("/music");
-                      }}
-                    >
-                      <CardBody className="overflow-visible p-0 relative">
+                    key={index}
+                    className="bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group"
+                    style={{ width: "220px", height: "320px" }}
+                  >
+                    <CardBody className="flex flex-col items-center p-4 w-full h-full">
+                      {/* Image Section */}
+                      <div className="relative w-full h-2/3">
                         <Image
-                          alt={item.name || ""}
-                          className="w-full object-cover h-[190px] hover:scale-125 transition-all duration-500 cursor-pointer"
-                          src={item.imageUrl || ''}
-                          width={400}
-                          height={400}
+                          alt={item.name}
+                          src={item.imageUrl}
+                          fill
+                          className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
                         />
-                        <div className="absolute bottom-0 ml-8 mb-4">
-                          <PlayButton />
-                          <div className="flex flex-col ml-4">
-                            <p className="relative align-end text-white text-lg font-bold">
-                              {item.name || ""}
-                            </p>
-                            <p className="relative align-end text-white font-bold opacity-50">
-                              {item.artists || ""}
-                            </p>
-                          </div>
-                        </div>
-                      </CardBody>
-                    </Card>
+                      </div>
+        
+                      {/* Text and Icons Section */}
+                      <div className="mt-4 w-full flex justify-between items-center">
+                        {/* Heart button */}
+                        <FaRegHeart className="text-red-500 cursor-pointer opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300" />
+        
+                        {/* Song Name */}
+                        <span className="flex-1 text-center font-semibold text-xl">
+                          {item.name}
+                        </span>
+        
+                        {/* Ellipsis button */}
+                        <FaEllipsisH className="cursor-pointer opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300" />
+                      </div>
+                    </CardBody>
+                  </Card>
                   ))}
               </div>
             </CarouselItem>

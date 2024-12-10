@@ -155,13 +155,13 @@ const Index = () => {
       <hr className="w-full p-2 border-gray-600" />
       <MusicPlayCard data={topHits} />
 
-      <div className="mt-8 p-3">
+      {/* <div className="mt-8 p-3">
         <HeadLine title="Featured Artists" subTitle="Discover new music" />
         <Box
           data={artists}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         />
-      </div>
+      </div> */}
 
       {/* <div className="mt-8 p-3 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white text-black rounded-lg shadow-lg p-4">
