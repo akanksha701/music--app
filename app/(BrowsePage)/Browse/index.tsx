@@ -6,7 +6,7 @@ import MusicPlayCard from "./UI/UtilityComponent/MusicPlayCard";
 import Box from "./UI/UtilityComponent/Card";
 import { useEffect, useState } from "react";
 import { fetchApi } from "@/utils/helpers";
-import { music } from "@/utils/apiRoutes";
+import { getTopHits, music } from "@/utils/apiRoutes";
 import { Method } from "@/app/About/types/types";
 export const dummyMusics = [
   {
@@ -128,15 +128,14 @@ const Index = () => {
   const [topHits, setTopHits] = useState([]);
   const { user } = useUser();
   useEffect(() => {
-    // Immediately invoked async function
     (async () => {
       try {
-        const { data } = await fetchApi(music, Method.GET);
+        const { data } = await fetchApi(getTopHits, Method.GET);
         console.log(data, "data");
         if (!data) {
-          setTopHits([]); 
+          setTopHits([]);
         } else {
-          setTopHits(data); 
+          setTopHits(data);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -150,7 +149,6 @@ const Index = () => {
       </>
     );
   }
-  console.log(topHits, "topHits");
   return (
     <div className="flex flex-col ">
       <HeadLine title="Top hits" subTitle="2024" />

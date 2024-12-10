@@ -8,5 +8,6 @@ export const getLanguageDetails='/api/language'
 export const getArtistDetails='/api/artist'
 export const getAlbumDetails='/api/album'
 export const music='/api/music'
+export const getTopHits='/api/tophits'
 
 
