@@ -90,8 +90,13 @@ export async function GET(req: any) {
     const page: any = url?.searchParams?.get("page");
     const recordsPerPage: any = url?.searchParams?.get("recordsPerPage");
 
-    const currentPage = parseInt(page, 10);
-    const limit = parseInt(recordsPerPage, 10);
+    let currentPage = 1; // Default to page 1
+    let limit = 0; // Default to no limit (fetch all records)
+
+    if (page && recordsPerPage) {
+      currentPage = parseInt(page, 10);
+      limit = parseInt(recordsPerPage, 10);
+    }
 
     const skip = (currentPage - 1) * limit;
 
@@ -99,7 +104,7 @@ export async function GET(req: any) {
 
     const totalRecords = await Music.countDocuments();
 
-    const musics = await Music.aggregate([
+    const aggregatePipeline: any[] = [
       {
         $lookup: {
           from: "artists",
@@ -173,22 +178,29 @@ export async function GET(req: any) {
         },
       },
       { $sort: { createdAt: -1 } },
-      { $skip: skip },
-      { $limit: limit },
-    ]);
+    ];
 
-    const totalPages = Math.ceil(totalRecords / limit);
+    if (limit > 0) {
+      aggregatePipeline.push(
+        { $skip: skip },
+        { $limit: limit }
+      );
+    }
+
+    const musics = await Music.aggregate(aggregatePipeline);
+
+    const totalPages = limit > 0 ? Math.ceil(totalRecords / limit) : 1;
 
     return NextResponse.json({
       status: 200,
       data: {
         data: musics,
-        pagination: {
+        pagination: limit > 0 ? {
           currentPage,
           totalPages,
           totalRecords,
           recordsPerPage: limit,
-        },
+        } : undefined,
       },
     });
   } catch (error) {

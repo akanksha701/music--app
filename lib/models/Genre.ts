@@ -11,7 +11,7 @@ const genreSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    imgUrl: {
+    imageUrl: {
       type: String,
     },
     isDeleted: {

@@ -16,6 +16,9 @@ export const newMusicApi = createApi({
     getTopHitsMusics: builder.query({
       query: () => `${getTopHits}`,
     }),
+    getNewReleaseMusics: builder.query({
+      query: () => `api/newReleaseMusics`,
+    }),
   }),
 });
 
@@ -23,4 +26,5 @@ export const {
   useGetnewMusicsQuery,
   useGetAllMusicsQuery,
   useGetTopHitsMusicsQuery,
+  useGetNewReleaseMusicsQuery
 } = newMusicApi;

@@ -10,6 +10,7 @@ import FileUploadInput from "@/common/inputs/FileUploadInput";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/utils/helpers";
 import { Method } from "@/app/About/types/types";
+import NextDatePicker from "@/common/inputs/DatePicker";
 
 const AddMusic = (props: IAddMusicProps) => {
   const { genreList, languageList, artistList, albumList } = props;
@@ -71,8 +72,17 @@ const AddMusic = (props: IAddMusicProps) => {
               errors={errors}
             />
           </div>
+          <div className="flex flex-col">
+            <NextDatePicker
+              name="releasedate"
+              label="Release date"
+              register={register}
+              control={control}
+              rules={{ required: "Release date is required" }}
+              error={errors.releasedate?.message}
+            />
+          </div>
 
-          {/* MultiSelect Grids */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="flex flex-col">
               <MultiSelect

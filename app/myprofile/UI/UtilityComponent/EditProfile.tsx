@@ -134,6 +134,7 @@ const EditProfile = (props: IEditProfileProps) => {
             <SelectMenu
               selectionMode={"multiple"}
               name="gender"
+              placeholder="select gender"
               label="Select Gender"
               control={control}
               rules={{ required: "Gender is required" }}
