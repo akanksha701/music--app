@@ -9,6 +9,7 @@ import { useGetLanguageQuery } from "@/services/languages";
 import { useGetArtistsQuery } from "@/services/artists";
 import { useGetGenreQuery } from "@/services/genre";
 import Loading from "../loading";
+import { useGetAlbumsQuery } from "@/services/album";
 
 const columns = [
   { header: "Song Title", accessor: "name" },
@@ -28,7 +29,7 @@ const Index = () => {
   const { data: languageData } = useGetLanguageQuery(undefined);
   const { data: artistData } = useGetArtistsQuery(undefined);
   const { data: genreData } = useGetGenreQuery(undefined);
-  const { data: albumData } = useGetGenreQuery(undefined);
+  const { data: albumData } = useGetAlbumsQuery(undefined);
 
   if (!languageData || !artistData || !genreData || !albumData || !musicData) {
     return <Loading/>;

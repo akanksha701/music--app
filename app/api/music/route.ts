@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Music from "@/lib/models/Music";
 import path from "path";
-import { getAudioDuration, saveFiles } from "@/utils/helpers";
+import { capitalizeTitle, getAudioDuration, saveFiles } from "@/utils/helpers";
 import mongoose from "mongoose";
+import Album from "@/lib/models/Album";
 
 export const config = {
   api: {
@@ -15,42 +16,71 @@ export const IMAGE_UPLOAD_DIR = path.resolve("public/music/images");
 export const AUDIO_UPLOAD_DIR = path.resolve("public/music/audio");
 
 export async function POST(req: Request) {
-  await dbConnect();
-  const formData = await req.formData();
-  const body = Object.fromEntries(formData);
-  const audio = (body.audio as Blob) || null;
-  const image = (body.image as Blob) || null;
+  try {
+    await dbConnect();
 
-  const artistIds = body.artists
-    ? body.artists
-        .toString()
-        .split(",")
-        .map((id: string) => new mongoose.Types.ObjectId(id))
-    : [];
-  const newMusic = await Music.create({
-    musicDetails: {
-      name: body.name,
-      description: body.description,
-      genreId: body.genre,
-      languageId: body.language,
-      artistId: artistIds,
-      releaseDate: new Date(),
-      duration: Number((await getAudioDuration(audio)) || 0),
-    },
-    audioDetails: {
-      imgUrl: image ? await saveFiles(image, IMAGE_UPLOAD_DIR) : null,
-      audioUrl: audio ? await saveFiles(audio, AUDIO_UPLOAD_DIR) : null,
-    },
-    price: {
-      amount: Number(body.priceAmount || 0),
-      currency: body.currency || "USD",
-    },
-  });
-  return NextResponse.json({
-    status: 200,
-    message: "new music created successfully",
-    data: newMusic,
-  });
+    const formData = await req.formData();
+    const body = Object.fromEntries(formData);
+    const audio = (body.audio as Blob) || null;
+    const image = (body.image as Blob) || null;
+
+    const artistIds = body.artists
+      ? body.artists
+          .toString()
+          .split(",")
+          .map((id: string) => new mongoose.Types.ObjectId(id))
+      : [];
+
+    if (body.album) {
+      const newMusic = await Music.create({
+        musicDetails: {
+          name: await capitalizeTitle(body?.name.toString()),
+          description: body.description,
+          genreId: body.genre,
+          languageId: body.language,
+          artistId: artistIds,
+          releaseDate: new Date(),
+          duration: Number((await getAudioDuration(audio)) || 0),
+        },
+        audioDetails: {
+          imgUrl: image ? await saveFiles(image, IMAGE_UPLOAD_DIR) : null,
+          audioUrl: audio ? await saveFiles(audio, AUDIO_UPLOAD_DIR) : null,
+        },
+        price: {
+          amount: Number(body.priceAmount || 0),
+          currency: body.currency || "USD",
+        },
+      });
+      const updatedAlbum = await Album.updateOne(
+        { _id: new mongoose.Types.ObjectId(body.album.toString()) },
+        { $addToSet: { musicIds: newMusic._id } }
+      );
+
+      if (!updatedAlbum) {
+        return NextResponse.json({
+          status: 500,
+          message: "An error occurred while creating new music.",
+        });
+      }
+      return NextResponse.json({
+        status: 200,
+        message: "New music created successfully",
+        data: newMusic,
+      });
+    } else {
+      return NextResponse.json({
+        status: 400,
+        message: "Album ID is required",
+      });
+    }
+  } catch (error) {
+    console.error("Error creating new music:", error);
+    return NextResponse.json({
+      status: 500,
+      message: "An error occurred while creating new music.",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
 }
 
 export async function GET(req: any) {

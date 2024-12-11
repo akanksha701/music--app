@@ -65,64 +65,6 @@ export const dummyMusics = [
     artist: "Arijit Singh",
   },
 ];
-const artists = [
-  {
-    name: "Taylor Swift",
-    image:
-      "https://media.gettyimages.com/id/2184019175/photo/kansas-city-missouri-taylor-swift-looks-on-prior-to-a-game-between-the-kansas-city-chiefs-and.jpg?s=612x612&w=0&k=20&c=8xRu22BUe5ryQ_dZ1WMbT0POxU9H-4stBQBxQew34WA=",
-  },
-  {
-    name: "Katy Perry",
-    image:
-      "https://media.gettyimages.com/id/2150186499/photo/beverly-hills-california-katy-perry-attends-the-35th-annual-colleagues-spring-luncheon-oscar.jpg?s=612x612&w=0&k=20&c=loej3GuDukYHVCfhDpmiizP5H8wJ9X9QIvCSydN-a8Y=",
-  },
-  {
-    name: "Drake",
-    image:
-      "https://media.gettyimages.com/id/1485898184/photo/napa-california-singer-drake-milligan-performs-on-day-3-of-live-in-the-vineyard-goes-country.jpg?s=612x612&w=0&k=20&c=LhIPCpul-hM_zTBXImypjqXQEWnjxBuI3VLXdUWTM54=",
-  },
-  {
-    name: "Ariana Grande",
-    image:
-      "https://media.gettyimages.com/id/2163809588/photo/paris-france-ariana-grande-attends-the-red-carpet-ahead-of-the-opening-ceremony-of-the.jpg?s=612x612&w=0&k=20&c=d1GV3uTfcsLPVSGXL7ylWsOnFpuo3c0vX2cowQbiRho=",
-  },
-];
-const songs = [
-  {
-    name: "Song 1",
-    image: "https://via.placeholder.com/180",
-  },
-  {
-    name: "Song 2",
-    image: "https://via.placeholder.com/180",
-  },
-  {
-    name: "Song 3",
-    image: "https://via.placeholder.com/180",
-  },
-  {
-    name: "Song 4",
-    image: "https://via.placeholder.com/180",
-  },
-];
-const albums = [
-  {
-    name: "New Album 1",
-    image: "https://via.placeholder.com/180",
-  },
-  {
-    name: "New Album 2",
-    image: "https://via.placeholder.com/180",
-  },
-  {
-    name: "New Album 3",
-    image: "https://via.placeholder.com/180",
-  },
-  {
-    name: "New Album 4",
-    image: "https://via.placeholder.com/180",
-  },
-];
 
 const Index = () => {
   const [topHits, setTopHits] = useState([]);
@@ -131,7 +73,6 @@ const Index = () => {
     (async () => {
       try {
         const { data } = await fetchApi(getTopHits, Method.GET);
-        console.log(data, "data");
         if (!data) {
           setTopHits([]);
         } else {

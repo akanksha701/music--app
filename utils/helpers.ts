@@ -8,11 +8,15 @@ import cloudinary from "cloudinary";
 import queryString from "query-string";
 import fs from "fs";
 
-
-
 export interface IAudioTypes {
   audioDestination: string;
   duration: number | undefined;
+}
+export async function capitalizeTitle(str:string) {
+  return str
+    .split(" ") 
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
+    .join(" "); 
 }
 
 export async function generateUrl(
