@@ -9,9 +9,6 @@ import {
 import React from "react";
 import DropDownItem from "./DropDownItem";
 import { IItem } from "../../types/types";
-import Modal from "@/common/modal/modal";
-import { DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 
 const menus: IItem[] = [
   { label: "My profile", key: "my_profile", route: "/myprofile" },

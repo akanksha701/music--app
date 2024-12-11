@@ -75,7 +75,7 @@ const TableComp = ({
       </Table>
       <div className="mt-10">
         <PaginationComp
-          totalPages={paginationData?.totalPages}
+          totalPages={paginationData?.totalPages || 1}
           page={page}
           setPage={setPage}
         />

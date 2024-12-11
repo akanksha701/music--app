@@ -12,7 +12,7 @@ interface Actions {
   setPaginationData: (paginationData: any) => void;
 }
 
-export const useMusic = create<States & Actions>((set) => ({
+export const usePagination = create<States & Actions>((set) => ({
   page: 1,
   data: null,
   paginationData: null,

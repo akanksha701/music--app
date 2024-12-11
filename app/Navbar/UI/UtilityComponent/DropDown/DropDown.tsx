@@ -6,13 +6,14 @@ import {
 } from '@nextui-org/react';
 import React from 'react';
 import DropDownMenu from './DropDownMenu';
+import Modal from '@/common/modal/modal';
 
 const DropDown = () => {
   const { user } = useUser();
-
   return (
     <>
       <Dropdown placement="bottom-end">
+        
         <DropdownTrigger>
           <Avatar
             isBordered

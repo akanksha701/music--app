@@ -1,13 +1,14 @@
 "use client";
-import React, { useMemo } from "react";
+import React from "react";
 import Addmusic from "./UI/UtilityComponent/Addmusic";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
-import { useMusic } from "@/hooks/useMusic";
+import { usePagination } from "@/hooks/usePagination";
 import { useGetAllMusicsQuery } from "@/services/music";
 import { useGetLanguageQuery } from "@/services/languages";
 import { useGetArtistsQuery } from "@/services/artists";
 import { useGetGenreQuery } from "@/services/genre";
+import Loading from "../loading";
 
 const columns = [
   { header: "Song Title", accessor: "name" },
@@ -22,7 +23,7 @@ const columns = [
 
 const Index = () => {
   const recordsPerPage = 5;
-  const { page, setPage } = useMusic();
+  const { page, setPage } = usePagination();
   const { data: musicData } = useGetAllMusicsQuery({ page, recordsPerPage });
   const { data: languageData } = useGetLanguageQuery(undefined);
   const { data: artistData } = useGetArtistsQuery(undefined);
@@ -30,7 +31,7 @@ const Index = () => {
   const { data: albumData } = useGetGenreQuery(undefined);
 
   if (!languageData || !artistData || !genreData || !albumData || !musicData) {
-    return null;
+    return <Loading/>;
   }
 
   const tabsData = [

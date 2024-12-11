@@ -22,7 +22,6 @@ const Modal = (props: any) => {
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
-            {/* Anyone who has this link will be able to view this. */}
           </DialogDescription>
         </DialogHeader>
         {body}

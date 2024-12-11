@@ -137,7 +137,7 @@ export interface ITableProps {
   columns: IColumn[];
   data: Record<string, any>[];
   handleEdit?: any;
-  paginationData: IPagination;
+  paginationData?: IPagination;
   page: number;
   setPage: (page: number) => void;
 }
