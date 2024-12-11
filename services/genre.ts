@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const artistApi = createApi({
-  reducerPath: "artistApi",
+export const genreApi = createApi({
+  reducerPath: "genreApi",
   baseQuery: fetchBaseQuery({ baseUrl:   process.env.APP_URL}),
   endpoints: (builder) => ({
-    getartists: builder.query({
-      query: () => "api/artist",
+    getGenre: builder.query({
+      query: () => "api/genre",
     }),
   }),
 });
 
-export const { useGetartistsQuery } = artistApi;
+export const { useGetGenreQuery } = genreApi;

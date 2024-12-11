@@ -14,11 +14,11 @@ import {
 import PaginationComp from "../pagination/paginationComp";
 import { FaEdit } from "react-icons/fa"; // Import the edit icon
 
-const TableComp = ({ message, columns, data }: ITableProps) => {
+const TableComp = ({ message, columns, data, paginationData }: ITableProps) => {
   const handleEdit = (rowData: any) => {
     console.log("Editing row:", rowData);
   };
-
+console.log("paginationData",paginationData)
   return (
     <>
       <Table>
@@ -54,7 +54,11 @@ const TableComp = ({ message, columns, data }: ITableProps) => {
         </TableBody>
       </Table>
       <div className="mt-10">
-        <PaginationComp page={2} totalPages={4} onPageChange={() => {}} />
+        <PaginationComp
+          // page={paginationData.currentPage || 0}
+          totalPages={paginationData?.totalPages}
+          // onPageChange={() => { }}
+        />
       </div>
     </>
   );

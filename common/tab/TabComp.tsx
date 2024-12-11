@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ITabsProps } from "../types/types";
 
 const TabComp = ({ tabsData }: ITabsProps) => {
+  
   return (
     <Tabs defaultValue={tabsData[0]?.value} className="w-full">
       <TabsList className="">

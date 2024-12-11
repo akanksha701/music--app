@@ -1,12 +1,13 @@
-// Index.tsx (Server Component)
+"use client";
 import React from "react";
 import Addmusic from "./UI/UtilityComponent/Addmusic";
-import { fetchGenresAndLanguages } from "../actions/getGenresAndLanguage";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
-import { fetchApi } from "@/utils/helpers";
-import { music } from "@/utils/apiRoutes";
-import { Method } from "../About/types/types";
+import { useMusic } from "@/hooks/useMusic";
+import { useGetAllMusicsQuery } from "@/services/music";
+import { useGetLanguageQuery } from "@/services/languages";
+import { useGetArtistsQuery } from "@/services/artists";
+import { useGetGenreQuery } from "@/services/genre";
 
 const columns = [
   { header: "Song Title", accessor: "name" },
@@ -14,17 +15,23 @@ const columns = [
   { header: "Price", accessor: "price", className: "text-right" },
   {
     header: "Edit",
-    accessor: "edit", 
-    className: "text-center", // Center align the edit button
+    accessor: "edit",
+    className: "text-center",
   },
 ];
 
+const recordsPerPage = 5;
 
-const Index = async () => {
-  const { genreList, languageList, artistList, albumList } =
-    await fetchGenresAndLanguages();
-  const { data } = await fetchApi(music, Method.GET);
-  if (!genreList || !languageList || !artistList || !albumList || !data) {
+const Index = () => {
+  const { page } = useMusic();
+
+  const { data: musicData } = useGetAllMusicsQuery({ page, recordsPerPage });
+  const { data: languageData } = useGetLanguageQuery(undefined);
+  const { data: artistData } = useGetArtistsQuery(undefined);
+  const { data: genreData } = useGetGenreQuery(undefined);
+  const { data: albumData } = useGetGenreQuery(undefined);
+
+  if (!languageData || !artistData || !genreData || !albumData || !musicData) {
     return null;
   }
   const tabsData = [
@@ -35,8 +42,8 @@ const Index = async () => {
         <TableComp
           message="A list of your recent invoices."
           columns={columns}
-          data={data}
-          // handleEdit={handleEdit} // Pass the handleEdit function to the TableComp
+          data={musicData.data.data}
+          paginationData={musicData.data.pagination}
         />
       ),
     },
@@ -45,14 +52,15 @@ const Index = async () => {
       label: "Create music",
       content: (
         <Addmusic
-          languageList={languageList}
-          genreList={genreList}
-          artistList={artistList}
-          albumList={albumList}
+          languageList={languageData.data}
+          genreList={genreData.data}
+          artistList={artistData.data}
+          albumList={albumData.data}
         />
       ),
     },
   ];
+
   return (
     <div className="flex justify-center items-start min-h-screen bg-gray-100 pt-8">
       <div className="w-full sm:w-[500px] md:w-[600px] lg:w-[700px] px-4">

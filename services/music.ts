@@ -8,7 +8,11 @@ export const newMusicApi = createApi({
       query: (language) =>
         language ? `api/newRelease?language=${language}}` : "api/newRelease",
     }),
+    getAllMusics: builder.query({
+      query: ({ page, recordsPerPage }) =>
+        `api/music?page=${page}&recordsPerPage=${recordsPerPage}`,
+    }),
   }),
 });
 
-export const { useGetnewMusicsQuery } = newMusicApi;
+export const { useGetnewMusicsQuery,useGetAllMusicsQuery } = newMusicApi;

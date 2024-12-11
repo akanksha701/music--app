@@ -53,9 +53,22 @@ export async function POST(req: Request) {
     data: newMusic,
   });
 }
-export async function GET() {
+
+export async function GET(req: any) {
   try {
+    const url = new URL(req?.url as string);
+    const page: any = url?.searchParams?.get("page");
+    const recordsPerPage: any = url?.searchParams?.get("recordsPerPage");
+
+    const currentPage = parseInt(page, 10);
+    const limit = parseInt(recordsPerPage, 10);
+
+    const skip = (currentPage - 1) * limit;
+
     await dbConnect();
+
+    const totalRecords = await Music.countDocuments();
+
     const musics = await Music.aggregate([
       {
         $lookup: {
@@ -109,6 +122,7 @@ export async function GET() {
           currency: { $first: "$price.currency" },
           imageUrl: { $first: "$audioDetails.imgUrl" },
           audioUrl: { $first: "$audioDetails.audioUrl" },
+          createdAt: { $first: "$createdAt" },
         },
       },
       {
@@ -128,9 +142,25 @@ export async function GET() {
           },
         },
       },
+      { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit },
     ]);
 
-    return NextResponse.json({ status: 200, data: musics });
+    const totalPages = Math.ceil(totalRecords / limit);
+
+    return NextResponse.json({
+      status: 200,
+      data: {
+        data: musics,
+        pagination: {
+          currentPage,
+          totalPages,
+          totalRecords,
+          recordsPerPage: limit,
+        },
+      },
+    });
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json({ status: 500, message: "Error occurred" });

@@ -5,7 +5,7 @@ import { IItem } from "../../types/types";
 import Tooltip from "@/common/tooltip/Tooltip";
 import HoverCard from "./HoverCard";
 import { useGetPlayListsQuery } from "@/services/playlists";
-import { useGetartistsQuery } from "@/services/artists";
+import { useGetArtistsQuery } from "@/services/artists";
 
 const navItems: IItem[] = [
   { label: "Browse", route: "/Browse" },
@@ -16,7 +16,7 @@ const navItems: IItem[] = [
 const NavItemList: React.FC = () => {
   const pathname = usePathname();
   const { data: playLists } = useGetPlayListsQuery(undefined);
-  const { data: artistList } = useGetartistsQuery(undefined);
+  const { data: artistList } = useGetArtistsQuery(undefined);
 
   if (!playLists || !artistList) {
     return null;

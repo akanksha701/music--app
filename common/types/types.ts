@@ -125,10 +125,17 @@ export interface IColumn {
   className?: string;
 }
 
+export interface IPagination {
+  currentPage: number;
+  totalPages: number;
+  totalRecords: number;
+  recordsPerPage: number;
+}
+
 export interface ITableProps {
   message: string;
   columns: IColumn[];
   data: Record<string, any>[];
   handleEdit?: any;
-
+  paginationData: IPagination;
 }

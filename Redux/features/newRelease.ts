@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { newMusicApi } from "@/services/newMusic";
+import { newMusicApi } from "@/services/music";
 
 const initialState = {
   newRelease: {},

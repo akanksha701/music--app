@@ -1,6 +1,6 @@
 "use client";
 import Box from "@/app/(BrowsePage)/Browse/UI/UtilityComponent/Card";
-import { useGetnewMusicsQuery } from "@/services/newMusic";
+import { useGetnewMusicsQuery } from "@/services/music";
 import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 
