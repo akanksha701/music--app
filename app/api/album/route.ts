@@ -35,18 +35,44 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     await dbConnect();
-    const AlbumList = await Album.find({});
-    if (AlbumList) {
-      return NextResponse.json({ status: 200, data: AlbumList });
+
+    const url = new URL(req.url);
+
+    const page: number = parseInt(url.searchParams.get("page") || "1", 10);
+    const recordsPerPage: number = parseInt(
+      url.searchParams.get("recordsPerPage") || "0",
+      10
+    );
+    if (!recordsPerPage || recordsPerPage) {
+      const albumList = await Album.find({});
+      return NextResponse.json({
+        status: 200,
+        data: albumList,
+      });
     }
 
-    return NextResponse.json(
-      { error: "error while fetching albums" },
-      { status: 400 }
-    );
+    // Pagination logic if recordsPerPage and page are provided
+    const skip = (page - 1) * recordsPerPage;
+    const limit = recordsPerPage;
+
+    const albumList = await Album.find({}).skip(skip).limit(limit);
+
+    // Get total count for pagination
+    const totalAlbums = await Album.countDocuments();
+
+    return NextResponse.json({
+      status: 200,
+      data: albumList,
+      pagination: {
+        page,
+        recordsPerPage,
+        totalAlbums,
+        totalPages: Math.ceil(totalAlbums / recordsPerPage), // Calculate total pages
+      },
+    });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server Error" },

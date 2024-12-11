@@ -3,7 +3,6 @@ import React from "react";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
 import { usePagination } from "@/hooks/usePagination";
-import { useGetLanguageQuery } from "@/services/languages";
 import Loading from "../loading";
 import { useGetAlbumsQuery } from "@/services/album";
 import AddAlbum from "./UI/UtilityComponent/AddAlbum";
@@ -20,7 +19,7 @@ const columns = [
 const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
-  const { data: albumData } = useGetAlbumsQuery(undefined);
+  const { data: albumData } = useGetAlbumsQuery({page,recordsPerPage});
 
   if (!albumData) {
     return <Loading />;
@@ -34,10 +33,10 @@ const Index = () => {
         <TableComp
           message="A list of your recent languages."
           columns={columns}
-          data={albumData.data}
+          data={[albumData.data]}
           setPage={setPage}
           page={page}
-          // paginationData={languageData.data.pagination}
+          paginationData={albumData.pagination}
         />
       ),
     },

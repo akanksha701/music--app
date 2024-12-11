@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Loading from "../loading";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
 import { usePagination } from "@/hooks/usePagination";
@@ -7,7 +8,6 @@ import { useGetAllMusicsQuery } from "@/services/music";
 import { useGetLanguageQuery } from "@/services/languages";
 import { useGetArtistsQuery } from "@/services/artists";
 import { useGetGenreQuery } from "@/services/genre";
-import Loading from "../loading";
 import { useGetAlbumsQuery } from "@/services/album";
 import AddMusic from "./UI/UtilityComponent/AddMusic";
 
@@ -26,11 +26,10 @@ const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
   const { data: musicData } = useGetAllMusicsQuery({ page, recordsPerPage });
-  const { data: languageData } = useGetLanguageQuery(undefined);
-  const { data: artistData } = useGetArtistsQuery(undefined);
-  const { data: genreData } = useGetGenreQuery(undefined);
-  const { data: albumData } = useGetAlbumsQuery(undefined);
-
+  const { data: languageData } = useGetLanguageQuery({});
+  const { data: artistData } = useGetArtistsQuery({});
+  const { data: genreData } = useGetGenreQuery({});
+  const { data: albumData } = useGetAlbumsQuery({});
   if (!languageData || !artistData || !genreData || !albumData || !musicData) {
     return <Loading />;
   }
