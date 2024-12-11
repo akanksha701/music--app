@@ -23,7 +23,7 @@ const columns = [
 const recordsPerPage = 5;
 
 const Index = () => {
-  const { page } = useMusic();
+    const { page,setPage } = useMusic();
 
   const { data: musicData } = useGetAllMusicsQuery({ page, recordsPerPage });
   const { data: languageData } = useGetLanguageQuery(undefined);
@@ -40,9 +40,11 @@ const Index = () => {
       label: "Musics",
       content: (
         <TableComp
-          message="A list of your recent invoices."
+          message="A list of your recent musics."
           columns={columns}
           data={musicData.data.data}
+          setPage={setPage}
+          page={page}
           paginationData={musicData.data.pagination}
         />
       ),

@@ -138,4 +138,6 @@ export interface ITableProps {
   data: Record<string, any>[];
   handleEdit?: any;
   paginationData: IPagination;
+  page: number;
+  setPage: (page: number) => void;
 }

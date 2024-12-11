@@ -1,5 +1,4 @@
-"use client"; // Add this line to mark the file as a client component
-
+"use client";
 import React from "react";
 import { ITableProps } from "../types/types";
 import {
@@ -12,17 +11,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PaginationComp from "../pagination/paginationComp";
-import { FaEdit } from "react-icons/fa"; // Import the edit icon
+import { FaEdit } from "react-icons/fa";
 
-const TableComp = ({ message, columns, data, paginationData }: ITableProps) => {
+const TableComp = ({
+  message,
+  columns,
+  data,
+  paginationData,
+  page,
+  setPage,
+}: ITableProps) => {
   const handleEdit = (rowData: any) => {
     console.log("Editing row:", rowData);
   };
-console.log("paginationData",paginationData)
   return (
     <>
       <Table>
-        {/* <TableCaption>{message}</TableCaption> */}
+        <TableCaption>{message}</TableCaption>
         <TableHeader>
           <TableRow>
             {columns.map((column, index) => (
@@ -55,9 +60,9 @@ console.log("paginationData",paginationData)
       </Table>
       <div className="mt-10">
         <PaginationComp
-          // page={paginationData.currentPage || 0}
           totalPages={paginationData?.totalPages}
-          // onPageChange={() => { }}
+          page={page}
+          setPage={setPage}
         />
       </div>
     </>
