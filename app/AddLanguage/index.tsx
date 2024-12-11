@@ -19,7 +19,7 @@ const columns = [
 const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
-  const { data: languageData } = useGetLanguageQuery(undefined);
+  const { data: languageData } = useGetLanguageQuery({ page, recordsPerPage });
 
   if (!languageData) {
     return <Loading />;
@@ -36,14 +36,14 @@ const Index = () => {
           data={languageData.data}
           setPage={setPage}
           page={page}
-          // paginationData={languageData.data.pagination}
+          paginationData={languageData.pagination}
         />
       ),
     },
     {
       value: "createlanguage",
       label: "Create Language",
-      content: <AddLanguage/>,
+      content: <AddLanguage />,
     },
   ];
   return (

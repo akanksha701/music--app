@@ -21,15 +21,14 @@ const TableComp = ({
   page,
   setPage,
 }: ITableProps) => {
-  
   const handleEdit = useCallback((rowData: any) => {
     console.log("Editing row:", rowData);
-  }, []); 
+  }, []);
 
   const memoizedColumns = useMemo(() => {
     return columns.map((column) => ({
       ...column,
-      className: column.className || "", 
+      className: column.className || "",
     }));
   }, [columns]);
 
@@ -38,7 +37,6 @@ const TableComp = ({
       ...row,
     }));
   }, [data]);
-
   return (
     <>
       <Table>

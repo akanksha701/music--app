@@ -63,18 +63,35 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     await dbConnect();
-    const languageList = await Language.find({});
+    const url = new URL(req?.url as string);
+    const page: any = parseInt(url?.searchParams?.get("page") || "1", 10);
+    const recordsPerPage: any = url?.searchParams?.get("recordsPerPage") 
+
+    const skip = (page - 1) * recordsPerPage;
+    const limit = recordsPerPage;
+
+    const languageList = await Language.find({}).skip(skip).limit(limit);
+
+    const totalLanguages = await Language.countDocuments();
+
     if (languageList) {
       return NextResponse.json({
         status: 200,
         data: languageList,
+        pagination: {
+          page,
+          recordsPerPage,
+          totalLanguages,
+          totalPages: Math.ceil(totalLanguages / recordsPerPage),
+        },
       });
     }
+
     return NextResponse.json(
-      { error: "error while fetching languages" },
+      { error: "Error while fetching languages" },
       { status: 400 }
     );
   } catch (error) {
