@@ -11,12 +11,15 @@ import {
 
 interface PaginationCompProps {
   totalPages: number;
-  page:number;
+  page: number;
   setPage: (page: number) => void;
 }
 
-const PaginationComp: React.FC<PaginationCompProps> = ({ totalPages,page, setPage }) => {
-
+const PaginationComp: React.FC<PaginationCompProps> = ({
+  totalPages,
+  page,
+  setPage,
+}) => {
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import Addmusic from "./UI/UtilityComponent/Addmusic";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
@@ -20,11 +20,9 @@ const columns = [
   },
 ];
 
-const recordsPerPage = 5;
-
 const Index = () => {
-    const { page,setPage } = useMusic();
-
+  const recordsPerPage = 5;
+  const { page, setPage } = useMusic();
   const { data: musicData } = useGetAllMusicsQuery({ page, recordsPerPage });
   const { data: languageData } = useGetLanguageQuery(undefined);
   const { data: artistData } = useGetArtistsQuery(undefined);
@@ -34,6 +32,7 @@ const Index = () => {
   if (!languageData || !artistData || !genreData || !albumData || !musicData) {
     return null;
   }
+
   const tabsData = [
     {
       value: "musics",
@@ -62,7 +61,6 @@ const Index = () => {
       ),
     },
   ];
-
   return (
     <div className="flex justify-center items-start min-h-screen bg-gray-100 pt-8">
       <div className="w-full sm:w-[500px] md:w-[600px] lg:w-[700px] px-4">

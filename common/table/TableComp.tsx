@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { ITableProps } from "../types/types";
 import {
   Table,
@@ -21,16 +21,31 @@ const TableComp = ({
   page,
   setPage,
 }: ITableProps) => {
-  const handleEdit = (rowData: any) => {
+  
+  const handleEdit = useCallback((rowData: any) => {
     console.log("Editing row:", rowData);
-  };
+  }, []); 
+
+  const memoizedColumns = useMemo(() => {
+    return columns.map((column) => ({
+      ...column,
+      className: column.className || "", 
+    }));
+  }, [columns]);
+
+  const memoizedData = useMemo(() => {
+    return data.map((row) => ({
+      ...row,
+    }));
+  }, [data]);
+
   return (
     <>
       <Table>
         <TableCaption>{message}</TableCaption>
         <TableHeader>
           <TableRow>
-            {columns.map((column, index) => (
+            {memoizedColumns.map((column, index) => (
               <TableHead key={index} className={column.className}>
                 {column.header}
               </TableHead>
@@ -38,9 +53,9 @@ const TableComp = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((row, rowIndex) => (
+          {memoizedData.map((row, rowIndex) => (
             <TableRow key={rowIndex}>
-              {columns.map((column, colIndex) => (
+              {memoizedColumns.map((column, colIndex) => (
                 <TableCell key={colIndex} className={column.className}>
                   {column.accessor === "edit" ? (
                     <button
