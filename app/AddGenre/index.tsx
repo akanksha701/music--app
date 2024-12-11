@@ -5,7 +5,7 @@ import TableComp from "@/common/table/TableComp";
 import { usePagination } from "@/hooks/usePagination";
 import Loading from "../loading";
 import AddGenre from "./UI/UtilityComponent/AddGenre";
-// import { useGetGenresQuery } from "@/services/Genre";
+import { useGetGenreQuery } from "@/services/genre";
 
 const columns = [
   { header: "Genre Name", accessor: "name" },
@@ -19,11 +19,11 @@ const columns = [
 const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
-  // const { data: GenreData } = useGetGenresQuery(undefined);
+  const { data: genreData } = useGetGenreQuery({ page, recordsPerPage });
 
-  // if (!GenreData) {
-  //   return <Loading />;
-  // }
+  if (!genreData) {
+    return <Loading />;
+  }
 
   const tabsData = [
     {
@@ -33,10 +33,10 @@ const Index = () => {
         <TableComp
           message="A list of your recent languages."
           columns={columns}
-          data={[]}
+          data={genreData.data}
           setPage={setPage}
           page={page}
-          // paginationData={languageData.data.pagination}
+          paginationData={genreData.pagination}
         />
       ),
     },

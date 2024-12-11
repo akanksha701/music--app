@@ -3,7 +3,7 @@ import dbConnect from "@/lib/DbConnection/dbConnection";
 import Genre from "@/lib/models/Genre";
 import { NextApiRequest } from "next";
 import { capitalizeTitle, saveFiles } from "@/utils/helpers";
-import {  GENRE_IMAGE_UPLOAD_DIR } from "../music/route";
+import { GENRE_IMAGE_UPLOAD_DIR } from "../music/route";
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,7 +18,11 @@ export async function POST(req: NextRequest) {
       imageUrl: image ? await saveFiles(image, GENRE_IMAGE_UPLOAD_DIR) : null,
     });
     if (newGenre) {
-      return NextResponse.json({ status: 200,message:'new genre created successfully', data: newGenre });
+      return NextResponse.json({
+        status: 200,
+        message: "new genre created successfully",
+        data: newGenre,
+      });
     }
     return NextResponse.json(
       { error: "error while creating genres" },
@@ -60,16 +64,42 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
-
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const genreList = await Genre.find({});
+
+    const url = new URL(req?.url as string);
+    const page: any = parseInt(url?.searchParams?.get("page") || "1", 10); // Default page is 1
+    const recordsPerPage: any = parseInt(
+      url?.searchParams?.get("recordsPerPage") || "10",
+      10
+    ); // Default records per page is 10
+
+    // Pagination logic
+    const skip = (page - 1) * recordsPerPage;
+    const limit = recordsPerPage;
+
+    // If pagination parameters are found, apply skip and limit
+    const genreList = await Genre.find({}).skip(skip).limit(limit);
+
+    // Get total count of genres for pagination info
+    const totalGenres = await Genre.countDocuments();
+
     if (genreList) {
-      return NextResponse.json({ status: 200, data: genreList });
+      return NextResponse.json({
+        status: 200,
+        data: genreList,
+        pagination: {
+          page,
+          recordsPerPage,
+          totalGenres,
+          totalPages: Math.ceil(totalGenres / recordsPerPage), // Calculate total pages
+        },
+      });
     }
+
     return NextResponse.json(
-      { error: "error while fetching genres" },
+      { error: "Error while fetching genres" },
       { status: 400 }
     );
   } catch (error) {
