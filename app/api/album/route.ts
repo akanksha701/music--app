@@ -11,16 +11,16 @@ export async function POST(req: NextRequest) {
     const body = Object.fromEntries(formData);
     const image = (body.image as Blob) || null;
     const { name, description } = body;
-    const newGenre = await Album.create({
+    const newAlbum = await Album.create({
       name: await capitalizeTitle(name.toString()),
       description: description,
       imageUrl: image ? await saveFiles(image, ALBUM_IMAGE_UPLOAD_DIR) : null,
     });
-    if (newGenre) {
+    if (newAlbum) {
       return NextResponse.json({
         status: 200,
-        message: "New album created successfully",
-        data: newGenre,
+        message: "new album created successfully",
+        data: newAlbum,
       });
     }
     return NextResponse.json(

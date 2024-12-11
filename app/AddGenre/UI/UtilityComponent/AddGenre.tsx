@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { IAddAlbumProps } from "../../types/types";
+import { IAddGenreProps } from "../../types/types";
 import NextInput from "@/common/inputs/Input";
 import { useForm } from "react-hook-form";
 import NextTextArea from "@/common/inputs/Textarea";
@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { fetchApi } from "@/utils/helpers";
 import { Method } from "@/app/About/types/types";
 
-const AddAlbum = (props: IAddAlbumProps) => {
+const AddGenre = (props: IAddGenreProps) => {
   const {
     register,
     handleSubmit,
@@ -24,7 +24,7 @@ const AddAlbum = (props: IAddAlbumProps) => {
     formData.append("name", data.name);
     formData.append("description", data.description);
     try {
-      const res = await fetchApi("/api/album", Method.POST, formData);
+      const res = await fetchApi("/api/genre", Method.POST, formData);
       if (res.status === 200) {
         toast.success(res.message);
       }
@@ -93,4 +93,4 @@ const AddAlbum = (props: IAddAlbumProps) => {
   );
 };
 
-export default AddAlbum;
+export default AddGenre;

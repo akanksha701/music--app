@@ -2,18 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Genre from "@/lib/models/Genre";
 import { NextApiRequest } from "next";
+import { capitalizeTitle, saveFiles } from "@/utils/helpers";
+import {  GENRE_IMAGE_UPLOAD_DIR } from "../music/route";
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
-    const body = await req?.json();
+    const formData = await req.formData();
+    const body = Object.fromEntries(formData);
+    const image = (body.image as Blob) || null;
     const { name, description } = body;
     const newGenre = await Genre.create({
-      name: name,
+      name: await capitalizeTitle(name.toString()),
       description: description,
+      imageUrl: image ? await saveFiles(image, GENRE_IMAGE_UPLOAD_DIR) : null,
     });
     if (newGenre) {
-      return NextResponse.json({ status: 200, data: newGenre });
+      return NextResponse.json({ status: 200,message:'new genre created successfully', data: newGenre });
     }
     return NextResponse.json(
       { error: "error while creating genres" },

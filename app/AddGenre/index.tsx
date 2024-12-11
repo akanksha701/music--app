@@ -3,12 +3,12 @@ import React from "react";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
 import { usePagination } from "@/hooks/usePagination";
-import { useGetLanguageQuery } from "@/services/languages";
 import Loading from "../loading";
-import AddLanguage from "./UI/UtilityComponent/AddLanguage";
+import AddGenre from "./UI/UtilityComponent/AddGenre";
+// import { useGetGenresQuery } from "@/services/Genre";
 
 const columns = [
-  { header: "Language Name", accessor: "name" },
+  { header: "Genre Name", accessor: "name" },
   {
     header: "Edit",
     accessor: "edit",
@@ -19,21 +19,21 @@ const columns = [
 const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
-  const { data: languageData } = useGetLanguageQuery(undefined);
+  // const { data: GenreData } = useGetGenresQuery(undefined);
 
-  if (!languageData) {
-    return <Loading />;
-  }
+  // if (!GenreData) {
+  //   return <Loading />;
+  // }
 
   const tabsData = [
     {
-      value: "languages",
-      label: "Languages",
+      value: "Genres",
+      label: "Genres",
       content: (
         <TableComp
           message="A list of your recent languages."
           columns={columns}
-          data={languageData.data}
+          data={[]}
           setPage={setPage}
           page={page}
           // paginationData={languageData.data.pagination}
@@ -41,9 +41,9 @@ const Index = () => {
       ),
     },
     {
-      value: "createlanguage",
-      label: "Create Language",
-      content: <AddLanguage/>,
+      value: "createGenre",
+      label: "Create Genre",
+      content: <AddGenre />,
     },
   ];
   return (

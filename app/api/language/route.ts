@@ -13,7 +13,11 @@ export async function POST(req: NextRequest) {
       description: description,
     });
     if (newLanguage) {
-      return NextResponse.json({ status: 200, data: newLanguage });
+      return NextResponse.json({
+        status: 200,
+        message: "new message created successfully",
+        data: newLanguage,
+      });
     }
     return NextResponse.json(
       { error: "error while creating genres" },

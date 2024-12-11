@@ -1,16 +1,17 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { IAddAlbumProps } from "../../types/types";
+import { IAddLanguageProps } from "../../types/types";
 import NextInput from "@/common/inputs/Input";
 import { useForm } from "react-hook-form";
 import NextTextArea from "@/common/inputs/Textarea";
+import MultiSelect from "@/common/inputs/MultiSelect";
 import FileUploadInput from "@/common/inputs/FileUploadInput";
 import toast from "react-hot-toast";
 import { fetchApi } from "@/utils/helpers";
 import { Method } from "@/app/About/types/types";
 
-const AddAlbum = (props: IAddAlbumProps) => {
+const AddLanguage = (props: IAddLanguageProps) => {
   const {
     register,
     handleSubmit,
@@ -19,17 +20,13 @@ const AddAlbum = (props: IAddAlbumProps) => {
   } = useForm({});
 
   const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    formData.append("image", data.imageUrl);
-    formData.append("name", data.name);
-    formData.append("description", data.description);
     try {
-      const res = await fetchApi("/api/album", Method.POST, formData);
+      const res = await fetchApi("/api/language", Method.POST, data);
       if (res.status === 200) {
         toast.success(res.message);
       }
     } catch (error) {
-      toast.error("Error while creating music");
+      toast.error("Error while creating language");
     }
   };
 
@@ -65,19 +62,6 @@ const AddAlbum = (props: IAddAlbumProps) => {
             />
           </div>
 
-          {/* MultiSelect Grids */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-         
-            <div className="flex flex-col">
-              <FileUploadInput
-                name="imageUrl"
-                control={control}
-                label="Upload an Image"
-                accept="image/png, image/jpeg"
-              />
-            </div>
-          </div>
-
           {/* Submit Button */}
           <div className="flex justify-center sm:justify-start mt-4">
             <Button
@@ -93,4 +77,4 @@ const AddAlbum = (props: IAddAlbumProps) => {
   );
 };
 
-export default AddAlbum;
+export default AddLanguage;

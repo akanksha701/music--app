@@ -10,8 +10,9 @@ import { redirect } from "next/navigation";
 import React, { useState } from "react";
 
 const menus: any = [
-  { label: "My profile", key: "my_profile", route: "/MyProfile" },
+  { label: "My Profile", key: "my_profile", route: "/MyProfile" },
   { label: "Add Language", key: "add_language", route: "/AddLanguage" },
+  { label: "Add Genre", key: "add_genre", route: "/AddGenre" },
   { label: "Add Album", key: "add_album", route: "/AddAlbum" },
   { label: "Add Music", key: "add_music", route: "/AddMusic" },
   { label: "My Musics", key: "my_music", route: "/MyMusics" },
@@ -32,7 +33,6 @@ const DropDownMenu = () => {
   return (
     <>
       <DropdownMenu aria-label="Profile Actions" variant="flat">
-      
         <DropdownItem key="profile" className="h-14 gap-2 ">
           <p className="font-semibold ">Signed in as</p>
           <p className="font-semibold ">
