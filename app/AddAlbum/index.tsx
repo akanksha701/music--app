@@ -6,6 +6,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { useGetLanguageQuery } from "@/services/languages";
 import Loading from "../loading";
 import { useGetAlbumsQuery } from "@/services/album";
+import AddAlbum from "./UI/UtilityComponent/AddAlbum";
 
 const columns = [
   { header: "Album Name", accessor: "name" },
@@ -43,7 +44,7 @@ const Index = () => {
     {
       value: "createalbum",
       label: "Create Album",
-      content: <></>,
+      content: <AddAlbum />,
     },
   ];
   return (

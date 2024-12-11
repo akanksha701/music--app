@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Addmusic from "./UI/UtilityComponent/Addmusic";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
 import { usePagination } from "@/hooks/usePagination";
@@ -10,6 +9,7 @@ import { useGetArtistsQuery } from "@/services/artists";
 import { useGetGenreQuery } from "@/services/genre";
 import Loading from "../loading";
 import { useGetAlbumsQuery } from "@/services/album";
+import AddMusic from "./UI/UtilityComponent/AddMusic";
 
 const columns = [
   { header: "Song Title", accessor: "name" },
@@ -32,7 +32,7 @@ const Index = () => {
   const { data: albumData } = useGetAlbumsQuery(undefined);
 
   if (!languageData || !artistData || !genreData || !albumData || !musicData) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const tabsData = [
@@ -54,7 +54,7 @@ const Index = () => {
       value: "createmusic",
       label: "Create music",
       content: (
-        <Addmusic
+        <AddMusic
           languageList={languageData.data}
           genreList={genreData.data}
           artistList={artistData.data}

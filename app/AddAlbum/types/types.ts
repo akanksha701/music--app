@@ -19,9 +19,5 @@ interface ILanguage {
   _id: string; 
   name: string; 
 }
-export interface IAddMusicProps {
-  genreList: IGenre[];
-  languageList: ILanguage[];
-  artistList: IArtist[];
-  albumList: IAlbum[];
+export interface IAddAlbumProps {
 }

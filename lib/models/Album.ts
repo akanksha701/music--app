@@ -9,15 +9,15 @@ const albumSchema = new mongoose.Schema(
     },
     musicIds: [
       {
-        type: mongoose.Schema.Types.ObjectId,  // Reference to Music model
-        ref: "Music",  // Name of the model to reference
+        type: mongoose.Schema.Types.ObjectId,  
+        ref: "Music",  
       },
     ],
     description: {
       type: String,
       required: true,
     },
-    imgUrl: {
+    imageUrl: {
       type: String,
     },
     isDeleted: {

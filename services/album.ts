@@ -7,7 +7,11 @@ export const albumApi = createApi({
     getAlbums: builder.query({
       query: () => "api/album",
     }),
+    getTopAlbums: builder.query({
+      query: () =>'api/topalbums',
+    }),
   }),
+  
 });
 
-export const { useGetAlbumsQuery } = albumApi;
+export const { useGetAlbumsQuery,useGetTopAlbumsQuery } = albumApi;

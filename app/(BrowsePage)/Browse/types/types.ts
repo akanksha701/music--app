@@ -10,7 +10,7 @@ export interface ImusicProps {
   price: number; // price of the
 }
 export interface IBoxTypes {
-  data: Array<{ name: string; image: string }>;
+  data: Array<{ name: string; imageUrl: string }>;
   className: string;
   title?: string;
 }

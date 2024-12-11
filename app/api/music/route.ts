@@ -14,6 +14,7 @@ export const config = {
 
 export const IMAGE_UPLOAD_DIR = path.resolve("public/music/images");
 export const AUDIO_UPLOAD_DIR = path.resolve("public/music/audio");
+export const ALBUM_IMAGE_UPLOAD_DIR = path.resolve("public/albums/images");
 
 export async function POST(req: Request) {
   try {
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
           duration: Number((await getAudioDuration(audio)) || 0),
         },
         audioDetails: {
-          imgUrl: image ? await saveFiles(image, IMAGE_UPLOAD_DIR) : null,
+          imageUrl: image ? await saveFiles(image, IMAGE_UPLOAD_DIR) : null,
           audioUrl: audio ? await saveFiles(audio, AUDIO_UPLOAD_DIR) : null,
         },
         price: {
@@ -149,7 +150,7 @@ export async function GET(req: any) {
           email: { $first: "$artists.email" },
           price: { $first: "$price.amount" },
           currency: { $first: "$price.currency" },
-          imageUrl: { $first: "$audioDetails.imgUrl" },
+          imageUrl: { $first: "$audioDetails.imageUrl" },
           audioUrl: { $first: "$audioDetails.audioUrl" },
           createdAt: { $first: "$createdAt" },
         },

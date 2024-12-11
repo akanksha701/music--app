@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { fetchApi } from "@/utils/helpers";
 import { Method } from "@/app/About/types/types";
 
-const Addmusic = (props: IAddMusicProps) => {
+const AddMusic = (props: IAddMusicProps) => {
   const { genreList, languageList, artistList, albumList } = props;
   const {
     register,
@@ -167,4 +167,4 @@ const Addmusic = (props: IAddMusicProps) => {
   );
 };
 
-export default Addmusic;
+export default AddMusic;

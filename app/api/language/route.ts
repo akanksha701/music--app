@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Language from "@/lib/models/Language";
+import { capitalizeTitle } from "@/utils/helpers";
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function POST(req: NextRequest) {
     const body = await req?.json();
     const { name, description } = body;
     const newLanguage = await Language.create({
-      name: name,
+      name: await capitalizeTitle(name.toString()),
       description: description,
     });
     if (newLanguage) {

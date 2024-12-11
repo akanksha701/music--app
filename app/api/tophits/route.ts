@@ -56,7 +56,7 @@ export async function GET() {
           email: { $first: "$artists.email" },
           price: { $first: "$price.amount" },
           currency: { $first: "$price.currency" },
-          imageUrl: { $first: "$audioDetails.imgUrl" },
+          imageUrl: { $first: "$audioDetails.imageUrl" },
           audioUrl: { $first: "$audioDetails.audioUrl" },
           playTime: { $first: "$playTime" },
         },
@@ -84,7 +84,6 @@ export async function GET() {
         },
       },
     ]);
-    console.log("musics", musics);
     return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
     console.error("Error:", error);

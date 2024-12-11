@@ -42,7 +42,7 @@ const musicSchema = new mongoose.Schema(
       },
     },
     audioDetails: {
-      imgUrl: {
+      imageUrl: {
         type: String,
       },
       audioUrl: {

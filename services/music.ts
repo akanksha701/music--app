@@ -1,3 +1,4 @@
+import { getTopHits } from "@/utils/apiRoutes";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const newMusicApi = createApi({
@@ -12,7 +13,14 @@ export const newMusicApi = createApi({
       query: ({ page, recordsPerPage }) =>
         `api/music?page=${page}&recordsPerPage=${recordsPerPage}`,
     }),
+    getTopHitsMusics: builder.query({
+      query: () => `${getTopHits}`,
+    }),
   }),
 });
 
-export const { useGetnewMusicsQuery,useGetAllMusicsQuery } = newMusicApi;
+export const {
+  useGetnewMusicsQuery,
+  useGetAllMusicsQuery,
+  useGetTopHitsMusicsQuery,
+} = newMusicApi;
