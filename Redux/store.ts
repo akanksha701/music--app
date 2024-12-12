@@ -8,6 +8,7 @@ import { newMusicApi } from "@/services/music";
 import newReleaseSlice from "./features/newRelease";
 import { genreApi } from "@/services/genre";
 import { albumApi } from "@/services/album";
+import { likeApi } from "@/services/like";
 export const store = configureStore({
   reducer: {
     userReducer: userSlice,
@@ -19,6 +20,8 @@ export const store = configureStore({
     [newMusicApi.reducerPath]: newMusicApi.reducer,
     [genreApi.reducerPath]: genreApi.reducer,
     [albumApi.reducerPath]: albumApi.reducer,
+    [likeApi.reducerPath]: likeApi.reducer,
+
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -28,7 +31,9 @@ export const store = configureStore({
       .concat(languageApi.middleware)
       .concat(newMusicApi.middleware)
       .concat(genreApi.middleware)
-      .concat(albumApi.middleware),
+      .concat(albumApi.middleware)
+      .concat(likeApi.middleware),
+
 });
 
 export type RootState = ReturnType<typeof store.getState>;

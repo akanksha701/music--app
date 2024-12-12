@@ -1,16 +1,16 @@
 import React, { useMemo } from "react";
 import { Card, CardBody } from "@nextui-org/react";
-import Image from "next/image"; 
+import Image from "next/image";
 import { IBoxTypes } from "../../types/types";
-import { FaRegHeart, FaEllipsisH } from "react-icons/fa";
+import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
 
 const Box = (props: IBoxTypes) => {
-  const { data, className, title,name } = props;
+  const { data, className, title, name,handleLikeToggle } = props;
+
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>
-        {data &&
-          data.length > 0 &&
+        {data && data.length > 0 ? (
           data.map((item, index) => (
             <Card
               key={index}
@@ -27,19 +27,34 @@ const Box = (props: IBoxTypes) => {
                   />
                 </div>
                 <div className="mt-4 w-full flex justify-between items-center">
-                  <FaRegHeart className="text-red-500 cursor-pointer opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300" />
-                  <span className="flex-1 text-center font-semibold text-xl">
+                  <button 
+                     onClick={() => handleLikeToggle(item._id,name)}
+                  className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer">
+                    {item.liked ? (
+                      <FaHeart className="text-red-500 transition-colors duration-300" />
+                    ) : (
+                      <FaRegHeart className="text-gray-500 transition-colors duration-300" />
+                    )}
+                    {/* <FaRegHeart className="text-gray-500 hover:text-red-500 transition-colors duration-300" /> */}
+                  </button>
+
+                  <span className="flex-1 text-center font-semibold text-xl truncate px-2">
                     {item.name}
                   </span>
-                  <FaEllipsisH className="cursor-pointer opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300" />
+
+                  <button className="p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <FaEllipsisH className="cursor-pointer" />
+                  </button>
                 </div>
               </CardBody>
             </Card>
-          ))}
-        {data && data.length === 0 && <p>No Music Found</p>}
+          ))
+        ) : (
+          <p>No Music Found</p>
+        )}
       </div>
     );
-  }, [data]);
+  }, [data, className]);
 
   return (
     <>

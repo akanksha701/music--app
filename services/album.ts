@@ -1,3 +1,4 @@
+import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const albumApi = createApi({
@@ -8,10 +9,7 @@ export const albumApi = createApi({
       query: ({ page, recordsPerPage }) =>
         `api/album?page=${page}&recordsPerPage=${recordsPerPage}`,
     }),
-    getTopAlbums: builder.query({
-      query: () => "api/topalbums",
-    }),
   }),
 });
 
-export const { useGetAlbumsQuery, useGetTopAlbumsQuery } = albumApi;
+export const { useGetAlbumsQuery } = albumApi;

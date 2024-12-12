@@ -55,10 +55,23 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
+    
     likedMusics: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Music",
+      },
+    ],
+    likedAlbums: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Albums",
+      },
+    ],
+    likedGenres: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Genre",
       },
     ],
     playlists: [

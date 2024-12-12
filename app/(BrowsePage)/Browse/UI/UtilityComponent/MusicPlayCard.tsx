@@ -11,20 +11,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useToggleLikeMutation } from "@/services/music";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
-  const { data, name } = props;
+  const { data, name, handleLikeToggle } = props;
   const itemsPerPage = 10;
   const pages = Math.ceil(data?.length / itemsPerPage);
-  const [toggleLike] = useToggleLikeMutation();
-  const handleLikeToggle = async (itemId: string) => {
-    try {
-      await toggleLike({ id: itemId, name }).unwrap();
-    } catch (error) {
-      console.error("Error toggling like status:", error);
-    }
-  };
+
   return (
     <div className="p-4 sm:p-6 md:p-10">
       <Carousel>
@@ -55,7 +47,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
 
                         <div className="mt-4 w-full flex justify-between items-center">
                           <button
-                            onClick={() => handleLikeToggle(item._id)}
+                            onClick={() => handleLikeToggle(item._id,name)}
                             className="group p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
                           >
                             {item.liked ? (

@@ -1,8 +1,19 @@
 export const MediaType = {
-  MUSIC: "music" as string,
-  ALBUM: "album" as string,
-  GENRE: "genre" as string,
+  MUSIC: "Musics" as string,
+  ALBUM: "Albums" as string,
+  GENRE: "Genres" as string,
+  NEW_RELEASE: "NewReleases",
 };
+
+export const TAGS = {
+  MUSIC: "Musics",
+  NEW_RELEASE: "NewReleases",
+  TOP_HITS: "TopHits",
+  ALBUMS: "Albums",
+  TOP_ALBUMS: "TopAlbums",
+  GENRE: "Genres",
+} as const;
+
 export interface IMusicProps {
   _id: string;
   name: string;
@@ -13,15 +24,17 @@ export interface IMusicProps {
   email: string;
   imageUrl: string;
   price: number;
-  liked:boolean
+  liked: boolean;
 }
 export interface IBoxTypes {
-  data: Array<{ name: string; imageUrl: string }>;
+  data: Array<{ _id: string; name: string; imageUrl: string; liked: boolean }>;
   className: string;
   title?: string;
   name: string;
+  handleLikeToggle: Function;
 }
 export interface IMusicPlayCardProps {
   data: Array<IMusicProps>;
   name: string;
+  handleLikeToggle: Function;
 }

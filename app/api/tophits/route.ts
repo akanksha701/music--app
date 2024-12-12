@@ -3,7 +3,7 @@ import dbConnect from "@/lib/DbConnection/dbConnection";
 import Music from "@/lib/models/Music";
 import { currentUser } from "@clerk/nextjs/server";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     await dbConnect();
     const user: any = await currentUser();

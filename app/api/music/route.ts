@@ -5,6 +5,7 @@ import path from "path";
 import { capitalizeTitle, getAudioDuration, saveFiles } from "@/utils/helpers";
 import mongoose from "mongoose";
 import Album from "@/lib/models/Album";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const config = {
   api: {
@@ -16,7 +17,6 @@ export const IMAGE_UPLOAD_DIR = path.resolve("public/music/images");
 export const AUDIO_UPLOAD_DIR = path.resolve("public/music/audio");
 export const ALBUM_IMAGE_UPLOAD_DIR = path.resolve("public/albums/images");
 export const GENRE_IMAGE_UPLOAD_DIR = path.resolve("public/genres/images");
-
 
 export async function POST(req: Request) {
   try {
@@ -92,8 +92,8 @@ export async function GET(req: any) {
     const page: any = url?.searchParams?.get("page");
     const recordsPerPage: any = url?.searchParams?.get("recordsPerPage");
 
-    let currentPage = 1; // Default to page 1
-    let limit = 0; // Default to no limit (fetch all records)
+    let currentPage = 1;
+    let limit = 0;
 
     if (page && recordsPerPage) {
       currentPage = parseInt(page, 10);
@@ -105,6 +105,7 @@ export async function GET(req: any) {
     await dbConnect();
 
     const totalRecords = await Music.countDocuments();
+    const user: any = await currentUser();
 
     const aggregatePipeline: any[] = [
       {
@@ -136,6 +137,26 @@ export async function GET(req: any) {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          pipeline: [
+            {
+              $match: { clerkUserId: user.id },
+            },
+            {
+              $project: { likedMusics: 1 },
+            },
+          ],
+          as: "loggedInUser",
+        },
+      },
+      {
+        $unwind: {
+          path: "$loggedInUser",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
         $addFields: {
           fullArtistName: {
             $concat: [
@@ -144,6 +165,7 @@ export async function GET(req: any) {
               { $ifNull: ["$artists.lastName", ""] },
             ],
           },
+          liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
         },
       },
       {
@@ -154,6 +176,7 @@ export async function GET(req: any) {
           artists: {
             $push: "$fullArtistName",
           },
+          liked: { $first: "$liked" },
           email: { $first: "$artists.email" },
           price: { $first: "$price.amount" },
           currency: { $first: "$price.currency" },
@@ -179,14 +202,11 @@ export async function GET(req: any) {
           },
         },
       },
-      { $sort: { createdAt: -1 } },
+      { $sort: { createdAt: -1 ,_id:1} },
     ];
 
     if (limit > 0) {
-      aggregatePipeline.push(
-        { $skip: skip },
-        { $limit: limit }
-      );
+      aggregatePipeline.push({ $skip: skip }, { $limit: limit });
     }
 
     const musics = await Music.aggregate(aggregatePipeline);
@@ -197,12 +217,15 @@ export async function GET(req: any) {
       status: 200,
       data: {
         data: musics,
-        pagination: limit > 0 ? {
-          currentPage,
-          totalPages,
-          totalRecords,
-          recordsPerPage: limit,
-        } : undefined,
+        pagination:
+          limit > 0
+            ? {
+                currentPage,
+                totalPages,
+                totalRecords,
+                recordsPerPage: limit,
+              }
+            : undefined,
       },
     });
   } catch (error) {
