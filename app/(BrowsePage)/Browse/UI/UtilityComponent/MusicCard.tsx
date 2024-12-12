@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { ImusicProps } from '../../types/types';
-const MusicCard = (props: ImusicProps) => {
+import { IMusicProps } from '../../types/types';
+const MusicCard = (props: IMusicProps) => {
   const audioRef = useRef<any>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime] = useState(0);

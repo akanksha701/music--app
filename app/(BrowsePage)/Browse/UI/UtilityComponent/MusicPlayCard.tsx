@@ -16,7 +16,7 @@ import { useToggleLikeMutation } from "@/services/music";
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name } = props;
   const itemsPerPage = 10;
-  const pages = Math.ceil(data.length / itemsPerPage);
+  const pages = Math.ceil(data?.length / itemsPerPage);
   const [toggleLike] = useToggleLikeMutation();
   const handleLikeToggle = async (itemId: string) => {
     try {

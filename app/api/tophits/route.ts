@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Music from "@/lib/models/Music";
-import mongoose from "mongoose";
+import { currentUser } from "@clerk/nextjs/server";
 
 export async function GET(req: Request) {
   try {
     await dbConnect();
+    const user: any = await currentUser();
 
     const musics = await Music.aggregate([
       {
@@ -39,15 +40,21 @@ export async function GET(req: Request) {
       {
         $lookup: {
           from: "users",
-          let: { musicId: "$_id" },
           pipeline: [
             {
-              $match: {
-                $expr: { $in: ["$$musicId", "$likedMusics"] },
-              },
+              $match: { clerkUserId: user.id },
+            },
+            {
+              $project: { likedMusics: 1 },
             },
           ],
-          as: "likedByUsers",
+          as: "loggedInUser",
+        },
+      },
+      {
+        $unwind: {
+          path: "$loggedInUser",
+          preserveNullAndEmptyArrays: true,
         },
       },
       {
@@ -59,7 +66,7 @@ export async function GET(req: Request) {
               { $ifNull: ["$artists.lastName", ""] },
             ],
           },
-          liked: { $gt: [{ $size: "$likedByUsers" }, 0] },
+          liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
         },
       },
       {
@@ -67,9 +74,7 @@ export async function GET(req: Request) {
           _id: "$_id",
           name: { $first: "$musicDetails.name" },
           description: { $first: "$musicDetails.description" },
-          artists: {
-            $push: "$fullArtistName",
-          },
+          artists: { $push: "$fullArtistName" },
           liked: { $first: "$liked" },
           email: { $first: "$artists.email" },
           price: { $first: "$price.amount" },

@@ -1,4 +1,4 @@
-' use server'
+'use server'
 import path from "path";
 import { Method } from "@/app/About/types/types";
 import { Roles } from "../globals";
