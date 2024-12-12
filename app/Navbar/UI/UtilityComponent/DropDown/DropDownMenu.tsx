@@ -15,7 +15,6 @@ const menus: any = [
   { label: "Add Genre", key: "add_genre", route: "/AddGenre" },
   { label: "Add Album", key: "add_album", route: "/AddAlbum" },
   { label: "Add Music", key: "add_music", route: "/AddMusic" },
-  { label: "My Musics", key: "my_music", route: "/MyMusics" },
 ];
 const DropDownMenu = () => {
   const { signOut } = useClerk();

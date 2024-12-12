@@ -60,7 +60,6 @@ const AddMusic = (props: IAddMusicProps) => {
             />
           </div>
 
-          {/* Description Field */}
           <div className="flex flex-col">
             <NextTextArea
               id="description"
@@ -162,7 +161,6 @@ const AddMusic = (props: IAddMusicProps) => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="flex justify-center sm:justify-start mt-4">
             <Button
               type="submit"

@@ -4,12 +4,12 @@ import Loading from "../loading";
 import TabComp from "@/common/tab/TabComp";
 import TableComp from "@/common/table/TableComp";
 import { usePagination } from "@/hooks/usePagination";
-import { useGetAllMusicsQuery } from "@/services/music";
 import { useGetLanguageQuery } from "@/services/languages";
 import { useGetArtistsQuery } from "@/services/artists";
 import { useGetGenreQuery } from "@/services/genre";
 import { useGetAlbumsQuery } from "@/services/album";
 import AddMusic from "./UI/UtilityComponent/AddMusic";
+import { useGetAllMusicsQuery } from "@/services/like";
 
 const columns = [
   { header: "Song Title", accessor: "name" },
