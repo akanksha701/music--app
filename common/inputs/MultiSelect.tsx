@@ -28,6 +28,7 @@ const MultiSelect = <T extends FieldValues>({
         render={({ field: { onChange, value = [], ref } }) => {
           return (
             <Select
+            key={id}
               selectionMode={selectionMode}
               id={id}
               onChange={(selectedValue) => {

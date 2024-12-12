@@ -4,7 +4,7 @@ import userSlice from "./features/user/userSlice";
 import { playlistApi } from "@/services/playlists";
 import { artistApi } from "@/services/artists";
 import { languageApi } from "@/services/languages";
-import { newMusicApi } from "@/services/music";
+import { musicApi } from "@/services/music";
 import newReleaseSlice from "./features/newRelease";
 import { genreApi } from "@/services/genre";
 import { albumApi } from "@/services/album";
@@ -17,7 +17,7 @@ export const store = configureStore({
     [playlistApi.reducerPath]: playlistApi.reducer,
     [artistApi.reducerPath]: artistApi.reducer,
     [languageApi.reducerPath]: languageApi.reducer,
-    [newMusicApi.reducerPath]: newMusicApi.reducer,
+    [musicApi.reducerPath]: musicApi.reducer,
     [genreApi.reducerPath]: genreApi.reducer,
     [albumApi.reducerPath]: albumApi.reducer,
     [likeApi.reducerPath]: likeApi.reducer,
@@ -29,7 +29,7 @@ export const store = configureStore({
       .concat(playlistApi.middleware)
       .concat(artistApi.middleware)
       .concat(languageApi.middleware)
-      .concat(newMusicApi.middleware)
+      .concat(musicApi.middleware)
       .concat(genreApi.middleware)
       .concat(albumApi.middleware)
       .concat(likeApi.middleware),

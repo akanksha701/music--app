@@ -51,13 +51,14 @@ const Index = () => {
           data={topAlbums.data}
           name={MediaType.ALBUM}
           handleLikeToggle={handleLikeToggle}
+          showLikeIcon={true}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         />
       </div>
       <HeadLine title="New Releases" subTitle="2024" />
       <hr className="w-full p-2 border-gray-600" />
       <MusicPlayCard
-        data={newReleases.data.data}
+        data={newReleases?.data?.data}
         name={MediaType.MUSIC}
         handleLikeToggle={handleLikeToggle}
       />
@@ -70,6 +71,7 @@ const Index = () => {
           name={MediaType.GENRE}
           data={topGenres.data}
           handleLikeToggle={handleLikeToggle}
+          showLikeIcon={true}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         />
       </div>

@@ -31,10 +31,11 @@ export interface IBoxTypes {
   className: string;
   title?: string;
   name: string;
-  handleLikeToggle: Function;
+  showLikeIcon:boolean
+  handleLikeToggle?: ((id: string, name: string) => void) 
 }
 export interface IMusicPlayCardProps {
   data: Array<IMusicProps>;
   name: string;
-  handleLikeToggle: Function;
+  handleLikeToggle?: ((id: string, name: string) => void) 
 }

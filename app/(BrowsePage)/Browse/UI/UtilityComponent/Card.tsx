@@ -4,9 +4,8 @@ import Image from "next/image";
 import { IBoxTypes } from "../../types/types";
 import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
 
-const Box = (props: IBoxTypes) => {
-  const { data, className, title, name, handleLikeToggle } = props;
-
+const Box = ({ data, className, title, name,showLikeIcon, handleLikeToggle }: IBoxTypes) => {
+  console.log('data',data)
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>
@@ -21,22 +20,26 @@ const Box = (props: IBoxTypes) => {
                 <div className="relative w-full h-2/3">
                   <Image
                     alt={item.name}
-                    src={item.imageUrl}
+                    src={item?.imageUrl}
                     fill
                     className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
                   />
                 </div>
                 <div className="mt-4 w-full flex justify-between items-center">
-                  <button
-                    onClick={() => handleLikeToggle(item._id, name)}
-                    className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
-                  >
-                    {item.liked ? (
-                      <FaHeart className="text-red-500 transition-colors duration-300" />
-                    ) : (
-                      <FaRegHeart className="text-gray-500 transition-colors duration-300" />
-                    )}
-                  </button>
+                  {showLikeIcon && (
+                    <button
+                      onClick={() =>
+                        handleLikeToggle && handleLikeToggle(item._id, name)
+                      }
+                      className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
+                    >
+                      {item.liked ? (
+                        <FaHeart className="text-red-500 transition-colors duration-300" />
+                      ) : (
+                        <FaRegHeart className="text-gray-500 transition-colors duration-300" />
+                      )}
+                    </button>
+                  )}
 
                   <span className="flex-1 text-center font-semibold text-xl truncate px-2">
                     {item.name}

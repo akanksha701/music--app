@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const newMusicApi = createApi({
-  reducerPath: "newMusicApi",
+export const musicApi = createApi({
+  reducerPath: "musicApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL }),
   endpoints: (builder) => ({
     getnewMusics: builder.query({
@@ -11,8 +11,11 @@ export const newMusicApi = createApi({
     getNewReleaseMusics: builder.query({
       query: () => `api/newReleaseMusics`,
     }),
+    getMusicsByUserId: builder.query({
+      query: (slug) => `api/music/${slug}`,  
+    }),
   }),
 });
 
-export const { useGetnewMusicsQuery, useGetNewReleaseMusicsQuery } =
-  newMusicApi;
+export const { useGetnewMusicsQuery, useGetNewReleaseMusicsQuery,useGetMusicsByUserIdQuery } =
+  musicApi;

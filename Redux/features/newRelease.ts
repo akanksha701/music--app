@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { newMusicApi } from "@/services/music";
+import { musicApi } from "@/services/music";
 
 const initialState = {
   newRelease: {},
@@ -12,20 +12,20 @@ const newReleaseSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      newMusicApi.endpoints.getnewMusics.matchFulfilled,
+      musicApi.endpoints.getnewMusics.matchFulfilled,
       (state, action) => {
         state.newRelease = action.payload;
         state.loading = false;
       }
     );
     builder.addMatcher(
-      newMusicApi.endpoints.getnewMusics.matchPending,
+      musicApi.endpoints.getnewMusics.matchPending,
       (state) => {
         state.loading = true;
       }
     );
     builder.addMatcher(
-      newMusicApi.endpoints.getnewMusics.matchRejected,
+      musicApi.endpoints.getnewMusics.matchRejected,
       (state, action) => {
         state.loading = false;
       }
