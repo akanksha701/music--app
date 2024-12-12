@@ -1,9 +1,9 @@
-import { Card, CardBody } from "@nextui-org/react";
+"use client";
 import Image from "next/image";
 import React from "react";
-import { useRouter } from "next/navigation";
-import PlayButton from "@/common/buttons/PlayButton";
+import { Card, CardBody } from "@nextui-org/react";
 import { IMusicPlayCardProps } from "../../types/types";
+import { FaEllipsisH, FaHeart, FaRegHeart } from "react-icons/fa";
 import {
   Carousel,
   CarouselContent,
@@ -11,13 +11,20 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { FaEllipsisH, FaRegHeart } from "react-icons/fa";
+import { useToggleLikeMutation } from "@/services/music";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
-  const router = useRouter();
-  const { data } = props;
+  const { data, name } = props;
   const itemsPerPage = 10;
   const pages = Math.ceil(data.length / itemsPerPage);
+  const [toggleLike] = useToggleLikeMutation();
+  const handleLikeToggle = async (itemId: string) => {
+    try {
+      await toggleLike({ id: itemId, name }).unwrap();
+    } catch (error) {
+      console.error("Error toggling like status:", error);
+    }
+  };
   return (
     <div className="p-4 sm:p-6 md:p-10">
       <Carousel>
@@ -47,7 +54,16 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                         </div>
 
                         <div className="mt-4 w-full flex justify-between items-center">
-                          <FaRegHeart className="text-red-500 cursor-pointer opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300" />
+                          <button
+                            onClick={() => handleLikeToggle(item._id)}
+                            className="group p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
+                          >
+                            {item.liked ? (
+                              <FaHeart className="text-red-500 transition-colors duration-300" />
+                            ) : (
+                              <FaRegHeart className="text-gray-500 transition-colors duration-300" />
+                            )}
+                          </button>
 
                           <span className="flex-1 text-center font-semibold text-lg sm:text-xl">
                             {item.name}

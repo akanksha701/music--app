@@ -9,6 +9,7 @@ import Footer from "./Footer/Footer";
 import { Suspense } from "react";
 import Loading from "./loading";
 import Modal from "@/common/modal/modal";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export default async function RootLayout({
   children,

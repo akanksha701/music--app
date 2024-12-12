@@ -55,16 +55,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
-    favoriteSongs: [
+    likedMusics: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Song",
-        validate: {
-          validator: function (array: any[]) {
-            return array.length <= 1000;
-          },
-          message: "Cannot have more than 1000 favorite songs",
-        },
+        ref: "Music",
       },
     ],
     playlists: [

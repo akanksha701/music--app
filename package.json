@@ -28,6 +28,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@reduxjs/toolkit": "^2.3.0",
     "@shadcn/ui": "^0.0.4",
+    "@tanstack/react-query": "^5.62.7",
     "@types/bcrypt": "^5.0.2",
     "@types/mongoose": "^5.11.96",
     "bcrypt": "^5.1.1",

@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Music from "@/lib/models/Music";
+import mongoose from "mongoose";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     await dbConnect();
+
     const musics = await Music.aggregate([
       {
         $lookup: {
@@ -35,6 +37,20 @@ export async function GET() {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          let: { musicId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $in: ["$$musicId", "$likedMusics"] },
+              },
+            },
+          ],
+          as: "likedByUsers",
+        },
+      },
+      {
         $addFields: {
           fullArtistName: {
             $concat: [
@@ -43,6 +59,7 @@ export async function GET() {
               { $ifNull: ["$artists.lastName", ""] },
             ],
           },
+          liked: { $gt: [{ $size: "$likedByUsers" }, 0] },
         },
       },
       {
@@ -53,6 +70,7 @@ export async function GET() {
           artists: {
             $push: "$fullArtistName",
           },
+          liked: { $first: "$liked" },
           email: { $first: "$artists.email" },
           price: { $first: "$price.amount" },
           currency: { $first: "$price.currency" },
@@ -81,9 +99,11 @@ export async function GET() {
       {
         $sort: {
           playTime: -1,
+          _id: 1,
         },
       },
     ]);
+
     return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
     console.error("Error:", error);

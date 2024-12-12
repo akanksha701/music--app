@@ -1,4 +1,4 @@
-"use server";
+' use server'
 import path from "path";
 import { Method } from "@/app/About/types/types";
 import { Roles } from "../globals";
@@ -12,11 +12,12 @@ export interface IAudioTypes {
   audioDestination: string;
   duration: number | undefined;
 }
-export async function capitalizeTitle(str:string) {
+
+export async function capitalizeTitle(str: string) {
   return str
-    .split(" ") 
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) 
-    .join(" "); 
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 export async function generateUrl(

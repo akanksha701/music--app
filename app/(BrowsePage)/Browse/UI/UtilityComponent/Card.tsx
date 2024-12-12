@@ -5,8 +5,7 @@ import { IBoxTypes } from "../../types/types";
 import { FaRegHeart, FaEllipsisH } from "react-icons/fa";
 
 const Box = (props: IBoxTypes) => {
-  const { data, className, title } = props;
-console.log('data',data)
+  const { data, className, title,name } = props;
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>
