@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Music from "@/lib/models/Music";
+import { currentUser } from "@clerk/nextjs/server";
 
 export async function GET() {
   try {
     await dbConnect();
-    const albums = await Music.aggregate([
+    const user: any = await currentUser();
+    const genres = await Music.aggregate([
       {
         $lookup: {
           from: "genres",
@@ -15,9 +17,34 @@ export async function GET() {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          pipeline: [
+            {
+              $match: { clerkUserId: user.id },
+            },
+            {
+              $project: { likedGenres: 1 },
+            },
+          ],
+          as: "loggedInUser",
+        },
+      },
+      {
         $unwind: {
           path: "$genreDetails",
           preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: "$loggedInUser",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          liked: { $in: ["$genreDetails._id", "$loggedInUser.likedGenres"] },
         },
       },
       {
@@ -28,6 +55,8 @@ export async function GET() {
           genre: "$genreDetails.name",
           genreId: "$genreDetails._id",
           imageUrl: "$genreDetails.imageUrl" ,
+          liked:1
+          
         },
       },
       {
@@ -35,6 +64,7 @@ export async function GET() {
           _id: "$genreId",
           name: { $first: "$genre" },
           imageUrl: { $first: "$imageUrl" },
+          liked: { $first: "$liked" },
           musics: {
             $push: {
               id: "$_id",
@@ -63,12 +93,13 @@ export async function GET() {
           name: 1,
           totalPlayTime: 1,
           musics: 1,
-          imageUrl: 1
+          imageUrl: 1,
+          liked: 1,
         },
       },
     ]);
 
-    return NextResponse.json({ status: 200, data: albums });
+    return NextResponse.json({ status: 200, data: genres });
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json({ status: 500, message: "Error occurred" });

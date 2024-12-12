@@ -5,7 +5,7 @@ import { IBoxTypes } from "../../types/types";
 import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
 
 const Box = (props: IBoxTypes) => {
-  const { data, className, title, name,handleLikeToggle } = props;
+  const { data, className, title, name, handleLikeToggle } = props;
 
   const memoizedCards = useMemo(() => {
     return (
@@ -27,15 +27,15 @@ const Box = (props: IBoxTypes) => {
                   />
                 </div>
                 <div className="mt-4 w-full flex justify-between items-center">
-                  <button 
-                     onClick={() => handleLikeToggle(item._id,name)}
-                  className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer">
+                  <button
+                    onClick={() => handleLikeToggle(item._id, name)}
+                    className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
+                  >
                     {item.liked ? (
                       <FaHeart className="text-red-500 transition-colors duration-300" />
                     ) : (
                       <FaRegHeart className="text-gray-500 transition-colors duration-300" />
                     )}
-                    {/* <FaRegHeart className="text-gray-500 hover:text-red-500 transition-colors duration-300" /> */}
                   </button>
 
                   <span className="flex-1 text-center font-semibold text-xl truncate px-2">

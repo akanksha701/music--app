@@ -40,6 +40,11 @@ export const likeApi = createApi({
         `api/music?page=${page}&recordsPerPage=${recordsPerPage}`,
       providesTags: [TAGS.NEW_RELEASE],
     }),
+    getTopGenre: builder.query({
+      query: () => "api/topgenres",
+      providesTags: [TAGS.GENRE],
+
+    }),
   }),
 });
 
@@ -48,4 +53,5 @@ export const {
   useGetTopHitsMusicsQuery,
   useGetTopAlbumsQuery,
   useGetAllMusicsQuery,
+  useGetTopGenreQuery
 } = likeApi;

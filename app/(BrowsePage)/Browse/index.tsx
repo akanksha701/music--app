@@ -4,11 +4,11 @@ import Loading from "@/app/loading";
 import HeadLine from "./UI/UtilityComponent/HeadLine";
 import MusicPlayCard from "./UI/UtilityComponent/MusicPlayCard";
 import Box from "./UI/UtilityComponent/Card";
-import { useGetTopGenreQuery } from "@/services/genre";
-import { MediaType, TAGS } from "./types/types";
+import { MediaType } from "./types/types";
 import {
   useGetAllMusicsQuery,
   useGetTopAlbumsQuery,
+  useGetTopGenreQuery,
   useGetTopHitsMusicsQuery,
   useToggleLikeMutation,
 } from "@/services/like";

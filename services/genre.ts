@@ -7,10 +7,8 @@ export const genreApi = createApi({
     getGenre: builder.query({
       query: ({page,recordsPerPage}) => `api/genre?page=${page}&recordsPerPage=${recordsPerPage}`,
     }),
-    getTopGenre: builder.query({
-      query: () => "api/topgenres",
-    }),
+    
   }),
 });
 
-export const { useGetGenreQuery, useGetTopGenreQuery } = genreApi;
+export const { useGetGenreQuery } = genreApi;

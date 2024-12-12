@@ -60,7 +60,6 @@ export async function GET(req: Request) {
 
     const albumList = await Album.find({}).skip(skip).limit(limit);
 
-    // Get total count for pagination
     const totalAlbums = await Album.countDocuments();
 
     return NextResponse.json({
