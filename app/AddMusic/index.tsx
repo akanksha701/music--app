@@ -43,13 +43,14 @@ const Index = () => {
       content: (
         <>
           <HeadLine
-            title="My Music"
+            title="My Musics"
             subTitle="Discover musics created by you"
           />
           <Box
             name={MediaType.MUSIC}
             data={musicData?.data}
             showLikeIcon={false}
+            message='musics not found'
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
           />
         </>

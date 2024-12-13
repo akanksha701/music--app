@@ -32,6 +32,7 @@ export interface IBoxTypes {
   title?: string;
   name: string;
   showLikeIcon:boolean
+  message:string
   handleLikeToggle?: ((id: string, name: string) => void) 
 }
 export interface IMusicPlayCardProps {

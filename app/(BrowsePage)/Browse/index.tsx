@@ -52,6 +52,7 @@ const Index = () => {
           name={MediaType.ALBUM}
           handleLikeToggle={handleLikeToggle}
           showLikeIcon={true}
+          message="albums not found"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         />
       </div>
@@ -72,6 +73,7 @@ const Index = () => {
           data={topGenres.data}
           handleLikeToggle={handleLikeToggle}
           showLikeIcon={true}
+          message="genres not found"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         />
       </div>

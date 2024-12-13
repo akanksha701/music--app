@@ -4,7 +4,7 @@ import Image from "next/image";
 import { IBoxTypes } from "../../types/types";
 import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
 
-const Box = ({ data, className, title, name,showLikeIcon, handleLikeToggle }: IBoxTypes) => {
+const Box = ({ data, className, title, name,showLikeIcon, message,handleLikeToggle }: IBoxTypes) => {
   console.log('data',data)
   const memoizedCards = useMemo(() => {
     return (
@@ -53,7 +53,7 @@ const Box = ({ data, className, title, name,showLikeIcon, handleLikeToggle }: IB
             </Card>
           ))
         ) : (
-          <p>No Music Found</p>
+          <p>{message}</p>
         )}
       </div>
     );
