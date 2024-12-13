@@ -2,7 +2,6 @@ export const MediaType = {
   MUSIC: "Musics" as string,
   ALBUM: "Albums" as string,
   GENRE: "Genres" as string,
-  NEW_RELEASE: "NewReleases",
 };
 
 export const TAGS = {
@@ -31,12 +30,12 @@ export interface IBoxTypes {
   className: string;
   title?: string;
   name: string;
-  showLikeIcon:boolean
-  message:string
-  handleLikeToggle?: ((id: string, name: string) => void) 
+  showLikeIcon: boolean;
+  message: string;
+  handleLikeToggle: (id: string, name: string) => void;
 }
 export interface IMusicPlayCardProps {
   data: Array<IMusicProps>;
   name: string;
-  handleLikeToggle: (id: string, name: string) => void; 
+  handleLikeToggle: (id: string, name: string) => void;
 }

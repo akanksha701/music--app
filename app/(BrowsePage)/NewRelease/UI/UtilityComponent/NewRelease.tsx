@@ -1,7 +1,8 @@
 "use client";
 import { MediaType } from "@/app/(BrowsePage)/Browse/types/types";
 import Box from "@/app/(BrowsePage)/Browse/UI/UtilityComponent/Card";
-import { useGetAllMusicsQuery } from "@/services/like";
+import { handleLikeToggle } from "@/hooks/useLike";
+import { useGetAllMusicsQuery, useToggleLikeMutation } from "@/services/like";
 import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 
@@ -9,13 +10,12 @@ const NewRelease = () => {
   const searchParams = useSearchParams();
   const language = searchParams.get("language");
   const queryParams = new URLSearchParams();
+  const [toggleLike] = useToggleLikeMutation();
 
-  
   if (language) queryParams.append("language", language);
   const { data: newReleases } = useGetAllMusicsQuery({
     queryParams: queryParams.toString(),
   });
-
 
   const memorizedNewRelease = useMemo(
     () => (
@@ -25,9 +25,12 @@ const NewRelease = () => {
             title={`New ${language || "" + "Songs"}`}
             data={newReleases?.data?.data}
             className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            name={MediaType.NEW_RELEASE}
+            name={MediaType.MUSIC}
             showLikeIcon={true}
             message={"musics not found"}
+            handleLikeToggle={(itemId, name) =>
+              handleLikeToggle(itemId, name, toggleLike)
+            }
           />
         </div>
       </>
