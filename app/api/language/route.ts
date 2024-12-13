@@ -88,7 +88,6 @@ export async function GET(req: Request) {
 
     // Get total count for pagination
     const totalLanguages = await Language.countDocuments();
-
     return NextResponse.json({
       status: 200,
       data: languageList,

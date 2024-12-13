@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { MediaType, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { Method } from "@/app/About/types/types";
-import { getTopHits } from "@/utils/apiRoutes";
+import { getTopHits, music } from "@/utils/apiRoutes";
 
 export const likeApi = createApi({
   reducerPath: "likeApi",
@@ -36,8 +36,7 @@ export const likeApi = createApi({
       providesTags: [TAGS.TOP_ALBUMS],
     }),
     getAllMusics: builder.query({
-      query: ({ page, recordsPerPage }) =>
-        `api/music?page=${page}&recordsPerPage=${recordsPerPage}`,
+      query: ({ queryParams }) => `${music}?${queryParams}`,
       providesTags: [TAGS.NEW_RELEASE],
     }),
     getTopGenre: builder.query({

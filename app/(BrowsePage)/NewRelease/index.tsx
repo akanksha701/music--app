@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 import { newRelease } from "@/utils/apiRoutes";
 import { generateUrl } from "@/utils/helpers";
 const Index = () => {
-  const { data: languageList, isLoading } = useGetLanguageQuery(undefined);
+  const { data: languageList, isLoading } = useGetLanguageQuery({});
   const { setSelectedLanguage } = useNewRelease();
   const handleClick = useCallback(
     async (value: string, index: number) => {

@@ -89,8 +89,9 @@ export async function POST(req: Request) {
 export async function GET(req: any) {
   try {
     const url = new URL(req?.url as string);
-    const page: any = url?.searchParams?.get("page");
-    const recordsPerPage: any = url?.searchParams?.get("recordsPerPage");
+    const page: any = await url?.searchParams?.get("page");
+    const recordsPerPage: any = await url?.searchParams?.get("recordsPerPage");
+    const language: string | null = await url?.searchParams?.get("language") || null;
 
     let currentPage = 1;
     let limit = 0;
@@ -117,8 +118,22 @@ export async function GET(req: any) {
         },
       },
       {
+        $lookup: {
+          from: "languages",
+          localField: "musicDetails.languageId",
+          foreignField: "_id",
+          as: "languageDetails",
+        },
+      },
+      {
         $unwind: {
           path: "$artistDetails",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: "$languageDetails",
           preserveNullAndEmptyArrays: true,
         },
       },
@@ -168,10 +183,22 @@ export async function GET(req: any) {
           liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
         },
       },
+    ];
+
+    if (language) {
+      await aggregatePipeline.push({
+        $match: {
+          "languageDetails.name": await language,
+        },
+      });
+    }
+
+    await aggregatePipeline.push(
       {
         $group: {
           _id: "$_id",
           name: { $first: "$musicDetails.name" },
+          language: { $first: "$languageDetails.name" },
           description: { $first: "$musicDetails.description" },
           artists: {
             $push: "$fullArtistName",
@@ -202,8 +229,8 @@ export async function GET(req: any) {
           },
         },
       },
-      { $sort: { createdAt: -1 ,_id:1} },
-    ];
+      { $sort: { createdAt: -1, _id: 1 } }
+    );
 
     if (limit > 0) {
       aggregatePipeline.push({ $skip: skip }, { $limit: limit });

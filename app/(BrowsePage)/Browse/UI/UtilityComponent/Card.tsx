@@ -4,8 +4,15 @@ import Image from "next/image";
 import { IBoxTypes } from "../../types/types";
 import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
 
-const Box = ({ data, className, title, name,showLikeIcon, message,handleLikeToggle }: IBoxTypes) => {
-  console.log('data',data)
+const Box = ({
+  data,
+  className,
+  title,
+  name,
+  showLikeIcon,
+  message,
+  handleLikeToggle,
+}: IBoxTypes) => {
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>
