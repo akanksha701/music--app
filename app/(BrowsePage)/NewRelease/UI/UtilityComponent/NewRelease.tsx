@@ -1,4 +1,5 @@
 "use client";
+import { MediaType } from "@/app/(BrowsePage)/Browse/types/types";
 import Box from "@/app/(BrowsePage)/Browse/UI/UtilityComponent/Card";
 import { useGetAllMusicsQuery } from "@/services/like";
 import { useSearchParams } from "next/navigation";
@@ -24,9 +25,9 @@ const NewRelease = () => {
             title={`New ${language || "" + "Songs"}`}
             data={newReleases?.data?.data}
             className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            name={""}
-            showLikeIcon={false}
-            message={""}
+            name={MediaType.NEW_RELEASE}
+            showLikeIcon={true}
+            message={"musics not found"}
           />
         </div>
       </>

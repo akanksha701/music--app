@@ -12,6 +12,7 @@ import {
   useGetTopHitsMusicsQuery,
   useToggleLikeMutation,
 } from "@/services/like";
+import { handleLikeToggle } from "@/hooks/useLike";
 
 const Index = () => {
   const { user } = useUser();
@@ -24,13 +25,6 @@ const Index = () => {
   if (!user || !topHits || !topAlbums || !newReleases || !topGenres) {
     return <Loading />;
   }
-  const handleLikeToggle = async (itemId: string, name: string) => {
-    try {
-      await toggleLike({ id: itemId, name }).unwrap();
-    } catch (error) {
-      console.error("Error toggling like status:", error);
-    }
-  };
 
   return (
     <div className="flex flex-col ">
@@ -39,7 +33,7 @@ const Index = () => {
       <MusicPlayCard
         data={topHits.data}
         name={MediaType.MUSIC}
-        handleLikeToggle={handleLikeToggle}
+        handleLikeToggle={(itemId, name) =>handleLikeToggle(itemId, name, toggleLike)}
       />
 
       <div className="mt-8 p-3">
@@ -50,7 +44,9 @@ const Index = () => {
         <Box
           data={topAlbums.data}
           name={MediaType.ALBUM}
-          handleLikeToggle={handleLikeToggle}
+          handleLikeToggle={(itemId, name) =>
+            handleLikeToggle(itemId, name, toggleLike)
+          }
           showLikeIcon={true}
           message="albums not found"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
@@ -61,7 +57,9 @@ const Index = () => {
       <MusicPlayCard
         data={newReleases?.data?.data}
         name={MediaType.MUSIC}
-        handleLikeToggle={handleLikeToggle}
+        handleLikeToggle={(itemId, name) =>
+          handleLikeToggle(itemId, name, toggleLike)
+        }
       />
       <div className="mt-8 p-3">
         <HeadLine
@@ -71,7 +69,7 @@ const Index = () => {
         <Box
           name={MediaType.GENRE}
           data={topGenres.data}
-          handleLikeToggle={handleLikeToggle}
+          handleLikeToggle={(itemId, name) =>handleLikeToggle(itemId, name, toggleLike)}
           showLikeIcon={true}
           message="genres not found"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"

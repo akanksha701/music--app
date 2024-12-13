@@ -38,5 +38,5 @@ export interface IBoxTypes {
 export interface IMusicPlayCardProps {
   data: Array<IMusicProps>;
   name: string;
-  handleLikeToggle?: ((id: string, name: string) => void) 
+  handleLikeToggle: (id: string, name: string) => void; 
 }
