@@ -1,19 +1,17 @@
 import { create } from "zustand";
-import { useToggleLikeMutation } from "@/services/like"; // Import the mutation hook
 
 interface States {
   likedItems: Record<string, boolean>;
 }
 
 interface Actions {
-  toggleLocalLike: (id: string) => void; // Renamed to avoid conflict
-  setLike: (id: string, liked: boolean) => void; // Optionally, directly set like status
+  toggleLocalLike: (id: string) => void; 
+  setLike: (id: string, liked: boolean) => void; 
 }
 
 export const useLike = create<States & Actions>((set) => ({
   likedItems: {},
   
-  // Local state toggle, which just updates UI optimistically
   toggleLocalLike: (id) =>
     set((state) => ({
       likedItems: {
@@ -22,7 +20,6 @@ export const useLike = create<States & Actions>((set) => ({
       },
     })),
 
-  // Directly update the like status
   setLike: (id, liked) => 
     set((state) => ({
       likedItems: {
