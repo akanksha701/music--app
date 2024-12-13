@@ -33,7 +33,7 @@ const Index = () => {
         <TableComp
           message="A list of your recent languages."
           columns={columns}
-          data={[albumData.data]}
+          data={albumData.data}
           setPage={setPage}
           page={page}
           paginationData={albumData.pagination}
