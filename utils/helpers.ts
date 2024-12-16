@@ -193,9 +193,3 @@ export async function getAudioDuration(audioBlob: Blob): Promise<number> {
     resolve(duration);
   });
 }
-
-export  const formatTime = async(seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-};
