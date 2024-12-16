@@ -20,7 +20,6 @@ const albumSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      default: false,
     },
     isDeleted: {
       type: Boolean,
