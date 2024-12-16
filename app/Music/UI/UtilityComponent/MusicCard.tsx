@@ -13,9 +13,10 @@ import {
   FaHeart,
 } from "react-icons/fa";
 import MusicList from "./MusicList";
-import { useGetTopHitsMusicsQuery } from "@/services/like";
+import useFetchMusicData from "@/app/About/UI/UtilityComponent/useFetchMusicList";
+import { useSearchParams } from "next/navigation";
 
-const MusicCard =  () => {
+const MusicCard = () => {
   const {
     currentTrack,
     isPlaying,
@@ -24,18 +25,13 @@ const MusicCard =  () => {
     setVolume,
     togglePlayPause,
   } = useMusic();
-
-  const { data: topHits } = useGetTopHitsMusicsQuery(undefined, {
-    skip: false,
-  });
-
+  const { data, name,error } = useFetchMusicData();
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const [seekPercentage, setSeekPercentage] = useState(0);
 
   useEffect(() => {
-    if (!topHits || !topHits.data.length || !currentTrack) return;
-
+    if (!data) return;
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current!,
       waveColor: "#1DB954",
@@ -69,7 +65,7 @@ const MusicCard =  () => {
         wavesurferRef.current.destroy();
       }
     };
-  }, [currentTrack, topHits]);
+  }, [currentTrack, data]);
 
   useEffect(() => {
     if (wavesurferRef.current) {
@@ -114,13 +110,13 @@ const MusicCard =  () => {
     }
   };
 
-  if (!topHits || !topHits?.data) {
+  if (!data) {
     return null;
   }
 
   return (
     <div className="mx-4 sm:mx-10 my-10">
-      <MusicList tracks={topHits.data} />
+      <MusicList data={data.data} title={name || ''}/>
 
       <div className="w-full bg-black-100 text-white rounded-2xl shadow-lg p-4 space-y-6">
         <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">

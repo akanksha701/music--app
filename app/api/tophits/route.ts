@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Music from "@/lib/models/Music";
 import { currentUser } from "@clerk/nextjs/server";
-import { music } from "@/utils/apiRoutes";
-import { pipeline } from "stream";
 
 export const getFormattedDurationStage = () => {
   return {

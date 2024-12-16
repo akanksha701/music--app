@@ -1,23 +1,32 @@
 import React from "react";
 import Image from "next/image";
 import { useGetTopHitsMusicsQuery } from "@/services/like";
+import {
+  FaBackward,
+  FaForward,
+  FaHeart,
+  FaPause,
+  FaPlay,
+  FaRegHeart,
+  FaVolumeMute,
+  FaVolumeUp,
+} from "react-icons/fa";
+import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 
 const MusicList = ({ tracks }: IMusicListProps) => {
- if(!tracks)
- {
-    return null
- }
- console.log(tracks,"tracks")
+  if (!tracks) {
+    return null;
+  }
+  console.log(tracks, "tracks");
   return (
     <div className="mt-6 mb-10">
       <h3 className="text-purple-400 text-xl font-semibold">Other Tracks</h3>
       <div className="flex flex-col space-y-4 py-4 max-h-60 overflow-y-auto">
         {tracks && tracks.length > 0 ? (
-          tracks.map((track: any) => (
+          tracks.map((track: IMusicProps) => (
             <div
-              key={track.id}
-              className="flex items-center cursor-pointer p-2 hover:bg-gray-800 rounded-lg"
-              // onClick={() => setCurrentTrack(track)} // Set the track on click
+              key={track._id}
+              className="flex items-center cursor-pointer p-2 hover:bg-orange-300 rounded-lg"
             >
               <Image
                 src={track.imageUrl}
@@ -26,9 +35,21 @@ const MusicList = ({ tracks }: IMusicListProps) => {
                 height={60}
                 className="rounded-md"
               />
-              <div className="ml-4">
+              <div className="flex-1 ml-4">
                 <p className="text-black text-sm">{track.name}</p>
                 <p className="text-gray-400 text-xs">{track.artists}</p>
+              </div>
+              <div>
+                <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-4 mx-2 my-2">
+                  <button className="p-2 bg-green-500 text-black rounded-full hover:bg-green-600 transition duration-300">
+                    <FaPause size={20} />
+                  </button>
+                  {track.liked ? (
+                    <FaHeart  size={20} className="text-red-500 transition-colors duration-300" />
+                  ) : (
+                    <FaRegHeart size={20} className="text-gray-500 transition-colors duration-300" />
+                  )}
+                </div>
               </div>
             </div>
           ))

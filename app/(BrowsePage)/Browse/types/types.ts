@@ -1,8 +1,3 @@
-export const MediaType = {
-  MUSIC: "Musics" as string,
-  ALBUM: "Albums" as string,
-  GENRE: "Genres" as string,
-};
 
 export const TAGS = {
   MUSIC: "Musics",
@@ -11,6 +6,15 @@ export const TAGS = {
   ALBUMS: "Albums",
   TOP_ALBUMS: "TopAlbums",
   GENRE: "Genres",
+} as const;
+
+export const LIST_NAME = {
+  MUSIC: "New Musics",
+  NEW_RELEASE: "New New Releases",
+  TOP_HITS: "Top Hits",
+  ALBUMS: "Albums",
+  TOP_ALBUMS: "Top Albums",
+  GENRE: "Top Genres",
 } as const;
 
 export interface IMusicProps {

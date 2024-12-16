@@ -2,7 +2,7 @@ import dbConnect from "@/lib/DbConnection/dbConnection";
 import User from "@/lib/models/User";
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
-import { MediaType } from "@/app/(BrowsePage)/Browse/types/types";
+import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import mongoose from "mongoose";
 
 async function handleMusicLike(user: any, id: string, clerkUserId: string) {
@@ -22,24 +22,6 @@ async function handleMusicLike(user: any, id: string, clerkUserId: string) {
 
   return updatedUser;
 }
-
-// async function handleNewReleaseLike(user: any, id: string, clerkUserId: string) {
-//   const alreadyLiked = user.likedNewReleases.includes(
-//     new mongoose.Types.ObjectId(id)
-//   );
-
-//   const updatedUser = await User.findOneAndUpdate(
-//     { clerkUserId },
-//     {
-//       [alreadyLiked ? "$pull" : "$addToSet"]: {
-//         likedNewReleases: new mongoose.Types.ObjectId(id),
-//       },
-//     },
-//     { new: true }
-//   );
-
-//   return updatedUser;
-// }
 
 async function handleAlbumLike(user: any, id: string, clerkUserId: string) {
   const alreadyLiked = user.likedAlbums.includes(
@@ -90,20 +72,18 @@ export async function POST(req: Request) {
 
     let updatedUser;
     switch (name) {
-      case MediaType.MUSIC:
+      case TAGS.MUSIC:
         updatedUser = await handleMusicLike(user, id, userDetails?.id);
         break;
 
-      case MediaType.ALBUM:
+      case TAGS.ALBUMS:
         updatedUser = await handleAlbumLike(user, id, userDetails?.id);
         break;
 
-      case MediaType.GENRE:
+      case TAGS.GENRE:
         updatedUser = await handleGenreLike(user, id, userDetails?.id);
         break;
-      // case MediaType.NEW_RELEASE:
-      //   updatedUser = await handleNewReleaseLike(user, id, userDetails?.id);
-      //   break;
+
       default:
         return NextResponse.json(
           { message: "Invalid media type." },

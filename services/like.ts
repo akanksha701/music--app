@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { MediaType, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { Method } from "@/app/About/types/types";
 import { getTopHits, music } from "@/utils/apiRoutes";
+import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 
 export const likeApi = createApi({
   reducerPath: "likeApi",
@@ -16,11 +16,11 @@ export const likeApi = createApi({
       }),
       invalidatesTags: (result, error, { name }) => {
         switch (name) {
-          case MediaType.MUSIC:
+          case TAGS.MUSIC:
             return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
-          case MediaType.ALBUM:
+          case TAGS.ALBUMS:
             return [TAGS.ALBUMS, TAGS.TOP_ALBUMS];
-          case MediaType.GENRE:
+          case TAGS.GENRE:
             return [TAGS.GENRE];
           default:
             return [];

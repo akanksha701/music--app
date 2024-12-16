@@ -4,7 +4,7 @@ import { generateUrl } from "@/utils/helpers";
 import { redirect } from "next/navigation";
 
 interface States {
-  currentTrack: IMusicProps | null;
+  currentTrack: IMusicProps;
   isPlaying: boolean;
   currentSongIndex: number;
   volume: number;
@@ -14,16 +14,28 @@ interface States {
 
 interface Actions {
   togglePlayPause: () => void;
-  setCurrentTrack: (track?:any) => void;
+  setCurrentTrack: (track?: any) => void;
   setVolume: (volume: number) => void;
   setCurrentSongIndex: (index: number) => void;
   setDuration: (duration: number) => void;
   setCurrentTime: (currentTime: number) => void;
-  handleMusicClick: (music: IMusicProps,name:string) => void;
+  handleMusicClick: (music: IMusicProps, name: string) => void;
 }
 
 export const useMusic = create<States & Actions>((set) => ({
-  currentTrack: null,
+  currentTrack: {
+    _id: "",
+    name: "",
+    artists: "",
+    audioUrl: "",
+    currency: "string",
+    description: "string",
+    email: "string",
+    imageUrl: "string",
+    price: 0,
+    liked: false,
+    duration: 0,
+  },
   isPlaying: false,
   currentSongIndex: 0,
   volume: 1,
@@ -36,10 +48,11 @@ export const useMusic = create<States & Actions>((set) => ({
   setCurrentSongIndex: (index: number) => set({ currentSongIndex: index }),
   setDuration: (duration: number) => set({ duration }),
   setCurrentTime: (currentTime: number) => set({ currentTime }),
-  handleMusicClick: async (music: IMusicProps,name:string) => {
+  handleMusicClick: async (music: IMusicProps, name: string) => {
     const url = await generateUrl("/Music", {
       name: music.name,
-      category:name
+      id: music._id,
+      type: name,
     });
     set({ currentTrack: music, isPlaying: true });
     redirect(url);
