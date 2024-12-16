@@ -1,29 +1,23 @@
 import React from "react";
 import Image from "next/image";
-import { useGetTopHitsMusicsQuery } from "@/services/like";
 import {
-  FaBackward,
-  FaForward,
   FaHeart,
   FaPause,
-  FaPlay,
   FaRegHeart,
-  FaVolumeMute,
-  FaVolumeUp,
 } from "react-icons/fa";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import { IMusicListProps } from "../../types/types";
 
-const MusicList = ({ tracks }: IMusicListProps) => {
-  if (!tracks) {
+const MusicList = ({ data,title }: IMusicListProps) => {
+  if (!data) {
     return null;
   }
-  console.log(tracks, "tracks");
   return (
     <div className="mt-6 mb-10">
-      <h3 className="text-purple-400 text-xl font-semibold">Other Tracks</h3>
+      <h3 className="text-purple-400 text-xl font-semibold">{title}</h3>
       <div className="flex flex-col space-y-4 py-4 max-h-60 overflow-y-auto">
-        {tracks && tracks.length > 0 ? (
-          tracks.map((track: IMusicProps) => (
+        {data && data.length > 0 ? (
+          data.map((track: IMusicProps) => (
             <div
               key={track._id}
               className="flex items-center cursor-pointer p-2 hover:bg-orange-300 rounded-lg"
@@ -54,7 +48,7 @@ const MusicList = ({ tracks }: IMusicListProps) => {
             </div>
           ))
         ) : (
-          <p className="text-gray-400">No other tracks available</p>
+          <p className="text-gray-400">No other data available</p>
         )}
       </div>
     </div>
