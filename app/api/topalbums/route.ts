@@ -59,7 +59,7 @@ export async function GET() {
           liked: { $first: "$liked" },
           imageUrl: { $first: "$imageUrl" },
           description: { $first: "$description" },
-          count: { $sum: "$musicDetails.playTime" },
+          count: { $sum: "$musicDetails.playCount" },
         },
       },
       {

@@ -50,7 +50,7 @@ const musicSchema = new mongoose.Schema(
         required: [true, "music url is required"],
       },
     },
-    playTime: {
+    playCount: {
       type: Number,
       default: 0,
     },

@@ -51,7 +51,7 @@ export async function GET() {
         $project: {
           _id: 1,
           name: "$musicDetails.name",
-          playTime: 1,
+          playCount: 1,
           genre: "$genreDetails.name",
           genreId: "$genreDetails._id",
           imageUrl: "$genreDetails.imageUrl" ,
@@ -68,11 +68,11 @@ export async function GET() {
           musics: {
             $push: {
               id: "$_id",
-              playTime: "$playTime",
+              playCount: "$playCount",
               name: "$name",
             },
           },
-          totalPlayTime: { $sum: "$playTime" },
+          totalPlayTime: { $sum: "$playCount" },
         },
       },
       {
@@ -83,7 +83,7 @@ export async function GET() {
           musics: {
             $sortArray: {
               input: "$musics",
-              sortBy: { playTime: -1 },
+              sortBy: { playCount: -1 },
             },
           },
         },

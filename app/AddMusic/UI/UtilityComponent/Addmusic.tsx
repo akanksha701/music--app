@@ -71,18 +71,33 @@ const AddMusic = (props: IAddMusicProps) => {
               errors={errors}
             />
           </div>
-          <div className="flex flex-col">
-            <NextDatePicker
-              name="releasedate"
-              label="Release date"
-              register={register}
-              control={control}
-              rules={{ required: "Release date is required" }}
-              error={errors.releasedate?.message}
-            />
-          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="flex flex-col">
+              <NextDatePicker
+                name="releasedate"
+                label="Release date"
+                register={register}
+                control={control}
+                rules={{ required: "Release date is required" }}
+                error={errors.releasedate?.message}
+              />
+            </div>
+            <div className="flex flex-col">
+            {/* <MultiSelect
+                control={control}
+                name="price"
+                label="Choose Price"
+                items={[].map((price,index) => ({
+                  id: price._id,
+                  name: price.name,
+                }))}
+                error={errors}
+                rules={{ required: true }}
+                selectionMode={"single"}
+                placeholder="Select Language"
+              /> */}
+            </div>
             <div className="flex flex-col">
               <MultiSelect
                 control={control}

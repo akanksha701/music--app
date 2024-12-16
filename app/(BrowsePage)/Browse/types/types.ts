@@ -24,6 +24,7 @@ export interface IMusicProps {
   imageUrl: string;
   price: number;
   liked: boolean;
+  duration?:number
 }
 export interface IBoxTypes {
   data: Array<{ _id: string; name: string; imageUrl: string; liked: boolean }>;
@@ -32,7 +33,7 @@ export interface IBoxTypes {
   name: string;
   showLikeIcon: boolean;
   message: string;
-  handleLikeToggle: (id: string, name: string) => void;
+  handleLikeToggle?: (id: string, name: string) => void;
 }
 export interface IMusicPlayCardProps {
   data: Array<IMusicProps>;

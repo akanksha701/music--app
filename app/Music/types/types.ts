@@ -1,0 +1,4 @@
+interface IMusicListProps
+{
+    tracks:any
+}

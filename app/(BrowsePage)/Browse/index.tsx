@@ -28,7 +28,7 @@ const Index = () => {
 
   return (
     <div className="flex flex-col ">
-      <HeadLine title="Top hits" subTitle="2024" />
+      <HeadLine title="Top Hits" subTitle="2024" />
       <hr className="w-full p-2 border-gray-600" />
       <MusicPlayCard
         data={topHits.data}

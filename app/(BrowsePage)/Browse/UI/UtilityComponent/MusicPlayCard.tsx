@@ -11,11 +11,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useMusic } from "@/hooks/useMusic";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
   const itemsPerPage = 10;
   const pages = Math.ceil(data?.length / itemsPerPage);
+  const { handleMusicClick } = useMusic(); 
+
   return (
     <div className="p-4 sm:p-6 md:p-10">
       <Carousel>
@@ -31,7 +34,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                   .map((item, index) => (
                     <Card
                       key={index}
-                      className="bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group mb-3 ml-2"
+                      className="cursor-pointer bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group mb-3 ml-2"
                       style={{ height: "320px" }}
                     >
                       <CardBody className="flex flex-col items-center p-4 w-full h-full">
@@ -40,6 +43,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                             alt={item.name}
                             src={item.imageUrl}
                             fill
+                            onClick={() => handleMusicClick(item,name)}
                             className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
                           />
                         </div>

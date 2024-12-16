@@ -165,6 +165,11 @@ export async function GET() {
         },
       },
       {
+        $addFields: {
+          liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
+        },
+      },
+      {
         $unwind: {
           path: "$artists",
           preserveNullAndEmptyArrays: true,

@@ -35,7 +35,7 @@ const Box = ({
                 <div className="mt-4 w-full flex justify-between items-center">
                   {showLikeIcon && (
                     <button
-                    onClick={() => handleLikeToggle(item._id, name)}
+                    onClick={() => handleLikeToggle && handleLikeToggle(item._id, name)}
                       className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
                     >
                       {item.liked ? (
