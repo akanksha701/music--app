@@ -1,5 +1,5 @@
 "use client";
-import { MediaType } from "@/app/(BrowsePage)/Browse/types/types";
+import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import Box from "@/app/(BrowsePage)/Browse/UI/UtilityComponent/Card";
 import { handleLikeToggle } from "@/hooks/useLike";
 import { useGetAllMusicsQuery, useToggleLikeMutation } from "@/services/like";
@@ -25,7 +25,7 @@ const NewRelease = () => {
             title={`New ${language || "" + "Songs"}`}
             data={newReleases?.data?.data}
             className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            name={MediaType.MUSIC}
+            name={TAGS.MUSIC}
             showLikeIcon={true}
             message={"musics not found"}
             handleLikeToggle={(itemId, name) =>

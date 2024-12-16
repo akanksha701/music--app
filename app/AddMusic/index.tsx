@@ -9,7 +9,7 @@ import { useGetGenreQuery } from "@/services/genre";
 import { useGetAlbumsQuery } from "@/services/album";
 import HeadLine from "../(BrowsePage)/Browse/UI/UtilityComponent/HeadLine";
 import Box from "../(BrowsePage)/Browse/UI/UtilityComponent/Card";
-import { IMusicProps, MediaType } from "../(BrowsePage)/Browse/types/types";
+import { IMusicProps, TAGS } from "../(BrowsePage)/Browse/types/types";
 import { useGetMusicsByUserIdQuery } from "@/services/music";
 import { Input } from "@/components/ui/input";
 import { debounce } from "lodash";
@@ -63,7 +63,7 @@ const Index = () => {
           </div>
 
           <Box
-            name={MediaType.MUSIC}
+            name={TAGS.MUSIC}
             data={filteredMusicData} 
             showLikeIcon={false}
             message={filteredMusicData?.length === 0 ? "No musics found" : ""}
