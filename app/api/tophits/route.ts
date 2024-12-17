@@ -173,13 +173,12 @@ export async function GET() {
           preserveNullAndEmptyArrays: true,
         },
       },
-      // getFormattedDurationStage(),
       {
         $group: {
           _id: "$_id",
           name: { $first: "$musicDetails.name" },
           description: { $first: "$musicDetails.description" },
-          duration: { $first: "$formattedDuration" },
+          duration: { $first: "$musicDetails.duration" },
           artists: {
             $push: {
               $concat: ["$artists.firstName", " ", "$artists.lastName"],

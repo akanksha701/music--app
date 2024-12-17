@@ -45,7 +45,7 @@ const MusicList = ({ data, title }: IMusicListProps) => {
         </div>
       </div>
     ));
-  }, [data]); // Memoize based on `data` prop (and `title` if you want to)
+  }, [data]); 
 
   return (
     <div className="mt-6 mb-10">

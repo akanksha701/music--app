@@ -20,7 +20,7 @@ const initialState: MusicState = {
     currency: "string",
     description: "string",
     email: "string",
-    imageUrl: "string",
+    imageUrl: "",
     price: 0,
     liked: false,
     duration: 0,

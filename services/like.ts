@@ -18,6 +18,8 @@ export const likeApi = createApi({
         switch (name) {
           case TAGS.MUSIC:
             return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
+            case TAGS.NEW_RELEASE:
+              return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
           case TAGS.ALBUMS:
             return [TAGS.ALBUMS, TAGS.TOP_ALBUMS];
           case TAGS.GENRE:

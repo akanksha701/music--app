@@ -4,7 +4,7 @@ import Image from "next/image";
 import PlayerButtons from "./PlayerButtons";
 import PlayerLabel from "./PlayerLabel";
 import WaveComp from "./WaveComp";
-import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { generateUrl } from "@/utils/helpers";
 import {
   setCurrentTime,
@@ -13,14 +13,22 @@ import {
   setSeekPercentage,
 } from "@/Redux/features/musicPlayer/musicPlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "@/app/loading";
 import WaveSurfer from "wavesurfer.js";
 import { formatTime } from "@/hooks/useWaveSurfer";
+import { FiShoppingCart } from "react-icons/fi";
+import { IoAddSharp } from "react-icons/io5";
+import { GoDownload } from "react-icons/go";
+import { FaHeart } from "react-icons/fa";
+import { IoVolumeMediumSharp } from "react-icons/io5";
+import { handleLikeToggle } from "@/hooks/useLike";
+import { useToggleLikeMutation } from "@/services/like";
 
 const MusicPlayer = () => {
   const dispatch = useDispatch();
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const waveSurferRef = useRef<WaveSurfer | null>(null);
+  const [toggleLike] = useToggleLikeMutation();
+
   const currentTrack = useSelector(
     (state: any) => state?.musicPlayerSlice?.currentTrack
   );
@@ -30,10 +38,10 @@ const MusicPlayer = () => {
   const seekPercentage = useSelector(
     (state: any) => state?.musicPlayerSlice?.seekPercentage
   );
-  const volume = useSelector((state: any) => state?.musicPlayerSlice?.volume);
   const isPlaying = useSelector(
     (state: any) => state?.musicPlayerSlice?.isPlaying
   );
+
   const playNextPrevious = async (music: IMusicProps) => {
     const url = await generateUrl("/Music", {
       name: music.name,
@@ -62,89 +70,101 @@ const MusicPlayer = () => {
         );
       });
 
-      ws.on("finish", () => {
-        dispatch(setIsPlaying(false));
-      });
+      ws.on("finish", () => dispatch(setIsPlaying(false)));
+      ws.on("ready", () => isPlaying && ws.play());
 
-      ws.on("ready", () => {
-        if (isPlaying) {
-          ws.play();
-        }
-      });
-
-      return () => {
-        ws.destroy();
-      };
+      return () => ws.destroy();
     }
   }, [currentTrack]);
 
   useEffect(() => {
     const ws = waveSurferRef.current;
     if (ws) {
-      if (isPlaying) {
-        if (!ws.isPlaying()) {
-          ws.play();
-        }
-      } else {
-        if (ws.isPlaying()) {
-          ws.pause();
-        }
-      }
+      isPlaying ? !ws.isPlaying() && ws.play() : ws.isPlaying() && ws.pause();
     }
   }, [isPlaying]);
 
-  const handleSeek = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const waveform = waveformRef.current;
     if (waveform) {
-      const waveformWidth = waveform.offsetWidth;
       const clickX = e.clientX - waveform.getBoundingClientRect().left;
-      const newSeekPercentage = (clickX / waveformWidth) * 100;
+      const newSeekPercentage = (clickX / waveform.offsetWidth) * 100;
       dispatch(setSeekPercentage(newSeekPercentage));
-      const duration = currentTrack?.duration || 0;
-      const newTime = (newSeekPercentage / 100) * duration;
-      dispatch(setCurrentTime(newTime));
+      dispatch(setCurrentTime(newSeekPercentage));
     }
   };
 
-  if (!currentTrack) {
-    return <Loading />;
-  }
+  const handleLikeClick = async () => {
+    await handleLikeToggle(currentTrack._id, TAGS.MUSIC, toggleLike);
+    if (waveSurferRef.current) {
+      dispatch(setCurrentTime(waveSurferRef.current.getCurrentTime()));
+    }
+  };
+const getSelectedMusicDetails = async()=>
+{
+  
+}
   return (
-    <div className="w-full bg-black p-4 flex items-center space-x-4">
-      <div className="flex-shrink-0">
-        {/* <Image
-          src={currentTrack?.imageUrl }
+    <div className="w-full bg-black p-1 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 fixed bottom-0 left-0 z-50">
+      
+      <div className="w-20 h-20 mb-2 sm:mb-0 overflow-hidden">
+        <Image
+          src={currentTrack?.imageUrl || "/default-image.jpg"}
           alt="Track Image"
           width={80}
           height={80}
-          className="rounded-md p-2"
-        /> */}
-      </div>
-      <div className="flex-shrink-0 mr-3">
-        <PlayerLabel
-          title={currentTrack?.name || "Unknown Track"}
-          artists={currentTrack?.artists || ""}
+          className="rounded-md w-full h-full object-cover"
         />
       </div>
-      <div className="flex items-center mx-3">
+
+      <div className="flex flex-col sm:flex-row items-center flex-1 space-y-2 sm:space-y-0 sm:space-x-4">
+        <div className="text-center sm:text-left flex-1">
+          <PlayerLabel
+            title={currentTrack?.name || "Unknown Track"}
+            artists={currentTrack?.artists || ""}
+          />
+        </div>
+
         <PlayerButtons
           isPlaying={isPlaying}
           handleClick={() => dispatch(setIsPlaying(!isPlaying))}
           playNextPrevious={playNextPrevious}
         />
-      </div>
-      <div className="flex items-center mx-3">
+
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {formatTime(currentTime) || 0}
+          {formatTime(currentTime) || "0:00"}
         </p>
       </div>
+
       <WaveComp
         seekPercentage={seekPercentage}
         ref={waveformRef}
-        handleClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-          handleSeek(e)
-        }
+        handleClick={handleSeek}
       />
+
+      <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
+        {formatTime(currentTrack?.duration) || "0:00"}
+      </p>
+
+      <div className="flex items-center justify-center space-x-4 mt-2">
+        <IoVolumeMediumSharp size={24} color="white" />
+        
+        {/* Updated FaHeart click handler */}
+        <FaHeart 
+          onClick={handleLikeClick} 
+          size={24} 
+          color={currentTrack.liked ? 'red' : 'white'} 
+          className="cursor-pointer" 
+        />
+        
+        <IoAddSharp size={24} color="white" className="cursor-pointer" />
+        
+        <button className="bg-yellow-500 rounded-full p-1">
+          <GoDownload size={20} color="black" />
+        </button>
+        
+        <FiShoppingCart size={24} color="white" className="cursor-pointer" />
+      </div>
     </div>
   );
 };

@@ -33,7 +33,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
     });
     
     dispatch(setCurrentTrack(music)); 
-    redirect(url); 
+    // redirect(url); 
   };
 
   return (

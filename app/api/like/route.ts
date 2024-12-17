@@ -72,7 +72,10 @@ export async function POST(req: Request) {
 
     let updatedUser;
     switch (name) {
-      case TAGS.MUSIC:
+      case (TAGS.MUSIC ):
+        updatedUser = await handleMusicLike(user, id, userDetails?.id);
+        break;
+      case TAGS.NEW_RELEASE:
         updatedUser = await handleMusicLike(user, id, userDetails?.id);
         break;
 
