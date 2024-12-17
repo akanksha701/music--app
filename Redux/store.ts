@@ -9,10 +9,12 @@ import newReleaseSlice from "./features/newRelease";
 import { genreApi } from "@/services/genre";
 import { albumApi } from "@/services/album";
 import { likeApi } from "@/services/like";
+import musicPlayerSlice from "./features/musicPlayer/musicPlayerSlice";
 export const store = configureStore({
   reducer: {
     userReducer: userSlice,
     newRelease: newReleaseSlice,
+    musicPlayerSlice:musicPlayerSlice,
     [userApi.reducerPath]: userApi.reducer,
     [playlistApi.reducerPath]: playlistApi.reducer,
     [artistApi.reducerPath]: artistApi.reducer,

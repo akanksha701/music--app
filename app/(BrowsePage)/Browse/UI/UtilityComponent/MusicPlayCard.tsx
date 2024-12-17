@@ -1,8 +1,9 @@
 "use client";
+
 import Image from "next/image";
 import React from "react";
 import { Card, CardBody } from "@nextui-org/react";
-import { IMusicPlayCardProps } from "../../types/types";
+import { IMusicPlayCardProps, IMusicProps } from "../../types/types";
 import { FaEllipsisH, FaHeart, FaRegHeart } from "react-icons/fa";
 import {
   Carousel,
@@ -11,13 +12,29 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useMusic } from "@/hooks/useMusic";
+import { useDispatch } from "react-redux";
+import { setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust the path as necessary
+import { generateUrl } from "@/utils/helpers";
+import { redirect } from "next/navigation";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
+  
+  const dispatch = useDispatch();
+  
   const itemsPerPage = 10;
   const pages = Math.ceil(data?.length / itemsPerPage);
-  const { handleMusicClick } = useMusic(); 
+
+  const handleMusicClick = async (music: IMusicProps) => {
+    const url = await generateUrl("/Music", {
+      name: music.name,
+      id: music._id,
+      type: name,
+    });
+    
+    dispatch(setCurrentTrack(music)); // Dispatch action to set current track
+    redirect(url); // Redirect to the generated URL
+  };
 
   return (
     <div className="p-4 sm:p-6 md:p-10">
@@ -43,7 +60,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                             alt={item.name}
                             src={item.imageUrl}
                             fill
-                            onClick={() => handleMusicClick(item,name)}
+                            onClick={() => handleMusicClick(item)} // Use the handleMusicClick function
                             className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
                           />
                         </div>
