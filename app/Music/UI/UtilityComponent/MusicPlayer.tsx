@@ -100,13 +100,13 @@ const MusicPlayer = () => {
       dispatch(setCurrentTime(waveSurferRef.current.getCurrentTime()));
     }
   };
-const getSelectedMusicDetails = async()=>
-{
+
+  if (!currentTrack?._id) {
+    return null;
+  }
   
-}
   return (
     <div className="w-full bg-black p-1 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 fixed bottom-0 left-0 z-50">
-      
       <div className="w-20 h-20 mb-2 sm:mb-0 overflow-hidden">
         <Image
           src={currentTrack?.imageUrl || "/default-image.jpg"}
@@ -148,21 +148,21 @@ const getSelectedMusicDetails = async()=>
 
       <div className="flex items-center justify-center space-x-4 mt-2">
         <IoVolumeMediumSharp size={24} color="white" />
-        
+
         {/* Updated FaHeart click handler */}
-        <FaHeart 
-          onClick={handleLikeClick} 
-          size={24} 
-          color={currentTrack.liked ? 'red' : 'white'} 
-          className="cursor-pointer" 
+        <FaHeart
+          onClick={handleLikeClick}
+          size={24}
+          color={currentTrack.liked ? "red" : "white"}
+          className="cursor-pointer"
         />
-        
+
         <IoAddSharp size={24} color="white" className="cursor-pointer" />
-        
+
         <button className="bg-yellow-500 rounded-full p-1">
           <GoDownload size={20} color="black" />
         </button>
-        
+
         <FiShoppingCart size={24} color="white" className="cursor-pointer" />
       </div>
     </div>
