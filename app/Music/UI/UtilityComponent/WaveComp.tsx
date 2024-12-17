@@ -5,8 +5,7 @@ const WaveComp = ({ ref, handleClick,seekPercentage}: any) => {
     <>
       <div
         ref={ref}
-        className="cursor-pointer bg-gray-600 mx-4 rounded-lg w-full h-50"
-        // style={{ width: `${seekPercentage}%` }}
+        className="cursor-pointer mx-4 rounded-lg w-full h-50"
         onClick={handleClick}
       ></div>
     </>

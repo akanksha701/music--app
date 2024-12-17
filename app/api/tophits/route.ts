@@ -173,7 +173,7 @@ export async function GET() {
           preserveNullAndEmptyArrays: true,
         },
       },
-      getFormattedDurationStage(),
+      // getFormattedDurationStage(),
       {
         $group: {
           _id: "$_id",

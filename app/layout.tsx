@@ -9,7 +9,7 @@ import Footer from "./Footer/Footer";
 import { Suspense } from "react";
 import Loading from "./loading";
 import Modal from "@/common/modal/modal";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import MusicPlayer from "./Music/UI/UtilityComponent/MusicPlayer";
 
 export default async function RootLayout({
   children,
@@ -18,7 +18,6 @@ export default async function RootLayout({
 }>) {
   const res = await fetch("http://localhost:3000/api/marketing");
   const data = await res.json();
-
   return (
     <ClerkProvider>
       <ReduxProvider>
@@ -26,10 +25,11 @@ export default async function RootLayout({
           <body className="min-h-screen flex flex-col">
             <Toaster position="top-center" />
             <Tooltip />
-            <Modal/>
+            <Modal />
             <Suspense fallback={<Loading />}>
               <NavbarPage />
               <main className="flex-grow">{children}</main>
+              <MusicPlayer />
               <Footer data={data?.footerContent} />
             </Suspense>
           </body>

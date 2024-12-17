@@ -32,8 +32,8 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
       type: name,
     });
     
-    dispatch(setCurrentTrack(music)); // Dispatch action to set current track
-    redirect(url); // Redirect to the generated URL
+    dispatch(setCurrentTrack(music)); 
+    redirect(url); 
   };
 
   return (

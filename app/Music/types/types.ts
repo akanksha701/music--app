@@ -4,3 +4,20 @@ export interface IMusicListProps {
   data: IMusicProps[];
   title: string;
 }
+export interface IMusicPlayerProps {
+  currentTrack: IMusicProps;
+  isPlaying: boolean;
+  currentSongIndex: number;
+  volume: number;
+  currentTime: number | string;
+  seekPercentage: number;
+  togglePlayPause: () => void;
+  handleTimeSeek: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  ref: React.RefObject<HTMLDivElement>;
+}
+
+export interface IPlayerButtonsProps {
+  isPlaying: boolean;
+  handleClick: () => void;
+  playNextPrevious: any;
+}
