@@ -17,7 +17,7 @@ const useFetchMusicData = () => {
         undefined,
         { skip: type !== TAGS.MUSIC }
       );
-      data = topHits;
+      data = topHits?.data;
       name=LIST_NAME.TOP_HITS
       error = topHitsError;
       break;
@@ -25,7 +25,7 @@ const useFetchMusicData = () => {
       const { data: newReleases, error: newReleasesError } =
         useGetAllMusicsQuery({ skip: type !== TAGS.NEW_RELEASE });
       name=LIST_NAME.NEW_RELEASE
-      data = newReleases?.data;
+      data = newReleases?.data?.data;
       error = newReleasesError;
       break;
 

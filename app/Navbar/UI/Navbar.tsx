@@ -2,11 +2,11 @@
 import SoundScapeLogo from "@/public/images/SoundScapeLogo.png";
 import Image from "next/image";
 import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
-import NavItemList from "./UtilityComponent/NavItemList";
 import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
 import { useState } from "react";
 import DropDown from "./UtilityComponent/DropDown/DropDown";
 import { redirect } from "next/navigation";
+import NavItemList from "./UtilityComponent/NavItemList";
 
 export default function NavbarPage() {
   const [user, setUser] = useState();

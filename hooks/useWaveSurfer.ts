@@ -2,18 +2,23 @@ import WaveSurfer from "wavesurfer.js";
 import { create } from "zustand";
 
 interface States {
-  wavesurfer: WaveSurfer | null;
-  isPlaying: boolean;
-  volume: number;
-  seekPercentage: number;
   currentTime: number;
+  seekPercentage: number;
+  volume: number;
+  isPlaying: boolean;
+  wavesurfer: WaveSurfer | null;
 }
 
 interface Actions {
-  initWaveSurfer: (container: HTMLElement, audioUrl: string) => void;
+  setWavesurfer: (ws: WaveSurfer | null) => void;
+  setCurrentTime: (time: number) => void;
+  setSeekPercentage: (per: number) => void;
+  setVolume: (vol: number) => void;
+  setIsPlaying: (val: boolean) => void;
+  handleTimeSeek: (e: React.MouseEvent<HTMLDivElement>) => void; // Type for mouse event
+  handleVolumeChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Type for change event
+  handleMuteToggle: () => void;
   togglePlayPause: () => void;
-  setVolume: (volume: number) => void;
-  seekTo: (percent: number) => void;
 }
 
 export const formatTime = (seconds: number) => {
@@ -22,66 +27,72 @@ export const formatTime = (seconds: number) => {
   return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
 };
 
-export const useWaveSurfer = create<States & Actions>((set) => ({
+export const useWaveSurfer = create<States & Actions>((set, get) => ({
   wavesurfer: null,
-  isPlaying: false,
-  volume: 0.5,
-  seekPercentage: 0,
   currentTime: 0,
+  seekPercentage: 0,
+  volume: 0.5,
+  isPlaying: false,
 
-  initWaveSurfer: (container, audioUrl) => {
-    const wavesurfer = WaveSurfer.create({
-      container,
-      waveColor: "#1DB954",
-      progressColor: "#1DB954",
-      cursorColor: "#FFFFFF",
-      barWidth: 3,
-      height: 3,
-    });
-
-    wavesurfer.load(audioUrl);
-
-    wavesurfer.on("audioprocess", () => {
-      set({ currentTime: wavesurfer.getCurrentTime() });
-      set({
-        seekPercentage:
-          (wavesurfer.getCurrentTime() / wavesurfer.getDuration()) * 100,
-      });
-    });
-
-    wavesurfer.on("finish", () => {
-      set({ isPlaying: false });
-    });
-
-    set({ wavesurfer });
+  setWavesurfer: (ws) => {
+    set({ wavesurfer: ws });
+  },
+  setCurrentTime: (time) => {
+    set({ currentTime: time });
   },
 
-  togglePlayPause: () => set((state) => {
-    const wavesurfer = state.wavesurfer;
-    if (wavesurfer) {
-      if (state.isPlaying) {
-        wavesurfer.pause();
-      } else {
-        wavesurfer.play();
-      }
-      return { isPlaying: !state.isPlaying };
-    }
-    return state;
-  }),
+  setSeekPercentage: (per) => {
+    set({ seekPercentage: per });
+  },
 
-  setVolume: (volume) => set((state) => {
-    const wavesurfer = state.wavesurfer;
-    if (wavesurfer) {
-      wavesurfer.setVolume(volume);
-    }
-    return { volume };
-  }),
+  setVolume: (vol) => {
+    set({ volume: vol });
+  },
 
-  seekTo: (percent) => set((state) => {
-    const wavesurfer = state.wavesurfer;
+  setIsPlaying: (val) => {
+    set({ isPlaying: val });
+  },
+
+  handleTimeSeek: (e) => {
+    const bar = e.currentTarget;
+    const rect = bar.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+
+    const wavesurfer = get().wavesurfer;
     if (wavesurfer) {
       wavesurfer.seekTo(percent);
+      set({ seekPercentage: percent * 100 });
     }
-    return { seekPercentage: percent * 100 };
-  }),
+  },
+  handleVolumeChange: (e) => {
+    const newVolume = parseFloat(e.target.value);
+    const wavesurfer = get().wavesurfer;
+    if (wavesurfer) {
+      wavesurfer.setVolume(newVolume);
+      set({ volume: newVolume });
+    }
+  },
+  togglePlayPause: () => {
+    const wavesurfer = get().wavesurfer;
+    const isPlaying = get().isPlaying;
+    if (wavesurfer) {
+      if (isPlaying) {
+        wavesurfer.pause();
+        set({ isPlaying: false });
+      } else {
+        wavesurfer.play();
+        set({ isPlaying: true });
+      }
+    }
+  },
+  handleMuteToggle: () => {
+    const currentVolume = get().volume;
+    const newVolume = currentVolume === 0 ? 0.5 : 0;
+
+    const wavesurfer = get().wavesurfer;
+    if (wavesurfer) {
+      wavesurfer.setVolume(newVolume);
+      set({ volume: newVolume });
+    }
+  },
 }));
