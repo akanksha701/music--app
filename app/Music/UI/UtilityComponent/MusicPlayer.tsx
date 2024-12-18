@@ -164,7 +164,7 @@ const MusicPlayer = () => {
       />
 
       <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-        {formatTime(currentTrack?.duration as number) || "0:00"}
+        {currentTrack?.duration || "0:00"}
       </p>
 
       <div className="flex items-center justify-center space-x-4 mt-2">

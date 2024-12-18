@@ -43,7 +43,7 @@ export async function POST(req: Request) {
           languageId: body.language,
           artistId: artistIds,
           releaseDate: new Date(),
-          duration: Number((await getAudioDuration(audio)) || 0),
+          duration: (await getAudioDuration(audio)) || 0,
         },
         audioDetails: {
           imageUrl: image ? await saveFiles(image, IMAGE_UPLOAD_DIR) : null,
@@ -91,7 +91,8 @@ export async function GET(req: any) {
     const url = new URL(req?.url as string);
     const page: any = await url?.searchParams?.get("page");
     const recordsPerPage: any = await url?.searchParams?.get("recordsPerPage");
-    const language: string | null = await url?.searchParams?.get("language") || null;
+    const language: string | null =
+      (await url?.searchParams?.get("language")) || null;
 
     let currentPage = 1;
     let limit = 0;
