@@ -36,9 +36,8 @@ const musicSchema = new mongoose.Schema(
         required: [true, "release date is required"],
       },
       duration: {
-        type: Number,
+        type: String,
         required: [true, "Duration is required"],
-        min: [0, "Duration must be a positive number"],
       },
     },
     audioDetails: {
