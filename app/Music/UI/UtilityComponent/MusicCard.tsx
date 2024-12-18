@@ -8,7 +8,7 @@ const MusicCard = () => {
 
   return (
     <div className="mx-4 sm:mx-10 my-10">
-      <MusicList data={data || []} title={name || ""} />
+      <MusicList data={data} title={name} />
     </div>
   );
 };

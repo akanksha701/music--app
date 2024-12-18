@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import React from "react";
 import { Card, CardBody } from "@nextui-org/react";
@@ -14,7 +13,8 @@ import {
 } from "@/components/ui/carousel";
 import { useDispatch } from "react-redux";
 import { setCurrentSongIndex, setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust the path as necessary
-import { current } from "@reduxjs/toolkit";
+import { redirect } from "next/navigation";
+import { generateUrl } from "@/utils/helpers";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
@@ -25,13 +25,10 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const pages = Math.ceil(data?.length / itemsPerPage);
 
   const handleMusicClick = async (index: number, music: IMusicProps) => {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('name', music.name as string);
-    currentUrl.searchParams.set('id', music._id as string);
-    currentUrl.searchParams.set('type', name); 
     dispatch(setCurrentTrack(data[index])); 
     dispatch(setCurrentSongIndex(index));
-    window.history.pushState({}, '', currentUrl.toString());
+    const newUrl = await generateUrl('/Music', { type: name });
+    redirect(newUrl)
 };
 
   return (

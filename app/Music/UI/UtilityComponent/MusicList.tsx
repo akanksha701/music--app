@@ -1,58 +1,71 @@
-import React, { useMemo } from "react";
+import React from "react";
 import Image from "next/image";
-import { FaHeart, FaPause, FaRegHeart } from "react-icons/fa";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 import { IMusicListProps } from "../../types/types";
+import PlayerButtons from "./PlayerButtons";
+import PlayerLabel from "./PlayerLabel";
+import { IoAddSharp, IoVolumeMediumSharp } from "react-icons/io5";
+import { FaHeart } from "react-icons/fa";
+import { GoDownload } from "react-icons/go";
+import { FiShoppingCart } from "react-icons/fi";
 
 const MusicList = ({ data, title }: IMusicListProps) => {
-  const renderedTracks = useMemo(() => {
-    if (!data || data.length === 0) {
-      return <p className="text-gray-400">No other data available</p>;
-    }
-    return data.map((track: IMusicProps) => (
-      <div
-        key={track._id}
-        className="flex items-center cursor-pointer p-2 hover:bg-orange-300 rounded-lg"
-      >
-        <Image
-          src={track?.imageUrl as string}
-          alt="Track Image"
-          width={60}
-          height={60}
-          className="rounded-md"
-        />
-        <div className="flex-1 ml-4">
-          <p className="text-black text-sm">{track.name}</p>
-          <p className="text-gray-400 text-xs">{track.artists}</p>
-        </div>
-        <div>
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-4 mx-2 my-2">
-            <button className="p-2 bg-green-500 text-black rounded-full hover:bg-green-600 transition duration-300">
-              <FaPause size={20} />
-            </button>
-            {track.liked ? (
+  const renderedTracks =
+    data && data.length > 0 ? (
+      data.map((track: IMusicProps) => (
+        <div
+          key={track._id}
+          className="w-full bg-black p-2 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 left-0"
+        >
+          <div className="w-10 h-10 mb-2 sm:mb-0 overflow-hidden">
+            <Image
+              src={track?.imageUrl || "/default-image.jpg"}
+              alt="Track Image"
+              width={80}
+              height={80}
+              className="rounded-md w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row items-center flex-1 space-y-2 sm:space-y-0 sm:space-x-4">
+            <div className="text-center sm:text-left flex-1">
+              <PlayerLabel
+                title={track?.name || "Unknown Track"}
+                artists={track?.artists || ""}
+              />
+            </div>
+            <div className="flex items-center justify-center space-x-4 mt-2 mx-4">
+              <IoVolumeMediumSharp size={15} color="white" />
+
               <FaHeart
-                size={20}
-                className="text-red-500 transition-colors duration-300"
+                // onClick={handleLikeClick}
+                size={15}
+                color={track.liked ? "red" : "white"}
+                className="cursor-pointer"
               />
-            ) : (
-              <FaRegHeart
-                size={20}
-                className="text-gray-500 transition-colors duration-300"
+
+              <IoAddSharp size={15} color="white" className="cursor-pointer" />
+
+              <button className="bg-yellow-500 rounded-full p-1">
+                <GoDownload size={15} color="black" />
+              </button>
+
+              <FiShoppingCart
+                size={15}
+                color="white"
+                className="cursor-pointer"
               />
-            )}
+            </div>
           </div>
         </div>
-      </div>
-    ));
-  }, [data]); 
+      ))
+    ) : (
+      <p className="text-gray-400">No other data available</p>
+    );
 
   return (
-    <div className="mt-6 mb-10">
+    <div>
       <h3 className="text-purple-400 text-xl font-semibold">{title}</h3>
-      <div className="flex flex-col space-y-4 py-4 max-h-60 overflow-y-auto">
-        {renderedTracks}
-      </div>
+      {renderedTracks}
     </div>
   );
 };
