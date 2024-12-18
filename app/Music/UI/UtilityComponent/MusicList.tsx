@@ -15,7 +15,7 @@ const MusicList = ({ data, title }: IMusicListProps) => {
         className="flex items-center cursor-pointer p-2 hover:bg-orange-300 rounded-lg"
       >
         <Image
-          src={track.imageUrl}
+          src={track?.imageUrl as string}
           alt="Track Image"
           width={60}
           height={60}

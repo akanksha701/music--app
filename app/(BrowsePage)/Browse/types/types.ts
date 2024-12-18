@@ -18,16 +18,16 @@ export const LIST_NAME = {
 } as const;
 
 export interface IMusicProps {
-  _id: string;
-  name: string;
-  artists: string;
-  audioUrl: string;
-  currency: string;
-  description: string;
-  email: string;
-  imageUrl: string;
-  price: number;
-  liked: boolean;
+  _id?: string;
+  name?: string;
+  artists?: string;
+  audioUrl?: string;
+  currency?: string;
+  description?: string;
+  email?: string;
+  imageUrl?: string;
+  price?: number;
+  liked?: boolean;
   duration?:number
 }
 export interface IBoxTypes {

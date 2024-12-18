@@ -1,32 +1,23 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import { IMusicState } from "./types/types";
 
-interface MusicState {
-  currentTrack: IMusicProps;
-  isPlaying: boolean;
-  currentSongIndex: number;
-  volume: number;
-  duration: number;
-  currentTime: number;
-  seekPercentage: number; 
-}
-
-const initialState: MusicState = {
+const initialState: IMusicState = {
+   selectedMusicIndex: -1,  
   currentTrack: {
     _id: "",
     name: "",
     artists: "",
     audioUrl: "",
-    currency: "string",
-    description: "string",
-    email: "string",
+    currency: "",
+    description: "",
+    email: "",
     imageUrl: "",
     price: 0,
     liked: false,
     duration: 0,
   },
   isPlaying: true,
-  currentSongIndex: 0,
   volume: 1,
   duration: 0,
   currentTime: 0,
@@ -34,15 +25,14 @@ const initialState: MusicState = {
 };
 
 const musicPlayerSlice = createSlice({
-  name: 'music',
+  name: "music",
   initialState,
   reducers: {
     setCurrentTrack(state, action: PayloadAction<IMusicProps | undefined>) {
       state.currentTrack = action.payload || initialState.currentTrack;
-      state.isPlaying = true; 
     },
     setCurrentSongIndex(state, action: PayloadAction<number>) {
-      state.currentSongIndex = action.payload;
+      state.selectedMusicIndex = action.payload;
     },
     setVolume(state, action: PayloadAction<number>) {
       state.volume = action.payload;

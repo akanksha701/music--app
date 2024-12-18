@@ -19,7 +19,6 @@ async function handleMusicLike(user: any, id: string, clerkUserId: string) {
     },
     { new: true }
   );
-
   return updatedUser;
 }
 
@@ -72,7 +71,7 @@ export async function POST(req: Request) {
 
     let updatedUser;
     switch (name) {
-      case (TAGS.MUSIC ):
+      case TAGS.MUSIC:
         updatedUser = await handleMusicLike(user, id, userDetails?.id);
         break;
       case TAGS.NEW_RELEASE:

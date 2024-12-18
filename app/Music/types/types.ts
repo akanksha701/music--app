@@ -18,6 +18,7 @@ export interface IMusicPlayerProps {
 
 export interface IPlayerButtonsProps {
   isPlaying: boolean;
-  handleClick: () => void;
-  playNextPrevious: any;
+  selectedMusicIndex: number;
+  data: Array<IMusicProps>;
+  handlePlayPause:() => void;
 }

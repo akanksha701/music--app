@@ -13,9 +13,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useDispatch } from "react-redux";
-import { setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust the path as necessary
-import { generateUrl } from "@/utils/helpers";
-import { redirect } from "next/navigation";
+import { setCurrentSongIndex, setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust the path as necessary
+import { current } from "@reduxjs/toolkit";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
@@ -25,16 +24,15 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const itemsPerPage = 10;
   const pages = Math.ceil(data?.length / itemsPerPage);
 
-  const handleMusicClick = async (music: IMusicProps) => {
-    const url = await generateUrl("/Music", {
-      name: music.name,
-      id: music._id,
-      type: name,
-    });
-    
-    dispatch(setCurrentTrack(music)); 
-    // redirect(url); 
-  };
+  const handleMusicClick = async (index: number, music: IMusicProps) => {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('name', music.name as string);
+    currentUrl.searchParams.set('id', music._id as string);
+    currentUrl.searchParams.set('type', name); 
+    dispatch(setCurrentTrack(data[index])); 
+    dispatch(setCurrentSongIndex(index));
+    window.history.pushState({}, '', currentUrl.toString());
+};
 
   return (
     <div className="p-4 sm:p-6 md:p-10">
@@ -57,17 +55,17 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                       <CardBody className="flex flex-col items-center p-4 w-full h-full">
                         <div className="relative w-full h-2/3">
                           <Image
-                            alt={item.name}
-                            src={item.imageUrl}
+                            alt={item.name as string}
+                            src={item.imageUrl as string}
                             fill
-                            onClick={() => handleMusicClick(item)} // Use the handleMusicClick function
+                            onClick={() => handleMusicClick(index,item)} // Use the handleMusicClick function
                             className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
                           />
                         </div>
 
                         <div className="mt-4 w-full flex justify-between items-center">
                           <button
-                            onClick={() => handleLikeToggle(item._id, name)}
+                            onClick={() => handleLikeToggle(item._id as string, name)}
                             className="group p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
                           >
                             {item.liked ? (

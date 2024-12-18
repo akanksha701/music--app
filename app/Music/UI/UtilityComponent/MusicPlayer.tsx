@@ -1,16 +1,17 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import PlayerButtons from "./PlayerButtons";
 import PlayerLabel from "./PlayerLabel";
 import WaveComp from "./WaveComp";
 import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
-import { generateUrl } from "@/utils/helpers";
 import {
+  setCurrentSongIndex,
   setCurrentTime,
   setCurrentTrack,
   setIsPlaying,
   setSeekPercentage,
+  togglePlay,
 } from "@/Redux/features/musicPlayer/musicPlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import WaveSurfer from "wavesurfer.js";
@@ -22,68 +23,85 @@ import { FaHeart } from "react-icons/fa";
 import { IoVolumeMediumSharp } from "react-icons/io5";
 import { handleLikeToggle } from "@/hooks/useLike";
 import { useToggleLikeMutation } from "@/services/like";
+import useFetchMusicData from "@/app/About/UI/UtilityComponent/useFetchMusicList";
+import { RootState } from "@/Redux/features/musicPlayer/types/types";
 
 const MusicPlayer = () => {
   const dispatch = useDispatch();
+
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const waveSurferRef = useRef<WaveSurfer | null>(null);
+
   const [toggleLike] = useToggleLikeMutation();
 
-  const currentTrack = useSelector(
-    (state: any) => state?.musicPlayerSlice?.currentTrack
-  );
-  const currentTime = useSelector(
-    (state: any) => state?.musicPlayerSlice?.currentTime
-  );
-  const seekPercentage = useSelector(
-    (state: any) => state?.musicPlayerSlice?.seekPercentage
-  );
-  const isPlaying = useSelector(
-    (state: any) => state?.musicPlayerSlice?.isPlaying
+  const { data, error } = useFetchMusicData();
+
+  const currentTrack = useSelector<RootState, IMusicProps | null>(
+    (state) => state.musicPlayerSlice.currentTrack
   );
 
-  const playNextPrevious = async (music: IMusicProps) => {
-    const url = await generateUrl("/Music", {
-      name: music.name,
-      id: music._id,
+  const selectedMusicIndex = useSelector<RootState, number | null>(
+    (state) => state.musicPlayerSlice.selectedMusicIndex
+  );
+
+  const currentTime = useSelector<RootState, number>(
+    (state) => state.musicPlayerSlice.currentTime
+  );
+
+  const seekPercentage = useSelector<RootState, number>(
+    (state) => state.musicPlayerSlice.seekPercentage
+  );
+
+  const isPlaying = useSelector<RootState, boolean>(
+    (state) => state.musicPlayerSlice.isPlaying
+  );
+
+  const setupInitialWaveSurfer = (ws: WaveSurfer) => {
+    waveSurferRef.current = ws;
+    ws.load(currentTrack?.audioUrl as string);
+    ws.on("audioprocess", () => {
+      dispatch(setCurrentTime(ws.getCurrentTime()));
+      dispatch(
+        setSeekPercentage((ws.getCurrentTime() / ws.getDuration()) * 100)
+      );
     });
-    dispatch(setCurrentTrack(music));
+    ws.on("finish", () => dispatch(setIsPlaying(false)));
+    ws.on("ready", () => isPlaying && ws.play());
   };
 
   useEffect(() => {
-    if (currentTrack?.audioUrl && waveformRef.current) {
-      const ws = WaveSurfer.create({
-        container: waveformRef.current,
-        waveColor: "#C0C2C9",
-        progressColor: "#b794f4",
-        cursorColor: "#FFFFFF",
-        barWidth: 3,
-        height: 30,
-      });
+    if (!currentTrack?.audioUrl || !waveformRef.current) return;
 
-      waveSurferRef.current = ws;
-      ws.load(currentTrack?.audioUrl);
-      ws.on("audioprocess", () => {
-        dispatch(setCurrentTime(ws.getCurrentTime()));
-        dispatch(
-          setSeekPercentage((ws.getCurrentTime() / ws.getDuration()) * 100)
-        );
-      });
+    const ws = WaveSurfer.create({
+      container: waveformRef.current,
+      waveColor: "#C0C2C9",
+      progressColor: "#b794f4",
+      cursorColor: "#FFFFFF",
+      barWidth: 3,
+      height: 30,
+    });
 
-      ws.on("finish", () => dispatch(setIsPlaying(false)));
-      ws.on("ready", () => isPlaying && ws.play());
+    setupInitialWaveSurfer(ws);
 
-      return () => ws.destroy();
+    return () => {
+      if (waveSurferRef.current) {
+        waveSurferRef.current.destroy();
+        waveSurferRef.current = null;
+      }
+    };
+  }, [currentTrack?.audioUrl]); 
+
+  const handlePlayPause = () => {
+    if (waveSurferRef.current) {
+      const ws = waveSurferRef.current;
+      if (isPlaying) {
+        ws.pause();
+      } else {
+        ws.play();
+      }
+      dispatch(togglePlay());
     }
-  }, [currentTrack]);
-
-  useEffect(() => {
-    const ws = waveSurferRef.current;
-    if (ws) {
-      isPlaying ? !ws.isPlaying() && ws.play() : ws.isPlaying() && ws.pause();
-    }
-  }, [isPlaying]);
-
+  };
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const waveform = waveformRef.current;
     if (waveform) {
@@ -95,16 +113,18 @@ const MusicPlayer = () => {
   };
 
   const handleLikeClick = async () => {
-    await handleLikeToggle(currentTrack._id, TAGS.MUSIC, toggleLike);
-    if (waveSurferRef.current) {
-      dispatch(setCurrentTime(waveSurferRef.current.getCurrentTime()));
+    if (currentTrack) {
+      if (waveSurferRef.current) {
+        handleLikeToggle(currentTrack?._id as string, TAGS.MUSIC, toggleLike,currentTrack,dispatch)
+        dispatch(setCurrentTime(waveSurferRef.current.getCurrentTime()));
+       
+      }
     }
   };
 
-  if (!currentTrack?._id) {
+  if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;
   }
-  
   return (
     <div className="w-full bg-black p-1 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 fixed bottom-0 left-0 z-50">
       <div className="w-20 h-20 mb-2 sm:mb-0 overflow-hidden">
@@ -127,8 +147,9 @@ const MusicPlayer = () => {
 
         <PlayerButtons
           isPlaying={isPlaying}
-          handleClick={() => dispatch(setIsPlaying(!isPlaying))}
-          playNextPrevious={playNextPrevious}
+          selectedMusicIndex={selectedMusicIndex}
+          handlePlayPause={handlePlayPause}
+          data={data}
         />
 
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
@@ -143,13 +164,12 @@ const MusicPlayer = () => {
       />
 
       <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-        {formatTime(currentTrack?.duration) || "0:00"}
+        {formatTime(currentTrack?.duration as number) || "0:00"}
       </p>
 
       <div className="flex items-center justify-center space-x-4 mt-2">
         <IoVolumeMediumSharp size={24} color="white" />
 
-        {/* Updated FaHeart click handler */}
         <FaHeart
           onClick={handleLikeClick}
           size={24}

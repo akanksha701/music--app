@@ -218,7 +218,6 @@ export async function GET() {
       },
     ]);
 
-    console.log(musics, "------");
     return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
     console.error("Error:", error);

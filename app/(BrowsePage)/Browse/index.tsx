@@ -12,7 +12,9 @@ import {
   useToggleLikeMutation,
 } from "@/services/like";
 import { handleLikeToggle } from "@/hooks/useLike";
-import { TAGS } from "./types/types";
+import { IMusicProps, TAGS } from "./types/types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/Redux/features/musicPlayer/types/types";
 
 const Index = () => {
   const { user } = useUser();
@@ -21,11 +23,13 @@ const Index = () => {
   const { data: newReleases } = useGetAllMusicsQuery({});
   const { data: topGenres } = useGetTopGenreQuery({});
   const [toggleLike] = useToggleLikeMutation();
+  const dispatch = useDispatch();
+  const currentTrack = useSelector<RootState, IMusicProps | null>( (state) => state.musicPlayerSlice.currentTrack);
 
+  
   if (!user || !topHits || !topAlbums || !newReleases || !topGenres) {
     return <Loading />;
   }
-
   return (
     <div className="flex flex-col ">
       <HeadLine title="Top Hits" subTitle="2024" />
@@ -33,7 +37,7 @@ const Index = () => {
       <MusicPlayCard
         data={topHits.data}
         name={TAGS.MUSIC}
-        handleLikeToggle={(itemId) =>handleLikeToggle(itemId, TAGS.MUSIC, toggleLike)}
+        handleLikeToggle={(itemId) =>handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
       />
 
       <div className="mt-8 p-3">
