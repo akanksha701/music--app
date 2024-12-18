@@ -126,8 +126,8 @@ const MusicPlayer = () => {
     return null;
   }
   return (
-    <div className="w-full bg-black p-1 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 fixed bottom-0 left-0 z-50">
-      <div className="w-20 h-20 mb-2 sm:mb-0 overflow-hidden">
+    <div className="w-full bg-black p-2 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 fixed bottom-0 left-0 z-50">
+      <div className="w-10 h-10 mb-2 sm:mb-0 overflow-hidden">
         <Image
           src={currentTrack?.imageUrl || "/default-image.jpg"}
           alt="Track Image"
