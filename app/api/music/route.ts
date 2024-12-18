@@ -199,6 +199,7 @@ export async function GET(req: any) {
           _id: "$_id",
           name: { $first: "$musicDetails.name" },
           language: { $first: "$languageDetails.name" },
+          duration: { $first: "$musicDetails.duration" },
           description: { $first: "$musicDetails.description" },
           artists: {
             $push: "$fullArtistName",
