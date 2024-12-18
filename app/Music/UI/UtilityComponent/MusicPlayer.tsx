@@ -65,7 +65,7 @@ const MusicPlayer = () => {
         setSeekPercentage((ws.getCurrentTime() / ws.getDuration()) * 100)
       );
     });
-    ws.on("finish", () => dispatch(setIsPlaying(false)));
+    ws.on("finish", () => dispatch(setIsPlaying(true)));
     ws.on("ready", () => isPlaying && ws.play());
   };
 
@@ -89,7 +89,7 @@ const MusicPlayer = () => {
         waveSurferRef.current = null;
       }
     };
-  }, [currentTrack?.audioUrl]); 
+  }, [currentTrack?._id]); 
 
   const handlePlayPause = () => {
     if (waveSurferRef.current) {

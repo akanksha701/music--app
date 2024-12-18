@@ -61,9 +61,7 @@ const Index = () => {
       <MusicPlayCard
         data={newReleases?.data?.data}
         name={TAGS.NEW_RELEASE}
-        handleLikeToggle={(itemId) =>
-          handleLikeToggle(itemId, TAGS.NEW_RELEASE, toggleLike)
-        }
+        handleLikeToggle={(itemId) =>handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
       />
       <div className="mt-8 p-3">
         <HeadLine
