@@ -1,7 +1,7 @@
 import React, { forwardRef, Ref } from "react";
 import { IWaveProps } from "../../types/types";
 
-const WaveComp = forwardRef<HTMLDivElement, IWaveProps>(
+const WaveComp = forwardRef<any, IWaveProps>(
   ({ seekPercentage, handleClick }, ref) => {
     return (
       <div

@@ -35,7 +35,7 @@ const Index = () => {
       <HeadLine title="Top Hits" subTitle="2024" />
       <hr className="w-full p-2 border-gray-600" />
       <MusicPlayCard
-        data={topHits.data}
+        data={topHits.data.slice(0,8)}
         name={TAGS.MUSIC}
         handleLikeToggle={(itemId) =>handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
       />
@@ -59,7 +59,7 @@ const Index = () => {
       <HeadLine title="New Releases" subTitle="2024" />
       <hr className="w-full p-2 border-gray-600" />
       <MusicPlayCard
-        data={newReleases?.data?.data}
+        data={newReleases?.data?.data.slice(0,8)}
         name={TAGS.NEW_RELEASE}
         handleLikeToggle={(itemId) =>handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
       />

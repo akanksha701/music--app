@@ -7,9 +7,7 @@ const MusicCard = () => {
   const { data, name } = useFetchMusicData();
 
   return (
-    <div className="mx-4 sm:mx-10 my-10">
       <MusicList data={data} title={name} />
-    </div>
   );
 };
 
