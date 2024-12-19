@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import PlayerButtons from "./PlayerButtons";
 import PlayerLabel from "./PlayerLabel";
@@ -28,12 +28,10 @@ import { RootState } from "@/Redux/features/musicPlayer/types/types";
 
 const MusicPlayer = () => {
   const dispatch = useDispatch();
-
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const waveSurferRef = useRef<WaveSurfer | null>(null);
 
   const [toggleLike] = useToggleLikeMutation();
-
   const { data, error } = useFetchMusicData();
 
   const currentTrack = useSelector<RootState, IMusicProps | null>(
@@ -59,16 +57,25 @@ const MusicPlayer = () => {
   const setupInitialWaveSurfer = (ws: WaveSurfer) => {
     waveSurferRef.current = ws;
     ws.load(currentTrack?.audioUrl as string);
+
     ws.on("audioprocess", () => {
-      dispatch(setCurrentTime(ws.getCurrentTime()));
-      dispatch(
-        setSeekPercentage((ws.getCurrentTime() / ws.getDuration()) * 100)
-      );
+      const current = ws.getCurrentTime();
+      const duration = ws.getDuration();
+
+      dispatch(setCurrentTime(current));
+      dispatch(setSeekPercentage((current / duration) * 100));
     });
-    ws.on("finish", () => dispatch(setIsPlaying(true)));
-    ws.on("ready", () => isPlaying && ws.play());
+
+    ws.on("finish", () => {
+      dispatch(setIsPlaying(false)); // Stop music on finish
+    });
+
+    ws.on("ready", () => {
+      if (isPlaying) ws.play();  // Play if it's already set to playing
+    });
   };
 
+  // When current track changes, create new waveSurfer instance
   useEffect(() => {
     if (!currentTrack?.audioUrl || !waveformRef.current) return;
 
@@ -89,7 +96,7 @@ const MusicPlayer = () => {
         waveSurferRef.current = null;
       }
     };
-  }, [currentTrack?._id]); 
+  }, [currentTrack?._id]);
 
   const handlePlayPause = () => {
     if (waveSurferRef.current) {
@@ -102,6 +109,7 @@ const MusicPlayer = () => {
       dispatch(togglePlay());
     }
   };
+
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const waveform = waveformRef.current;
     if (waveform) {
@@ -109,15 +117,23 @@ const MusicPlayer = () => {
       const newSeekPercentage = (clickX / waveform.offsetWidth) * 100;
       dispatch(setSeekPercentage(newSeekPercentage));
       dispatch(setCurrentTime(newSeekPercentage));
+      isPlaying
+        ? waveSurferRef?.current?.play()
+        : waveSurferRef?.current?.pause();
     }
   };
 
   const handleLikeClick = async () => {
     if (currentTrack) {
       if (waveSurferRef.current) {
-        handleLikeToggle(currentTrack?._id as string, TAGS.MUSIC, toggleLike,currentTrack,dispatch)
+        handleLikeToggle(
+          currentTrack?._id as string,
+          TAGS.MUSIC,
+          toggleLike,
+          currentTrack,
+          dispatch
+        );
         dispatch(setCurrentTime(waveSurferRef.current.getCurrentTime()));
-       
       }
     }
   };
@@ -125,6 +141,7 @@ const MusicPlayer = () => {
   if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;
   }
+
   return (
     <div className="w-full bg-black p-2 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 fixed bottom-0 left-0 z-50">
       <div className="w-10 h-10 mb-2 sm:mb-0 overflow-hidden">

@@ -21,4 +21,6 @@ export interface IPlayerButtonsProps {
   selectedMusicIndex: number;
   data: Array<IMusicProps>;
   handlePlayPause:() => void;
+  currentTime?:string,
+  totalDuration?:number
 }
