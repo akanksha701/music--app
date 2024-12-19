@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Method } from "@/app/About/types/types";
-import { getTopHits, music } from "@/utils/apiRoutes";
+import { getTopAlbums, getTopGenres, getTopHits, like, music } from "@/utils/apiRoutes";
 import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 
 export const likeApi = createApi({
@@ -10,7 +10,7 @@ export const likeApi = createApi({
   endpoints: (builder) => ({
     toggleLike: builder.mutation<void, { id: string; name: string }>({
       query: ({ id, name }) => ({
-        url: "api/like",
+        url: like,
         method: Method.POST,
         body: { id, name },
       }),
@@ -34,7 +34,7 @@ export const likeApi = createApi({
       providesTags: [TAGS.TOP_HITS],
     }),
     getTopAlbums: builder.query({
-      query: () => "api/topalbums",
+      query: () => getTopAlbums,
       providesTags: [TAGS.TOP_ALBUMS],
     }),
     getAllMusics: builder.query({
@@ -42,7 +42,7 @@ export const likeApi = createApi({
       providesTags: [TAGS.NEW_RELEASE],
     }),
     getTopGenre: builder.query({
-      query: () => "api/topgenres",
+      query: () => getTopGenres,
       providesTags: [TAGS.GENRE],
     }),
   }),
