@@ -3,7 +3,7 @@ import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 import { IMusicState } from "./types/types";
 
 const initialState: IMusicState = {
-   selectedMusicIndex: -1,  
+  selectedMusicIndex: -1,  
   currentTrack: {
     _id: "",
     name: "",
@@ -19,6 +19,7 @@ const initialState: IMusicState = {
   },
   isPlaying: true,
   volume: 1,
+  isMuted: false, // Add isMuted state
   duration: 0,
   currentTime: 0,
   seekPercentage: 0,
@@ -36,6 +37,10 @@ const musicPlayerSlice = createSlice({
     },
     setVolume(state, action: PayloadAction<number>) {
       state.volume = action.payload;
+    },
+    toggleMute(state) { // Add toggleMute action
+      state.isMuted = !state.isMuted;
+      state.volume = state.isMuted ? 0 : initialState.volume; // Set volume to 0 if muted, otherwise restore initial volume
     },
     togglePlay(state) {
       state.isPlaying = !state.isPlaying;
@@ -59,6 +64,7 @@ export const {
   setCurrentTrack,
   setCurrentSongIndex,
   setVolume,
+  toggleMute, // Export the new toggleMute action
   togglePlay,
   setCurrentTime,
   setDuration,

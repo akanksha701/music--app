@@ -3,7 +3,7 @@ import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 export interface IMusicState {
     currentTrack: IMusicProps;
     isPlaying: boolean;
-    // currentSongIndex: number;
+    isMuted:boolean,
     volume: number;
     duration: number;
     currentTime: number;

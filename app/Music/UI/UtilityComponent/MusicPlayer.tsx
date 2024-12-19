@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import PlayerButtons from "./PlayerButtons";
 import PlayerLabel from "./PlayerLabel";
@@ -20,7 +20,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { IoAddSharp } from "react-icons/io5";
 import { GoDownload } from "react-icons/go";
 import { FaHeart } from "react-icons/fa";
-import { IoVolumeMediumSharp } from "react-icons/io5";
+import { IoVolumeMuteSharp, IoVolumeLowSharp, IoVolumeMediumSharp, IoVolumeHighSharp } from "react-icons/io5"; // Import volume icons
 import { handleLikeToggle } from "@/hooks/useLike";
 import { useToggleLikeMutation } from "@/services/like";
 import useFetchMusicData from "@/app/About/UI/UtilityComponent/useFetchMusicList";
@@ -30,7 +30,10 @@ const MusicPlayer = () => {
   const dispatch = useDispatch();
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const waveSurferRef = useRef<WaveSurfer | null>(null);
-
+  
+  const [volume, setVolume] = useState(1); // Volume state (0.0 to 1.0)
+  const [isMuted, setIsMuted] = useState(false); // Mute state
+  
   const [toggleLike] = useToggleLikeMutation();
   const { data, error } = useFetchMusicData();
 
@@ -57,6 +60,7 @@ const MusicPlayer = () => {
   const setupInitialWaveSurfer = (ws: WaveSurfer) => {
     waveSurferRef.current = ws;
     ws.load(currentTrack?.audioUrl as string);
+    ws.setVolume(isMuted ? 0 : volume); // Set initial volume based on mute state
 
     ws.on("audioprocess", () => {
       const current = ws.getCurrentTime();
@@ -138,76 +142,88 @@ const MusicPlayer = () => {
     }
   };
 
-  if (!currentTrack?._id || selectedMusicIndex === null) {
-    return null;
-  }
+   
 
-  return (
-    <div className="w-full bg-black p-2 flex flex-row items-center justify-between gap-4 fixed bottom-0 left-0 z-50">
-      <div className="w-10 h-10 mb-2 sm:mb-0 overflow-hidden">
-        <Image
-          src={currentTrack?.imageUrl || "/default-image.jpg"}
-          alt="Track Image"
-          width={80}
-          height={80}
-          className="rounded-md w-full h-full object-cover"
-        />
-      </div>
+   const toggleMute = () => {
+     setIsMuted((prevMute) => !prevMute);
+     if (waveSurferRef.current) {
+       waveSurferRef.current.setVolume(isMuted ? volume : 0); // Set volume to current level or mute
+     }
+   };
 
-      <div className="flex flex-row items-center flex-1 space-x-4">
-        <div className="text-left ">
-          <PlayerLabel
-            title={currentTrack?.name || "Unknown Track"}
-            artists={currentTrack?.artists || ""}
-          />
-        </div>
+   const renderVolumeIcon = () => {
+     if (isMuted || volume === 0) return <IoVolumeMuteSharp size={24} color="white" onClick={toggleMute} />;
+     if (volume < 0.5) return <IoVolumeLowSharp size={24} color="white" onClick={toggleMute} />;
+     if (volume < 1) return <IoVolumeMediumSharp size={24} color="white" onClick={toggleMute} />;
+     return <IoVolumeHighSharp size={24} color="white" onClick={toggleMute} />;
+   };
 
-        <PlayerButtons
-          isPlaying={isPlaying}
-          selectedMusicIndex={selectedMusicIndex}
-          handlePlayPause={handlePlayPause}
-          data={data}
-        />
+   if (!currentTrack?._id || selectedMusicIndex === null) {
+     return null;
+   }
 
-        <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {formatTime(currentTime) || "0:00"}
-        </p>
-        <WaveComp
-          seekPercentage={seekPercentage}
-          ref={waveformRef}
-          handleClick={handleSeek}
-        />
+   return (
+     <div className="w-full bg-black p-2 flex flex-row items-center justify-between gap-4 fixed bottom-0 left-0 z-50">
+       <div className="w-10 h-10 mb-2 sm:mb-0 overflow-hidden">
+         <Image
+           src={currentTrack?.imageUrl || "/default-image.jpg"}
+           alt="Track Image"
+           width={80}
+           height={80}
+           className="rounded-md w-full h-full object-cover"
+         />
+       </div>
 
-        <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {currentTrack?.duration || "0:00"}
-        </p>
-        <div className="flex flex-row mt-2 ">
-          <IoVolumeMediumSharp size={24} color="white" className="" />
-          <div className="flex flex-row mx-20 ">
-            <FaHeart
-              onClick={handleLikeClick}
-              size={24}
-              color={currentTrack.liked ? "red" : "white"}
-              className="cursor-pointer mx-2"
-            />
-            <IoAddSharp
-              size={24}
-              color="white"
-              className="cursor-pointer mx-2"
-            />
-            <button className="bg-yellow-500 rounded-full p-1 mx-2">
-              <GoDownload size={20} color="black" />
-            </button>
-            <FiShoppingCart
-              size={24}
-              color="white"
-              className="cursor-pointer mx-2"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+       <div className="flex flex-row items-center flex-1 space-x-4">
+         <div className="text-left ">
+           <PlayerLabel
+             title={currentTrack?.name || "Unknown Track"}
+             artists={currentTrack?.artists || ""}
+           />
+         </div>
+
+         <PlayerButtons
+           isPlaying={isPlaying}
+           selectedMusicIndex={selectedMusicIndex}
+           handlePlayPause={handlePlayPause}
+           data={data}
+         />
+
+         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
+           {formatTime(currentTime) || "0:00"}
+         </p>
+         
+         <WaveComp
+           seekPercentage={seekPercentage}
+           ref={waveformRef}
+           handleClick={handleSeek}
+         />
+
+         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
+           {currentTrack?.duration || "0:00"}
+         </p>
+
+         <div className="flex flex-row items-center mt-2">
+           {/* Render Volume Icon */}
+           {renderVolumeIcon()}
+           
+           <div className="flex flex-row mx-20  ">
+             <FaHeart
+               onClick={handleLikeClick}
+               size={24}
+               color={currentTrack.liked ? "red" : "white"}
+               className="cursor-pointer mx-2"
+             />
+             <IoAddSharp size={24} color="white" className="cursor-pointer mx-2" />
+             <button className="bg-yellow-500 rounded-full p-1 mx-2">
+               <GoDownload size={20} color="black" />
+             </button>
+             <FiShoppingCart size={24} color="white" className="cursor-pointer mx-2" />
+           </div>
+         </div>
+       </div>
+     </div>
+   );
 };
 
 export default MusicPlayer;
