@@ -71,7 +71,7 @@ const MusicPlayer = () => {
     });
 
     ws.on("ready", () => {
-      if (isPlaying) ws.play();  // Play if it's already set to playing
+      if (isPlaying) ws.play(); // Play if it's already set to playing
     });
   };
 
@@ -143,7 +143,7 @@ const MusicPlayer = () => {
   }
 
   return (
-    <div className="w-full bg-black p-2 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 fixed bottom-0 left-0 z-50">
+    <div className="w-full bg-black p-2 flex flex-row items-center justify-between gap-4 fixed bottom-0 left-0 z-50">
       <div className="w-10 h-10 mb-2 sm:mb-0 overflow-hidden">
         <Image
           src={currentTrack?.imageUrl || "/default-image.jpg"}
@@ -154,8 +154,8 @@ const MusicPlayer = () => {
         />
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center flex-1 space-y-2 sm:space-y-0 sm:space-x-4">
-        <div className="text-center sm:text-left flex-1">
+      <div className="flex flex-row items-center flex-1 space-x-4">
+        <div className="text-left ">
           <PlayerLabel
             title={currentTrack?.name || "Unknown Track"}
             artists={currentTrack?.artists || ""}
@@ -172,35 +172,39 @@ const MusicPlayer = () => {
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
           {formatTime(currentTime) || "0:00"}
         </p>
-      </div>
-
-      <WaveComp
-        seekPercentage={seekPercentage}
-        ref={waveformRef}
-        handleClick={handleSeek}
-      />
-
-      <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-        {currentTrack?.duration || "0:00"}
-      </p>
-
-      <div className="flex items-center justify-center space-x-4 mt-2">
-        <IoVolumeMediumSharp size={24} color="white" />
-
-        <FaHeart
-          onClick={handleLikeClick}
-          size={24}
-          color={currentTrack.liked ? "red" : "white"}
-          className="cursor-pointer"
+        <WaveComp
+          seekPercentage={seekPercentage}
+          ref={waveformRef}
+          handleClick={handleSeek}
         />
 
-        <IoAddSharp size={24} color="white" className="cursor-pointer" />
-
-        <button className="bg-yellow-500 rounded-full p-1">
-          <GoDownload size={20} color="black" />
-        </button>
-
-        <FiShoppingCart size={24} color="white" className="cursor-pointer" />
+        <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
+          {currentTrack?.duration || "0:00"}
+        </p>
+        <div className="flex flex-row mt-2 ">
+          <IoVolumeMediumSharp size={24} color="white" className="" />
+          <div className="flex flex-row mx-20 ">
+            <FaHeart
+              onClick={handleLikeClick}
+              size={24}
+              color={currentTrack.liked ? "red" : "white"}
+              className="cursor-pointer mx-2"
+            />
+            <IoAddSharp
+              size={24}
+              color="white"
+              className="cursor-pointer mx-2"
+            />
+            <button className="bg-yellow-500 rounded-full p-1 mx-2">
+              <GoDownload size={20} color="black" />
+            </button>
+            <FiShoppingCart
+              size={24}
+              color="white"
+              className="cursor-pointer mx-2"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
