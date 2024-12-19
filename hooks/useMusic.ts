@@ -10,12 +10,14 @@ interface States {
   volume: number;
   duration: number;
   currentTime: number;
+  
 }
 
 interface Actions {
   setCurrentTrack: (track?: any) => void;
   setCurrentSongIndex: (index: number) => void;
   handleMusicClick: (music: IMusicProps, name: string) => void;
+  setCurrentTime: any;
 }
 
 export const useMusic = create<States & Actions>((set) => ({
@@ -40,10 +42,11 @@ export const useMusic = create<States & Actions>((set) => ({
 
   setCurrentTrack: (track) => set({ currentTrack: track, isPlaying: true }),
   setCurrentSongIndex: (index: number) => set({ currentSongIndex: index }),
+  setCurrentTime: (time:any) => set({ currentTime: time }),
   handleMusicClick: async (music: IMusicProps, name: string) => {
     const url = await generateUrl("/Music", {
-      name: music.name,
-      id: music._id,
+      name: music?.name as string,
+      id: music?._id as string,
       type: name,
     });
     set({ currentTrack: music, isPlaying: true });

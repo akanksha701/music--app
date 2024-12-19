@@ -24,3 +24,8 @@ export interface IPlayerButtonsProps {
   currentTime?:string,
   totalDuration?:number
 }
+export interface IVolumeProps
+{
+  isMuted:boolean;
+  handleClick:()=>void
+}
