@@ -16,9 +16,13 @@ const PlayerButtons = ({
   const dispatch = useDispatch();
 
   const handleMusicClick = async (index: number) => {
-    const newIndex = index < 0 ? data.length - 1 : index % data.length;
-    dispatch(setCurrentTrack(data[newIndex]));
-    dispatch(setCurrentSongIndex(newIndex));
+    if(data)
+    {
+      const newIndex = index < 0 ? data.length - 1 : index % data.length;
+      dispatch(setCurrentTrack(data[newIndex]));
+      dispatch(setCurrentSongIndex(newIndex));
+    }
+   
   };
 
   if (selectedMusicIndex === null) return null;
