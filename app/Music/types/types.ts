@@ -1,4 +1,5 @@
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import WaveSurfer from "wavesurfer.js";
 
 export interface IMusicListProps {
   data: IMusicProps[];
@@ -28,4 +29,10 @@ export interface IVolumeProps
 {
   isMuted:boolean;
   handleClick:()=>void
+}
+
+export interface IWaveProps
+{
+  handleClick?:(e: React.MouseEvent<HTMLDivElement>)=> void ,
+  seekPercentage?:number
 }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { MutableRefObject, useEffect, useRef } from "react";
 import Image from "next/image";
 import PlayerButtons from "./PlayerButtons";
 import PlayerLabel from "./PlayerLabel";
@@ -58,7 +58,7 @@ const MusicPlayer = () => {
   const setupInitialWaveSurfer = (ws: WaveSurfer) => {
     waveSurferRef.current = ws;
     ws.load(currentTrack?.audioUrl as string);
-    ws.setVolume(isMuted ? 0 : volume); 
+    ws.setVolume(isMuted ? 0 : volume);
 
     ws.on("audioprocess", () => {
       const current = ws.getCurrentTime();
@@ -68,11 +68,11 @@ const MusicPlayer = () => {
     });
 
     ws.on("finish", () => {
-      dispatch(setIsPlaying(false)); // Stop music on finish
+      dispatch(setIsPlaying(false)); 
     });
 
     ws.on("ready", () => {
-      if (isPlaying) ws.play(); 
+      if (isPlaying) ws.play();
     });
   };
 
