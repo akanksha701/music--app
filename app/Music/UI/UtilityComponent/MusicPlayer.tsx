@@ -1,5 +1,5 @@
 "use client";
-import React, { MutableRefObject, useEffect, useRef } from "react";
+import React from "react";
 import Image from "next/image";
 import PlayerButtons from "./PlayerButtons";
 import PlayerLabel from "./PlayerLabel";
@@ -12,29 +12,28 @@ import {
   togglePlay,
 } from "@/Redux/features/musicPlayer/musicPlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
-import WaveSurfer from "wavesurfer.js";
-import { formatTime } from "@/hooks/useWaveSurfer";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoAddSharp } from "react-icons/io5";
 import { GoDownload } from "react-icons/go";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { handleLikeToggle } from "@/hooks/useLike";
 import { useToggleLikeMutation } from "@/services/like";
 import useFetchMusicData from "@/app/About/UI/UtilityComponent/useFetchMusicList";
 import { RootState } from "@/Redux/features/musicPlayer/types/types";
 import { useMusic } from "@/hooks/useMusic";
 import VolumeIcon from "./VolumeIcon";
+import useWaveSurfer from "@/hooks/customHooks/useWaveSurfer";
 
 const MusicPlayer = () => {
   const dispatch = useDispatch();
-  const waveformRef = useRef<HTMLDivElement | null>(null);
-  const waveSurferRef = useRef<WaveSurfer | null>(null);
   const { currentTime, setCurrentTime } = useMusic();
   const [toggleLike] = useToggleLikeMutation();
-  const { data, error } = useFetchMusicData();
+  const { data } = useFetchMusicData();
+
   const volume = useSelector<RootState, number>(
     (state) => state?.musicPlayerSlice?.volume
   );
+
   const isMuted = useSelector<RootState, boolean>(
     (state) => state?.musicPlayerSlice?.isMuted
   );
@@ -55,96 +54,62 @@ const MusicPlayer = () => {
     (state) => state.musicPlayerSlice.isPlaying
   );
 
-  const setupInitialWaveSurfer = (ws: WaveSurfer) => {
-    waveSurferRef.current = ws;
-    ws.load(currentTrack?.audioUrl as string);
-    ws.setVolume(isMuted ? 0 : volume);
-
-    ws.on("audioprocess", () => {
-      const current = ws.getCurrentTime();
-      const duration = ws.getDuration();
-      setCurrentTime(current);
-      dispatch(setSeekPercentage((current / duration) * 100));
-    });
-
-    ws.on("finish", () => {
-      dispatch(setIsPlaying(false)); 
-    });
-
-    ws.on("ready", () => {
-      if (isPlaying) ws.play();
-    });
-  };
-
-  useEffect(() => {
-    if (!currentTrack?.audioUrl || !waveformRef.current) return;
-
-    const ws = WaveSurfer.create({
-      container: waveformRef.current,
-      waveColor: "#C0C2C9",
-      progressColor: "#b794f4",
-      cursorColor: "#FFFFFF",
-      barWidth: 3,
-      height: 30,
-    });
-
-    setupInitialWaveSurfer(ws);
-
-    return () => {
-      if (waveSurferRef.current) {
-        waveSurferRef.current.destroy();
-        waveSurferRef.current = null;
-      }
-    };
-  }, [currentTrack?._id]);
+  // Use the custom hook for WaveSurfer
+  const { waveformRef, waveSurfer } = useWaveSurfer(
+    currentTrack?.audioUrl || "",
+    isPlaying,
+    isMuted ? 0 : volume,
+    setCurrentTime,
+    () => dispatch(setSeekPercentage(0)),
+    () => dispatch(setIsPlaying(false)) // Handle finish event
+  );
 
   const handlePlayPause = () => {
-    if (waveSurferRef.current) {
-      const ws = waveSurferRef.current;
+    if (waveSurfer.current) {
       if (isPlaying) {
-        ws.pause();
+        waveSurfer.current.pause();
       } else {
-        ws.play();
+        waveSurfer.current.play();
       }
       dispatch(togglePlay());
     }
   };
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    const waveform = waveformRef.current;
-    if (waveform) {
-      const clickX = e.clientX - waveform.getBoundingClientRect().left;
-      const newSeekPercentage = (clickX / waveform.offsetWidth) * 100;
+    if (waveformRef.current && waveSurfer.current) {
+      const clickX =
+        e.clientX - waveformRef.current.getBoundingClientRect().left;
+      const newSeekPercentage =
+        (clickX / waveformRef.current.offsetWidth) * 100;
       dispatch(setSeekPercentage(newSeekPercentage));
       setCurrentTime(newSeekPercentage);
-      isPlaying
-        ? waveSurferRef?.current?.play()
-        : waveSurferRef?.current?.pause();
+
+      if (isPlaying) {
+        waveSurfer.current.play();
+      }
     }
   };
 
   const handleLikeClick = async () => {
+    // Implement like handling logic here
     if (currentTrack) {
-      if (waveSurferRef.current) {
-        handleLikeToggle(
-          currentTrack?._id as string,
-          TAGS.MUSIC,
-          toggleLike,
-          currentTrack,
-          dispatch
-        );
-        dispatch(setCurrentTime(waveSurferRef?.current?.getCurrentTime()));
-      }
+      handleLikeToggle(
+        currentTrack._id as string,
+        TAGS.MUSIC,
+        toggleLike,
+        currentTrack,
+        dispatch
+      );
+      setCurrentTime(waveSurfer.current?.getCurrentTime());
     }
   };
 
   const toggleMute = () => {
     dispatch(setIsMuted(!isMuted));
-    if (waveSurferRef.current) {
-      waveSurferRef.current.setVolume(isMuted ? volume : 0);
+    if (waveSurfer.current) {
+      waveSurfer.current.setVolume(isMuted ? volume : 0);
     }
   };
-
   if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;
   }
@@ -177,7 +142,7 @@ const MusicPlayer = () => {
         />
 
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {formatTime(currentTime) || "0:00"}
+          {currentTime  || "0:00"}
         </p>
 
         <WaveComp
@@ -192,17 +157,25 @@ const MusicPlayer = () => {
 
         <div className="flex flex-row items-center mt-2">
           <VolumeIcon isMuted={isMuted} handleClick={toggleMute} />
-          <div className="flex flex-row mx-20  ">
-            <FaHeart
-              onClick={handleLikeClick}
-              size={24}
-              color={currentTrack.liked ? "red" : "white"}
-              className="cursor-pointer mx-2"
-            />
+          <div className="flex flex-row mx-20 ">
+            {currentTrack.liked ? (
+              <FaHeart
+                size={24}
+                onClick={handleLikeClick}
+                className="text-red-500 cursor-pointer mx-2 transition-colors duration-300"
+              />
+            ) : (
+              <FaRegHeart
+                size={24}
+                onClick={handleLikeClick}
+                className="text-white cursor-pointer mx-2 transition-colors duration-300"
+              />
+            )}
+
             <IoAddSharp
               size={24}
               color="white"
-              className="cursor-pointer mx-2"
+              className="cursor-pointer mx-2 text-gray-500 "
             />
             <button className="bg-yellow-500 rounded-full p-1 mx-2">
               <GoDownload size={20} color="black" />

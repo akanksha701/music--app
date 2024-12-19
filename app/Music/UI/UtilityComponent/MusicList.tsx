@@ -1,140 +1,69 @@
-import React from "react";
-import Image from "next/image";
+import React, { useRef } from "react";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 import { IMusicListProps } from "../../types/types";
-import PlayerButtons from "./PlayerButtons";
 import PlayerLabel from "./PlayerLabel";
-import { IoAddSharp, IoVolumeMediumSharp } from "react-icons/io5";
-import { FaHeart } from "react-icons/fa";
+import { IoAddSharp } from "react-icons/io5";
+import { FaHeart, FaPlay, FaRegHeart } from "react-icons/fa";
 import { GoDownload } from "react-icons/go";
 import { FiShoppingCart } from "react-icons/fi";
-import VolumeIcon from "./VolumeIcon";
-import { formatTime } from "@/hooks/useWaveSurfer";
 import WaveComp from "./WaveComp";
+import WaveSurfer from "wavesurfer.js";
+
 
 const MusicList = ({ data, title }: IMusicListProps) => {
+  // const waveformRef = useRef<HTMLDivElement | null>(null);
+  // const waveSurferRef = useRef<WaveSurfer | null>(null);
+  
   const renderedTracks =
     data && data.length > 0 ? (
-      data.map((track: IMusicProps,index:number) => (
-        <div key={index} className="w-full bg-black p-2 flex flex-row items-center justify-between gap-4  left-0">
-          <div className="w-10 h-10 mb-2 sm:mb-0 overflow-hidden">
-            <Image
-              src={track?.imageUrl || "/default-image.jpg"}
-              alt="Track Image"
-              width={80}
-              height={80}
-              className="rounded-md w-full h-full object-cover"
-            />
-          </div>
-
-          <div className="flex flex-row items-center flex-1 space-x-4">
-            <div className="text-left ">
+      data.map((track: IMusicProps, index: number) => (
+        <div key={index} className="w-full p-2 flex flex-row items-center">
+          <div className="flex flex-row items-center flex-1">
+            <button className="border border-white rounded-full p-2 mx-2 my-2">
+              <FaPlay size={12} color="white" />
+            </button>
+            <div className="text-left flex-1">
               <PlayerLabel
                 title={track?.name || "Unknown Track"}
                 artists={track?.artists || ""}
               />
             </div>
-
-            <PlayerButtons
-              isPlaying={false}
-              selectedMusicIndex={1}
-              handlePlayPause={() => {}}
-              data={data}
-            />
-
-            <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-              {formatTime(0) || "0:00"}
+            {/* <WaveComp
+              ref={waveformRef}
+            /> */}
+            <p className="text-xs text-slate-600 bg-transparent rounded-md my-2 ml-4 mx-5">
+              {track?.duration || "0:00"}
             </p>
 
-            <WaveComp
-              seekPercentage={1}
-              ref={null}
-              handleClick={()=>{}}
+            {track?.liked ? (
+              <FaHeart className="text-red-500 transition-colors duration-300" />
+            ) : (
+              <FaRegHeart className="text-red-500 transition-colors duration-300" />
+            )}
+            <IoAddSharp
+              size={16}
+              color="white"
+              className="cursor-pointer mx-2"
             />
-
-            <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-              {formatTime(0) || "0:00"}
-            </p>
-
-            <div className="flex flex-row items-center mt-2">
-              <VolumeIcon isMuted={false} handleClick={()=> {}} />
-              <div className="flex flex-row mx-20  ">
-                <FaHeart
-                  // onClick={handleLikeClick}
-                  size={15}
-                  color={track.liked ? "red" : "white"}
-                  className="cursor-pointer"
-                />
-
-                <IoAddSharp
-                  size={24}
-                  color="white"
-                  className="cursor-pointer mx-2"
-                />
-                <button className="bg-yellow-500 rounded-full p-1 mx-2">
-                  <GoDownload size={20} color="black" />
-                </button>
-                <FiShoppingCart
-                  size={15}
-                  color="white"
-                  className="cursor-pointer"
-                />
-              </div>
-            </div>
+            <button className="bg-yellow-500 rounded-full p-1 mx-2">
+              <GoDownload size={20} color="black" />
+            </button>
+            <FiShoppingCart
+              size={16}
+              color="white"
+              className="cursor-pointer mx-2"
+            />
           </div>
         </div>
-        // <div
-        //   key={track._id}
-        //   className="w-full bg-black p-2 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 gap-4 left-0"
-        // >
-        //   <div className="w-10 h-10 mb-2 sm:mb-0 overflow-hidden">
-        //     <Image
-        //       src={track?.imageUrl || "/default-image.jpg"}
-        //       alt="Track Image"
-        //       width={80}
-        //       height={80}
-        //       className="rounded-md w-full h-full object-cover"
-        //     />
-        //   </div>
-        //   <div className="flex flex-col sm:flex-row items-center flex-1 space-y-2 sm:space-y-0 sm:space-x-4">
-        //     <div className="text-center sm:text-left flex-1">
-        //       <PlayerLabel
-        //         title={track?.name || "Unknown Track"}
-        //         artists={track?.artists || ""}
-        //       />
-        //     </div>
-        //     <div className="flex items-center justify-center space-x-4 mt-2 mx-4">
-        //       <IoVolumeMediumSharp size={15} color="white" />
-
-        //       <FaHeart
-        //         // onClick={handleLikeClick}
-        //         size={15}
-        //         color={track.liked ? "red" : "white"}
-        //         className="cursor-pointer"
-        //       />
-
-        //       <IoAddSharp size={15} color="white" className="cursor-pointer" />
-
-        //       <button className="bg-yellow-500 rounded-full p-1">
-        //         <GoDownload size={15} color="black" />
-        //       </button>
-
-        //       <FiShoppingCart
-        //         size={15}
-        //         color="white"
-        //         className="cursor-pointer"
-        //       />
-        //     </div>
-        //   </div>
-        // </div>
       ))
     ) : (
       <p className="text-gray-400">No other data available</p>
     );
 
   return (
-    <div>
-      <h3 className="text-purple-400 text-xl font-semibold">{title}</h3>
+    <div className=" bg-black ">
+      <h3 className="text-white text-2xl font-semibold  mx-2 p-5">{title}</h3>
+      <hr className="w-full p-2 border-gray-600" />
       {renderedTracks}
     </div>
   );
