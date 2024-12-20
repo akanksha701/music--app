@@ -41,9 +41,6 @@ const musicPlayerSlice = createSlice({
     togglePlay(state) {
       state.isPlaying = !state.isPlaying;
     },
-    setCurrentTime(state, action: PayloadAction<number>) {
-      state.currentTime = action.payload;
-    },
     setDuration(state, action: PayloadAction<number>) {
       state.duration = action.payload;
     },
@@ -65,7 +62,6 @@ export const {
   setCurrentSongIndex,
   setVolume,
   togglePlay,
-  setCurrentTime,
   setDuration,
   setSeekPercentage,
   setIsPlaying,

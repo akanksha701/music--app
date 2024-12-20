@@ -4,24 +4,36 @@ import React, { useRef } from "react";
 import { Card, CardBody } from "@nextui-org/react";
 import { IMusicPlayCardProps, IMusicProps } from "../../types/types";
 import { FaEllipsisH, FaHeart, FaRegHeart, FaPlay } from "react-icons/fa"; // Import play icon
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCurrentSongIndex, setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust the path as necessary
 import { redirect } from "next/navigation";
 import { generateUrl } from "@/utils/helpers";
 import WaveSurfer from "wavesurfer.js";
+import { RootState } from "@/Redux/store";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
   
   const dispatch = useDispatch();
   
+  // const handleMusicClick = async (index: number, music: IMusicProps) => {
+  //   dispatch(setCurrentTrack(data[index])); 
+  //   dispatch(setCurrentSongIndex(index));
+  //   const newUrl = await generateUrl('/Music', { type: name });
+  //   redirect(newUrl);
+  // };
+  const currentTrack = useSelector<RootState, IMusicProps | null>((state) => state.musicPlayerSlice.currentTrack); // Get current track from Redux state
   const handleMusicClick = async (index: number, music: IMusicProps) => {
-    dispatch(setCurrentTrack(data[index])); 
-    dispatch(setCurrentSongIndex(index));
+    if (!currentTrack || currentTrack._id !== music._id) {
+      dispatch(setCurrentTrack(data[index])); 
+      dispatch(setCurrentSongIndex(index));
+      
+    }
     const newUrl = await generateUrl('/Music', { type: name });
     redirect(newUrl);
+
   };
- 
+  
   return (
     <div className="p-4 sm:p-6 md:p-10">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">

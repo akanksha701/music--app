@@ -6,14 +6,11 @@ import { IoAddSharp } from "react-icons/io5";
 import { FaHeart, FaPlay, FaRegHeart } from "react-icons/fa";
 import { GoDownload } from "react-icons/go";
 import { FiShoppingCart } from "react-icons/fi";
+import useWaveSurfer from "@/hooks/customHooks/useWaveSurfer";
 import WaveComp from "./WaveComp";
-import WaveSurfer from "wavesurfer.js";
-
 
 const MusicList = ({ data, title }: IMusicListProps) => {
-  // const waveformRef = useRef<HTMLDivElement | null>(null);
-  // const waveSurferRef = useRef<WaveSurfer | null>(null);
-  
+  const { waveformRef } = useWaveSurfer();
   const renderedTracks =
     data && data.length > 0 ? (
       data.map((track: IMusicProps, index: number) => (
@@ -28,9 +25,10 @@ const MusicList = ({ data, title }: IMusicListProps) => {
                 artists={track?.artists || ""}
               />
             </div>
-            {/* <WaveComp
+            <div
               ref={waveformRef}
-            /> */}
+              className="cursor-pointer mx-4 rounded-lg w-1/2 h-50"
+            ></div>
             <p className="text-xs text-slate-600 bg-transparent rounded-md my-2 ml-4 mx-5">
               {track?.duration || "0:00"}
             </p>
@@ -61,11 +59,14 @@ const MusicList = ({ data, title }: IMusicListProps) => {
     );
 
   return (
-    <div className=" bg-black ">
-      <h3 className="text-white text-2xl font-semibold  mx-2 p-5">{title}</h3>
-      <hr className="w-full p-2 border-gray-600" />
-      {renderedTracks}
-    </div>
+    <>
+      <div className=" bg-black ">
+        <h3 className="text-white text-2xl font-semibold  mx-2 p-5">{title}</h3>
+        <hr className="w-full p-2 border-gray-600" />
+        {/* <WaveComp     ref={waveformRef}/> */}
+        {renderedTracks}
+      </div>
+    </>
   );
 };
 

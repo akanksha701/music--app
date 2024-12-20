@@ -55,14 +55,7 @@ const MusicPlayer = () => {
   );
 
   // Use the custom hook for WaveSurfer
-  const { waveformRef, waveSurfer } = useWaveSurfer(
-    currentTrack?.audioUrl || "",
-    isPlaying,
-    isMuted ? 0 : volume,
-    setCurrentTime,
-    () => dispatch(setSeekPercentage(0)),
-    () => dispatch(setIsPlaying(false)) // Handle finish event
-  );
+  const { waveformRef, waveSurfer } = useWaveSurfer();
 
   const handlePlayPause = () => {
     if (waveSurfer.current) {
@@ -142,15 +135,14 @@ const MusicPlayer = () => {
         />
 
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {currentTime  || "0:00"}
+          {currentTime || "0:00"}
         </p>
 
         <WaveComp
-          seekPercentage={seekPercentage}
+          // seekPercentage={seekPercentage}
           ref={waveformRef}
-          handleClick={handleSeek}
+          // handleClick={handleSeek}
         />
-
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
           {currentTrack?.duration || "0:00"}
         </p>
