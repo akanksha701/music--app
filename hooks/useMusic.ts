@@ -47,7 +47,7 @@ export const useMusic = create<States & Actions>((set) => ({
 
   setCurrentTrack: (track) => set({ currentTrack: track, isPlaying: true }),
   setCurrentSongIndex: (index: number) => set({ currentSongIndex: index }),
-  setCurrentTime: (time:any) => set({ currentTime: formatTime(time) }),
+  setCurrentTime: (time:any) => set({ currentTime: time }),
   handleMusicClick: async (music: IMusicProps, name: string) => {
     const url = await generateUrl("/Music", {
       name: music?.name as string,

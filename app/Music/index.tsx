@@ -2,11 +2,12 @@
 import React from "react";
 import useFetchMusicData from "@/app/About/UI/UtilityComponent/useFetchMusicList";
 import MusicList from "./UI/UtilityComponent/MusicList";
+import MusicListContainer from "./UI/UtilityComponent/MusicListContainer";
 
 const Index = () => {
-  const { data, name } = useFetchMusicData();
+ 
 
-  return <MusicList data={data?.slice(0,3)} title={name} />;
+  return <MusicListContainer />;
 };
 
 export default Index;

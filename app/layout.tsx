@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import { NextUIProvider, Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@nextui-org/react";
 import { Toaster } from "react-hot-toast";
 import ReduxProvider from "@/Redux/storeProvider";
 import NavbarPage from "./Navbar/index";
@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import Loading from "./loading";
 import Modal from "@/common/modal/modal";
 import MusicPlayer from "./Music/UI/UtilityComponent/MusicPlayer";
+import MusicPlayerContainer from "./Music/UI/UtilityComponent/MusicPlayerContainer";
 
 export default async function RootLayout({
   children,
@@ -30,7 +31,7 @@ export default async function RootLayout({
             <Suspense fallback={<Loading />}>
               <NavbarPage />
               <main className="flex-grow">{children}</main>
-              <MusicPlayer />
+              <MusicPlayerContainer />
               <Footer data={data?.footerContent} />
             </Suspense>
           </body>

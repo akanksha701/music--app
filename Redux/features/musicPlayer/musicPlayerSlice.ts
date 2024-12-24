@@ -2,8 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 import { IMusicState } from "./types/types";
 
-const initialState: IMusicState = {
+const initialState: any = {
   selectedMusicIndex: -1,
+  currentList:null,
   currentTrack: {
     _id: "",
     name: "",
@@ -29,6 +30,10 @@ const musicPlayerSlice = createSlice({
   name: "music",
   initialState,
   reducers: {
+    setCurrentList(state, action: PayloadAction<any | any>) {
+      state.currentList = action.payload || initialState.currentList;
+    },
+   
     setCurrentTrack(state, action: PayloadAction<IMusicProps | undefined>) {
       state.currentTrack = action.payload || initialState.currentTrack;
     },
@@ -58,6 +63,7 @@ const musicPlayerSlice = createSlice({
 });
 
 export const {
+  setCurrentList,
   setCurrentTrack,
   setCurrentSongIndex,
   setVolume,
@@ -65,7 +71,7 @@ export const {
   setDuration,
   setSeekPercentage,
   setIsPlaying,
-  setIsMuted
+  setIsMuted,
 } = musicPlayerSlice.actions;
 
 export default musicPlayerSlice.reducer;

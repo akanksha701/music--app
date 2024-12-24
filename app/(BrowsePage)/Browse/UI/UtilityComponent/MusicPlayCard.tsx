@@ -5,35 +5,37 @@ import { Card, CardBody } from "@nextui-org/react";
 import { IMusicPlayCardProps, IMusicProps } from "../../types/types";
 import { FaEllipsisH, FaHeart, FaRegHeart, FaPlay } from "react-icons/fa"; // Import play icon
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentSongIndex, setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust the path as necessary
+import {
+  setCurrentList,
+  setCurrentSongIndex,
+  setCurrentTrack,
+} from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust the path as necessary
 import { redirect } from "next/navigation";
 import { generateUrl } from "@/utils/helpers";
 import WaveSurfer from "wavesurfer.js";
 import { RootState } from "@/Redux/store";
+import { useMusic } from "@/hooks/useMusic";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
-  
+  const { setCurrentTime } = useMusic();
   const dispatch = useDispatch();
-  
-  // const handleMusicClick = async (index: number, music: IMusicProps) => {
-  //   dispatch(setCurrentTrack(data[index])); 
-  //   dispatch(setCurrentSongIndex(index));
-  //   const newUrl = await generateUrl('/Music', { type: name });
-  //   redirect(newUrl);
-  // };
-  const currentTrack = useSelector<RootState, IMusicProps | null>((state) => state.musicPlayerSlice.currentTrack); // Get current track from Redux state
-  const handleMusicClick = async (index: number, music: IMusicProps) => {
-    if (!currentTrack || currentTrack._id !== music._id) {
-      dispatch(setCurrentTrack(data[index])); 
-      dispatch(setCurrentSongIndex(index));
-      
-    }
-    const newUrl = await generateUrl('/Music', { type: name });
-    redirect(newUrl);
 
+  const currentTrack = useSelector<RootState, IMusicProps | null>(
+    (state) => state.musicPlayerSlice.currentTrack
+  );
+  const handleMusicClick = async (index: number, music: IMusicProps) => {
+    dispatch(setCurrentList(data));
+    if (!currentTrack || currentTrack._id !== music._id) {
+      // setCurrentTime(0);
+      // dispatch(setCurrentTrack({}));
+      dispatch(setCurrentTrack(data[index]));
+      dispatch(setCurrentSongIndex(index));
+    }
+    const newUrl = await generateUrl("/Music", { type: name });
+    redirect(newUrl);
   };
-  
+
   return (
     <div className="p-4 sm:p-6 md:p-10">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
@@ -49,10 +51,10 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                   alt={item.name as string}
                   src={item.imageUrl as string}
                   fill
-                  onClick={() => handleMusicClick(index,item)} 
+                  onClick={() => handleMusicClick(index, item)}
                   className="rounded-lg border-2  shadow-md object-cover"
                 />
-             
+
                 <FaPlay className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
 
