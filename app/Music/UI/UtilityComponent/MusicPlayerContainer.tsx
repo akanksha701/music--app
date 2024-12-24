@@ -51,8 +51,8 @@ const MusicPlayerContainer = () => {
           wavesurferRef.current = WaveSurfer.create({
             container: waveformElement,
             height: 33,
-            waveColor: "#716F6B",
-            progressColor: "#F6A400",
+            waveColor: "#0f172a",
+            progressColor: "#9333ea",
             barWidth: 3,
             barGap: 2,
             barRadius: 2,

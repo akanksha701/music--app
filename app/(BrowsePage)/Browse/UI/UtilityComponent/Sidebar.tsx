@@ -62,7 +62,7 @@ const Sidebar = () => {
           );
         })}
       </div>
-      <Button className="border-1  border-purple-400 text-purple-400 rounded-full hover:bg-purple-600 hover:text-white">
+      <Button className="border-1  border-electric-purple text-electric-purple rounded-full hover:bg-electric-purple hover:text-white">
         <GoPlus size={50} /> New PlayList
       </Button>
     </div>

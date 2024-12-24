@@ -74,7 +74,7 @@ const MusicList = ({
               color="white"
               className="cursor-pointer mx-2"
             />
-            <button className="bg-yellow-500 rounded-full p-1 mx-2">
+            <button className="bg-vivid-orange rounded-full p-1 mx-2">
               <GoDownload size={20} color="black" />
             </button>
             <FiShoppingCart

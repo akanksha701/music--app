@@ -9,22 +9,29 @@ import Footer from "./Footer/Footer";
 import { Suspense } from "react";
 import Loading from "./loading";
 import Modal from "@/common/modal/modal";
-import MusicPlayer from "./Music/UI/UtilityComponent/MusicPlayer";
 import MusicPlayerContainer from "./Music/UI/UtilityComponent/MusicPlayerContainer";
+import { Nunito } from 'next/font/google'
+
+// Load Nunito font
+const nunito = Nunito({
+  subsets: ['latin'],
+  weight: ['300', '400', '600', '700'], // Define the weights you need
+});
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch marketing data (example of fetching data)
   const res = await fetch("http://localhost:3000/api/marketing");
   const data = await res.json();
-  
+
   return (
     <ClerkProvider>
       <ReduxProvider>
         <html lang="en">
-          <body className="min-h-screen flex flex-col">
+          <body className={`${nunito.className} min-h-screen flex flex-col`}>
             <Toaster position="top-center" />
             <Tooltip />
             <Modal />

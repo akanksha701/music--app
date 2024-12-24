@@ -11,6 +11,10 @@ module.exports = {
   theme: {
   	extend: {
   		colors: {
+			'vivid-violet': '#9333ea',
+			'electric-purple': '#5a17dd',
+			'vivid-orange': '#f98f03',
+			'gunmetal': '#0f172a',
   			primary: {
   				purple: '#9333ea'
   			},
