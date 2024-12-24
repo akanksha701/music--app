@@ -35,7 +35,7 @@ const Index = () => {
       <HeadLine title="Top Hits" subTitle="2024" />
       <hr className="w-full p-2 border-gray-600" />
       <MusicPlayCard
-        data={topHits?.data?.slice(0,8)}
+        data={topHits?.data}
         name={TAGS.MUSIC}
         handleLikeToggle={(itemId) =>handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
       />

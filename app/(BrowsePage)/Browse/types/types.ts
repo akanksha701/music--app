@@ -1,16 +1,15 @@
-
 export const TAGS = {
   MUSIC: "Musics",
-  NEW_RELEASE: "NewReleases",
-  TOP_HITS: "TopHits",
+  NEW_RELEASE: "New Releases",
+  TOP_HITS: "Top Hits",
   ALBUMS: "Albums",
-  TOP_ALBUMS: "TopAlbums",
+  TOP_ALBUMS: "Top Albums",
   GENRE: "Genres",
 } as const;
 
 export const LIST_NAME = {
   MUSIC: "New Musics",
-  NEW_RELEASE: "New New Releases",
+  NEW_RELEASE: "New Releases",
   TOP_HITS: "Top Hits",
   ALBUMS: "Albums",
   TOP_ALBUMS: "Top Albums",
@@ -28,7 +27,7 @@ export interface IMusicProps {
   imageUrl?: string;
   price?: number;
   liked?: boolean;
-  duration?:number
+  duration?: number;
 }
 export interface IBoxTypes {
   data: Array<{ _id: string; name: string; imageUrl: string; liked: boolean }>;

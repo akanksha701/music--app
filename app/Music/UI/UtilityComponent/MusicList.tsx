@@ -1,18 +1,28 @@
-'use client'
-import React, { useRef, useEffect } from "react";
-import WaveSurfer from "wavesurfer.js"; // Import WaveSurfer.js
+"use client";
+import React from "react";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
-import { IMusicListProps } from "../../types/types";
 import PlayerLabel from "./PlayerLabel";
 import { IoAddSharp } from "react-icons/io5";
-import { FaHeart, FaPlay, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaPause, FaPlay, FaRegHeart } from "react-icons/fa";
 import { GoDownload } from "react-icons/go";
 import { FiShoppingCart } from "react-icons/fi";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentSongIndex } from "@/Redux/features/musicPlayer/musicPlayerSlice";
+import { useSearchParams } from "next/navigation";
 
-const MusicList = ({ data, title }: any) => {
-  const currentTrackId = useSelector<any, string | null>((state) => state.musicPlayerSlice.currentTrack?._id); // Get the current track ID
+const MusicList = ({
+  data,
+  handleLikeClick,
+  handlePlayTrack,
+}: {
+  data: IMusicProps[];
+  handleLikeClick: () => void;
+  handlePlayTrack: (track: IMusicProps) => void;
+}) => {
+  const searchParams = useSearchParams();
+  const listName = searchParams.get("type");
+  const currentTrackId = useSelector<any, string | null>(
+    (state) => state.musicPlayerSlice.currentTrack?._id
+  );
 
   const renderedTracks =
     data && data.length > 0 ? (
@@ -21,12 +31,12 @@ const MusicList = ({ data, title }: any) => {
           <div className="flex flex-row items-center flex-1">
             <button
               className="border border-white rounded-full p-2 mx-2 my-2"
-              // onClick={() => handlePlayTrack(track._id)} // Play the selected track
+              onClick={() => handlePlayTrack(track)}
             >
               {currentTrackId === track._id ? (
-                <FaPlay size={12} color="white" />
+                <FaPause size={12} color="white" />
               ) : (
-                <FaPlay size={12} color="gray" />
+                < FaPlay size={12} color="gray" />
               )}
             </button>
 
@@ -48,12 +58,22 @@ const MusicList = ({ data, title }: any) => {
             </p>
 
             {track?.liked ? (
-              <FaHeart className="text-red-500 transition-colors duration-300" />
+              <FaHeart
+                className="text-red-500 transition-colors duration-300"
+                onClick={handleLikeClick}
+              />
             ) : (
-              <FaRegHeart className="text-red-500 transition-colors duration-300" />
+              <FaRegHeart
+                className="text-red-500 transition-colors duration-300"
+                onClick={handleLikeClick}
+              />
             )}
 
-            <IoAddSharp size={16} color="white" className="cursor-pointer mx-2" />
+            <IoAddSharp
+              size={16}
+              color="white"
+              className="cursor-pointer mx-2"
+            />
             <button className="bg-yellow-500 rounded-full p-1 mx-2">
               <GoDownload size={20} color="black" />
             </button>
@@ -72,7 +92,9 @@ const MusicList = ({ data, title }: any) => {
   return (
     <>
       <div className="bg-black">
-        <h3 className="text-white text-2xl font-semibold mx-2 p-5">{title}</h3>
+        <h3 className="text-white text-2xl font-semibold mx-2 p-5">
+          {listName}
+        </h3>
         <hr className="w-full p-2 border-gray-600" />
         {renderedTracks}
       </div>

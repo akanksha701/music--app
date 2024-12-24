@@ -1,5 +1,4 @@
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
-import WaveSurfer from "wavesurfer.js";
 
 export interface IMusicListProps {
   data: IMusicProps[];
@@ -7,32 +6,34 @@ export interface IMusicListProps {
 }
 export interface IMusicPlayerProps {
   currentTrack: IMusicProps;
-  isPlaying: boolean;
-  currentSongIndex: number;
-  volume: number;
-  currentTime: number | string;
+  isMuted: boolean;
+  handleLikeClick: () => void;
+  onMuteToggle: () => void;
+  currentTime: string;
   seekPercentage: number;
-  togglePlayPause: () => void;
-  handleTimeSeek: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  ref: React.RefObject<HTMLDivElement>;
+  isPlaying: boolean;
+  allSongs: IMusicProps[];
+  handlePlayPause: () => void;
+  onNextSong: () => void;
+  onPreviousSong: () => void;
+  volume: number;
+  handlePlayTrack: (track: IMusicProps) => void;
 }
 
 export interface IPlayerButtonsProps {
   isPlaying: boolean;
   selectedMusicIndex: number;
   data: Array<IMusicProps>;
-  handlePlayPause:() => void;
-  currentTime?:string,
-  totalDuration?:number
+  handlePlayPause: () => void;
+  currentTime?: string;
+  totalDuration?: number;
 }
-export interface IVolumeProps
-{
-  isMuted:boolean;
-  handleClick:()=>void
+export interface IVolumeProps {
+  isMuted: boolean;
+  handleClick: () => void;
 }
 
-export interface IWaveProps
-{
-  handleClick?:(e: React.MouseEvent<HTMLDivElement>)=> void ,
-  seekPercentage?:number
+export interface IWaveProps {
+  handleClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  seekPercentage?: number;
 }

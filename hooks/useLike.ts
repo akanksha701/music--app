@@ -39,7 +39,6 @@ export const handleLikeToggle = async (
   dispatch?: Function
 ) => {
   try {
-    console.log(currentTrack,id,name)
     const { toggleLocalLike } = useLike.getState();
     toggleLocalLike(id);
     await toggleLike({ id, name }).unwrap();

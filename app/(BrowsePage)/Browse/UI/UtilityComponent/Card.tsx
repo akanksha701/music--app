@@ -1,8 +1,13 @@
 import React, { useMemo } from "react";
 import { Card, CardBody } from "@nextui-org/react";
 import Image from "next/image";
-import { IBoxTypes } from "../../types/types";
+import { IBoxTypes, IMusicProps } from "../../types/types";
 import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice";
+import { RootState } from "@/Redux/store";
+import { generateUrl } from "@/utils/helpers";
+import { redirect } from "next/navigation";
 
 const Box = ({
   data,
@@ -13,6 +18,20 @@ const Box = ({
   message,
   handleLikeToggle,
 }: IBoxTypes) => {
+  const dispatch = useDispatch();
+  const currentTrack = useSelector<RootState, IMusicProps | null>(
+    (state) => state.musicPlayerSlice.currentTrack
+  );
+  
+  const handleMusicClick = async (index: number, music: IMusicProps) => {
+    dispatch(setCurrentList(data));
+    if (!currentTrack || currentTrack._id !== music._id) {
+      dispatch(setCurrentTrack(data[index]));
+      dispatch(setCurrentSongIndex(index));
+    }
+    const newUrl = await generateUrl("/Music", { type: name });
+    redirect(newUrl);
+  };
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>

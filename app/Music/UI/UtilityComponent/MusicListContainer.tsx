@@ -6,9 +6,13 @@ import WaveSurfer from "wavesurfer.js";
 import MusicList from "./MusicList";
 import { RootState } from "@/Redux/store";
 import { useMusic } from "@/hooks/useMusic";
+import { handleLikeToggle } from "@/hooks/useLike";
+import { useToggleLikeMutation } from "@/services/like";
+import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
+  const hasMounted = useRef(false);
   const currentTrack = useSelector<RootState, any | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
@@ -18,6 +22,7 @@ const MusicListContainer = () => {
   const { currentTime, setCurrentTime } = useMusic();
   const wavesurferRefs = useRef<Map<string, any>>(new Map());
   const [waveSurferInstances, setWaveSurferInstances] = useState<any[]>([]);
+  const [toggleLike] = useToggleLikeMutation();
 
   const createWaveSurfers = (songs: any[]) => {
     if (songs && songs.length > 0) {
@@ -96,8 +101,17 @@ const MusicListContainer = () => {
       );
     }
   };
-
-  const hasMounted = useRef(false);
+  const handleLikeClick = async () => {
+    if (currentTrack) {
+      handleLikeToggle(
+        currentTrack._id,
+        TAGS.MUSIC,
+        toggleLike,
+        currentTrack,
+        dispatch
+      );
+    }
+  };
 
   useEffect(() => {
     if (!hasMounted.current) {
@@ -112,13 +126,20 @@ const MusicListContainer = () => {
     }
   }, [currentTrack, allSongs]);
 
+  const handlePlayTrack = (track: IMusicProps) =>
+    dispatch(setCurrentTrack(track));
+
   if (!allSongs) {
     return null;
   }
 
   return (
     <div>
-      <MusicList data={allSongs} title={"Top hits"} />
+      <MusicList
+        data={allSongs}
+        handlePlayTrack={handlePlayTrack}
+        handleLikeClick={handleLikeClick}
+      />
     </div>
   );
 };

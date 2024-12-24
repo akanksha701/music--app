@@ -14,21 +14,18 @@ import { redirect } from "next/navigation";
 import { generateUrl } from "@/utils/helpers";
 import WaveSurfer from "wavesurfer.js";
 import { RootState } from "@/Redux/store";
-import { useMusic } from "@/hooks/useMusic";
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
-  const { setCurrentTime } = useMusic();
   const dispatch = useDispatch();
 
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
+
   const handleMusicClick = async (index: number, music: IMusicProps) => {
     dispatch(setCurrentList(data));
     if (!currentTrack || currentTrack._id !== music._id) {
-      // setCurrentTime(0);
-      // dispatch(setCurrentTrack({}));
       dispatch(setCurrentTrack(data[index]));
       dispatch(setCurrentSongIndex(index));
     }
