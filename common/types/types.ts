@@ -1,5 +1,6 @@
 import { UserData } from "@clerk/types";
 import { CloudinaryUploadWidgetResults } from "next-cloudinary";
+import React, { ReactNode } from "react";
 import {
   Control,
   FieldErrors,
@@ -12,6 +13,7 @@ export interface IButtonProps {
   name?: string;
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
+  mode? :  string
 }
 
 export interface IIconProps {
@@ -72,7 +74,7 @@ export interface ISelectProps<T extends FieldValues> {
   control: any;
   name: Path<T>;
   label?: string;
-  items: Array<{ id: string; name: string }>; // Define the structure of items
+  items: Array<{ id: string; name: string, imageUrl?: string }>; // Define the structure of items
   rules?: object;
   error?: any;
   id?: string;
@@ -140,4 +142,12 @@ export interface ITableProps {
   paginationData?: IPagination;
   page: number;
   setPage: (page: number) => void;
+}
+export interface IGridrops {
+  columns: IColumn[];
+  data: Record<string, any>[];
+  handleEdit?: any; 
+  label : string
+  moreBox: ReactNode;
+  addBox:ReactNode
 }
