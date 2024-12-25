@@ -6,7 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import { CalendarDate } from "@internationalized/date";
 import cloudinary from "cloudinary";
 import queryString from "query-string";
-import fs from "fs";
+import fs from "fs";  
 
 export interface IAudioTypes {
   audioDestination: string;
@@ -158,9 +158,13 @@ export const saveFiles = async (file: Blob, folderName: string) => {
 
     try {
       await fs.promises.writeFile(filePath, buffer);
-      console.log("File saved to:", filePath);
-
-      return filePath.split("public")[1];
+      console.log("File saved to:", filePath.split("public")[1]);
+      let relativePath = filePath.split("public")[1];
+      // Added for windows
+      if (process.platform === "win32") {
+        relativePath = relativePath.replace(/\\/g, "/");
+      }
+      return relativePath;
     } catch (err) {
       console.error("Error saving the file:", err);
       return null;
