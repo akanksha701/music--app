@@ -80,11 +80,11 @@ const MusicListContainer = () => {
     song: any,
     wavesTime: number
   ) => {
-    if (currentTrack?.id !== song?.song_url?.id) {
+    if (currentTrack?._id !== song?._id) {
       dispatch(
         setCurrentTrack({
           ...currentTrack,
-          id: song?.song_url?.id,
+          _id: song?._id,
           isPlaying: true,
           seekTo: wavesTime,
         })
