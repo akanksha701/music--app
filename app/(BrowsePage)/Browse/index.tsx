@@ -1,20 +1,20 @@
-"use client";
-import { useUser } from "@clerk/nextjs";
-import Loading from "@/app/loading";
-import HeadLine from "./UI/UtilityComponent/HeadLine";
-import MusicPlayCard from "./UI/UtilityComponent/MusicPlayCard";
-import Box from "./UI/UtilityComponent/Card";
+'use client';
+import { useUser } from '@clerk/nextjs';
+import Loading from '@/app/loading';
+import HeadLine from './UI/UtilityComponent/HeadLine';
+import MusicPlayCard from './UI/UtilityComponent/MusicPlayCard';
+import Box from './UI/UtilityComponent/Card';
 import {
   useGetAllMusicsQuery,
   useGetTopAlbumsQuery,
   useGetTopGenreQuery,
   useGetTopHitsMusicsQuery,
   useToggleLikeMutation,
-} from "@/services/like";
-import { handleLikeToggle } from "@/hooks/useLike";
-import { IMusicProps, TAGS } from "./types/types";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/Redux/features/musicPlayer/types/types";
+} from '@/services/like';
+import { handleLikeToggle } from '@/hooks/useLike';
+import { IMusicProps, TAGS } from './types/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/Redux/features/musicPlayer/types/types';
 
 const Index = () => {
   const { user } = useUser();

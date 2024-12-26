@@ -1,15 +1,15 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import React from "react";
-import { IAddLanguageProps } from "../../types/types";
-import NextInput from "@/common/inputs/Input";
-import { useForm } from "react-hook-form";
-import NextTextArea from "@/common/inputs/Textarea";
-import MultiSelect from "@/common/inputs/MultiSelect";
-import FileUploadInput from "@/common/inputs/FileUploadInput";
-import toast from "react-hot-toast";
-import { fetchApi } from "@/utils/helpers";
-import { Method } from "@/app/About/types/types";
+'use client';
+import { Button } from '@/components/ui/button';
+import React from 'react';
+import { IAddLanguageProps } from '../../types/types';
+import NextInput from '@/common/inputs/Input';
+import { useForm } from 'react-hook-form';
+import NextTextArea from '@/common/inputs/Textarea';
+import MultiSelect from '@/common/inputs/MultiSelect';
+import FileUploadInput from '@/common/inputs/FileUploadInput';
+import toast from 'react-hot-toast';
+import { fetchApi } from '@/utils/helpers';
+import { Method } from '@/app/About/types/types';
 
 const AddLanguage = (props: IAddLanguageProps) => {
   const {
@@ -21,12 +21,12 @@ const AddLanguage = (props: IAddLanguageProps) => {
 
   const onSubmit = async (data: any) => {
     try {
-      const res = await fetchApi("/api/language", Method.POST, data);
+      const res = await fetchApi('/api/language', Method.POST, data);
       if (res.status === 200) {
         toast.success(res.message);
       }
     } catch (error) {
-      toast.error("Error while creating language");
+      toast.error('Error while creating language');
     }
   };
 
@@ -44,7 +44,7 @@ const AddLanguage = (props: IAddLanguageProps) => {
               label="Name"
               placeholder="Enter your name"
               register={register}
-              options={{ required: "Name is required" }}
+              options={{ required: 'Name is required' }}
               errors={errors}
             />
           </div>
@@ -57,7 +57,7 @@ const AddLanguage = (props: IAddLanguageProps) => {
               label="Description"
               placeholder="Enter music description"
               register={register}
-              options={{ required: "Description is required" }}
+              options={{ required: 'Description is required' }}
               errors={errors}
             />
           </div>

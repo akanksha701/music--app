@@ -1,19 +1,19 @@
-"use client";
-import Image from "next/image";
-import React, { useRef } from "react";
-import { Card, CardBody } from "@nextui-org/react";
-import { IMusicPlayCardProps, IMusicProps } from "../../types/types";
-import { FaEllipsisH, FaHeart, FaRegHeart, FaPlay } from "react-icons/fa"; // Import play icon
-import { useDispatch, useSelector } from "react-redux";
+'use client';
+import Image from 'next/image';
+import React, { useRef } from 'react';
+import { Card, CardBody } from '@nextui-org/react';
+import { IMusicPlayCardProps, IMusicProps } from '../../types/types';
+import { FaEllipsisH, FaHeart, FaRegHeart, FaPlay } from 'react-icons/fa'; // Import play icon
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setCurrentList,
   setCurrentSongIndex,
   setCurrentTrack,
-} from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust the path as necessary
-import { redirect } from "next/navigation";
-import { generateUrl } from "@/utils/helpers";
-import WaveSurfer from "wavesurfer.js";
-import { RootState } from "@/Redux/store";
+} from '@/Redux/features/musicPlayer/musicPlayerSlice'; // Adjust the path as necessary
+import { redirect } from 'next/navigation';
+import { generateUrl } from '@/utils/helpers';
+import WaveSurfer from 'wavesurfer.js';
+import { RootState } from '@/Redux/store';
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
@@ -29,7 +29,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
       dispatch(setCurrentTrack(data[index]));
       dispatch(setCurrentSongIndex(index));
     }
-    const newUrl = await generateUrl("/Music", { type: name });
+    const newUrl = await generateUrl('/Music', { type: name });
     redirect(newUrl);
   };
 
@@ -40,7 +40,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
           <Card
             key={index}
             className="cursor-pointer bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group mb-3 ml-2 relative"
-            style={{ height: "320px" }}
+            style={{ height: '320px' }}
           >
             <CardBody className="flex flex-col items-center p-4 w-full h-full">
               <div className="relative w-full h-2/3">

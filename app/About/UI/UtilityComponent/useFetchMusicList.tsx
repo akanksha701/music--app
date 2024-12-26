@@ -1,10 +1,10 @@
-import { LIST_NAME, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
-import { useGetAllMusicsQuery, useGetTopHitsMusicsQuery } from "@/services/like";
-import { useSearchParams } from "next/navigation";
+import { LIST_NAME, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+import { useGetAllMusicsQuery, useGetTopHitsMusicsQuery } from '@/services/like';
+import { useSearchParams } from 'next/navigation';
 
 const useFetchMusicData = () => {
   const searchParams = useSearchParams();
-  const type = searchParams.get("type");
+  const type = searchParams.get('type');
 
   let data = null;
   let error = null;
@@ -20,19 +20,19 @@ const useFetchMusicData = () => {
   );
 
   switch (type) {
-    case TAGS.MUSIC:
-      data = topHits?.data;
-      name = LIST_NAME.TOP_HITS;
-      error = topHitsError;
-      break;
-    case TAGS.NEW_RELEASE:
-      data = newReleases?.data?.data;
-      name = LIST_NAME.NEW_RELEASE;
-      error = newReleasesError;
-      break;
-    default:
-      error = new Error("Invalid media type");
-      break;
+  case TAGS.MUSIC:
+    data = topHits?.data;
+    name = LIST_NAME.TOP_HITS;
+    error = topHitsError;
+    break;
+  case TAGS.NEW_RELEASE:
+    data = newReleases?.data?.data;
+    name = LIST_NAME.NEW_RELEASE;
+    error = newReleasesError;
+    break;
+  default:
+    error = new Error('Invalid media type');
+    break;
   }
 
   return { data, name, error };

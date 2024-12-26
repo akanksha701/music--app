@@ -1,18 +1,18 @@
-"use client";
-import React from "react";
-import TabComp from "@/common/tab/TabComp";
-import TableComp from "@/common/table/TableComp";
-import { usePagination } from "@/hooks/usePagination";
-import Loading from "../loading";
-import AddGenre from "./UI/UtilityComponent/AddGenre";
-import { useGetGenreQuery } from "@/services/genre";
+'use client';
+import React from 'react';
+import TabComp from '@/common/tab/TabComp';
+import TableComp from '@/common/table/TableComp';
+import { usePagination } from '@/hooks/usePagination';
+import Loading from '../loading';
+import AddGenre from './UI/UtilityComponent/AddGenre';
+import { useGetGenreQuery } from '@/services/genre';
 
 const columns = [
-  { header: "Genre Name", accessor: "name" },
+  { header: 'Genre Name', accessor: 'name' },
   {
-    header: "Edit",
-    accessor: "edit",
-    className: "text-center",
+    header: 'Edit',
+    accessor: 'edit',
+    className: 'text-center',
   },
 ];
 
@@ -27,8 +27,8 @@ const Index = () => {
 
   const tabsData = [
     {
-      value: "Genres",
-      label: "Genres",
+      value: 'Genres',
+      label: 'Genres',
       content: (
         <TableComp
           message="A list of your recent languages."
@@ -41,8 +41,8 @@ const Index = () => {
       ),
     },
     {
-      value: "createGenre",
-      label: "Create Genre",
+      value: 'createGenre',
+      label: 'Create Genre',
       content: <AddGenre />,
     },
   ];

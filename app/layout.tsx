@@ -1,16 +1,16 @@
-import { ClerkProvider } from "@clerk/nextjs";
-import "./globals.css";
-import { Tooltip } from "@nextui-org/react";
-import { Toaster } from "react-hot-toast";
-import ReduxProvider from "@/Redux/storeProvider";
-import NavbarPage from "./Navbar/index";
-import { ThemeProvider } from "next-themes";
-import Footer from "./Footer/Footer";
-import { Suspense } from "react";
-import Loading from "./loading";
-import Modal from "@/common/modal/modal";
-import MusicPlayerContainer from "./Music/UI/UtilityComponent/MusicPlayerContainer";
-import { Nunito } from 'next/font/google'
+import { ClerkProvider } from '@clerk/nextjs';
+import './globals.css';
+import { Tooltip } from '@nextui-org/react';
+import { Toaster } from 'react-hot-toast';
+import ReduxProvider from '@/Redux/storeProvider';
+import NavbarPage from './Navbar/index';
+import { ThemeProvider } from 'next-themes';
+import Footer from './Footer/Footer';
+import { Suspense } from 'react';
+import Loading from './loading';
+import Modal from '@/common/modal/modal';
+import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
+import { Nunito } from 'next/font/google';
 
 // Load Nunito font
 const nunito = Nunito({
@@ -24,7 +24,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // Fetch marketing data (example of fetching data)
-  const res = await fetch("http://localhost:3000/api/marketing");
+  const res = await fetch('http://localhost:3000/api/marketing');
   const data = await res.json();
 
   return (

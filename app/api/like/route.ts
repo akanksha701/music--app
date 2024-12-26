@@ -1,9 +1,9 @@
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import User from "@/lib/models/User";
-import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
-import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
-import mongoose from "mongoose";
+import dbConnect from '@/lib/DbConnection/dbConnection';
+import User from '@/lib/models/User';
+import { NextResponse } from 'next/server';
+import { currentUser } from '@clerk/nextjs/server';
+import { TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+import mongoose from 'mongoose';
 
 async function handleMusicLike(user: any, id: string, clerkUserId: string) {
   const alreadyLiked = user.likedMusics.includes(
@@ -13,7 +13,7 @@ async function handleMusicLike(user: any, id: string, clerkUserId: string) {
   const updatedUser = await User.findOneAndUpdate(
     { clerkUserId },
     {
-      [alreadyLiked ? "$pull" : "$addToSet"]: {
+      [alreadyLiked ? '$pull' : '$addToSet']: {
         likedMusics: new mongoose.Types.ObjectId(id),
       },
     },
@@ -30,7 +30,7 @@ async function handleAlbumLike(user: any, id: string, clerkUserId: string) {
   const updatedUser = await User.findOneAndUpdate(
     { clerkUserId },
     {
-      [alreadyLiked ? "$pull" : "$addToSet"]: {
+      [alreadyLiked ? '$pull' : '$addToSet']: {
         likedAlbums: new mongoose.Types.ObjectId(id),
       },
     },
@@ -48,7 +48,7 @@ async function handleGenreLike(user: any, id: string, clerkUserId: string) {
   const updatedUser = await User.findOneAndUpdate(
     { clerkUserId },
     {
-      [alreadyLiked ? "$pull" : "$addToSet"]: {
+      [alreadyLiked ? '$pull' : '$addToSet']: {
         likedGenres: new mongoose.Types.ObjectId(id),
       },
     },
@@ -66,31 +66,31 @@ export async function POST(req: Request) {
 
     const user = await User.findOne({ clerkUserId: userDetails?.id });
     if (!user) {
-      return NextResponse.json({ message: "User not found." }, { status: 404 });
+      return NextResponse.json({ message: 'User not found.' }, { status: 404 });
     }
 
     let updatedUser;
     switch (name) {
-      case TAGS.MUSIC:
-        updatedUser = await handleMusicLike(user, id, userDetails?.id);
-        break;
-      case TAGS.NEW_RELEASE:
-        updatedUser = await handleMusicLike(user, id, userDetails?.id);
-        break;
+    case TAGS.MUSIC:
+      updatedUser = await handleMusicLike(user, id, userDetails?.id);
+      break;
+    case TAGS.NEW_RELEASE:
+      updatedUser = await handleMusicLike(user, id, userDetails?.id);
+      break;
 
-      case TAGS.ALBUMS:
-        updatedUser = await handleAlbumLike(user, id, userDetails?.id);
-        break;
+    case TAGS.ALBUMS:
+      updatedUser = await handleAlbumLike(user, id, userDetails?.id);
+      break;
 
-      case TAGS.GENRE:
-        updatedUser = await handleGenreLike(user, id, userDetails?.id);
-        break;
+    case TAGS.GENRE:
+      updatedUser = await handleGenreLike(user, id, userDetails?.id);
+      break;
 
-      default:
-        return NextResponse.json(
-          { message: "Invalid media type." },
-          { status: 400 }
-        );
+    default:
+      return NextResponse.json(
+        { message: 'Invalid media type.' },
+        { status: 400 }
+      );
     }
 
     return NextResponse.json({
@@ -98,9 +98,9 @@ export async function POST(req: Request) {
       data: updatedUser,
     });
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
     return NextResponse.json(
-      { message: "Something went wrong." },
+      { message: 'Something went wrong.' },
       { status: 500 }
     );
   }

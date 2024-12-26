@@ -1,19 +1,19 @@
 export const TAGS = {
-  MUSIC: "Musics",
-  NEW_RELEASE: "New Releases",
-  TOP_HITS: "Top Hits",
-  ALBUMS: "Albums",
-  TOP_ALBUMS: "Top Albums",
-  GENRE: "Genres",
+  MUSIC: 'Musics',
+  NEW_RELEASE: 'NewReleases',
+  TOP_HITS: 'Top Hits',
+  ALBUMS: 'Albums',
+  TOP_ALBUMS: 'Top Albums',
+  GENRE: 'Genres',
 } as const;
 
 export const LIST_NAME = {
-  MUSIC: "New Musics",
-  NEW_RELEASE: "New Releases",
-  TOP_HITS: "Top Hits",
-  ALBUMS: "Albums",
-  TOP_ALBUMS: "Top Albums",
-  GENRE: "Top Genres",
+  MUSIC: 'New Musics',
+  NEW_RELEASE: 'NewReleases',
+  TOP_HITS: 'Top Hits',
+  ALBUMS: 'Albums',
+  TOP_ALBUMS: 'Top Albums',
+  GENRE: 'Top Genres',
 } as const;
 
 export interface IMusicProps {

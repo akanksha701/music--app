@@ -1,5 +1,5 @@
-import React from "react";
-import { IHoverCardProps } from "../../types/types";
+import React from 'react';
+import { IHoverCardProps } from '../../types/types';
 
 const HoverCard = (props: IHoverCardProps) => {
   const { topPlaylists, topArtists } = props;

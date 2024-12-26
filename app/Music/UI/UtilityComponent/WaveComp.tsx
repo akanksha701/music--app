@@ -1,5 +1,5 @@
-import React, { forwardRef, Ref } from "react";
-import { IWaveProps } from "../../types/types";
+import React, { forwardRef, Ref } from 'react';
+import { IWaveProps } from '../../types/types';
 
 const WaveComp = forwardRef<any, IWaveProps>(
   ({  handleClick }, ref) => {

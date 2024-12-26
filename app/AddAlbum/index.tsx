@@ -1,18 +1,18 @@
-"use client";
-import React from "react";
-import TabComp from "@/common/tab/TabComp";
-import TableComp from "@/common/table/TableComp";
-import { usePagination } from "@/hooks/usePagination";
-import Loading from "../loading";
-import { useGetAlbumsQuery } from "@/services/album";
-import AddAlbum from "./UI/UtilityComponent/AddAlbum";
+'use client';
+import React from 'react';
+import TabComp from '@/common/tab/TabComp';
+import TableComp from '@/common/table/TableComp';
+import { usePagination } from '@/hooks/usePagination';
+import Loading from '../loading';
+import { useGetAlbumsQuery } from '@/services/album';
+import AddAlbum from './UI/UtilityComponent/AddAlbum';
 
 const columns = [
-  { header: "Album Name", accessor: "name" },
+  { header: 'Album Name', accessor: 'name' },
   {
-    header: "Edit",
-    accessor: "edit",
-    className: "text-center",
+    header: 'Edit',
+    accessor: 'edit',
+    className: 'text-center',
   },
 ];
 
@@ -27,8 +27,8 @@ const Index = () => {
 
   const tabsData = [
     {
-      value: "albums",
-      label: "Albums",
+      value: 'albums',
+      label: 'Albums',
       content: (
         <TableComp
           message="A list of your recent languages."
@@ -41,8 +41,8 @@ const Index = () => {
       ),
     },
     {
-      value: "createalbum",
-      label: "Create Album",
+      value: 'createalbum',
+      label: 'Create Album',
       content: <AddAlbum />,
     },
   ];

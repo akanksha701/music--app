@@ -1,5 +1,5 @@
-import React from "react";
-import Sidebar from "./Browse/UI/UtilityComponent/Sidebar";
+import React from 'react';
+import Sidebar from './Browse/UI/UtilityComponent/Sidebar';
 
 const Layout = ({
   children,

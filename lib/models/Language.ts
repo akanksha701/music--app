@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const languageSchema = new mongoose.Schema(
   {
@@ -22,4 +22,4 @@ const languageSchema = new mongoose.Schema(
 );
 
 export default mongoose.models.Language ||
-  mongoose.model("Language", languageSchema);
+  mongoose.model('Language', languageSchema);

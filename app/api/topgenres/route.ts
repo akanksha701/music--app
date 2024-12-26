@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import Music from "@/lib/models/Music";
-import { currentUser } from "@clerk/nextjs/server";
+import { NextResponse } from 'next/server';
+import dbConnect from '@/lib/DbConnection/dbConnection';
+import Music from '@/lib/models/Music';
+import { currentUser } from '@clerk/nextjs/server';
 
 export async function GET() {
   try {
@@ -10,15 +10,15 @@ export async function GET() {
     const genres = await Music.aggregate([
       {
         $lookup: {
-          from: "genres",
-          localField: "musicDetails.genreId",
-          foreignField: "_id",
-          as: "genreDetails",
+          from: 'genres',
+          localField: 'musicDetails.genreId',
+          foreignField: '_id',
+          as: 'genreDetails',
         },
       },
       {
         $lookup: {
-          from: "users",
+          from: 'users',
           pipeline: [
             {
               $match: { clerkUserId: user.id },
@@ -27,52 +27,52 @@ export async function GET() {
               $project: { likedGenres: 1 },
             },
           ],
-          as: "loggedInUser",
+          as: 'loggedInUser',
         },
       },
       {
         $unwind: {
-          path: "$genreDetails",
+          path: '$genreDetails',
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $unwind: {
-          path: "$loggedInUser",
+          path: '$loggedInUser',
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $addFields: {
-          liked: { $in: ["$genreDetails._id", "$loggedInUser.likedGenres"] },
+          liked: { $in: ['$genreDetails._id', '$loggedInUser.likedGenres'] },
         },
       },
       {
         $project: {
           _id: 1,
-          name: "$musicDetails.name",
+          name: '$musicDetails.name',
           playCount: 1,
-          genre: "$genreDetails.name",
-          genreId: "$genreDetails._id",
-          imageUrl: "$genreDetails.imageUrl" ,
+          genre: '$genreDetails.name',
+          genreId: '$genreDetails._id',
+          imageUrl: '$genreDetails.imageUrl' ,
           liked:1
           
         },
       },
       {
         $group: {
-          _id: "$genreId",
-          name: { $first: "$genre" },
-          imageUrl: { $first: "$imageUrl" },
-          liked: { $first: "$liked" },
+          _id: '$genreId',
+          name: { $first: '$genre' },
+          imageUrl: { $first: '$imageUrl' },
+          liked: { $first: '$liked' },
           musics: {
             $push: {
-              id: "$_id",
-              playCount: "$playCount",
-              name: "$name",
+              id: '$_id',
+              playCount: '$playCount',
+              name: '$name',
             },
           },
-          totalPlayTime: { $sum: "$playCount" },
+          totalPlayTime: { $sum: '$playCount' },
         },
       },
       {
@@ -82,7 +82,7 @@ export async function GET() {
         $addFields: {
           musics: {
             $sortArray: {
-              input: "$musics",
+              input: '$musics',
               sortBy: { playCount: -1 },
             },
           },
@@ -101,7 +101,7 @@ export async function GET() {
 
     return NextResponse.json({ status: 200, data: genres });
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json({ status: 500, message: "Error occurred" });
+    console.error('Error:', error);
+    return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }

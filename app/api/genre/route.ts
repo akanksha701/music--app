@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import Genre from "@/lib/models/Genre";
-import { NextApiRequest } from "next";
-import { capitalizeTitle, saveFiles } from "@/utils/helpers";
-import { GENRE_IMAGE_UPLOAD_DIR } from "../music/route";
+import { NextRequest, NextResponse } from 'next/server';
+import dbConnect from '@/lib/DbConnection/dbConnection';
+import Genre from '@/lib/models/Genre';
+import { NextApiRequest } from 'next';
+import { capitalizeTitle, saveFiles } from '@/utils/helpers';
+import { GENRE_IMAGE_UPLOAD_DIR } from '../music/route';
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,17 +20,17 @@ export async function POST(req: NextRequest) {
     if (newGenre) {
       return NextResponse.json({
         status: 200,
-        message: "new genre created successfully",
+        message: 'new genre created successfully',
         data: newGenre,
       });
     }
     return NextResponse.json(
-      { error: "error while creating genres" },
+      { error: 'error while creating genres' },
       { status: 400 }
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -39,7 +39,7 @@ export async function PUT(req: NextRequest) {
   try {
     await dbConnect();
     const url = new URL(req?.url as string);
-    const id = url?.searchParams?.get("id");
+    const id = url?.searchParams?.get('id');
     const body = await req?.json();
     const { name, description } = body;
 
@@ -56,10 +56,10 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ error: "genre not found" }, { status: 404 });
+    return NextResponse.json({ error: 'genre not found' }, { status: 404 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -69,9 +69,9 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     const url = new URL(req?.url as string);
-    const page: any = parseInt(url?.searchParams?.get("page") || "1", 10); // Default page is 1
+    const page: any = parseInt(url?.searchParams?.get('page') || '1', 10); // Default page is 1
     const recordsPerPage: any = parseInt(
-      url?.searchParams?.get("recordsPerPage") || "10",
+      url?.searchParams?.get('recordsPerPage') || '10',
       10
     ); // Default records per page is 10
 
@@ -99,12 +99,12 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: "Error while fetching genres" },
+      { error: 'Error while fetching genres' },
       { status: 400 }
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -114,20 +114,20 @@ export async function DELETE(req: NextApiRequest) {
   try {
     await dbConnect();
     const url = new URL(req?.url as string);
-    const id = url?.searchParams?.get("id");
+    const id = url?.searchParams?.get('id');
     const deletedGenre = await Genre.findByIdAndDelete(id);
 
     if (deletedGenre) {
       return NextResponse.json({
         status: 200,
-        message: "genre deleted successfully",
+        message: 'genre deleted successfully',
       });
     }
 
-    return NextResponse.json({ error: "genre not found" }, { status: 404 });
+    return NextResponse.json({ error: 'genre not found' }, { status: 404 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

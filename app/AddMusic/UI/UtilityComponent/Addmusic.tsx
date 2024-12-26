@@ -1,16 +1,16 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import React from "react";
-import { IAddMusicProps } from "../../types/types";
-import NextInput from "@/common/inputs/Input";
-import { useForm } from "react-hook-form";
-import NextTextArea from "@/common/inputs/Textarea";
-import MultiSelect from "@/common/inputs/MultiSelect";
-import FileUploadInput from "@/common/inputs/FileUploadInput";
-import toast from "react-hot-toast";
-import { fetchApi } from "@/utils/helpers";
-import { Method } from "@/app/About/types/types";
-import NextDatePicker from "@/common/inputs/DatePicker";
+'use client';
+import { Button } from '@/components/ui/button';
+import React from 'react';
+import { IAddMusicProps } from '../../types/types';
+import NextInput from '@/common/inputs/Input';
+import { useForm } from 'react-hook-form';
+import NextTextArea from '@/common/inputs/Textarea';
+import MultiSelect from '@/common/inputs/MultiSelect';
+import FileUploadInput from '@/common/inputs/FileUploadInput';
+import toast from 'react-hot-toast';
+import { fetchApi } from '@/utils/helpers';
+import { Method } from '@/app/About/types/types';
+import NextDatePicker from '@/common/inputs/DatePicker';
 
 const AddMusic = (props: IAddMusicProps) => {
   const { genreList, languageList, artistList, albumList } = props;
@@ -23,21 +23,21 @@ const AddMusic = (props: IAddMusicProps) => {
 
   const onSubmit = async (data: any) => {
     const formData = new FormData();
-    formData.append("audio", data.audioUrl);
-    formData.append("image", data.imageUrl);
-    formData.append("name", data.name);
-    formData.append("description", data.description);
-    formData.append("language", data.language);
-    formData.append("genre", data.genre);
-    formData.append("artists", data.artists);
-    formData.append("album", data.album);
+    formData.append('audio', data.audioUrl);
+    formData.append('image', data.imageUrl);
+    formData.append('name', data.name);
+    formData.append('description', data.description);
+    formData.append('language', data.language);
+    formData.append('genre', data.genre);
+    formData.append('artists', data.artists);
+    formData.append('album', data.album);
     try {
-      const res = await fetchApi("/api/music", Method.POST, formData);
+      const res = await fetchApi('/api/music', Method.POST, formData);
       if (res.status === 200) {
         toast.success(res.message);
       }
     } catch (error) {
-      toast.error("Error while creating music");
+      toast.error('Error while creating music');
     }
   };
 
@@ -55,7 +55,7 @@ const AddMusic = (props: IAddMusicProps) => {
               label="Name"
               placeholder="Enter your name"
               register={register}
-              options={{ required: "Name is required" }}
+              options={{ required: 'Name is required' }}
               errors={errors}
             />
           </div>
@@ -67,7 +67,7 @@ const AddMusic = (props: IAddMusicProps) => {
               label="Description"
               placeholder="Enter music description"
               register={register}
-              options={{ required: "Description is required" }}
+              options={{ required: 'Description is required' }}
               errors={errors}
             />
           </div>
@@ -79,12 +79,12 @@ const AddMusic = (props: IAddMusicProps) => {
                 label="Release date"
                 register={register}
                 control={control}
-                rules={{ required: "Release date is required" }}
+                rules={{ required: 'Release date is required' }}
                 error={errors.releasedate?.message}
               />
             </div>
             <div className="flex flex-col">
-            {/* <MultiSelect
+              {/* <MultiSelect
                 control={control}
                 name="price"
                 label="Choose Price"
@@ -109,7 +109,7 @@ const AddMusic = (props: IAddMusicProps) => {
                 }))}
                 error={errors}
                 rules={{ required: true }}
-                selectionMode={"single"}
+                selectionMode={'single'}
                 placeholder="Select Language"
               />
             </div>
@@ -124,7 +124,7 @@ const AddMusic = (props: IAddMusicProps) => {
                 }))}
                 error={errors}
                 rules={{ required: true }}
-                selectionMode={"single"}
+                selectionMode={'single'}
                 placeholder="Select Genre"
               />
             </div>
@@ -139,7 +139,7 @@ const AddMusic = (props: IAddMusicProps) => {
                 }))}
                 error={errors}
                 rules={{ required: true }}
-                selectionMode={"multiple"}
+                selectionMode={'multiple'}
                 placeholder="Select Artists"
               />
             </div>
@@ -154,7 +154,7 @@ const AddMusic = (props: IAddMusicProps) => {
                 }))}
                 error={errors}
                 rules={{ required: true }}
-                selectionMode={"multiple"}
+                selectionMode={'multiple'}
                 placeholder="Select Album"
               />
             </div>

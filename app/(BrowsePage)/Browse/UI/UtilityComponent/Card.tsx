@@ -1,13 +1,13 @@
-import React, { useMemo } from "react";
-import { Card, CardBody } from "@nextui-org/react";
-import Image from "next/image";
-import { IBoxTypes, IMusicProps } from "../../types/types";
-import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice";
-import { RootState } from "@/Redux/store";
-import { generateUrl } from "@/utils/helpers";
-import { redirect } from "next/navigation";
+import React, { useMemo } from 'react';
+import { Card, CardBody } from '@nextui-org/react';
+import Image from 'next/image';
+import { IBoxTypes, IMusicProps } from '../../types/types';
+import { FaRegHeart, FaEllipsisH, FaHeart } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import { RootState } from '@/Redux/store';
+import { generateUrl } from '@/utils/helpers';
+import { redirect } from 'next/navigation';
 
 const Box = ({
   data,
@@ -29,7 +29,7 @@ const Box = ({
       dispatch(setCurrentTrack(data[index]));
       dispatch(setCurrentSongIndex(index));
     }
-    const newUrl = await generateUrl("/Music", { type: name });
+    const newUrl = await generateUrl('/Music', { type: name });
     redirect(newUrl);
   };
   const memoizedCards = useMemo(() => {
@@ -40,7 +40,7 @@ const Box = ({
             <Card
               key={index}
               className="bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group"
-              style={{ width: "220px", height: "220px" }}
+              style={{ width: '220px', height: '220px' }}
             >
               <CardBody className="flex flex-col items-center p-4 w-full h-full">
                 <div className="relative w-full h-2/3">
@@ -54,7 +54,7 @@ const Box = ({
                 <div className="mt-4 w-full flex justify-between items-center">
                   {showLikeIcon && (
                     <button
-                    onClick={() => handleLikeToggle && handleLikeToggle(item._id, name)}
+                      onClick={() => handleLikeToggle && handleLikeToggle(item._id, name)}
                       className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
                     >
                       {item.liked ? (

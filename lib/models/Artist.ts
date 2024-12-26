@@ -1,4 +1,4 @@
-import User from "./User";
+import User from './User';
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
@@ -19,4 +19,4 @@ const artistSchema = new Schema(
   }
 );
 
-export default mongoose.models.Artist || mongoose.model("Artist", artistSchema);
+export default mongoose.models.Artist || mongoose.model('Artist', artistSchema);

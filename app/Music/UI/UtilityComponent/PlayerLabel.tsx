@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 const PlayerLabel = ({ title,artists }: any) => {
   return (
     <>
-      <p className="text-white text-sm">{title || "No Track Selected"}</p>
+      <p className="text-white text-sm">{title || 'No Track Selected'}</p>
       <p className="text-gray-400 text-xs">
-        {artists || "Unknown Artist"}
+        {artists || 'Unknown Artist'}
       </p>
     </>
   );

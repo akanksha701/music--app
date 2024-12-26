@@ -1,43 +1,43 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const musicSchema = new mongoose.Schema(
   {
     musicDetails: {
       name: {
         type: String,
-        required: [true, "music name is required"],
-        maxLength: [100, "music name cannot exceed 100 characters"],
+        required: [true, 'music name is required'],
+        maxLength: [100, 'music name cannot exceed 100 characters'],
         trim: true,
       },
       artistId: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Artist",
-          required: [true, "at least one artist id is required"],
+          ref: 'Artist',
+          required: [true, 'at least one artist id is required'],
         },
       ],
       description: {
         type: String,
-        maxLength: [500, "description cannot exceed 500 characters"],
+        maxLength: [500, 'description cannot exceed 500 characters'],
         trim: true,
       },
       genreId: {
         type: mongoose.Schema.Types.ObjectId, // Reference to Genre model
-        ref: "Genre",
-        required: [true, "genre id is required"],
+        ref: 'Genre',
+        required: [true, 'genre id is required'],
       },
       languageId: {
         type: mongoose.Schema.Types.ObjectId, // Reference to Language model
-        ref: "Language",
-        required: [true, "language is required"],
+        ref: 'Language',
+        required: [true, 'language is required'],
       },
       releaseDate: {
         type: Date,
-        required: [true, "release date is required"],
+        required: [true, 'release date is required'],
       },
       duration: {
         type: String,
-        required: [true, "Duration is required"],
+        required: [true, 'Duration is required'],
       },
     },
     audioDetails: {
@@ -46,7 +46,7 @@ const musicSchema = new mongoose.Schema(
       },
       audioUrl: {
         type: String,
-        required: [true, "music url is required"],
+        required: [true, 'music url is required'],
       },
     },
     playCount: {
@@ -61,7 +61,7 @@ const musicSchema = new mongoose.Schema(
       },
       currency: {
         type: String,
-        enum: ["USD", "EUR", "INR"],
+        enum: ['USD', 'EUR', 'INR'],
         required: true,
       },
     },
@@ -75,4 +75,4 @@ const musicSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.models.Music || mongoose.model("Music", musicSchema);
+export default mongoose.models.Music || mongoose.model('Music', musicSchema);

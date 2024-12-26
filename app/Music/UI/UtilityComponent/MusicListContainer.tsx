@@ -1,22 +1,36 @@
-"use client";
-import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+'use client';
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
+  setCurrentList,
   setCurrentTrack,
   setIsPlaying,
   setSeekPercentage,
-} from "@/Redux/features/musicPlayer/musicPlayerSlice";
-import WaveSurfer from "wavesurfer.js";
-import MusicList from "./MusicList";
-import { RootState } from "@/Redux/store";
-import { useMusic } from "@/hooks/useMusic";
-import { handleLikeToggle } from "@/hooks/useLike";
-import { useToggleLikeMutation } from "@/services/like";
-import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
+} from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import WaveSurfer from 'wavesurfer.js';
+import MusicList from './MusicList';
+import { RootState } from '@/Redux/store';
+import { useMusic } from '@/hooks/useMusic';
+import { handleLikeToggle } from '@/hooks/useLike';
+import {
+  useGetAllMusicsQuery,
+  useGetTopHitsMusicsQuery,
+  useToggleLikeMutation,
+} from '@/services/like';
+import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+import { useSearchParams } from 'next/navigation';
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
-  const hasMounted = useRef(false);
+  const searchParams = useSearchParams();
+  const queryType = searchParams.get('type');
+  const { data: allSongsData, isLoading } =
+    queryType === TAGS.MUSIC
+      ? useGetTopHitsMusicsQuery(undefined)
+      : queryType === TAGS.NEW_RELEASE
+        ? useGetAllMusicsQuery({})
+        : { data: null, isLoading: false };
+  // const { data: topHits } = useGetTopHitsMusicsQuery(undefined);
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
@@ -50,9 +64,9 @@ const MusicListContainer = () => {
             barWidth: 3,
             barGap: 2,
             barRadius: 2,
-            waveColor: "#0f172a",
-            progressColor: "#9333ea",
-            cursorColor: "transparent",
+            waveColor: '#0f172a',
+            progressColor: '#9333ea',
+            cursorColor: 'transparent',
           });
 
           if (song?.audioUrl) {
@@ -72,7 +86,7 @@ const MusicListContainer = () => {
 
   useEffect(() => {
     waveSurferInstances.forEach(({ song, wavesurfer }) => {
-      wavesurfer.on("interaction", (time: number) => {
+      wavesurfer.on('interaction', (time: number) => {
         const wavesTime = wavesurfer.getCurrentTime();
         if (currentTrack?._id != song?._id) {
           dispatch(
@@ -120,6 +134,7 @@ const MusicListContainer = () => {
     wavesurfer.seekTo(seekPercentage);
   };
 
+  
   const handleLikeClick = async () => {
     if (currentTrack) {
       handleLikeToggle(
@@ -132,9 +147,27 @@ const MusicListContainer = () => {
     }
   };
 
+
+
   useEffect(() => {
-    if (!hasMounted.current) {
-      hasMounted.current = true;
+    if (allSongsData && allSongsData.data) {
+      const songs =
+        queryType === TAGS.MUSIC
+          ? allSongsData?.data
+          : queryType === TAGS.NEW_RELEASE
+            ? allSongsData?.data?.data
+            : [];
+
+      if (songs?.length > 0) {
+        dispatch(setCurrentList(songs));
+      }
+    }
+  }, [allSongsData]);
+
+
+
+  useEffect(() => {
+    if (allSongs && allSongs.length > 0) {
       createWaveSurfers(allSongs);
     }
   }, [allSongs]);
@@ -143,10 +176,12 @@ const MusicListContainer = () => {
     if (currentTrack) {
       syncWaveSurferProgress();
     }
-  }, [currentTrack, allSongs]);
+  }, [currentTrack]);
 
-  const handlePlayTrack = (track: IMusicProps) =>
+  const handlePlayTrack = (track: IMusicProps) => {
     dispatch(setCurrentTrack(track));
+    dispatch(setIsPlaying(!isPlaying));
+  };
 
   if (!allSongs) {
     return null;
