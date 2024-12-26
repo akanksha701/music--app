@@ -1,7 +1,11 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice";
+import {
+  setCurrentTrack,
+  setIsPlaying,
+  setSeekPercentage,
+} from "@/Redux/features/musicPlayer/musicPlayerSlice";
 import WaveSurfer from "wavesurfer.js";
 import MusicList from "./MusicList";
 import { RootState } from "@/Redux/store";
@@ -14,10 +18,16 @@ const MusicListContainer = () => {
   const dispatch = useDispatch();
   const hasMounted = useRef(false);
   const currentTrack = useSelector<RootState, any | null>(
-    (state) => state.musicPlayerSlice.currentTrack
+    (state: any) => state.musicPlayerSlice.currentTrack
+  );
+  const seekPercentage = useSelector<RootState, number>(
+    (state) => state.musicPlayerSlice.seekPercentage
   );
   const allSongs = useSelector<RootState, any[]>(
     (state) => state.musicPlayerSlice.currentList
+  );
+  const isPlaying = useSelector<RootState, boolean>(
+    (state) => state.musicPlayerSlice.isPlaying
   );
   const { currentTime, setCurrentTime } = useMusic();
   const wavesurferRefs = useRef<Map<string, any>>(new Map());
@@ -51,13 +61,6 @@ const MusicListContainer = () => {
 
           wavesurferRefs.current.set(song._id, wavesurfer);
 
-          wavesurfer.on("interaction", () => {
-            const wavesTime =
-              wavesurfer.getCurrentTime() / wavesurfer.getDuration();
-            setCurrentTime(wavesurfer.getCurrentTime());
-            togglePlayPauseOnWaveSurfer(wavesurfer, song, wavesTime);
-          });
-
           return { song, wavesurfer };
         }
         return null;
@@ -67,6 +70,44 @@ const MusicListContainer = () => {
     }
   };
 
+  useEffect(() => {
+    waveSurferInstances.forEach(({ song, wavesurfer }) => {
+      wavesurfer.on("interaction", (time: number) => {
+        const wavesTime = wavesurfer.getCurrentTime();
+        if (currentTrack?._id != song?._id) {
+          dispatch(
+            setCurrentTrack({
+              ...currentTrack,
+              name: song?.name,
+              artists: song?.artists,
+              audioUrl: song?.audioUrl,
+              currency: song?.audioUrl,
+              description: song?.audioUrl,
+              email: song?.email,
+              imageUrl: song?.imageUrl,
+              price: song?.price,
+              liked: song?.liked,
+              duration: song?.duration,
+              _id: song?._id,
+            })
+          );
+          const currentWavesurfer = wavesurferRefs.current.get(song._id);
+          currentWavesurfer.seekTo(wavesTime);
+          dispatch(setIsPlaying(true));
+        } else {
+          const currentWavesurfer = wavesurferRefs.current.get(
+            currentTrack._id
+          );
+          setCurrentTime(time);
+          dispatch(setIsPlaying(true));
+          const duration = currentWavesurfer.getDuration() || 1;
+          const seekPercentage = time / duration;
+          dispatch(setSeekPercentage(seekPercentage * 100));
+        }
+      });
+    });
+  }, [currentTrack]);
+
   const syncWaveSurferProgress = () => {
     if (!currentTrack || !wavesurferRefs.current.has(currentTrack._id)) return;
     const wavesurfer = wavesurferRefs.current.get(currentTrack._id);
@@ -75,32 +116,6 @@ const MusicListContainer = () => {
     wavesurfer.seekTo(seekPercentage);
   };
 
-  const togglePlayPauseOnWaveSurfer = (
-    ws: any,
-    song: any,
-    wavesTime: number
-  ) => {
-    if (currentTrack?._id !== song?._id) {
-      dispatch(
-        setCurrentTrack({
-          ...currentTrack,
-          _id: song?._id,
-          isPlaying: true,
-          seekTo: wavesTime,
-        })
-      );
-      ws.play();
-    } else {
-      ws.seekTo(wavesTime);
-      ws.play();
-      dispatch(
-        setCurrentTrack({
-          ...currentTrack,
-          isPlaying: !currentTrack?.isPlaying,
-        })
-      );
-    }
-  };
   const handleLikeClick = async () => {
     if (currentTrack) {
       handleLikeToggle(

@@ -70,7 +70,7 @@ const MusicPlayerContainer = () => {
           });
 
           wavesurferRef.current.on("timeupdate", (time: number) => {
-            dispatch(
+           dispatch(
               setSeekPercentage(
                 (wavesurferRef.current.getCurrentTime() /
                   wavesurferRef.current.getDuration()) *
@@ -80,11 +80,13 @@ const MusicPlayerContainer = () => {
             dispatch(
               setCurrentTrack({
                 ...currentTrack,
-                // wavesurfer: wavesurferRef.current,
               })
             );
             setCurrentTime(time);
           });
+          // wavesurferRef.current.on("interaction", () => {
+          //   console.log('musicplayer list 11')
+          // })
         }
       }
     }
