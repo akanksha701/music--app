@@ -17,13 +17,13 @@ import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 const MusicListContainer = () => {
   const dispatch = useDispatch();
   const hasMounted = useRef(false);
-  const currentTrack = useSelector<RootState, any | null>(
-    (state: any) => state.musicPlayerSlice.currentTrack
+  const currentTrack = useSelector<RootState, IMusicProps | null>(
+    (state) => state.musicPlayerSlice.currentTrack
   );
   const seekPercentage = useSelector<RootState, number>(
     (state) => state.musicPlayerSlice.seekPercentage
   );
-  const allSongs = useSelector<RootState, any[]>(
+  const allSongs = useSelector<RootState, IMusicProps[]>(
     (state) => state.musicPlayerSlice.currentList
   );
   const isPlaying = useSelector<RootState, boolean>(
@@ -34,7 +34,7 @@ const MusicListContainer = () => {
   const [waveSurferInstances, setWaveSurferInstances] = useState<any[]>([]);
   const [toggleLike] = useToggleLikeMutation();
 
-  const createWaveSurfers = (songs: any[]) => {
+  const createWaveSurfers = (songs: IMusicProps[]) => {
     if (songs && songs.length > 0) {
       const instances = songs.map((song) => {
         const waveformContainerId = `waveform_${song?._id}`;
@@ -42,7 +42,7 @@ const MusicListContainer = () => {
 
         if (!waveformContainer) return null;
 
-        if (!wavesurferRefs.current.has(song._id)) {
+        if (!wavesurferRefs.current.has(song?._id as string)) {
           const wavesurfer = WaveSurfer.create({
             container: `#${waveformContainerId}`,
             width: 383,
@@ -59,7 +59,7 @@ const MusicListContainer = () => {
             wavesurfer.load(song.audioUrl);
           }
 
-          wavesurferRefs.current.set(song._id, wavesurfer);
+          wavesurferRefs.current.set(song?._id as string, wavesurfer);
 
           return { song, wavesurfer };
         }
@@ -96,7 +96,7 @@ const MusicListContainer = () => {
           dispatch(setIsPlaying(true));
         } else {
           const currentWavesurfer = wavesurferRefs.current.get(
-            currentTrack._id
+            currentTrack?._id as string
           );
           setCurrentTime(time);
           dispatch(setIsPlaying(true));
@@ -109,8 +109,12 @@ const MusicListContainer = () => {
   }, [currentTrack]);
 
   const syncWaveSurferProgress = () => {
-    if (!currentTrack || !wavesurferRefs.current.has(currentTrack._id)) return;
-    const wavesurfer = wavesurferRefs.current.get(currentTrack._id);
+    if (
+      !currentTrack ||
+      !wavesurferRefs.current.has(currentTrack?._id as string)
+    )
+      return;
+    const wavesurfer = wavesurferRefs.current.get(currentTrack?._id as string);
     const duration = wavesurfer.getDuration() || 1;
     const seekPercentage = currentTime / duration;
     wavesurfer.seekTo(seekPercentage);
@@ -119,7 +123,7 @@ const MusicListContainer = () => {
   const handleLikeClick = async () => {
     if (currentTrack) {
       handleLikeToggle(
-        currentTrack._id,
+        currentTrack?._id as string,
         TAGS.MUSIC,
         toggleLike,
         currentTrack,

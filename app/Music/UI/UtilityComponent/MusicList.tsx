@@ -36,7 +36,7 @@ const MusicList = ({
               {currentTrackId === track._id ? (
                 <FaPause size={12} color="white" />
               ) : (
-                < FaPlay size={12} color="gray" />
+                <FaPlay size={12} color="gray" />
               )}
             </button>
 

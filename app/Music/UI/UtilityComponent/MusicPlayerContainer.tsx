@@ -70,7 +70,7 @@ const MusicPlayerContainer = () => {
           });
 
           wavesurferRef.current.on("timeupdate", (time: number) => {
-           dispatch(
+            dispatch(
               setSeekPercentage(
                 (wavesurferRef.current.getCurrentTime() /
                   wavesurferRef.current.getDuration()) *
@@ -158,9 +158,8 @@ const MusicPlayerContainer = () => {
     dispatch(setCurrentSongIndex(newIndex));
   };
 
-  const handlePlayTrack = (track: IMusicProps) => dispatch(setCurrentTrack(track));
-
-
+  const handlePlayTrack = (track: IMusicProps) =>
+    dispatch(setCurrentTrack(track));
 
   if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;

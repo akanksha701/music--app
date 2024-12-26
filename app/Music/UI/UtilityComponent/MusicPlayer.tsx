@@ -25,7 +25,7 @@ const MusicPlayer = ({
   handlePlayPause,
   onNextSong,
   onPreviousSong,
-  handlePlayTrack
+  handlePlayTrack,
 }: IMusicPlayerProps) => {
   return (
     <div className="w-full bg-black p-2 flex flex-row items-center justify-between gap-4 fixed bottom-0 left-0 z-50">
