@@ -66,12 +66,12 @@ export async function POST(req: NextRequest) {
     if (newAlbum) {
       return NextResponse.json({
         status: 200,
-        message: "new album created successfully",
+        message: 'new album created successfully',
         data: newAlbum,
       });
     }
     return NextResponse.json(
-      { error: "error while creating genres" },
+      { error: 'error while creating genres' },
       { status: 400 }
     );
   } catch (error : any) {
@@ -126,9 +126,9 @@ export async function GET(req: Request) {
       });
     }
 
-    const page: number = parseInt(url.searchParams.get("page") || "1", 10);
+    const page: number = parseInt(url.searchParams.get('page') || '1', 10);
     const recordsPerPage: number = parseInt(
-      url.searchParams.get("recordsPerPage") || "0",
+      url.searchParams.get('recordsPerPage') || '0',
       10
     );
 
@@ -171,7 +171,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

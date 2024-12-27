@@ -23,11 +23,11 @@ const Views = (props: IViewProps) => {
 
         <div className="flex flex-wrap mt-4 md:mt-0 md:ml-12 text-sm md:text-base text-gray-600">
           {points.map((point, index) => (
-            <>
+            <div key={index}>
               <div className="px-4 py-2" key={index}>
                 <span className="font-semibold text-gray-800">{point}</span>
               </div>
-            </>
+            </div>
           ))}
         </div>
       </div>

@@ -1,9 +1,9 @@
-"use client";
-import React, { useMemo } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import Image from "next/image";
-import { ICategoryProps } from "../../types/types";
-import { Name, useSelectCard } from "@/hooks/useSelectCard";
+'use client';
+import React, { useMemo } from 'react';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import Image from 'next/image';
+import { ICategoryProps } from '../../types/types';
+import { Name, useSelectCard } from '@/hooks/useSelectCard';
 
 const CategoryCard = (props: ICategoryProps) => {
   const { genreList, title } = props;
@@ -19,8 +19,8 @@ const CategoryCard = (props: ICategoryProps) => {
           {genreList.map((mood, index) => {
             const bgColor =
               selectedIndexCategory === index
-                ? "bg-purple-600 text-white"
-                : "bg-white";
+                ? 'bg-purple-600 text-white'
+                : 'bg-white';
             return (
               <Card
                 key={index}

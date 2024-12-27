@@ -1,6 +1,6 @@
-import Music from "./Music";
+import Music from './Music';
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const playListSchema = new mongoose.Schema(
   {
     name: {
@@ -32,4 +32,4 @@ const playListSchema = new mongoose.Schema(
 );
 
 export default mongoose.models.playList ||
-  mongoose.model("playList", playListSchema);
+  mongoose.model('playList', playListSchema);

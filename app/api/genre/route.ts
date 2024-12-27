@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -107,10 +107,10 @@ if (img instanceof Blob) {
       });
     }
 
-    return NextResponse.json({ error: "genre not found" }, { status: 404 });
+    return NextResponse.json({ error: 'genre not found' }, { status: 404 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -120,9 +120,9 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     const url = new URL(req?.url as string);
-    const page: any = parseInt(url?.searchParams?.get("page") || "1", 10); // Default page is 1
+    const page: any = parseInt(url?.searchParams?.get('page') || '1', 10); // Default page is 1
     const recordsPerPage: any = parseInt(
-      url?.searchParams?.get("recordsPerPage") || "10",
+      url?.searchParams?.get('recordsPerPage') || '10',
       10
     ); // Default records per page is 10
 
@@ -150,12 +150,12 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: "Error while fetching genres" },
+      { error: 'Error while fetching genres' },
       { status: 400 }
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -184,10 +184,10 @@ export async function DELETE(req: NextApiRequest) {
       });
     }
 
-    return NextResponse.json({ error: "genre not found" }, { status: 404 });
+    return NextResponse.json({ error: 'genre not found' }, { status: 404 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

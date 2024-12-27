@@ -1,13 +1,13 @@
-"use client";
-import React, { useCallback } from "react";
-import NewRelease from "./UI/UtilityComponent/NewRelease";
-import MenubarComponent from "@/common/menubar/Menubar";
-import { useGetLanguageQuery } from "@/services/languages";
-import Loading from "@/app/loading";
-import { useNewRelease } from "@/hooks/useNewRelease";
-import { redirect } from "next/navigation";
-import { newRelease } from "@/utils/apiRoutes";
-import { generateUrl } from "@/utils/helpers";
+'use client';
+import React, { useCallback } from 'react';
+import NewRelease from './UI/UtilityComponent/NewRelease';
+import MenubarComponent from '@/common/menubar/Menubar';
+import { useGetLanguageQuery } from '@/services/languages';
+import Loading from '@/app/loading';
+import { useNewRelease } from '@/hooks/useNewRelease';
+import { redirect } from 'next/navigation';
+import { newRelease } from '@/utils/apiRoutes';
+import { generateUrl } from '@/utils/helpers';
 const Index = () => {
   const { data: languageList, isLoading } = useGetLanguageQuery({});
   const { setSelectedLanguage } = useNewRelease();

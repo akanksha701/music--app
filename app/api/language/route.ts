@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -106,10 +106,10 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ error: "language not found" }, { status: 404 });
+    return NextResponse.json({ error: 'language not found' }, { status: 404 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -122,8 +122,8 @@ export async function GET(req: Request) {
     await dbConnect();
     const url = new URL(req.url);
     
-    const page: any = parseInt(url.searchParams.get("page") || "1", 10); // Default to page 1
-    const recordsPerPage: any = parseInt(url.searchParams.get("recordsPerPage") || "0", 10); // Default to 0 (no pagination)
+    const page: any = parseInt(url.searchParams.get('page') || '1', 10); // Default to page 1
+    const recordsPerPage: any = parseInt(url.searchParams.get('recordsPerPage') || '0', 10); // Default to 0 (no pagination)
     if (!recordsPerPage || !page) {
       const languageList = await Language.find({isDeleted: false});
       return NextResponse.json({
@@ -153,7 +153,7 @@ export async function GET(req: Request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -184,10 +184,10 @@ export async function DELETE(req: NextApiRequest) {
       });
     }
 
-    return NextResponse.json({ error: "language not found" }, { status: 404 });
+    return NextResponse.json({ error: 'language not found' }, { status: 404 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

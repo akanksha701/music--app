@@ -1,17 +1,17 @@
-import NextInput from "@/common/inputs/Input";
-import React, { useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import useFetchUserDetails from "@/hooks/customHooks/useFetchUserDetails";
-import { CalendarDate } from "@internationalized/date";
-import Loading from "@/app/loading";
-import NextDatePicker from "@/common/inputs/DatePicker";
-import SelectMenu from "@/common/inputs/SelectMenu";
-import { fetchApi } from "@/utils/helpers";
-import { IEditProfileProps, IUserDetails } from "../../types/types";
-import toast from "react-hot-toast";
-import Button from "@/common/buttons/Button";
-import { Method } from "@/app/About/types/types";
-import { userApi } from "@/utils/apiRoutes";
+import NextInput from '@/common/inputs/Input';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
+import { CalendarDate } from '@internationalized/date';
+import Loading from '@/app/loading';
+import NextDatePicker from '@/common/inputs/DatePicker';
+import SelectMenu from '@/common/inputs/SelectMenu';
+import { fetchApi } from '@/utils/helpers';
+import { IEditProfileProps, IUserDetails } from '../../types/types';
+import toast from 'react-hot-toast';
+import Button from '@/common/buttons/Button';
+import { Method } from '@/app/About/types/types';
+import { userApi } from '@/utils/apiRoutes';
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;
@@ -32,13 +32,13 @@ const EditProfile = (props: IEditProfileProps) => {
         const year = dob?.year || new Date().getFullYear();
         const month = dob?.month || new Date().getMonth();
         const date = new CalendarDate(year, month + 1, day);
-        setValue("userId", user?.id);
-        setValue("firstName", user?.firstName);
-        setValue("lastName", user?.lastName);
-        setValue("gender", user?.unsafeMetadata?.gender);
-        setValue("dob", date);
-        setValue("imageUrl", user?.unsafeMetadata?.imageUrl);
-        setValue("emailAddresses", user.emailAddresses[0].emailAddress);
+        setValue('userId', user?.id);
+        setValue('firstName', user?.firstName);
+        setValue('lastName', user?.lastName);
+        setValue('gender', user?.unsafeMetadata?.gender);
+        setValue('dob', date);
+        setValue('imageUrl', user?.unsafeMetadata?.imageUrl);
+        setValue('emailAddresses', user.emailAddresses[0].emailAddress);
         setImage(user?.unsafeMetadata?.imageUrl as string);
       }
     }
@@ -59,10 +59,10 @@ const EditProfile = (props: IEditProfileProps) => {
         dob: new Date(`${year}-${month}-${day}`),
       });
       if (response.status === 200) {
-        toast.success("profile updated successfully");
+        toast.success('profile updated successfully');
       }
     } catch (error) {
-      console.error("Error submitting form", error);
+      console.error('Error submitting form', error);
     }
   });
   if (!user) {
@@ -81,7 +81,7 @@ const EditProfile = (props: IEditProfileProps) => {
               required
               placeholder="Enter your first name"
               errors={errors}
-              options={{ required: "First name is required" }}
+              options={{ required: 'First name is required' }}
             />
           </div>
 
@@ -94,7 +94,7 @@ const EditProfile = (props: IEditProfileProps) => {
               required
               placeholder="Enter your last name"
               errors={errors}
-              options={{ required: "Last name is required" }}
+              options={{ required: 'Last name is required' }}
             />
           </div>
 
@@ -110,10 +110,10 @@ const EditProfile = (props: IEditProfileProps) => {
               placeholder="Enter your email address"
               errors={errors}
               options={{
-                required: "Email is required",
+                required: 'Email is required',
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email address",
+                  message: 'Invalid email address',
                 },
               }}
             />
@@ -125,24 +125,24 @@ const EditProfile = (props: IEditProfileProps) => {
               label="Date of Birth"
               register={register}
               control={control}
-              rules={{ required: "Date of birth is required" }}
+              rules={{ required: 'Date of birth is required' }}
               error={errors.dob?.message}
             />
           </div>
 
           <div className="flex flex-col">
             <SelectMenu
-              selectionMode={"multiple"}
+              selectionMode={'multiple'}
               name="gender"
               placeholder="select gender"
               label="Select Gender"
               control={control}
-              rules={{ required: "Gender is required" }}
+              rules={{ required: 'Gender is required' }}
               error={errors.gender?.message as string}
               items={[
-                { id: "male", name: "Male" },
-                { id: "female", name: "Female" },
-                { id: "other", name: "Other" },
+                { id: 'male', name: 'Male' },
+                { id: 'female', name: 'Female' },
+                { id: 'other', name: 'Other' },
               ]}
             />
           </div>

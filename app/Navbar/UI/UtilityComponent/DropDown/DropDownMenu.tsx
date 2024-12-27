@@ -1,13 +1,13 @@
-"use client";
-import { IItem } from "@/app/Navbar/types/types";
-import Modal from "@/common/modal/modal";
-import Tooltip from "@/common/tooltip/Tooltip";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { HoverCard } from "@/components/ui/hover-card";
-import { useClerk, useUser } from "@clerk/nextjs";
-import { DropdownItem, DropdownMenu } from "@nextui-org/react";
-import { redirect } from "next/navigation";
-import React, { useState } from "react";
+'use client';
+import { IItem } from '@/app/Navbar/types/types';
+import Modal from '@/common/modal/modal';
+import Tooltip from '@/common/tooltip/Tooltip';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { HoverCard } from '@/components/ui/hover-card';
+import { useClerk, useUser } from '@clerk/nextjs';
+import { DropdownItem, DropdownMenu } from '@nextui-org/react';
+import { redirect } from 'next/navigation';
+import React, { useState } from 'react';
 
 const menus: any = [
   { label: "My Profile", key: "my_profile", route: "/MyProfile" },
@@ -52,7 +52,7 @@ const DropDownMenu = () => {
         <DropdownItem
           key="logout"
           color="danger"
-          onClick={() => signOut({ redirectUrl: "/Signin" })}
+          onClick={() => signOut({ redirectUrl: '/Signin' })}
         >
           Log Out
         </DropdownItem>

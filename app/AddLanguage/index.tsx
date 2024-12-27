@@ -1,18 +1,18 @@
-"use client";
-import React from "react";
-import TabComp from "@/common/tab/TabComp";
-import TableComp from "@/common/table/TableComp";
-import { usePagination } from "@/hooks/usePagination";
-import { useGetLanguageQuery } from "@/services/languages";
-import Loading from "../loading";
-import AddLanguage from "./UI/UtilityComponent/AddLanguage";
+'use client';
+import React from 'react';
+import TabComp from '@/common/tab/TabComp';
+import TableComp from '@/common/table/TableComp';
+import { usePagination } from '@/hooks/usePagination';
+import { useGetLanguageQuery } from '@/services/languages';
+import Loading from '../loading';
+import AddLanguage from './UI/UtilityComponent/AddLanguage';
 
 const columns = [
-  { header: "Language Name", accessor: "name" },
+  { header: 'Language Name', accessor: 'name' },
   {
-    header: "Edit",
-    accessor: "edit",
-    className: "text-center",
+    header: 'Edit',
+    accessor: 'edit',
+    className: 'text-center',
   },
 ];
 
@@ -27,8 +27,8 @@ const Index = () => {
 
   const tabsData = [
     {
-      value: "languages",
-      label: "Languages",
+      value: 'languages',
+      label: 'Languages',
       content: (
         <TableComp
           message="A list of your recent languages."
@@ -41,8 +41,8 @@ const Index = () => {
       ),
     },
     {
-      value: "createlanguage",
-      label: "Create Language",
+      value: 'createlanguage',
+      label: 'Create Language',
       content: <AddLanguage />,
     },
   ];

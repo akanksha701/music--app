@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { MediaType, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { Method } from "@/app/About/types/types";
-import { getTopHits, music } from "@/utils/apiRoutes";
+import { getTopAlbums, getTopGenres, getTopHits, like, music } from "@/utils/apiRoutes";
+import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 
 export const likeApi = createApi({
   reducerPath: "likeApi",
@@ -10,17 +10,19 @@ export const likeApi = createApi({
   endpoints: (builder) => ({
     toggleLike: builder.mutation<void, { id: string; name: string }>({
       query: ({ id, name }) => ({
-        url: "api/like",
+        url: like,
         method: Method.POST,
         body: { id, name },
       }),
       invalidatesTags: (result, error, { name }) => {
         switch (name) {
-          case MediaType.MUSIC:
+          case TAGS.MUSIC:
             return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
-          case MediaType.ALBUM:
+            case TAGS.NEW_RELEASE:
+              return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
+          case TAGS.ALBUMS:
             return [TAGS.ALBUMS, TAGS.TOP_ALBUMS];
-          case MediaType.GENRE:
+          case TAGS.GENRE:
             return [TAGS.GENRE];
           default:
             return [];
@@ -32,7 +34,7 @@ export const likeApi = createApi({
       providesTags: [TAGS.TOP_HITS],
     }),
     getTopAlbums: builder.query({
-      query: () => "api/topalbums",
+      query: () => getTopAlbums,
       providesTags: [TAGS.TOP_ALBUMS],
     }),
     getAllMusics: builder.query({
@@ -40,7 +42,7 @@ export const likeApi = createApi({
       providesTags: [TAGS.NEW_RELEASE],
     }),
     getTopGenre: builder.query({
-      query: () => "api/topgenres",
+      query: () => getTopGenres,
       providesTags: [TAGS.GENRE],
     }),
   }),

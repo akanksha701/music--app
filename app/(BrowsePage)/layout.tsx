@@ -1,5 +1,5 @@
-import React from "react";
-import Sidebar from "./Browse/UI/UtilityComponent/Sidebar";
+import React from 'react';
+import Sidebar from './Browse/UI/UtilityComponent/Sidebar';
 
 const Layout = ({
   children,
@@ -7,7 +7,7 @@ const Layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="lg:grid grid-cols-12 gap-2 lg:min-h-screen">
+    <div className="lg:grid grid-cols-12 gap-2 lg:min-h-screen scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent">
       <div className="col-span-2 lg:sticky top-0 h-screen">
         <Sidebar />
       </div>

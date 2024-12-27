@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import Artist from "@/lib/models/Artist";
+import { NextResponse } from 'next/server';
+import dbConnect from '@/lib/DbConnection/dbConnection';
+import Artist from '@/lib/models/Artist';
 
 export async function GET() {
   try {
@@ -8,24 +8,24 @@ export async function GET() {
     const artists = await Artist.aggregate([
       {
         $lookup: {
-          from: "users",
-          localField: "userId",
-          foreignField: "_id",
-          as: "userDetails",
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'userDetails',
         },
       },
       {
         $unwind: {
-          path: "$userDetails",
+          path: '$userDetails',
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $project: {
           _id: 0,
-          id: "$userDetails._id",
+          id: '$userDetails._id',
           fullname: {
-            $concat: ["$userDetails.firstName", " ", "$userDetails.lastName"],
+            $concat: ['$userDetails.firstName', ' ', '$userDetails.lastName'],
           },
         },
       },
@@ -33,6 +33,6 @@ export async function GET() {
 
     return NextResponse.json({ status: 200, data: artists });
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 }

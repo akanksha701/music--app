@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import Album from "@/lib/models/Album";
-import { currentUser } from "@clerk/nextjs/server";
+import { NextResponse } from 'next/server';
+import dbConnect from '@/lib/DbConnection/dbConnection';
+import Album from '@/lib/models/Album';
+import { currentUser } from '@clerk/nextjs/server';
 
 export async function GET() {
   try {
@@ -10,10 +10,10 @@ export async function GET() {
     const albums = await Album.aggregate([
       {
         $lookup: {
-          from: "musics",
-          localField: "musicIds",
-          foreignField: "_id",
-          as: "musicDetails",
+          from: 'musics',
+          localField: 'musicIds',
+          foreignField: '_id',
+          as: 'musicDetails',
         },
       },
       {
@@ -23,7 +23,7 @@ export async function GET() {
       },
       {
         $lookup: {
-          from: "users",
+          from: 'users',
           pipeline: [
             {
               $match: { clerkUserId: user.id },
@@ -32,34 +32,34 @@ export async function GET() {
               $project: { likedAlbums: 1 },
             },
           ],
-          as: "loggedInUser",
+          as: 'loggedInUser',
         },
       },
       {
         $unwind: {
-          path: "$loggedInUser",
+          path: '$loggedInUser',
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $unwind: {
-          path: "$musicDetails",
+          path: '$musicDetails',
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $addFields: {
-          liked: { $in: ["$_id", "$loggedInUser.likedAlbums"] },
+          liked: { $in: ['$_id', '$loggedInUser.likedAlbums'] },
         },
       },
       {
         $group: {
-          _id: "$_id",
-          name: { $first: "$name" },
-          liked: { $first: "$liked" },
-          imageUrl: { $first: "$imageUrl" },
-          description: { $first: "$description" },
-          count: { $sum: "$musicDetails.playTime" },
+          _id: '$_id',
+          name: { $first: '$name' },
+          liked: { $first: '$liked' },
+          imageUrl: { $first: '$imageUrl' },
+          description: { $first: '$description' },
+          count: { $sum: '$musicDetails.playCount' },
         },
       },
       {
@@ -69,7 +69,7 @@ export async function GET() {
 
     return NextResponse.json({ status: 200, data: albums });
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json({ status: 500, message: "Error occurred" });
+    console.error('Error:', error);
+    return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }

@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import path from "path";
 import { Method } from "@/app/About/types/types";
 import { Roles } from "../globals";
@@ -8,6 +8,7 @@ import cloudinary from "cloudinary";
 import queryString from "query-string";
 import fs from "fs";  
 import crypto from "crypto";
+import { parseBuffer } from 'music-metadata';
 
 export interface IAudioTypes {
   audioDestination: string;
@@ -193,53 +194,28 @@ export const saveFiles = async (file: Blob, folderName: string) => {
     return null;
   }
 };
-// export const saveFiles = async (file: Blob, folderName: string) => {
-//   if (file) {
-//     const buffer = Buffer.from(await file.arrayBuffer());
 
-//     if (!fs.existsSync(folderName)) {
-//       fs.mkdirSync(folderName, { recursive: true });
-//     }
-//     const filePath = path.resolve(folderName, (file as File).name);
 
-//     try {
-//       await fs.promises.writeFile(filePath, buffer);
-//       console.log("File saved to:", filePath.split("public")[1]);
-//       let relativePath = filePath.split("public")[1];
-//       // Added for windows
-//       if (process.platform === "win32") {
-//         relativePath = relativePath.replace(/\\/g, "/");
-//       }
-//       return relativePath;
-//     } catch (err) {
-//       console.error("Error saving the file:", err);
-//       return null;
-//     }
-//   } else {
-//     return null;
-//   }
-// };
-export async function getAudioDuration(audioBlob: Blob): Promise<number> {
-  return new Promise(async (resolve, reject) => {
-    const buffer = Buffer.from(await audioBlob.arrayBuffer());
-    const fileSize = buffer.length;
-    const magicNumber = buffer.readUInt32BE(0);
-    if (magicNumber === 0x49443303) {
-      console.log("Detected an MP3 file with ID3 header");
-    } else if (buffer[0] === 0xff && buffer[1] === 0xfb) {
-      console.log("Detected an MP3 file with frame sync");
-    } else {
-      reject(new Error("Not a valid MP3 file or missing expected header."));
-      return;
-    }
-    const bitrateIndex = buffer[2];
-    let bitrate = 128;
+export async function getAudioDuration(audioBlob: Blob): Promise<string> {
+  try {
+    // Convert Blob to Buffer
+    const arrayBuffer = await audioBlob.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    if (bitrateIndex === 0) bitrate = 320;
-    else if (bitrateIndex === 1) bitrate = 256;
-    else if (bitrateIndex === 2) bitrate = 192;
-    else if (bitrateIndex === 3) bitrate = 128;
-    const duration = fileSize / (bitrate * 1000);
-    resolve(duration);
-  });
+    const metadata = await parseBuffer(buffer);
+    
+    const durationInSeconds:any = metadata.format.duration; // Duration is in seconds
+    
+    const minutes = Math.floor(durationInSeconds / 60);
+    const seconds = Math.floor(durationInSeconds % 60);
+    
+    const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    console.log("Formatted Duration:", formattedDuration);
+
+    return formattedDuration;
+  } catch (error:any) {
+    throw new Error('Unable to extract audio duration: ' + error.message);
+  }
 }
+

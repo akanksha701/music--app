@@ -1,12 +1,12 @@
-import NextInput from "@/common/inputs/Input";
-import NextTextArea from "@/common/inputs/Textarea";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectItem } from "@nextui-org/react";
-import React from "react";
-import { useForm } from "react-hook-form";
+import NextInput from '@/common/inputs/Input';
+import NextTextArea from '@/common/inputs/Textarea';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectItem } from '@nextui-org/react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 const AddCategory = () => {
   const {
     register,
@@ -18,7 +18,7 @@ const AddCategory = () => {
   const onSubmit = handleSubmit(async (data) => {
     try {
     } catch (error) {
-      console.error("Error submitting form", error);
+      console.error('Error submitting form', error);
     }
   });
 
@@ -38,7 +38,7 @@ const AddCategory = () => {
               required
               placeholder="Enter your genre name"
               errors={errors}
-              options={{ required: "Name is required" }}
+              options={{ required: 'Name is required' }}
             />
           </div>
         </div>
@@ -55,7 +55,7 @@ const AddCategory = () => {
               required
               placeholder="Enter your description"
               errors={errors}
-              options={{ required: "Description is required" }}
+              options={{ required: 'Description is required' }}
             />
           </div>
         </div>

@@ -28,9 +28,9 @@ const AddGenre = (props: IAddGenreProps) => {
 
     props.handleCloseDialog()
     const formData = new FormData();
-    formData.append("image", data.imageUrl);
-    formData.append("name", data.name);
-    formData.append("description", data.description);
+    formData.append('image', data.imageUrl);
+    formData.append('name', data.name);
+    formData.append('description', data.description);
     try {
       const Res = await addGenre(formData)
        console.log("Res :  " ,  Res )
@@ -57,7 +57,7 @@ const AddGenre = (props: IAddGenreProps) => {
               label="Name"
               placeholder="Enter your name"
               register={register}
-              options={{ required: "Name is required" }}
+              options={{ required: 'Name is required' }}
               errors={errors}
             />
           </div>
@@ -70,7 +70,7 @@ const AddGenre = (props: IAddGenreProps) => {
               label="Description"
               placeholder="Enter music description"
               register={register}
-              options={{ required: "Description is required" }}
+              options={{ required: 'Description is required' }}
               errors={errors}
             />
           </div>
