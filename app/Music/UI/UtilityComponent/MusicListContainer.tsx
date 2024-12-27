@@ -180,22 +180,21 @@ const MusicListContainer = () => {
       const wavesurfer = wavesurferRefs.current.get(
         currentTrack?._id as string
       );
-      if (currentTrack?._id == track._id) {
+      if (currentTrack?._id === track._id) {
         if (isPlaying) {
           wavesurfer?.current?.pause();
           dispatch(setIsPlaying(false));
         } else {
-          console.log('elle')
           wavesurfer?.current?.play();
           dispatch(setIsPlaying(true));
         }
       } else {
         if (isPlaying) {
-          wavesurfer?.current?.play();
-          dispatch(setIsPlaying(true));
-        } else {
           wavesurfer?.current?.pause();
           dispatch(setIsPlaying(false));
+        } else {
+          wavesurfer?.current?.play();
+          dispatch(setIsPlaying(true));
         }
       }
     },
@@ -205,7 +204,6 @@ const MusicListContainer = () => {
   if (!allSongs) {
     return null;
   }
-
   return (
     <div>
       <MusicList

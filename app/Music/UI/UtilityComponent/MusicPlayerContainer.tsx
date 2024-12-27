@@ -65,9 +65,25 @@ const MusicPlayerContainer = () => {
 
           wavesurferRef.current.on("ready", () => {
             console.log("WaveSurfer is ready");
+            dispatch(setIsPlaying(true));
             if (isMuted) wavesurferRef.current.setVolume(0);
             wavesurferRef.current.setVolume(volume);
             wavesurferRef.current.play();
+          });
+          wavesurferRef?.current?.on("timeupdate", (time: number) => {
+            dispatch(
+              setSeekPercentage(
+                (wavesurferRef?.current?.getCurrentTime() /
+                  wavesurferRef?.current?.getDuration()) *
+                  100
+              )
+            );
+            dispatch(
+              setCurrentTrack({
+                ...currentTrack,
+              })
+            );
+            setCurrentTime(time);
           });
         }
       }
@@ -85,22 +101,14 @@ const MusicPlayerContainer = () => {
   }, [currentTrack?._id]);
 
   useEffect(() => {
-    wavesurferRef?.current?.on("timeupdate", (time: number) => {
-        dispatch(
-          setSeekPercentage(
-            (wavesurferRef?.current?.getCurrentTime() /
-              wavesurferRef?.current?.getDuration()) *
-              100
-          )
-        );
-        dispatch(
-          setCurrentTrack({
-            ...currentTrack,
-          })
-        );
-        setCurrentTime(time);
-    });
-  }, [isPlaying,currentTime,currentTrack?._id]);
+    if (isPlaying) {
+      wavesurferRef?.current?.play();
+      dispatch(setIsPlaying(true));
+    } else {
+      wavesurferRef?.current?.pause();
+      dispatch(setIsPlaying(false));
+    }
+  }, [isPlaying,currentTrack?._id]);
 
   const handlePlayPause = useCallback(() => {
     if (wavesurferRef.current) {
