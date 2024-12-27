@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/Redux/store";
 import WaveSurfer from "wavesurfer.js";
@@ -26,7 +26,6 @@ const MusicPlayerContainer = () => {
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
-
   const allSongs = useSelector<RootState, IMusicProps[]>(
     (state) => state.musicPlayerSlice.currentList
   );
@@ -46,46 +45,54 @@ const MusicPlayerContainer = () => {
     (state) => state.musicPlayerSlice.selectedMusicIndex
   );
 
+  const createWaveSufer = () => {
+    if (!wavesurferRef.current) {
+      const waveformElement = document.getElementById("waveform");
+      if (waveformElement) {
+        wavesurferRef.current = WaveSurfer.create({
+          container: waveformElement,
+          width: 600,
+          height: 33,
+          waveColor: "#abb6c1",
+          progressColor: "#5a17dd",
+          // barWidth: 3,
+          // barGap: 2,
+          barRadius: 200,
+          cursorColor: "transparent",
+        });
+
+        const url = currentTrack?.audioUrl || "";
+        wavesurferRef.current.load(url);
+        wavesurferRef.current.on("ready", () => {
+          console.log("WaveSurfer is ready");
+          dispatch(setIsPlaying(true));
+          if (isMuted) wavesurferRef.current.setVolume(0);
+          wavesurferRef.current.setVolume(volume);
+          wavesurferRef.current.play();
+        });
+      }
+    }
+  };
+
+
+  const playerProgress = () => {
+    wavesurferRef?.current?.on("timeupdate", (time: number) => {
+      dispatch(
+        setSeekPercentage(
+          (wavesurferRef?.current?.getCurrentTime() /
+            wavesurferRef?.current?.getDuration()) *
+            100
+        )
+      );
+      dispatch(setCurrentTrack({ ...currentTrack }));
+      setCurrentTime(time);
+    });
+  };
+
+
   useEffect(() => {
     if (currentTrack) {
-      if (!wavesurferRef.current) {
-        const waveformElement = document.getElementById("waveform");
-        if (waveformElement) {
-          wavesurferRef.current = WaveSurfer.create({
-            container: waveformElement,
-            width: 600,
-            height: 33,
-            waveColor: "#abb6c1",
-            progressColor: "#5a17dd",
-            // barWidth: 3,
-            // barGap: 2,
-            barRadius: 200,
-            cursorColor: "transparent",
-          });
-
-          const url = currentTrack?.audioUrl || "";
-          wavesurferRef.current.load(url);
-
-          wavesurferRef.current.on("ready", () => {
-            console.log("WaveSurfer is ready");
-            dispatch(setIsPlaying(true));
-            if (isMuted) wavesurferRef.current.setVolume(0);
-            wavesurferRef.current.setVolume(volume);
-            wavesurferRef.current.play();
-          });
-          wavesurferRef?.current?.on("timeupdate", (time: number) => {
-            dispatch(
-              setSeekPercentage(
-                (wavesurferRef?.current?.getCurrentTime() /
-                  wavesurferRef?.current?.getDuration()) *
-                  100
-              )
-            );
-
-            setCurrentTime(time);
-          });
-        }
-      }
+      createWaveSufer();
     }
 
     return () => {
@@ -99,6 +106,14 @@ const MusicPlayerContainer = () => {
     };
   }, [currentTrack?._id]);
 
+
+
+  useEffect(() => {
+    playerProgress();
+  }, [currentTrack]);
+
+
+
   useEffect(() => {
     if (isPlaying) {
       wavesurferRef?.current?.play();
@@ -108,6 +123,7 @@ const MusicPlayerContainer = () => {
       dispatch(setIsPlaying(false));
     }
   }, [isPlaying, currentTrack?._id]);
+
 
   const handlePlayPause = useCallback(() => {
     if (wavesurferRef.current) {
@@ -120,6 +136,7 @@ const MusicPlayerContainer = () => {
     }
   }, [isPlaying]);
 
+
   const handleLikeClick = async () => {
     if (currentTrack) {
       await handleLikeToggle(
@@ -129,6 +146,7 @@ const MusicPlayerContainer = () => {
         currentTrack,
         dispatch
       );
+
       dispatch(
         setCurrentTrack({
           ...currentTrack,
@@ -138,12 +156,14 @@ const MusicPlayerContainer = () => {
     }
   };
 
+
   const toggleMute = () => {
     dispatch(setIsMuted(!isMuted));
     if (wavesurferRef.current) {
       wavesurferRef.current.setVolume(isMuted ? volume : 0);
     }
   };
+
 
   const playSong = (direction: "next" | "prev") => {
     if (!currentTrack) return;
@@ -160,9 +180,9 @@ const MusicPlayerContainer = () => {
     dispatch(setCurrentSongIndex(newIndex));
   };
 
-  const handlePlayTrack = (track: IMusicProps) =>
-    dispatch(setCurrentTrack(track));
+  const handlePlayTrack = (track: IMusicProps) => dispatch(setCurrentTrack(track));
 
+  
   if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;
   }

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import PlayerLabel from "./PlayerLabel";
 import { IoAddSharp } from "react-icons/io5";
 import { FaHeart, FaPause, FaPlay, FaRegHeart } from "react-icons/fa";
@@ -9,6 +9,8 @@ import { FiShoppingCart } from "react-icons/fi";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "next/navigation";
 import { RootState } from "@/Redux/store";
+import { handleLikeToggle } from "@/hooks/useLike";
+import { useToggleLikeMutation } from "@/services/like";
 
 const MusicList = ({
   data,
@@ -27,6 +29,9 @@ const MusicList = ({
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
+  const dispatch = useDispatch();
+  const [toggleLike] = useToggleLikeMutation();
+
   const renderedTracks =
     data && data.length > 0 ? (
       data.map((track: IMusicProps) => (
@@ -47,7 +52,7 @@ const MusicList = ({
               <PlayerLabel
                 title={track?.name || "Unknown Track"}
                 artists={track?.artists || ""}
-                textColor={'black'}
+                textColor={"black"}
               />
             </div>
 
@@ -64,12 +69,11 @@ const MusicList = ({
             {track?.liked ? (
               <FaHeart
                 className="text-red-500 transition-colors duration-300"
-                onClick={handleLikeClick}
+                
               />
             ) : (
               <FaRegHeart
                 className="text-red-500 transition-colors duration-300"
-                onClick={handleLikeClick}
               />
             )}
 

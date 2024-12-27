@@ -15,9 +15,6 @@ import VolumeIcon from "./VolumeIcon";
 import PlayerLabel from "./PlayerLabel";
 import Image from "next/image";
 import { IMusicPlayerProps } from "../../types/types";
-import { RootState } from "@/Redux/store";
-import { useSelector } from "react-redux";
-import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 const MusicPlayer = ({
   currentTrack,
   isMuted,
@@ -29,7 +26,6 @@ const MusicPlayer = ({
   onNextSong,
   onPreviousSong,
 }: IMusicPlayerProps) => {
-
   return (
     <div className="w-full bg-black p-2 flex flex-row items-center justify-between gap-4 fixed bottom-0 left-0 z-50">
       <div className="flex flex-row items-center flex-1 space-x-4">

@@ -32,6 +32,7 @@ const MusicListContainer = () => {
       ? useGetAllMusicsQuery({})
       : { data: null, isLoading: false };
 
+      
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
@@ -86,8 +87,6 @@ const MusicListContainer = () => {
       setWaveSurferInstances(instances.filter(Boolean));
     }
   };
-
-
 
   useEffect(() => {
     waveSurferInstances.forEach(({ song, wavesurfer }) => {
@@ -147,6 +146,12 @@ const MusicListContainer = () => {
         toggleLike,
         currentTrack,
         dispatch
+      );
+      dispatch(
+        setCurrentTrack({
+          ...currentTrack,
+          liked: !currentTrack.liked,
+        })
       );
     }
   };
