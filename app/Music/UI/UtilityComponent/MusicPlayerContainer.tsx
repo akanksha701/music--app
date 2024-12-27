@@ -1,20 +1,21 @@
-'use client';
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/Redux/store';
-import WaveSurfer from 'wavesurfer.js';
+"use client";
+import React, { useCallback, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/Redux/store";
+import WaveSurfer from "wavesurfer.js";
 import {
   setCurrentSongIndex,
   setCurrentTrack,
   setIsMuted,
+  setIsPlaying,
   setSeekPercentage,
   togglePlay,
-} from '@/Redux/features/musicPlayer/musicPlayerSlice';
-import { handleLikeToggle } from '@/hooks/useLike';
-import { useToggleLikeMutation } from '@/services/like';
-import MusicPlayer from './MusicPlayer';
-import { formatTime, useMusic } from '@/hooks/useMusic';
-import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+} from "@/Redux/features/musicPlayer/musicPlayerSlice";
+import { handleLikeToggle } from "@/hooks/useLike";
+import { useToggleLikeMutation } from "@/services/like";
+import MusicPlayer from "./MusicPlayer";
+import { formatTime, useMusic } from "@/hooks/useMusic";
+import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 
 const MusicPlayerContainer = () => {
   let newIndex: number;
@@ -46,47 +47,28 @@ const MusicPlayerContainer = () => {
   useEffect(() => {
     if (currentTrack) {
       if (!wavesurferRef.current) {
-        const waveformElement = document.getElementById('waveform');
+        const waveformElement = document.getElementById("waveform");
         if (waveformElement) {
           wavesurferRef.current = WaveSurfer.create({
             container: waveformElement,
             height: 33,
-            waveColor: '#0f172a',
-            progressColor: '#9333ea',
+            waveColor: "#0f172a",
+            progressColor: "#9333ea",
             barWidth: 3,
             barGap: 2,
             barRadius: 2,
-            cursorColor: 'transparent',
+            cursorColor: "transparent",
           });
 
-          const url = currentTrack?.audioUrl || '';
+          const url = currentTrack?.audioUrl || "";
           wavesurferRef.current.load(url);
 
-          wavesurferRef.current.on('ready', () => {
-            console.log('WaveSurfer is ready');
+          wavesurferRef.current.on("ready", () => {
+            console.log("WaveSurfer is ready");
             if (isMuted) wavesurferRef.current.setVolume(0);
             wavesurferRef.current.setVolume(volume);
             wavesurferRef.current.play();
           });
-
-          wavesurferRef.current.on('timeupdate', (time: number) => {
-            dispatch(
-              setSeekPercentage(
-                (wavesurferRef.current.getCurrentTime() /
-                  wavesurferRef.current.getDuration()) *
-                  100
-              )
-            );
-            dispatch(
-              setCurrentTrack({
-                ...currentTrack,
-              })
-            );
-            setCurrentTime(time);
-          });
-          // wavesurferRef.current.on("interaction", () => {
-          //   console.log('musicplayer list 11')
-          // })
         }
       }
     }
@@ -94,13 +76,31 @@ const MusicPlayerContainer = () => {
     return () => {
       if (
         wavesurferRef.current &&
-        typeof wavesurferRef.current.destroy === 'function'
+        typeof wavesurferRef.current.destroy === "function"
       ) {
         wavesurferRef.current.destroy();
         wavesurferRef.current = null;
       }
     };
   }, [currentTrack?._id]);
+
+  useEffect(() => {
+    wavesurferRef?.current?.on("timeupdate", (time: number) => {
+        dispatch(
+          setSeekPercentage(
+            (wavesurferRef?.current?.getCurrentTime() /
+              wavesurferRef?.current?.getDuration()) *
+              100
+          )
+        );
+        dispatch(
+          setCurrentTrack({
+            ...currentTrack,
+          })
+        );
+        setCurrentTime(time);
+    });
+  }, [isPlaying,currentTime,currentTrack?._id]);
 
   const handlePlayPause = useCallback(() => {
     if (wavesurferRef.current) {
@@ -143,14 +143,14 @@ const MusicPlayerContainer = () => {
     }
   };
 
-  const playSong = (direction: 'next' | 'prev') => {
+  const playSong = (direction: "next" | "prev") => {
     if (!currentTrack) return;
     const currentIndex = allSongs.findIndex(
       (song) => song._id === currentTrack._id
     );
-    if (direction === 'next') {
+    if (direction === "next") {
       newIndex = (currentIndex + 1) % allSongs.length;
-    } else if (direction === 'prev') {
+    } else if (direction === "prev") {
       newIndex = (currentIndex - 1 + allSongs.length) % allSongs.length;
     }
     const newTrack = allSongs[newIndex];
@@ -177,8 +177,8 @@ const MusicPlayerContainer = () => {
       handlePlayPause={handlePlayPause}
       handleLikeClick={handleLikeClick}
       handlePlayTrack={handlePlayTrack}
-      onNextSong={() => playSong('next')}
-      onPreviousSong={() => playSong('prev')}
+      onNextSong={() => playSong("next")}
+      onPreviousSong={() => playSong("prev")}
     />
   );
 };
