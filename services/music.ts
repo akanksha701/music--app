@@ -8,8 +8,11 @@ export const musicApi = createApi({
       query: (language) =>
         language ? `api/newRelease?language=${language}}` : "api/newRelease",
     }),
-    getNewReleaseMusics: builder.query({
-      query: () => `api/newReleaseMusics`,
+    getAllMusics: builder.query({
+      query: () => `api/music`,
+    }),
+    getMusicsOfArtists: builder.query({
+      query: (id) => `api/music/artist/${id}`,  
     }),
     getMusicsByUserId: builder.query({
       query: (slug) => `api/music/${slug}`,  
@@ -17,5 +20,5 @@ export const musicApi = createApi({
   }),
 });
 
-export const { useGetnewMusicsQuery, useGetNewReleaseMusicsQuery,useGetMusicsByUserIdQuery } =
+export const { useGetnewMusicsQuery, useGetMusicsOfArtistsQuery, useGetAllMusicsQuery ,useGetMusicsByUserIdQuery } =
   musicApi;

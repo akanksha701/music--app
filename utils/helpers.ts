@@ -7,6 +7,7 @@ import { CalendarDate } from "@internationalized/date";
 import cloudinary from "cloudinary";
 import queryString from "query-string";
 import fs from "fs";  
+import crypto from "crypto";
 
 export interface IAudioTypes {
   audioDestination: string;
@@ -146,6 +147,9 @@ export const fetchApi = async (
     throw error;
   }
 };
+const generateRandomKey = (length: number) => {
+  return crypto.randomBytes(length).toString("hex").slice(0, length);
+};
 
 export const saveFiles = async (file: Blob, folderName: string) => {
   if (file) {
@@ -154,16 +158,32 @@ export const saveFiles = async (file: Blob, folderName: string) => {
     if (!fs.existsSync(folderName)) {
       fs.mkdirSync(folderName, { recursive: true });
     }
-    const filePath = path.resolve(folderName, (file as File).name);
+
+    // Generate a unique file name with a random key
+    const originalFileName = (file as File).name;
+    const fileExtension = path.extname(originalFileName);
+    const baseName = path.basename(originalFileName, fileExtension);
+
+    // Generate a random key of specified length (e.g., 16 characters)
+    const randomKey = generateRandomKey(4);
+    const timestamp = Date.now(); // Current timestamp
+
+    // Create a unique file name
+    const uniqueFileName = `${baseName}-${timestamp}-${randomKey}${fileExtension}`;
+
+    const filePath = path.resolve(folderName, uniqueFileName);
 
     try {
       await fs.promises.writeFile(filePath, buffer);
       console.log("File saved to:", filePath.split("public")[1]);
+
       let relativePath = filePath.split("public")[1];
-      // Added for windows
+      // Adjust for Windows path separators
       if (process.platform === "win32") {
         relativePath = relativePath.replace(/\\/g, "/");
       }
+      console.log("relativePath  : " , relativePath)
+
       return relativePath;
     } catch (err) {
       console.error("Error saving the file:", err);
@@ -173,6 +193,32 @@ export const saveFiles = async (file: Blob, folderName: string) => {
     return null;
   }
 };
+// export const saveFiles = async (file: Blob, folderName: string) => {
+//   if (file) {
+//     const buffer = Buffer.from(await file.arrayBuffer());
+
+//     if (!fs.existsSync(folderName)) {
+//       fs.mkdirSync(folderName, { recursive: true });
+//     }
+//     const filePath = path.resolve(folderName, (file as File).name);
+
+//     try {
+//       await fs.promises.writeFile(filePath, buffer);
+//       console.log("File saved to:", filePath.split("public")[1]);
+//       let relativePath = filePath.split("public")[1];
+//       // Added for windows
+//       if (process.platform === "win32") {
+//         relativePath = relativePath.replace(/\\/g, "/");
+//       }
+//       return relativePath;
+//     } catch (err) {
+//       console.error("Error saving the file:", err);
+//       return null;
+//     }
+//   } else {
+//     return null;
+//   }
+// };
 export async function getAudioDuration(audioBlob: Blob): Promise<number> {
   return new Promise(async (resolve, reject) => {
     const buffer = Buffer.from(await audioBlob.arrayBuffer());

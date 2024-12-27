@@ -16,7 +16,7 @@ const NextInput = <T extends FieldValues>({
   options,
   className = "",
   defaultValue, // New defaultValue prop
-}: INextInputProps<T> & { defaultValue?: string }) => {
+}: INextInputProps<T> & { defaultValue?: string | number | undefined }) => {
   const hasError = errors[id] as FieldError;
   return (
     <div className="mb-3">

@@ -1,10 +1,10 @@
 
 export interface IAddLanguageProps {
-    handleCloseDialog: any;
+    handleCloseDialog: () => void;
 
 }
 
 export  interface IAddGenreProps {
-    handleCloseDialog: any;
+    handleCloseDialog: () => void;
 
 }

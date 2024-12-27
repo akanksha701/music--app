@@ -14,6 +14,7 @@ export interface IButtonProps {
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
   mode? :  string
+  children?: ReactNode;
 }
 
 export interface IIconProps {

@@ -1,35 +1,4 @@
-// const mongoose = require("mongoose");
-
-// const albumSchema = new mongoose.Schema(
-//   {
-//     name: {
-//       type: String,
-//       required: true,
-//       unique: true,
-//     }, 
-//     musicIds: [
-//       {
-//         type: mongoose.Schema.Types.ObjectId,  
-//         ref: "Music",  
-//       },
-//     ],
-//     description: {
-//       type: String,
-//       required: true,
-//     },
-//     imageUrl: {
-//       type: String,
-//     },
-//     isDeleted: {
-//       type: Boolean,
-//       default: false,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );
-
+import { nullable } from "zod";
 
 const mongoose = require('mongoose');
 
@@ -44,6 +13,7 @@ const albumSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
+    nullable: true,
   },
   isDeleted: {
     type: Boolean,
@@ -51,7 +21,7 @@ const albumSchema = new mongoose.Schema({
   },
   Label: {
     type: mongoose.Schema.Types.ObjectId,
-     
+    ref: 'User',
   },
   Rating: {
     type: Number,
