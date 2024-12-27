@@ -6,7 +6,6 @@ import {
   setCurrentTrack,
   setIsPlaying,
   setSeekPercentage,
-  togglePlay,
 } from "@/Redux/features/musicPlayer/musicPlayerSlice";
 import WaveSurfer from "wavesurfer.js";
 import MusicList from "./MusicList";
@@ -32,7 +31,7 @@ const MusicListContainer = () => {
       : queryType === TAGS.NEW_RELEASE
       ? useGetAllMusicsQuery({})
       : { data: null, isLoading: false };
-  // const { data: topHits } = useGetTopHitsMusicsQuery(undefined);
+
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
@@ -61,13 +60,15 @@ const MusicListContainer = () => {
         if (!wavesurferRefs.current.has(song?._id as string)) {
           const wavesurfer = WaveSurfer.create({
             container: `#${waveformContainerId}`,
-            width: 383,
+            // width: 600,
             height: 33,
-            barWidth: 3,
-            barGap: 2,
-            barRadius: 2,
-            waveColor: "#0f172a",
-            progressColor: "#9333ea",
+            // barWidth: 1,
+            // barGap: 2,
+            barRadius: 200,
+            // waveColor: 'rgb(200, 0, 200)',
+            // progressColor: 'rgb(100, 0, 100)',
+            waveColor: "#abb6c1",
+            progressColor: "#5a17dd",
             cursorColor: "transparent",
           });
 
@@ -85,6 +86,8 @@ const MusicListContainer = () => {
       setWaveSurferInstances(instances.filter(Boolean));
     }
   };
+
+
 
   useEffect(() => {
     waveSurferInstances.forEach(({ song, wavesurfer }) => {
@@ -202,11 +205,9 @@ const MusicListContainer = () => {
     [isPlaying]
   );
 
-  if(isLoading)
-  {
-    return <Loading/>
-  }
-  else if (!allSongs) {
+  if (isLoading) {
+    return <Loading />;
+  } else if (!allSongs) {
     return null;
   }
   return (

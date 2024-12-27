@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/Redux/store";
 import WaveSurfer from "wavesurfer.js";
@@ -26,6 +26,7 @@ const MusicPlayerContainer = () => {
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
+
   const allSongs = useSelector<RootState, IMusicProps[]>(
     (state) => state.musicPlayerSlice.currentList
   );
@@ -44,6 +45,7 @@ const MusicPlayerContainer = () => {
   const selectedMusicIndex = useSelector<RootState, number | null>(
     (state) => state.musicPlayerSlice.selectedMusicIndex
   );
+
   useEffect(() => {
     if (currentTrack) {
       if (!wavesurferRef.current) {
@@ -51,12 +53,13 @@ const MusicPlayerContainer = () => {
         if (waveformElement) {
           wavesurferRef.current = WaveSurfer.create({
             container: waveformElement,
+            width: 600,
             height: 33,
-            waveColor: "#0f172a",
-            progressColor: "#9333ea",
-            barWidth: 3,
-            barGap: 2,
-            barRadius: 2,
+            waveColor: "#abb6c1",
+            progressColor: "#5a17dd",
+            // barWidth: 3,
+            // barGap: 2,
+            barRadius: 200,
             cursorColor: "transparent",
           });
 
@@ -78,11 +81,7 @@ const MusicPlayerContainer = () => {
                   100
               )
             );
-            dispatch(
-              setCurrentTrack({
-                ...currentTrack,
-              })
-            );
+
             setCurrentTime(time);
           });
         }
@@ -108,7 +107,7 @@ const MusicPlayerContainer = () => {
       wavesurferRef?.current?.pause();
       dispatch(setIsPlaying(false));
     }
-  }, [isPlaying,currentTrack?._id]);
+  }, [isPlaying, currentTrack?._id]);
 
   const handlePlayPause = useCallback(() => {
     if (wavesurferRef.current) {
@@ -130,17 +129,12 @@ const MusicPlayerContainer = () => {
         currentTrack,
         dispatch
       );
-
-      const updatedSongIndex = allSongs.findIndex(
-        (song) => song._id === currentTrack._id
+      dispatch(
+        setCurrentTrack({
+          ...currentTrack,
+          liked: !currentTrack.liked,
+        })
       );
-      if (updatedSongIndex !== -1) {
-        const updatedSong = {
-          ...allSongs[updatedSongIndex],
-          liked: !allSongs[updatedSongIndex].liked,
-        };
-        dispatch(setCurrentTrack(updatedSong));
-      }
     }
   };
 

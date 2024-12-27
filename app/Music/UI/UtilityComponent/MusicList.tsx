@@ -33,13 +33,13 @@ const MusicList = ({
         <div key={track._id} className="w-full p-2 flex flex-row items-center">
           <div className="flex flex-row items-center flex-1">
             <button
-              className="border border-white rounded-full p-2 mx-2 my-2"
+              className="border border-black rounded-full p-2 mx-2 my-2"
               onClick={() => handlePlayTrack(track)}
             >
               {currentTrackId === track._id && isPlaying ? (
-                <FaPause size={12} color="white" />
+                <FaPause size={12} color="black" />
               ) : (
-                <FaPlay size={12} color="gray" />
+                <FaPlay size={12} color="black" />
               )}
             </button>
 
@@ -47,6 +47,7 @@ const MusicList = ({
               <PlayerLabel
                 title={track?.name || "Unknown Track"}
                 artists={track?.artists || ""}
+                textColor={'black'}
               />
             </div>
 
@@ -94,8 +95,8 @@ const MusicList = ({
 
   return (
     <>
-      <div className="bg-black">
-        <h3 className="text-white text-2xl font-semibold mx-2 p-5">
+      <div className="bg-white">
+        <h3 className="text-black text-2xl font-semibold mx-2 p-5">
           {listName}
         </h3>
         <hr className="w-full p-2 border-gray-600" />
