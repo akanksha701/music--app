@@ -20,6 +20,7 @@ import {
 } from "@/services/like";
 import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { useSearchParams } from "next/navigation";
+import Loading from "@/app/loading";
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
@@ -201,7 +202,11 @@ const MusicListContainer = () => {
     [isPlaying]
   );
 
-  if (!allSongs) {
+  if(isLoading)
+  {
+    return <Loading/>
+  }
+  else if (!allSongs) {
     return null;
   }
   return (

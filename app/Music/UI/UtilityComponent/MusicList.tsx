@@ -1,14 +1,14 @@
-'use client';
-import React from 'react';
-import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
-import PlayerLabel from './PlayerLabel';
-import { IoAddSharp } from 'react-icons/io5';
-import { FaHeart, FaPause, FaPlay, FaRegHeart } from 'react-icons/fa';
-import { GoDownload } from 'react-icons/go';
-import { FiShoppingCart } from 'react-icons/fi';
-import { useSelector, useDispatch } from 'react-redux';
-import { useSearchParams } from 'next/navigation';
-import { RootState } from '@/Redux/store';
+"use client";
+import React from "react";
+import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import PlayerLabel from "./PlayerLabel";
+import { IoAddSharp } from "react-icons/io5";
+import { FaHeart, FaPause, FaPlay, FaRegHeart } from "react-icons/fa";
+import { GoDownload } from "react-icons/go";
+import { FiShoppingCart } from "react-icons/fi";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "next/navigation";
+import { RootState } from "@/Redux/store";
 
 const MusicList = ({
   data,
@@ -20,7 +20,7 @@ const MusicList = ({
   handlePlayTrack: (track: IMusicProps) => void;
 }) => {
   const searchParams = useSearchParams();
-  const listName = searchParams.get('type');
+  const listName = searchParams.get("type");
   const currentTrackId = useSelector<any, string | null>(
     (state) => state.musicPlayerSlice.currentTrack?._id
   );
@@ -45,19 +45,19 @@ const MusicList = ({
 
             <div className="text-left flex-1">
               <PlayerLabel
-                title={track?.name || 'Unknown Track'}
-                artists={track?.artists || ''}
+                title={track?.name || "Unknown Track"}
+                artists={track?.artists || ""}
               />
             </div>
 
             <div
               key={`${track._id}`}
               id={`waveform_${track._id}`} // Use consistent ID format
-              className="cursor-pointer mx-4 rounded-lg w-1/2 h-50"
+              className="cursor-pointer  w-full sm:w-32 md:w-1/2 hidden md:block" // Hidden on mobile, block on md and larger
             ></div>
 
             <p className="text-xs text-slate-600 bg-transparent rounded-md my-2 ml-4 mx-5">
-              {track?.duration || '0:00'}
+              {track?.duration || "0:00"}
             </p>
 
             {track?.liked ? (
