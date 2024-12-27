@@ -13,8 +13,6 @@ import SecondaryButton from '@/common/buttons/SecondaryButton';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import toast from 'react-hot-toast';
 import { Album } from '../types/types';
-import WavesurferComponent from '@/common/Wave/WaveSuffer';
-
 
 
 const AlbumPage = ({ params }: { params: any }) => {
