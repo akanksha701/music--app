@@ -13,6 +13,7 @@ import SecondaryButton from '@/common/buttons/SecondaryButton';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import toast from 'react-hot-toast';
 import { Album } from '../types/types';
+import MusicListContainer from '@/common/MusicPlayer/MusicListContainer';
 
 
 const AlbumPage = ({ params }: { params: any }) => {
@@ -53,6 +54,8 @@ const AlbumPage = ({ params }: { params: any }) => {
   console.log("ALBUM : "   , album)
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
+
+
       <div className="edit-container w-full flex justify-end gap-4">
 
 
@@ -131,9 +134,9 @@ const AlbumPage = ({ params }: { params: any }) => {
           {/* Right Section: Music List (66%) */}
           <div className="lg:col-span-2 space-y-6">
             <h3 className="text-2xl font-semibold p-4">Music Tracks</h3>
-            {album.musicIds?.map((music, index: number) => (
-              <div key={index} className="flex items-center space-x-4 border-b pb-4">
-                <img
+            {/* {album.musicIds?.map((music, index: number) => (
+              <div key={index} className="flex items-center space-x-4 border-b pb-4"> */}
+                {/* <img
                   src={music.audioDetails.imageUrl}
                   alt={music.musicDetails.name}
                   className="w-16 h-16 object-cover rounded-full"
@@ -148,17 +151,20 @@ const AlbumPage = ({ params }: { params: any }) => {
                   <p className="text-gray-500 text-sm">
                     Released on {new Date(music.musicDetails.releaseDate).toLocaleDateString()}
                   </p>
-                </div>
-                <div className="text-right">
-                  {/* <p className="font-bold text-lg text-gray-500">${music.price.amount}</p> */}
+                </div> */}
+                {/* <div className="text-right">
+                  
                   <audio controls className="mt-2">
                     <source src={music.audioDetails.audioUrl} type="audio/mp3" />
                     Your browser does not support the audio element.
                   </audio>
-                </div>
+                </div> */}
 
-              </div>
-            ))}
+        <MusicListContainer AlbumId={AlbumId}  ></MusicListContainer>
+
+
+              {/* </div> */}
+            {/* ))} */}
           </div>
         </div>
       </div>

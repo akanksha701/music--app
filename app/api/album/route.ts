@@ -102,9 +102,137 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const albumId = url.searchParams.get("AlbumId");
     const artistId = url.searchParams.get("ArtistId");
+    const type = url.searchParams.get("type");
 
     // Filter to fetch only non-deleted documents
     let filter: any = { isDeleted: false };
+
+    // If AlbumId and type=musics are provided, fetch musics related to the album
+    if (albumId && type === "AlbumSongs") {
+      // Fetch the album to get musicIds
+      const album = await Album.findOne({ _id: albumId, isDeleted: false }).populate("musicIds");
+    
+      if (!album || !album.musicIds) {
+        return NextResponse.json(
+          { error: "Album or associated music not found" },
+          { status: 404 }
+        );
+      }
+    
+      const musicIds = album.musicIds.map((music: any) => music._id); // Extract the IDs of associated music
+    
+      const user: any = await currentUser();
+      const musics = await Music.aggregate([
+        {
+          $match: { _id: { $in: musicIds }, isDeleted: false }, // Match music by IDs
+        },
+        {
+          $lookup: {
+            from: "artists",
+            let: { artistsIds: "$musicDetails.artistId" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $in: ["$_id", "$$artistsIds"] },
+                },
+              },
+            ],
+            as: "artistDetails",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            let: { artistsIds: "$artistDetails.userId" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $in: ["$_id", "$$artistsIds"] },
+                },
+              },
+            ],
+            as: "artists",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            pipeline: [
+              {
+                $match: { clerkUserId: user.id },
+              },
+              {
+                $project: { likedMusics: 1 },
+              },
+            ],
+            as: "loggedInUser",
+          },
+        },
+        {
+          $unwind: {
+            path: "$loggedInUser",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
+          },
+        },
+        {
+          $unwind: {
+            path: "$artists",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $group: {
+            _id: "$_id",
+            name: { $first: "$musicDetails.name" },
+            description: { $first: "$musicDetails.description" },
+            duration: { $first: "$musicDetails.duration" },
+            artists: {
+              $push: {
+                $concat: ["$artists.firstName", " ", "$artists.lastName"],
+              },
+            },
+            liked: { $first: "$liked" },
+            email: { $first: "$artists.email" },
+            price: { $first: "$price.amount" },
+            currency: { $first: "$price.currency" },
+            imageUrl: { $first: "$audioDetails.imageUrl" },
+            audioUrl: { $first: "$audioDetails.audioUrl" },
+            playCount: { $first: "$playCount" },
+          },
+        },
+        {
+          $addFields: {
+            artists: {
+              $reduce: {
+                input: "$artists",
+                initialValue: "",
+                in: {
+                  $cond: {
+                    if: { $eq: ["$$value", ""] },
+                    then: "$$this",
+                    else: { $concat: ["$$value", ", ", "$$this"] },
+                  },
+                },
+              },
+            },
+          },
+        },
+        {
+          $sort: {
+            playCount: -1,
+            _id: 1,
+          },
+        },
+      ]);
+    
+      return NextResponse.json({ status: 200, data: musics });
+    }
+    
 
     // If AlbumId is provided, fetch the album with that ID
     if (albumId) {
@@ -126,9 +254,9 @@ export async function GET(req: Request) {
       });
     }
 
-    const page: number = parseInt(url.searchParams.get('page') || '1', 10);
+    const page: number = parseInt(url.searchParams.get("page") || "1", 10);
     const recordsPerPage: number = parseInt(
-      url.searchParams.get('recordsPerPage') || '0',
+      url.searchParams.get("recordsPerPage") || "0",
       10
     );
 
@@ -171,11 +299,94 @@ export async function GET(req: Request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }
 }
+
+
+// export async function GET(req: Request) {
+//   try {
+//     await dbConnect();
+
+//     const url = new URL(req.url);
+//     const albumId = url.searchParams.get("AlbumId");
+//     const artistId = url.searchParams.get("ArtistId");
+
+//     // Filter to fetch only non-deleted documents
+//     let filter: any = { isDeleted: false };
+
+//     // If AlbumId is provided, fetch the album with that ID
+//     if (albumId) {
+//       const album = await Album.findOne({ _id: albumId, ...filter })
+//         .populate("Genre")
+//         .populate("Language")
+//         .populate("musicIds");
+
+//       if (!album) {
+//         return NextResponse.json(
+//           { error: "Album not found" },
+//           { status: 404 }
+//         );
+//       }
+
+//       return NextResponse.json({
+//         status: 200,
+//         data: album,
+//       });
+//     }
+
+//     const page: number = parseInt(url.searchParams.get('page') || '1', 10);
+//     const recordsPerPage: number = parseInt(
+//       url.searchParams.get('recordsPerPage') || '0',
+//       10
+//     );
+
+//     // Add ArtistId to the filter if it's present
+//     if (artistId) {
+//       filter.Label = artistId;
+//     }
+
+//     // If no pagination params provided, fetch all albums matching the filter
+//     if (!recordsPerPage || recordsPerPage === 0) {
+//       const albumList = await Album.find(filter)
+//         .populate("Genre")
+//         .populate("Language")
+//         .populate("musicIds");
+
+//       return NextResponse.json({
+//         status: 200,
+//         data: albumList,
+//       });
+//     }
+
+//     // Pagination logic if recordsPerPage and page are provided
+//     const skip = (page - 1) * recordsPerPage;
+//     const limit = recordsPerPage;
+
+//     const albumList = await Album.find(filter).skip(skip).limit(limit);
+
+//     const totalAlbums = await Album.countDocuments(filter); // Count based on the filter
+
+//     return NextResponse.json({
+//       status: 200,
+//       data: albumList,
+//       pagination: {
+//         page,
+//         recordsPerPage,
+//         totalAlbums,
+//         totalPages: Math.ceil(totalAlbums / recordsPerPage), // Calculate total pages
+//       },
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return NextResponse.json(
+//       { error: 'Internal Server Error' },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 export async function PUT(req: NextRequest) {
   try {

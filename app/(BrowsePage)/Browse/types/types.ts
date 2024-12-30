@@ -5,6 +5,7 @@ export const TAGS = {
   ALBUMS: 'Albums',
   TOP_ALBUMS: 'Top Albums',
   GENRE: 'Genres',
+  ALBUM_SONGS : 'AlbumSongs'
 } as const;
 
 export const LIST_NAME = {

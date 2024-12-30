@@ -16,13 +16,16 @@ export const albumApi = createApi({
       query: (id) =>
         `album?AlbumId=${id}`,
       providesTags: ["Albums"],
-
+    }),
+    getAlbumByIdAndType: builder.query({
+      query: ({id, type}) =>
+        `album?AlbumId=${id}&type=${type}`,
+      providesTags: ["Albums"],
     }),
     getAlbumByArtistId: builder.query({
       query: (id) =>
         `album?ArtistId=${id}`,
       providesTags: ["Albums"],
-
     }),
     addAlbum: builder.mutation({
       query: (data) => ({
@@ -58,5 +61,6 @@ export const {
   useUpdateAlbumMutation, 
   useDeleteAlbumMutation,
   useGetAlbumByIdQuery, 
-  useGetAlbumByArtistIdQuery
+  useGetAlbumByArtistIdQuery,
+  useGetAlbumByIdAndTypeQuery
 } = albumApi;

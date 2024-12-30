@@ -19,7 +19,7 @@ const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
               }}
 
             > 
-              <Link href={`/Album/${item._id}`}>
+              <Link href={`/Album/${item._id}?type=AlbumSongs`}>
                 <CardBody className="flex flex-col justify-between w-full h-full p-0 ">
 
                   {/* Image */}
