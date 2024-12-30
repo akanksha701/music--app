@@ -1,15 +1,17 @@
-"use client";
-import React, { useCallback, useEffect, useRef } from "react";
+'use client'
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/Redux/store";
 import WaveSurfer from "wavesurfer.js";
 import {
-  setCurrentSongIndex,
   setCurrentTrack,
+  setCurrentSongIndex,
   setIsMuted,
   setIsPlaying,
   setSeekPercentage,
   togglePlay,
+  setWavesurferRef,
+  clearWavesurferRef,
 } from "@/Redux/features/musicPlayer/musicPlayerSlice";
 import { handleLikeToggle } from "@/hooks/useLike";
 import { useToggleLikeMutation } from "@/services/like";
@@ -20,8 +22,6 @@ import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 const MusicPlayerContainer = () => {
   let newIndex: number;
   const dispatch = useDispatch();
-  const wavesurferRef = useRef<any>(null);
-  const [toggleLike] = useToggleLikeMutation();
   const { setCurrentTime, currentTime } = useMusic();
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
@@ -41,101 +41,90 @@ const MusicPlayerContainer = () => {
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
+  const wavesurferRef = useSelector<RootState, any>((state) => state.musicPlayerSlice.wavesurferRef);
   const selectedMusicIndex = useSelector<RootState, number | null>(
     (state) => state.musicPlayerSlice.selectedMusicIndex
   );
+  const [toggleLike] = useToggleLikeMutation();
 
-  const createWaveSufer = () => {
-    if (!wavesurferRef.current) {
+  const createWaveSurfer = () => {
+    // if (!wavesurferRef) {
       const waveformElement = document.getElementById("waveform");
-      if (waveformElement) {
-        wavesurferRef.current = WaveSurfer.create({
+      if (waveformElement && currentTrack) {
+        const ws = WaveSurfer.create({
           container: waveformElement,
           width: 600,
           height: 33,
           waveColor: "#abb6c1",
           progressColor: "#5a17dd",
-          // barWidth: 3,
-          // barGap: 2,
           barRadius: 200,
           cursorColor: "transparent",
         });
 
-        const url = currentTrack?.audioUrl || "";
-        wavesurferRef.current.load(url);
-        wavesurferRef.current.on("ready", () => {
-          console.log("WaveSurfer is ready");
+        ws.load(currentTrack?.audioUrl as string);
+        ws.on("ready", () => {
           dispatch(setIsPlaying(true));
-          if (isMuted) wavesurferRef.current.setVolume(0);
-          wavesurferRef.current.setVolume(volume);
-          wavesurferRef.current.play();
+          if (isMuted) ws.setVolume(0);
+          ws.setVolume(volume);
+          ws.play();
+          dispatch(setWavesurferRef(ws));  
         });
       }
-    }
+    // }
   };
-
 
   const playerProgress = () => {
-    wavesurferRef?.current?.on("timeupdate", (time: number) => {
-      dispatch(
-        setSeekPercentage(
-          (wavesurferRef?.current?.getCurrentTime() /
-            wavesurferRef?.current?.getDuration()) *
-            100
-        )
-      );
-      dispatch(setCurrentTrack({ ...currentTrack }));
-      setCurrentTime(time);
-    });
+    if (wavesurferRef) {
+      wavesurferRef.on("timeupdate", (time: number) => {
+        dispatch(setSeekPercentage((wavesurferRef.getCurrentTime() / wavesurferRef.getDuration()) * 100));
+        setCurrentTime(time);
+      });
+    }
   };
-
 
   useEffect(() => {
     if (currentTrack) {
-      createWaveSufer();
+      // Clear existing wavesurferRef before creating a new one
+      if (wavesurferRef) {
+        wavesurferRef.destroy();
+        dispatch(clearWavesurferRef());
+      }
+
+      // Create a new wavesurferRef
+      createWaveSurfer();
     }
 
     return () => {
-      if (
-        wavesurferRef.current &&
-        typeof wavesurferRef.current.destroy === "function"
-      ) {
-        wavesurferRef.current.destroy();
-        wavesurferRef.current = null;
+      // Clean up when component unmounts or currentTrack changes
+      if (wavesurferRef) {
+        wavesurferRef.destroy();
+        dispatch(clearWavesurferRef());
       }
     };
-  }, [currentTrack?._id]);
-
-
+  }, [currentTrack?._id]);  // Only re-run when currentTrack._id changes
 
   useEffect(() => {
     playerProgress();
-  }, [currentTrack]);
-
-
+  }, [wavesurferRef]);
 
   useEffect(() => {
-    if (isPlaying) {
-      wavesurferRef?.current?.play();
-      dispatch(setIsPlaying(true));
-    } else {
-      wavesurferRef?.current?.pause();
-      dispatch(setIsPlaying(false));
-    }
-  }, [isPlaying, currentTrack?._id]);
-
-
-  const handlePlayPause = useCallback(() => {
-    if (wavesurferRef.current) {
-      if (isPlaying) {
-        wavesurferRef.current.pause();
-      } else {
-        wavesurferRef.current.play();
-      }
-      dispatch(togglePlay());
+    if (isPlaying && wavesurferRef) {
+      wavesurferRef.play();
+    } else if (!isPlaying && wavesurferRef) {
+      wavesurferRef.pause();
     }
   }, [isPlaying]);
 
+  const handlePlayPause = useCallback(() => {
+    if (wavesurferRef) {
+      if (isPlaying) {
+        wavesurferRef.pause();
+      } else {
+        wavesurferRef.play();
+      }
+      dispatch(togglePlay());
+    }
+  }, [isPlaying, wavesurferRef]);
 
   const handleLikeClick = async () => {
     if (currentTrack) {
@@ -156,14 +145,12 @@ const MusicPlayerContainer = () => {
     }
   };
 
-
   const toggleMute = () => {
     dispatch(setIsMuted(!isMuted));
-    if (wavesurferRef.current) {
-      wavesurferRef.current.setVolume(isMuted ? volume : 0);
+    if (wavesurferRef) {
+      wavesurferRef.setVolume(isMuted ? volume : 0);
     }
   };
-
 
   const playSong = (direction: "next" | "prev") => {
     if (!currentTrack) return;
@@ -180,12 +167,13 @@ const MusicPlayerContainer = () => {
     dispatch(setCurrentSongIndex(newIndex));
   };
 
-  const handlePlayTrack = (track: IMusicProps) => dispatch(setCurrentTrack(track));
+  const handlePlayTrack = (track: IMusicProps) =>
+    dispatch(setCurrentTrack(track));
 
-  
   if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;
   }
+
   return (
     <MusicPlayer
       allSongs={allSongs}
