@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/Redux/store";
@@ -18,6 +18,7 @@ import { useToggleLikeMutation } from "@/services/like";
 import MusicPlayer from "./MusicPlayer";
 import { formatTime, useMusic } from "@/hooks/useMusic";
 import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
+import { useFetchAudioPeaksQuery } from "@/services/audio";
 
 const MusicPlayerContainer = () => {
   let newIndex: number;
@@ -41,42 +42,54 @@ const MusicPlayerContainer = () => {
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
-  const wavesurferRef = useSelector<RootState, any>((state) => state.musicPlayerSlice.wavesurferRef);
+  const wavesurferRef = useSelector<RootState, any>(
+    (state) => state.musicPlayerSlice.wavesurferRef
+  );
   const selectedMusicIndex = useSelector<RootState, number | null>(
     (state) => state.musicPlayerSlice.selectedMusicIndex
   );
   const [toggleLike] = useToggleLikeMutation();
+  const {
+    data: audioPeaksData,
+    error,
+    isLoading,
+  } = currentTrack
+    ? useFetchAudioPeaksQuery(currentTrack.audioUrl as string)
+    : { data: null, error: null, isLoading: false };
+  const createWaveSurfer = async () => {
+    const waveformElement = document.getElementById("waveform");
+    if (waveformElement && currentTrack) {
+      console.log("audioPeaksData", audioPeaksData);
+      const ws = WaveSurfer.create({
+        container: waveformElement,
+        width: 600,
+        height: 33,
+        waveColor: "#abb6c1",
+        progressColor: "#5a17dd",
+        barRadius: 200,
+        cursorColor: "transparent",
+        url: currentTrack?.audioUrl,
+        peaks: audioPeaksData?.data,
+      });
 
-  const createWaveSurfer = () => {
-    // if (!wavesurferRef) {
-      const waveformElement = document.getElementById("waveform");
-      if (waveformElement && currentTrack) {
-        const ws = WaveSurfer.create({
-          container: waveformElement,
-          width: 600,
-          height: 33,
-          waveColor: "#abb6c1",
-          progressColor: "#5a17dd",
-          barRadius: 200,
-          cursorColor: "transparent",
-        });
-
-        ws.load(currentTrack?.audioUrl as string);
-        ws.on("ready", () => {
-          dispatch(setIsPlaying(true));
-          if (isMuted) ws.setVolume(0);
-          ws.setVolume(volume);
-          ws.play();
-          dispatch(setWavesurferRef(ws));  
-        });
-      }
-    // }
+      ws.on("ready", () => {
+        dispatch(setIsPlaying(true));
+        if (isMuted) ws.setVolume(0);
+        ws.setVolume(volume);
+        ws.play();
+        dispatch(setWavesurferRef(ws));
+      });
+    }
   };
 
   const playerProgress = () => {
     if (wavesurferRef) {
       wavesurferRef.on("timeupdate", (time: number) => {
-        dispatch(setSeekPercentage((wavesurferRef.getCurrentTime() / wavesurferRef.getDuration()) * 100));
+        dispatch(
+          setSeekPercentage(
+            (wavesurferRef.getCurrentTime() / wavesurferRef.getDuration()) * 100
+          )
+        );
         setCurrentTime(time);
       });
     }
@@ -101,7 +114,7 @@ const MusicPlayerContainer = () => {
         dispatch(clearWavesurferRef());
       }
     };
-  }, [currentTrack?._id]);  // Only re-run when currentTrack._id changes
+  }, [currentTrack?._id]); // Only re-run when currentTrack._id changes
 
   useEffect(() => {
     playerProgress();

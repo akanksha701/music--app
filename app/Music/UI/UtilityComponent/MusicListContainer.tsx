@@ -18,6 +18,7 @@ import {
 import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { useSearchParams } from "next/navigation";
 import Loading from "@/app/loading";
+import { useFetchAudioPeaksQuery } from "@/services/audio";
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
@@ -49,6 +50,13 @@ const MusicListContainer = () => {
   const wavesurferRef = useSelector<RootState, any>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
+  const {
+    data: audioPeaksData,
+    error,
+  } = currentTrack
+    ? useFetchAudioPeaksQuery(currentTrack.audioUrl as string)
+    : { data: null, error: null };
+    
   const createWaveSurfers = (songs: IMusicProps[]) => {
     if (songs && songs.length > 0) {
       const instances = songs.map((song) => {
@@ -65,16 +73,8 @@ const MusicListContainer = () => {
             waveColor: "#abb6c1",
             progressColor: "#5a17dd",
             cursorColor: "transparent",
-          });
-          if (song?.audioUrl) {
-            wavesurfer.load(song.audioUrl);
-          }
-          wavesurfer.on("seeking", (newTime: number) => {
-            setCurrentTime(newTime);
-            if (!isPlaying) {
-              dispatch(setIsPlaying(true));
-              wavesurfer.play();
-            }
+            url: currentTrack?.audioUrl,
+            peaks: audioPeaksData?.data,
           });
           wavesurferRefs.current.set(song?._id as string, wavesurfer);
           return { song, wavesurfer };
