@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
-import { IMusicState } from "./types/types";
 
 const initialState: any = {
   selectedMusicIndex: -1,
-  currentList:null,
+  currentList: null,
   currentTrack: {
     _id: "",
     name: "",
@@ -24,6 +23,7 @@ const initialState: any = {
   currentTime: 0,
   seekPercentage: 0,
   isMuted: false,
+  wavesurferRef: null,  // Add wavesurferRef to the state
 };
 
 const musicPlayerSlice = createSlice({
@@ -59,6 +59,15 @@ const musicPlayerSlice = createSlice({
       state.isMuted = action.payload;
     },
     
+    // Action to set wavesurferRef
+    setWavesurferRef(state, action: PayloadAction<any>) {
+      state.wavesurferRef = action.payload;
+    },
+    
+    // Action to clear wavesurferRef
+    clearWavesurferRef(state) {
+      state.wavesurferRef = null;
+    },
   },
 });
 
@@ -72,6 +81,8 @@ export const {
   setSeekPercentage,
   setIsPlaying,
   setIsMuted,
+  setWavesurferRef,   // Export the action for setting wavesurferRef
+  clearWavesurferRef, // Export the action for clearing wavesurferRef
 } = musicPlayerSlice.actions;
 
 export default musicPlayerSlice.reducer;

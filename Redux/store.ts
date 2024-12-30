@@ -10,6 +10,7 @@ import { genreApi } from "@/services/genre";
 import { albumApi } from "@/services/album";
 import { likeApi } from "@/services/like";
 import musicPlayerSlice from "./features/musicPlayer/musicPlayerSlice";
+
 export const store = configureStore({
   reducer: {
     userReducer: userSlice,
@@ -27,8 +28,14 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ["music/setCurrentTrack"], // Ignore specific action
-        ignoredPaths: ["musicPlayerSlice.currentTrack.wavesurfer"], // Ignore this path in the state
+        ignoredActions: [
+          "music/setCurrentTrack",         // Ignore this action as it might contain non-serializable values
+          "music/setWaveSurferRef",    
+        ],
+        ignoredPaths: [
+          "musicPlayerSlice.wavesurferRef",  // Ignore this specific part of the state
+        ],
+     
       },
     })
       .concat(userApi.middleware)

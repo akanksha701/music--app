@@ -1,15 +1,17 @@
-"use client";
-import React, { useCallback, useEffect, useRef } from "react";
+'use client'
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/Redux/store";
 import WaveSurfer from "wavesurfer.js";
 import {
-  setCurrentSongIndex,
   setCurrentTrack,
+  setCurrentSongIndex,
   setIsMuted,
   setIsPlaying,
   setSeekPercentage,
   togglePlay,
+  setWavesurferRef,
+  clearWavesurferRef,
 } from "@/Redux/features/musicPlayer/musicPlayerSlice";
 import { handleLikeToggle } from "@/hooks/useLike";
 import { useToggleLikeMutation } from "@/services/like";
@@ -20,8 +22,6 @@ import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 const MusicPlayerContainer = () => {
   let newIndex: number;
   const dispatch = useDispatch();
-  const wavesurferRef = useRef<any>(null);
-  const [toggleLike] = useToggleLikeMutation();
   const { setCurrentTime, currentTime } = useMusic();
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
@@ -41,85 +41,90 @@ const MusicPlayerContainer = () => {
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
+  const wavesurferRef = useSelector<RootState, any>((state) => state.musicPlayerSlice.wavesurferRef);
   const selectedMusicIndex = useSelector<RootState, number | null>(
     (state) => state.musicPlayerSlice.selectedMusicIndex
   );
+  const [toggleLike] = useToggleLikeMutation();
+
+  const createWaveSurfer = () => {
+    // if (!wavesurferRef) {
+      const waveformElement = document.getElementById("waveform");
+      if (waveformElement && currentTrack) {
+        const ws = WaveSurfer.create({
+          container: waveformElement,
+          width: 600,
+          height: 33,
+          waveColor: "#abb6c1",
+          progressColor: "#5a17dd",
+          barRadius: 200,
+          cursorColor: "transparent",
+        });
+
+        ws.load(currentTrack?.audioUrl as string);
+        ws.on("ready", () => {
+          dispatch(setIsPlaying(true));
+          if (isMuted) ws.setVolume(0);
+          ws.setVolume(volume);
+          ws.play();
+          dispatch(setWavesurferRef(ws));  
+        });
+      }
+    // }
+  };
+
+  const playerProgress = () => {
+    if (wavesurferRef) {
+      wavesurferRef.on("timeupdate", (time: number) => {
+        dispatch(setSeekPercentage((wavesurferRef.getCurrentTime() / wavesurferRef.getDuration()) * 100));
+        setCurrentTime(time);
+      });
+    }
+  };
+
   useEffect(() => {
     if (currentTrack) {
-      if (!wavesurferRef.current) {
-        const waveformElement = document.getElementById("waveform");
-        if (waveformElement) {
-          wavesurferRef.current = WaveSurfer.create({
-            container: waveformElement,
-            height: 33,
-            waveColor: "#0f172a",
-            progressColor: "#9333ea",
-            barWidth: 3,
-            barGap: 2,
-            barRadius: 2,
-            cursorColor: "transparent",
-          });
-
-          const url = currentTrack?.audioUrl || "";
-          wavesurferRef.current.load(url);
-
-          wavesurferRef.current.on("ready", () => {
-            console.log("WaveSurfer is ready");
-            dispatch(setIsPlaying(true));
-            if (isMuted) wavesurferRef.current.setVolume(0);
-            wavesurferRef.current.setVolume(volume);
-            wavesurferRef.current.play();
-          });
-          wavesurferRef?.current?.on("timeupdate", (time: number) => {
-            dispatch(
-              setSeekPercentage(
-                (wavesurferRef?.current?.getCurrentTime() /
-                  wavesurferRef?.current?.getDuration()) *
-                  100
-              )
-            );
-            dispatch(
-              setCurrentTrack({
-                ...currentTrack,
-              })
-            );
-            setCurrentTime(time);
-          });
-        }
+      // Clear existing wavesurferRef before creating a new one
+      if (wavesurferRef) {
+        wavesurferRef.destroy();
+        dispatch(clearWavesurferRef());
       }
+
+      // Create a new wavesurferRef
+      createWaveSurfer();
     }
 
     return () => {
-      if (
-        wavesurferRef.current &&
-        typeof wavesurferRef.current.destroy === "function"
-      ) {
-        wavesurferRef.current.destroy();
-        wavesurferRef.current = null;
+      // Clean up when component unmounts or currentTrack changes
+      if (wavesurferRef) {
+        wavesurferRef.destroy();
+        dispatch(clearWavesurferRef());
       }
     };
-  }, [currentTrack?._id]);
+  }, [currentTrack?._id]);  // Only re-run when currentTrack._id changes
 
   useEffect(() => {
-    if (isPlaying) {
-      wavesurferRef?.current?.play();
-      dispatch(setIsPlaying(true));
-    } else {
-      wavesurferRef?.current?.pause();
-      dispatch(setIsPlaying(false));
+    playerProgress();
+  }, [wavesurferRef]);
+
+  useEffect(() => {
+    if (isPlaying && wavesurferRef) {
+      wavesurferRef.play();
+    } else if (!isPlaying && wavesurferRef) {
+      wavesurferRef.pause();
     }
-  }, [isPlaying,currentTrack?._id]);
+  }, [isPlaying]);
 
   const handlePlayPause = useCallback(() => {
-    if (wavesurferRef.current) {
+    if (wavesurferRef) {
       if (isPlaying) {
-        wavesurferRef.current.pause();
+        wavesurferRef.pause();
       } else {
-        wavesurferRef.current.play();
+        wavesurferRef.play();
       }
       dispatch(togglePlay());
     }
-  }, [isPlaying]);
+  }, [isPlaying, wavesurferRef]);
 
   const handleLikeClick = async () => {
     if (currentTrack) {
@@ -131,23 +136,19 @@ const MusicPlayerContainer = () => {
         dispatch
       );
 
-      const updatedSongIndex = allSongs.findIndex(
-        (song) => song._id === currentTrack._id
+      dispatch(
+        setCurrentTrack({
+          ...currentTrack,
+          liked: !currentTrack.liked,
+        })
       );
-      if (updatedSongIndex !== -1) {
-        const updatedSong = {
-          ...allSongs[updatedSongIndex],
-          liked: !allSongs[updatedSongIndex].liked,
-        };
-        dispatch(setCurrentTrack(updatedSong));
-      }
     }
   };
 
   const toggleMute = () => {
     dispatch(setIsMuted(!isMuted));
-    if (wavesurferRef.current) {
-      wavesurferRef.current.setVolume(isMuted ? volume : 0);
+    if (wavesurferRef) {
+      wavesurferRef.setVolume(isMuted ? volume : 0);
     }
   };
 
@@ -172,6 +173,7 @@ const MusicPlayerContainer = () => {
   if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;
   }
+
   return (
     <MusicPlayer
       allSongs={allSongs}
