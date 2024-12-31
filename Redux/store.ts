@@ -32,9 +32,11 @@ export const store = configureStore({
         ignoredActions: [
           "music/setCurrentTrack", // Ignore this action as it might contain non-serializable values
           "music/setWaveSurferRef",
+          "music/setWavesurferInstances",
         ],
         ignoredPaths: [
-          "musicPlayerSlice.wavesurferRef", // Ignore this specific part of the state
+          "musicPlayerSlice.wavesurferRef",
+          "musicPlayerSlice.wavesurferInstances", // Ignore this specific part of the state
         ],
       },
     })
@@ -46,7 +48,7 @@ export const store = configureStore({
       .concat(genreApi.middleware)
       .concat(albumApi.middleware)
       .concat(likeApi.middleware)
-      .concat(audioApi.middleware)
+      .concat(audioApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

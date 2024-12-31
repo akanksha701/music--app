@@ -28,7 +28,7 @@ const MusicPlayerContainer = () => {
     (state) => state.musicPlayerSlice.currentTrack
   );
   const allSongs = useSelector<RootState, IMusicProps[]>(
-    (state) => state.musicPlayerSlice.currentList
+    (state: any) => state.musicPlayerSlice.currentList
   );
   const volume = useSelector<RootState, number>(
     (state) => state.musicPlayerSlice.volume
@@ -56,6 +56,7 @@ const MusicPlayerContainer = () => {
   } = currentTrack
     ? useFetchAudioPeaksQuery(currentTrack.audioUrl as string)
     : { data: null, error: null, isLoading: false };
+
   const createWaveSurfer = async () => {
     const waveformElement = document.getElementById("waveform");
     if (waveformElement && currentTrack) {
@@ -71,10 +72,15 @@ const MusicPlayerContainer = () => {
         peaks: audioPeaksData?.data,
       });
 
-      ws.on("ready", (time) => {
+      ws.on("ready", () => {
         dispatch(setIsPlaying(true));
         ws.setVolume(volume);
-        ws.play();
+        if (currentTime > 0) {
+          ws.seekTo(currentTime / ws.getDuration());
+          ws.play();
+        } else {
+          ws.play();
+        }
         dispatch(setWavesurferRef(ws));
       });
     }
@@ -130,11 +136,15 @@ const MusicPlayerContainer = () => {
       if (isPlaying) {
         wavesurferRef.pause();
       } else {
+        // If currentTime > 0, start from that position
+        if (currentTime > 0) {
+          wavesurferRef.seekTo(currentTime / wavesurferRef.getDuration());
+        }
         wavesurferRef.play();
       }
       dispatch(togglePlay());
     }
-  }, [isPlaying, wavesurferRef]);
+  }, [isPlaying, wavesurferRef, currentTime]);
 
   const handleLikeClick = async () => {
     if (currentTrack) {
@@ -164,6 +174,7 @@ const MusicPlayerContainer = () => {
 
   const playSong = (direction: "next" | "prev") => {
     if (!currentTrack) return;
+    setCurrentTime(0)
     const currentIndex = allSongs.findIndex(
       (song) => song._id === currentTrack._id
     );
@@ -192,7 +203,6 @@ const MusicPlayerContainer = () => {
       isPlaying={isPlaying}
       isMuted={isMuted}
       volume={volume}
-      seekPercentage={seekPercentage}
       onMuteToggle={toggleMute}
       handlePlayPause={handlePlayPause}
       handleLikeClick={handleLikeClick}

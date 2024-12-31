@@ -38,7 +38,7 @@ const MusicListContainer = () => {
     (state) => state.musicPlayerSlice.seekPercentage
   );
   const allSongs = useSelector<RootState, IMusicProps[]>(
-    (state) => state.musicPlayerSlice.currentList
+    (state:any) => state.musicPlayerSlice.currentList
   );
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
@@ -161,14 +161,12 @@ const MusicListContainer = () => {
           dispatch(setIsPlaying(true));
         }
       } else {
-        // if (isPlaying) {
-        //   wavesurfer?.current?.pause();
-        //   dispatch(setIsPlaying(false));
-        // } else {
+        
         dispatch(setCurrentTrack(track));
         wavesurfer?.current?.play();
         dispatch(setIsPlaying(true));
-        // }
+        setCurrentTime(0)
+  
       }
     },
     [isPlaying, currentTrack?._id]

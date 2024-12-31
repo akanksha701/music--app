@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState: any = {
+const initialState = {
   selectedMusicIndex: -1,
   currentList: null,
   currentTrack: {
@@ -23,7 +23,8 @@ const initialState: any = {
   currentTime: 0,
   seekPercentage: 0,
   isMuted: false,
-  wavesurferRef: null,  // Add wavesurferRef to the state
+  wavesurferRef: null,  
+  wavesurferInstances: new Map(),  // Store instances in a Map
 };
 
 const musicPlayerSlice = createSlice({
@@ -33,8 +34,8 @@ const musicPlayerSlice = createSlice({
     setCurrentList(state, action: PayloadAction<any | any>) {
       state.currentList = action.payload || initialState.currentList;
     },
-   
-    setCurrentTrack(state, action: PayloadAction<IMusicProps | undefined>) {
+
+    setCurrentTrack(state, action: PayloadAction<any | undefined>) {
       state.currentTrack = action.payload || initialState.currentTrack;
     },
     setCurrentSongIndex(state, action: PayloadAction<number>) {
@@ -46,43 +47,48 @@ const musicPlayerSlice = createSlice({
     togglePlay(state) {
       state.isPlaying = !state.isPlaying;
     },
+    setWavesurferInstances(state, action: PayloadAction<Map<string, any>>) {
+      state.wavesurferInstances = action.payload;
+    },
     setDuration(state, action: PayloadAction<number>) {
       state.duration = action.payload;
     },
     setSeekPercentage(state, action: PayloadAction<number>) {
       state.seekPercentage = action.payload;
     },
+    clearWavesurferInstances(state) {
+      state.wavesurferInstances.clear();
+    },
+
     setIsPlaying(state, action: PayloadAction<boolean>) {
       state.isPlaying = action.payload;
     },
     setIsMuted(state, action: PayloadAction<boolean>) {
       state.isMuted = action.payload;
-    },
-    
-    // Action to set wavesurferRef
+    },    
     setWavesurferRef(state, action: PayloadAction<any>) {
       state.wavesurferRef = action.payload;
     },
-    
-    // Action to clear wavesurferRef
     clearWavesurferRef(state) {
       state.wavesurferRef = null;
     },
+    // Additional actions can go here...
   },
 });
 
 export const {
   setCurrentList,
   setCurrentTrack,
-  setCurrentSongIndex,
-  setVolume,
-  togglePlay,
-  setDuration,
-  setSeekPercentage,
+  setWavesurferInstances,
+  clearWavesurferInstances,
   setIsPlaying,
+  setCurrentSongIndex,
   setIsMuted,
-  setWavesurferRef,   // Export the action for setting wavesurferRef
-  clearWavesurferRef, // Export the action for clearing wavesurferRef
+  togglePlay,
+  setWavesurferRef,
+  clearWavesurferRef,
+  setSeekPercentage,
+
 } = musicPlayerSlice.actions;
 
 export default musicPlayerSlice.reducer;
