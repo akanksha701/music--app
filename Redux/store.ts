@@ -30,13 +30,12 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [
-          "music/setCurrentTrack", // Ignore this action as it might contain non-serializable values
-          "music/setWaveSurferRef",
           "music/setWavesurferInstances",
+          "music/setWavesurferRef",
         ],
         ignoredPaths: [
           "musicPlayerSlice.wavesurferRef",
-          "musicPlayerSlice.wavesurferInstances", // Ignore this specific part of the state
+          "musicPlayerSlice.wavesurferInstances",
         ],
       },
     })
