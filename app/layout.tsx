@@ -8,9 +8,9 @@ import { ThemeProvider } from 'next-themes';
 import Footer from './Footer/Footer';
 import { Suspense } from 'react';
 import Loading from './loading';
-import Modal from '@/common/modal/modal';
-import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
+import Modal from '@/common/modal/modal'; 
 import { Nunito } from 'next/font/google';
+import MusicPlayerContainer from '@/common/MusicPlayer/MusicPlayerContainer';
 
 // Load Nunito font
 const nunito = Nunito({

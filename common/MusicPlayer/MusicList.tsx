@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
- 
+
 import { IoAddSharp } from "react-icons/io5";
 import { FaHeart, FaPause, FaPlay, FaRegHeart } from "react-icons/fa";
 import { GoDownload } from "react-icons/go";
@@ -48,6 +48,8 @@ const MusicList = ({
               <PlayerLabel
                 title={track?.name || "Unknown Track"}
                 artists={track?.artists || ""}
+                textColor="black"
+
               />
             </div>
 

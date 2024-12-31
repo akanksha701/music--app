@@ -2,7 +2,7 @@ export const TAGS = {
   MUSIC: 'Musics',
   NEW_RELEASE: 'NewReleases',
   TOP_HITS: 'Top Hits',
-  ALBUMS: 'Albums',
+  ALBUMS: 'Album',
   TOP_ALBUMS: 'Top Albums',
   GENRE: 'Genres',
   ALBUM_SONGS : 'AlbumSongs'

@@ -14,10 +14,10 @@ import { FiShoppingCart } from 'react-icons/fi';
  
 import Image from 'next/image'; 
 import { useSelector } from 'react-redux';
-import { RootState } from '@/Redux/store';
-import VolumeIcon from '@/app/Music/UI/UtilityComponent/VolumeIcon';
+import { RootState } from '@/Redux/store'; 
 import PlayerLabel from './PlayerLabel';
 import { IMusicPlayerProps } from '@/app/Music/types/types';
+import VolumeIcon from './VolumeIcon';
 const MusicPlayer = ({
   currentTrack,
   isMuted,
@@ -47,18 +47,20 @@ const MusicPlayer = ({
           <PlayerLabel
             title={currentTrack?.name || 'Unknown Track'}
             artists={currentTrack?.artists || ''}
+            textColor="white"
+            
           />
         </div>
         <div className="flex items-center mx-3">
-          <FaBackward size={20} color="black" onClick={onPreviousSong} />
+          <FaBackward size={20} color="white" onClick={onPreviousSong} />
           <div className="cursor-pointer mx-3">
             {isPlaying ? (
-              <FaPause size={20} color="black" onClick={handlePlayPause} />
+              <FaPause size={20} color="white" onClick={handlePlayPause} />
             ) : (
-              <FaPlay size={20} color="black" onClick={handlePlayPause} />
+              <FaPlay size={20} color="white" onClick={handlePlayPause} />
             )}
           </div>
-          <FaForward size={20} color="black" onClick={onNextSong} />
+          <FaForward size={20} color="white" onClick={onNextSong} />
         </div>
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
           {currentTime || '0:00'}
@@ -71,7 +73,7 @@ const MusicPlayer = ({
         ></div>
 
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {currentTrack?.duration ? currentTrack.duration : '0:00'}
+          {currentTrack?.duration?.toFixed(0) ? currentTrack.duration?.toFixed(0) : '0:00'}sec
         </p>
 
         <div className="flex flex-row items-center mt-2">
@@ -87,20 +89,20 @@ const MusicPlayer = ({
               <FaRegHeart
                 size={24}
                 onClick={handleLikeClick}
-                className="text-black cursor-pointer mx-2 transition-colors duration-300"
+                className="text-white cursor-pointer mx-2 transition-colors duration-300"
               />
             )}
             <IoAddSharp
               size={24}
-              color="black"
+              color="white"
               className="cursor-pointer mx-2 text-gray-500"
             />
             <button className="bg-vivid-orange rounded-full p-1 mx-2">
-              <GoDownload size={20} color="black" />
+              <GoDownload size={20} color="white" />
             </button>
             <FiShoppingCart
               size={24}
-              color="black"
+              color="white"
               className="cursor-pointer mx-2"
             />
           </div>
