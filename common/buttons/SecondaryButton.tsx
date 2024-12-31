@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { IButtonProps } from "../types/types";
 
-export default function SecondaryButton(buttonProps: IButtonProps & { children: React.ReactNode }) {
+export default function SecondaryButton(buttonProps: IButtonProps & { children?: React.ReactNode }) {
   const { name, onClick, type, children } = buttonProps;
 
   return (

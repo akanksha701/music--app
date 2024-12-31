@@ -44,7 +44,7 @@ const Box = ({
             <Card
               key={index}
               className="bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group"
-              style={{ width: '220px', height: '220px' , zIndex : -99}}
+              style={{ width: '220px', height: '220px'   }}
             >
               <CardBody className="flex flex-col items-center p-4 w-full h-full">
                 <div className="relative w-full h-2/3">
