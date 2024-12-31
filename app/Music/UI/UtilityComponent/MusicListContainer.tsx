@@ -18,6 +18,7 @@ import {
 import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { useSearchParams } from "next/navigation";
 import Loading from "@/app/loading";
+import { useFetchAudioPeaksQuery } from "@/services/audio";
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
@@ -37,18 +38,41 @@ const MusicListContainer = () => {
     (state) => state.musicPlayerSlice.seekPercentage
   );
   const allSongs = useSelector<RootState, IMusicProps[]>(
-    (state) => state.musicPlayerSlice.currentList
+    (state:any) => state.musicPlayerSlice.currentList
   );
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
   const { currentTime, setCurrentTime } = useMusic();
   const wavesurferRefs = useRef<Map<string, any>>(new Map());
-  const [waveSurferInstances, setWaveSurferInstances] = useState<any[]>([]);
+  const [waveSurferInstances, setWaveSurferInstances] = useState<any>([]);
   const [toggleLike] = useToggleLikeMutation();
   const wavesurferRef = useSelector<RootState, any>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
+  const { data: audioPeaksData, error } = currentTrack
+    ? useFetchAudioPeaksQuery(currentTrack.audioUrl as string)
+    : { data: null, error: null };
+  useEffect(() => {
+    if (allSongsData && allSongsData.data) {
+      const songs =
+        queryType === TAGS.MUSIC
+          ? allSongsData?.data
+          : queryType === TAGS.NEW_RELEASE
+          ? allSongsData?.data?.data
+          : [];
+
+      if (songs?.length > 0) {
+        dispatch(setCurrentList(songs));
+      }
+    }
+  }, [allSongsData]);
+  const currentTrackRef = useRef(currentTrack);
+
+  useEffect(() => {
+    currentTrackRef.current = currentTrack;
+  }, [currentTrack]);
+
   const createWaveSurfers = (songs: IMusicProps[]) => {
     if (songs && songs.length > 0) {
       const instances = songs.map((song) => {
@@ -65,21 +89,32 @@ const MusicListContainer = () => {
             waveColor: "#abb6c1",
             progressColor: "#5a17dd",
             cursorColor: "transparent",
+            url: song.audioUrl,
+            peaks: audioPeaksData?.data,
           });
-          if (song?.audioUrl) {
-            wavesurfer.load(song.audioUrl);
-          }
-          wavesurfer.on("seeking", (newTime: number) => {
-            setCurrentTime(newTime);
-            if (!isPlaying) {
-              dispatch(setIsPlaying(true));
-              wavesurfer.play();
-            }
-          });
+
           wavesurferRefs.current.set(song?._id as string, wavesurfer);
+
+          wavesurfer.on("interaction", (newTime: number) => {
+            dispatch(setCurrentTrack(song));
+            const duration = wavesurfer.getDuration() || 1;
+            const seekPercentage = newTime / duration;
+
+            wavesurfer.seekTo(seekPercentage);
+
+            if (wavesurferRef) {
+              wavesurferRef.seekTo(seekPercentage);
+              wavesurferRef.seekTo(seekPercentage);
+            }
+
+            setCurrentTime(newTime);
+
+            // console.log("Seeking in Track:", song);
+          });
+
           return { song, wavesurfer };
         }
-        return null;
+        return null; // Return null if instance already exists
       });
 
       setWaveSurferInstances(instances.filter(Boolean));
@@ -96,7 +131,6 @@ const MusicListContainer = () => {
     const duration = wavesurfer.getDuration() || 1;
     const seekPercentage = currentTime / duration;
     wavesurfer.seekTo(seekPercentage);
-    setCurrentTime(currentTime);
     wavesurfer.on("interaction", (newTime: number) => {
       const duration = wavesurfer.getDuration() || 1;
       const seekPercentage = newTime / duration;
@@ -104,31 +138,39 @@ const MusicListContainer = () => {
         wavesurferRef.seekTo(seekPercentage);
         wavesurfer.seekTo(seekPercentage);
       }
-
-      setCurrentTime(newTime);
     });
   }, [currentTime]);
-
-  useEffect(() => {
-    if (allSongsData && allSongsData.data) {
-      const songs =
-        queryType === TAGS.MUSIC
-          ? allSongsData?.data
-          : queryType === TAGS.NEW_RELEASE
-          ? allSongsData?.data?.data
-          : [];
-
-      if (songs?.length > 0) {
-        dispatch(setCurrentList(songs));
-      }
-    }
-  }, [allSongsData]);
 
   useEffect(() => {
     if (allSongs && allSongs.length > 0) {
       createWaveSurfers(allSongs);
     }
-  }, [allSongs]);
+  }, [allSongs, currentTime, isPlaying, currentTrack]);
+
+  const handlePlayTrack = useCallback(
+    (track: IMusicProps) => {
+      const wavesurfer = wavesurferRefs.current.get(
+        currentTrack?._id as string
+      );
+      if (currentTrack?._id === track._id) {
+        if (isPlaying) {
+          wavesurfer?.current?.pause();
+          dispatch(setIsPlaying(false));
+        } else {
+          wavesurfer?.current?.play();
+          dispatch(setIsPlaying(true));
+        }
+      } else {
+        
+        dispatch(setCurrentTrack(track));
+        wavesurfer?.current?.play();
+        dispatch(setIsPlaying(true));
+        setCurrentTime(0)
+  
+      }
+    },
+    [isPlaying, currentTrack?._id]
+  );
 
   const handleLikeClick = async () => {
     if (currentTrack) {
@@ -147,34 +189,6 @@ const MusicListContainer = () => {
       );
     }
   };
-
-  const handlePlayTrack = useCallback(
-    (track: IMusicProps) => {
-      dispatch(setCurrentTrack(track));
-      const wavesurfer = wavesurferRefs.current.get(
-        currentTrack?._id as string
-      );
-      if (currentTrack?._id === track._id) {
-        if (isPlaying) {
-          wavesurfer?.current?.pause();
-          dispatch(setIsPlaying(false));
-        } else {
-          wavesurfer?.current?.play();
-          dispatch(setIsPlaying(true));
-        }
-      } else {
-        if (isPlaying) {
-          wavesurfer?.current?.pause();
-          dispatch(setIsPlaying(false));
-        } else {
-          wavesurfer?.current?.play();
-          dispatch(setIsPlaying(true));
-        }
-      }
-    },
-    [isPlaying]
-  );
-
   if (isLoading) {
     return <Loading />;
   } else if (!allSongs) {
