@@ -95,7 +95,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       status: 200,
-      data: updatedUser,
+      data: {},  // Removed data from the response ( Updated user object )
     });
   } catch (error) {
     console.error('Error:', error);

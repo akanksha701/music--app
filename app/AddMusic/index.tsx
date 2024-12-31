@@ -33,7 +33,7 @@ const Index = () => {
   const debouncedSearch = debounce((query) => setSearchQuery(query), 100);
 
   const filteredMusicData = musicData?.data.filter((music: IMusicProps) =>
-    music.name.toLowerCase().includes(searchQuery.toLowerCase())
+    music.name!.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const tabsData = [

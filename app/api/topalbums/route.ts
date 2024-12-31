@@ -9,6 +9,11 @@ export async function GET() {
     const user: any = await currentUser();
     const albums = await Album.aggregate([
       {
+        $match: {
+          isDeleted: false
+        }
+      },
+      {
         $lookup: {
           from: 'musics',
           localField: 'musicIds',

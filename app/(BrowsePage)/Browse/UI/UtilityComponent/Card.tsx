@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { RootState } from '@/Redux/store';
 import { generateUrl } from '@/utils/helpers';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const Box = ({
   data,
@@ -21,22 +22,25 @@ const Box = ({
   const dispatch = useDispatch();
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
-  );
-  
-  const handleMusicClick = async (index: number, music: IMusicProps) => {
-    dispatch(setCurrentList(data));
-    if (!currentTrack || currentTrack._id !== music._id) {
-      dispatch(setCurrentTrack(data[index]));
-      dispatch(setCurrentSongIndex(index));
-    }
-    const newUrl = await generateUrl('/Music', { type: name });
-    redirect(newUrl);
-  };
+  ); 
+
+ const GetUrl = (item : any) => {
+  console.log("name : " , name)
+  switch (name) {
+    case "Album": 
+      return `/Album/${item._id}?type=AlbumSongs`;
+    case "Genres" : 
+      return `/Genre/${item._id}?type=GenreSongs`;
+    default:
+      return ''
+  }
+ }
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>
         {data && data.length > 0 ? (
-          data.map((item, index) => (
+          data?.map((item, index) => (
+            <Link key={index} href={GetUrl(item)} >
             <Card
               key={index}
               className="bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group"
@@ -75,6 +79,8 @@ const Box = ({
                 </div>
               </CardBody>
             </Card>
+            </Link>
+            
           ))
         ) : (
           <p>{message}</p>

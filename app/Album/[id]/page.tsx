@@ -134,37 +134,9 @@ const AlbumPage = ({ params }: { params: any }) => {
           {/* Right Section: Music List (66%) */}
           <div className="lg:col-span-2 space-y-6">
             <h3 className="text-2xl font-semibold p-4">Music Tracks</h3>
-            {/* {album.musicIds?.map((music, index: number) => (
-              <div key={index} className="flex items-center space-x-4 border-b pb-4"> */}
-                {/* <img
-                  src={music.audioDetails.imageUrl}
-                  alt={music.musicDetails.name}
-                  className="w-16 h-16 object-cover rounded-full"
-                />
-                <div className="flex-1">
-
-                  <h4 className="text-xl font-medium">{music.musicDetails.name}</h4>
-
-
-                  <p className="text-gray-500 text-sm">{music.musicDetails.description}</p>
-
-                  <p className="text-gray-500 text-sm">
-                    Released on {new Date(music.musicDetails.releaseDate).toLocaleDateString()}
-                  </p>
-                </div> */}
-                {/* <div className="text-right">
-                  
-                  <audio controls className="mt-2">
-                    <source src={music.audioDetails.audioUrl} type="audio/mp3" />
-                    Your browser does not support the audio element.
-                  </audio>
-                </div> */}
-
+            
         <MusicListContainer AlbumId={AlbumId}  ></MusicListContainer>
 
-
-              {/* </div> */}
-            {/* ))} */}
           </div>
         </div>
       </div>
