@@ -40,7 +40,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
           <Card
             key={index}
             className="cursor-pointer bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group mb-3 ml-2 relative"
-            style={{ height: '320px' }}
+            style={{ height: '320px', zIndex: -99 }}
           >
             <CardBody className="flex flex-col items-center p-4 w-full h-full">
               <div className="relative w-full h-2/3">

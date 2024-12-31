@@ -63,7 +63,7 @@ const Index = () => {
         name={TAGS.NEW_RELEASE}
         handleLikeToggle={(itemId) =>handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
       />
-      <div className="mt-8 p-3">
+      <div className="mt-8 p-3 " style={{ zIndex: -99 }}>
         <HeadLine
           title="Top Genres & Moods"
           subTitle="Discover popular genres musics"
