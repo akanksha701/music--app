@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const musicApi = createApi({
   reducerPath: "musicApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
   endpoints: (builder) => ({
     getnewMusics: builder.query({
       query: (language) =>
@@ -17,8 +17,13 @@ export const musicApi = createApi({
     getMusicsByUserId: builder.query({
       query: (slug) => `api/music/${slug}`,  
     }),
+    getMusicsByGenre : builder.query({
+      query: ({id , type}) => `api/music/for?type=${type}&id=${id}`,
+    })
   }),
 });
 
-export const { useGetnewMusicsQuery, useGetMusicsOfArtistsQuery, useGetAllMusicsQuery ,useGetMusicsByUserIdQuery } =
+export const { useGetnewMusicsQuery, useGetMusicsOfArtistsQuery, useGetAllMusicsQuery ,useGetMusicsByUserIdQuery, 
+  useGetMusicsByGenreQuery
+ } =
   musicApi;

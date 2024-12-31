@@ -5,7 +5,7 @@ import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 
 export const likeApi = createApi({
   reducerPath: "likeApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
   tagTypes: Object.values(TAGS),
   endpoints: (builder) => ({
     toggleLike: builder.mutation<void, { id: string; name: string }>({
@@ -17,7 +17,7 @@ export const likeApi = createApi({
       invalidatesTags: (result, error, { name }) => {
         switch (name) {
           case TAGS.MUSIC:
-            return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
+            return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE, TAGS.ALBUM_SONGS,];
             case TAGS.NEW_RELEASE:
               return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
           case TAGS.ALBUMS:

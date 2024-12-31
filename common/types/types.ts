@@ -152,3 +152,31 @@ export interface IGridrops {
   moreBox: ReactNode;
   addBox:ReactNode
 }
+
+
+export interface MusicDocument {
+  _id: string;
+  musicDetails: {
+      name: string;
+      artistId: {}[]; // Array of artist ObjectIds
+      description: string;
+      genreId: string; // Genre ObjectId
+      languageId: string; // Language ObjectId
+      releaseDate: string; // ISO Date string
+      duration: number; // Duration in seconds
+  };
+  audioDetails: {
+      audioUrl: string; // URL to audio file
+      imageUrl: string; // URL to image
+  };
+  playTime: number; // Total playtime in seconds
+  price: {
+      amount: number;
+      currency: string;
+  };
+  isDeleted: boolean;
+  createdAt: string; // ISO Date string
+  updatedAt: string; // ISO Date string
+  artists? : string;
+  liked?: any;
+}
