@@ -59,7 +59,6 @@ const MusicPlayerContainer = () => {
   const createWaveSurfer = async () => {
     const waveformElement = document.getElementById("waveform");
     if (waveformElement && currentTrack) {
-      console.log("audioPeaksData", audioPeaksData);
       const ws = WaveSurfer.create({
         container: waveformElement,
         width: 600,
@@ -72,9 +71,8 @@ const MusicPlayerContainer = () => {
         peaks: audioPeaksData?.data,
       });
 
-      ws.on("ready", () => {
+      ws.on("ready", (time) => {
         dispatch(setIsPlaying(true));
-        if (isMuted) ws.setVolume(0);
         ws.setVolume(volume);
         ws.play();
         dispatch(setWavesurferRef(ws));
@@ -108,13 +106,12 @@ const MusicPlayerContainer = () => {
     }
 
     return () => {
-      // Clean up when component unmounts or currentTrack changes
       if (wavesurferRef) {
         wavesurferRef.destroy();
         dispatch(clearWavesurferRef());
       }
     };
-  }, [currentTrack?._id]); // Only re-run when currentTrack._id changes
+  }, [currentTrack?._id]);
 
   useEffect(() => {
     playerProgress();
