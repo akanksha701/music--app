@@ -8,7 +8,7 @@ import {
 import WaveSurfer from "wavesurfer.js";
 import MusicList from "./MusicList";
 import { RootState } from "@/Redux/store";
-import { useMusic } from "@/hooks/useMusic";
+import { formatTime, useMusic } from "@/hooks/useMusic";
 import { handleLikeToggle } from "@/hooks/useLike";
 import {
   useGetAllMusicsQuery,
@@ -38,7 +38,7 @@ const MusicListContainer = () => {
     (state) => state.musicPlayerSlice.seekPercentage
   );
   const allSongs = useSelector<RootState, IMusicProps[]>(
-    (state:any) => state.musicPlayerSlice.currentList
+    (state: any) => state.musicPlayerSlice.currentList
   );
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
@@ -78,9 +78,9 @@ const MusicListContainer = () => {
       const instances = songs.map((song) => {
         const waveformContainerId = `waveform_${song?._id}`;
         const waveformContainer = document.getElementById(waveformContainerId);
-
+  
         if (!waveformContainer) return null;
-
+  
         if (!wavesurferRefs.current.has(song?._id as string)) {
           const wavesurfer = WaveSurfer.create({
             container: `#${waveformContainerId}`,
@@ -90,36 +90,37 @@ const MusicListContainer = () => {
             progressColor: "#5a17dd",
             cursorColor: "transparent",
             url: song.audioUrl,
-            peaks: audioPeaksData?.data,
+            peaks: song.peaks || [], 
           });
-
+  
           wavesurferRefs.current.set(song?._id as string, wavesurfer);
-
+  
+          const updatedSong = { ...song, duration: wavesurfer.getDuration() };
+  
           wavesurfer.on("interaction", (newTime: number) => {
-            dispatch(setCurrentTrack(song));
+            dispatch(setCurrentTrack(updatedSong)); // Use the updated song here
             const duration = wavesurfer.getDuration() || 1;
             const seekPercentage = newTime / duration;
-
+  
             wavesurfer.seekTo(seekPercentage);
-
+  
             if (wavesurferRef) {
               wavesurferRef.seekTo(seekPercentage);
               wavesurferRef.seekTo(seekPercentage);
             }
-
+  
             setCurrentTime(newTime);
-
-            // console.log("Seeking in Track:", song);
           });
-
-          return { song, wavesurfer };
+  
+          return { song: updatedSong, wavesurfer };
         }
         return null; // Return null if instance already exists
       });
-
+  
       setWaveSurferInstances(instances.filter(Boolean));
     }
   };
+  
 
   useEffect(() => {
     if (
@@ -161,12 +162,10 @@ const MusicListContainer = () => {
           dispatch(setIsPlaying(true));
         }
       } else {
-        
         dispatch(setCurrentTrack(track));
         wavesurfer?.current?.play();
         dispatch(setIsPlaying(true));
-        setCurrentTime(0)
-  
+        setCurrentTime(0);
       }
     },
     [isPlaying, currentTrack?._id]
