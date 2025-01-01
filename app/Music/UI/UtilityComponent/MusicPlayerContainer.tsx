@@ -19,6 +19,7 @@ import MusicPlayer from "./MusicPlayer";
 import { formatTime, useMusic } from "@/hooks/useMusic";
 import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { useFetchAudioPeaksQuery } from "@/services/audio";
+import { Duration } from "svix";
 
 const MusicPlayerContainer = () => {
   let newIndex: number;
@@ -69,14 +70,15 @@ const MusicPlayerContainer = () => {
         barRadius: 200,
         cursorColor: "transparent",
         url: currentTrack?.audioUrl,
-        peaks: audioPeaksData?.data,
       });
 
       ws.on("ready", () => {
         dispatch(setIsPlaying(true));
         ws.setVolume(volume);
+        dispatch(setCurrentTrack({...currentTrack,duration:formatTime(ws.getDuration())}))
         if (currentTime > 0) {
           ws.seekTo(currentTime / ws.getDuration());
+
           ws.play();
         } else {
           ws.play();
@@ -190,6 +192,7 @@ const MusicPlayerContainer = () => {
 
   const handlePlayTrack = (track: IMusicProps) =>
     dispatch(setCurrentTrack(track));
+  
 
   if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;

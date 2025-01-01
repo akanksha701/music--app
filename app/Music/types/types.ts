@@ -10,7 +10,7 @@ export interface IMusicPlayerProps {
   handleLikeClick: () => void;
   onMuteToggle: () => void;
   currentTime: string;
-  seekPercentage: number;
+  // seekPercentage: number;
   isPlaying: boolean;
   allSongs: IMusicProps[];
   handlePlayPause: () => void;
