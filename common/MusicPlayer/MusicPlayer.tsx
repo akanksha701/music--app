@@ -1,5 +1,5 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 import {
   FaBackward,
   FaForward,
@@ -7,17 +7,14 @@ import {
   FaPause,
   FaPlay,
   FaRegHeart,
-} from 'react-icons/fa';
-import { IoAddSharp } from 'react-icons/io5';
-import { GoDownload } from 'react-icons/go';
-import { FiShoppingCart } from 'react-icons/fi';
- 
-import Image from 'next/image'; 
-import { useSelector } from 'react-redux';
-import { RootState } from '@/Redux/store'; 
-import PlayerLabel from './PlayerLabel';
-import { IMusicPlayerProps } from '@/app/Music/types/types';
-import VolumeIcon from './VolumeIcon';
+} from "react-icons/fa";
+import { IoAddSharp } from "react-icons/io5";
+import { GoDownload } from "react-icons/go";
+import { FiShoppingCart } from "react-icons/fi";
+import VolumeIcon from "./VolumeIcon";
+import PlayerLabel from "./PlayerLabel";
+import Image from "next/image"; 
+import { IMusicPlayerProps } from "@/app/Music/types/types";
 const MusicPlayer = ({
   currentTrack,
   isMuted,
@@ -28,15 +25,13 @@ const MusicPlayer = ({
   handlePlayPause,
   onNextSong,
   onPreviousSong,
-  handlePlayTrack,
 }: IMusicPlayerProps) => {
- 
   return (
     <div className="w-full bg-black p-2 flex flex-row items-center justify-between gap-4 fixed bottom-0 left-0 z-50">
       <div className="flex flex-row items-center flex-1 space-x-4">
         <div className="flex-shrink-0">
           <Image
-            src={currentTrack?.imageUrl || '/default-image.jpg'}
+            src={currentTrack?.imageUrl || "/default-image.jpg"}
             alt="Track Image"
             width={80}
             height={80}
@@ -45,10 +40,9 @@ const MusicPlayer = ({
         </div>
         <div className="text-left">
           <PlayerLabel
-            title={currentTrack?.name || 'Unknown Track'}
-            artists={currentTrack?.artists || ''}
+            title={currentTrack?.name || "Unknown Track"}
+            artists={currentTrack?.artists || ""}
             textColor="white"
-            
           />
         </div>
         <div className="flex items-center mx-3">
@@ -63,7 +57,7 @@ const MusicPlayer = ({
           <FaForward size={20} color="white" onClick={onNextSong} />
         </div>
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {currentTime || '0:00'}
+          {currentTime || "0:00"}
         </p>
 
         <div
@@ -73,13 +67,13 @@ const MusicPlayer = ({
         ></div>
 
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {currentTrack?.duration?.toFixed(0) ? currentTrack.duration?.toFixed(0) : '0:00'}sec
+          {currentTrack?.duration ? currentTrack.duration : "0:00"}
         </p>
 
         <div className="flex flex-row items-center mt-2">
           <VolumeIcon isMuted={isMuted} handleClick={onMuteToggle} />
           <div className="flex flex-row mx-20">
-            {currentTrack.liked ? (
+            {currentTrack?.liked ? (
               <FaHeart
                 size={24}
                 onClick={handleLikeClick}
@@ -98,7 +92,7 @@ const MusicPlayer = ({
               className="cursor-pointer mx-2 text-gray-500"
             />
             <button className="bg-vivid-orange rounded-full p-1 mx-2">
-              <GoDownload size={20} color="white" />
+              <GoDownload size={20} color="black" />
             </button>
             <FiShoppingCart
               size={24}
