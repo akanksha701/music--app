@@ -17,8 +17,8 @@ const Index = () => {
   const [prevData, setPrevData] = useState<{}>({});
   const recordsPerPage = 5;
   const { page } = usePagination();
-  const { data: albumData } = useGetAlbumsQuery({ page, recordsPerPage });
-  const { data: musicData } = useGetMusicsOfArtistsQuery("6756a19a5833867b6aba2a54");
+  const { data: albumData , isLoading : isAllAlbumLoading } = useGetAlbumsQuery({ page, recordsPerPage });
+  const { data: musicData , isLoading : isMusicLoading } = useGetMusicsOfArtistsQuery("6756a19a5833867b6aba2a54");
  
   const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId, {
     skip: !albumId, // Skip the request if no albumId is provided
@@ -39,7 +39,7 @@ const Index = () => {
     }
   }, [albumByIdData]);
 
-  if (isAlbumLoading || !albumData) return <Loading />;
+  if (isAlbumLoading || !albumData || isMusicLoading || isAllAlbumLoading ) return <Loading />;
 
   return (
     <div className="flex justify-center items-start min-h-screen pt-8">

@@ -43,7 +43,7 @@ const AlbumPage = ({ params }: { params: any }) => {
 
   // Loading and error handling
   if (isLoading) {
-    return <div className="text-center text-xl h-screen flex items-center justify-center">Loading...</div>;
+    return <div className="text-center text-xl h-screen flex items-center justify-center"></div>;
   }
 
   if (isError || !albumData) {
