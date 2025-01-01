@@ -1,8 +1,12 @@
-import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/DbConnection/dbConnection';
-import Music from '@/lib/models/Music';
-import { currentUser } from '@clerk/nextjs/server';
-
+import { NextResponse } from "next/server";
+import dbConnect from "@/lib/DbConnection/dbConnection";
+import Music from "@/lib/models/Music";
+import { currentUser } from "@clerk/nextjs/server";
+import { audioDirectory, getPeaksFromAudioBuffer } from "../wavesurfer/route";
+import path from "path";
+import fs from "fs";
+import decode from "audio-decode";
+import loadWasm from "audio-decode";
 export const getFormattedDurationStage = () => {
   return {
     $addFields: {
@@ -12,11 +16,11 @@ export const getFormattedDurationStage = () => {
           {
             $toString: {
               $floor: {
-                $divide: ['$musicDetails.duration', 3600], // 3600 seconds = 1 hour
+                $divide: ["$musicDetails.duration", 3600], // 3600 seconds = 1 hour
               },
             },
           },
-          ':',
+          ":",
           // Calculate Minutes
           {
             $toString: {
@@ -26,7 +30,7 @@ export const getFormattedDurationStage = () => {
                     {
                       $floor: {
                         $divide: [
-                          { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                          { $mod: ["$musicDetails.duration", 3600] }, // Remaining seconds after removing hours
                           60, // Minutes in remaining time
                         ],
                       },
@@ -38,7 +42,7 @@ export const getFormattedDurationStage = () => {
                   $toString: {
                     $floor: {
                       $divide: [
-                        { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                        { $mod: ["$musicDetails.duration", 3600] }, // Remaining seconds after removing hours
                         60, // Minutes in remaining time
                       ],
                     },
@@ -46,12 +50,12 @@ export const getFormattedDurationStage = () => {
                 },
                 else: {
                   $concat: [
-                    '0', // Add leading zero for single digit minutes
+                    "0", // Add leading zero for single digit minutes
                     {
                       $toString: {
                         $floor: {
                           $divide: [
-                            { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                            { $mod: ["$musicDetails.duration", 3600] }, // Remaining seconds after removing hours
                             60, // Minutes in remaining time
                           ],
                         },
@@ -62,7 +66,7 @@ export const getFormattedDurationStage = () => {
               },
             },
           },
-          ':',
+          ":",
           // Calculate Seconds (without fractional part)
           {
             $toString: {
@@ -70,7 +74,7 @@ export const getFormattedDurationStage = () => {
                 if: {
                   $gte: [
                     {
-                      $mod: ['$musicDetails.duration', 60], // Remaining seconds after removing minutes
+                      $mod: ["$musicDetails.duration", 60], // Remaining seconds after removing minutes
                     },
                     10,
                   ],
@@ -79,18 +83,18 @@ export const getFormattedDurationStage = () => {
                   $toString: {
                     $floor: {
                       // Round to the nearest second
-                      $mod: ['$musicDetails.duration', 60], // Get remaining whole seconds
+                      $mod: ["$musicDetails.duration", 60], // Get remaining whole seconds
                     },
                   },
                 },
                 else: {
                   $concat: [
-                    '0', // Add leading zero for single digit seconds
+                    "0", // Add leading zero for single digit seconds
                     {
                       $toString: {
                         $floor: {
                           // Round to the nearest second
-                          $mod: ['$musicDetails.duration', 60], // Get remaining whole seconds
+                          $mod: ["$musicDetails.duration", 60], // Get remaining whole seconds
                         },
                       },
                     },
@@ -112,39 +116,39 @@ export async function GET() {
     const musics = await Music.aggregate([
       {
         $lookup: {
-          from: 'artists',
-          let: { artistsIds: '$musicDetails.artistId' },
+          from: "artists",
+          let: { artistsIds: "$musicDetails.artistId" },
           pipeline: [
             {
               $match: {
                 $expr: {
-                  $in: ['$_id', '$$artistsIds'],
+                  $in: ["$_id", "$$artistsIds"],
                 },
               },
             },
           ],
-          as: 'artistDetails',
+          as: "artistDetails",
         },
       },
       {
         $lookup: {
-          from: 'users',
-          let: { artistsIds: '$artistDetails.userId' },
+          from: "users",
+          let: { artistsIds: "$artistDetails.userId" },
           pipeline: [
             {
               $match: {
                 $expr: {
-                  $in: ['$_id', '$$artistsIds'],
+                  $in: ["$_id", "$$artistsIds"],
                 },
               },
             },
           ],
-          as: 'artists',
+          as: "artists",
         },
       },
       {
         $lookup: {
-          from: 'users',
+          from: "users",
           pipeline: [
             {
               $match: { clerkUserId: user.id },
@@ -153,57 +157,57 @@ export async function GET() {
               $project: { likedMusics: 1 },
             },
           ],
-          as: 'loggedInUser',
+          as: "loggedInUser",
         },
       },
       {
         $unwind: {
-          path: '$loggedInUser',
+          path: "$loggedInUser",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $addFields: {
-          liked: { $in: ['$_id', '$loggedInUser.likedMusics'] },
+          liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
         },
       },
       {
         $unwind: {
-          path: '$artists',
+          path: "$artists",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $group: {
-          _id: '$_id',
-          name: { $first: '$musicDetails.name' },
-          description: { $first: '$musicDetails.description' },
-          duration: { $first: '$musicDetails.duration' },
+          _id: "$_id",
+          name: { $first: "$musicDetails.name" },
+          description: { $first: "$musicDetails.description" },
+          duration: { $first: "$musicDetails.duration" },
           artists: {
             $push: {
-              $concat: ['$artists.firstName', ' ', '$artists.lastName'],
+              $concat: ["$artists.firstName", " ", "$artists.lastName"],
             },
           },
-          liked: { $first: '$liked' },
-          email: { $first: '$artists.email' },
-          price: { $first: '$price.amount' },
-          currency: { $first: '$price.currency' },
-          imageUrl: { $first: '$audioDetails.imageUrl' },
-          audioUrl: { $first: '$audioDetails.audioUrl' },
-          playCount: { $first: '$playCount' },
+          liked: { $first: "$liked" },
+          email: { $first: "$artists.email" },
+          price: { $first: "$price.amount" },
+          currency: { $first: "$price.currency" },
+          imageUrl: { $first: "$audioDetails.imageUrl" },
+          audioUrl: { $first: "$audioDetails.audioUrl" },
+          playCount: { $first: "$playCount" },
         },
       },
       {
         $addFields: {
           artists: {
             $reduce: {
-              input: '$artists',
-              initialValue: '',
+              input: "$artists",
+              initialValue: "",
               in: {
                 $cond: {
-                  if: { $eq: ['$$value', ''] },
-                  then: '$$this',
-                  else: { $concat: ['$$value', ', ', '$$this'] },
+                  if: { $eq: ["$$value", ""] },
+                  then: "$$this",
+                  else: { $concat: ["$$value", ", ", "$$this"] },
                 },
               },
             },
@@ -218,9 +222,37 @@ export async function GET() {
       },
     ]);
 
-    return NextResponse.json({ status: 200, data: musics });
+    const musicWithPeaks = await Promise.all(
+      musics.map(async (music: any) => {
+        const audioFileUrl = music.audioUrl;
+        if (!audioFileUrl || !audioFileUrl.endsWith(".mp3")) {
+          return { ...music, peaks: [] };
+        }
+
+        let filepath = path.join(audioDirectory, audioFileUrl);
+        if (!fs.existsSync(filepath)) {
+          console.error(`File not found at path: ${filepath}`);
+          return { ...music, peaks: [] };
+        }
+
+        try {
+          const audioData = await fs.promises.readFile(filepath);
+          const audioBuffer = await decode(audioData);
+
+          const peaks = getPeaksFromAudioBuffer(audioBuffer);
+          console.log('peaks',peaks)
+          return { ...music, peaks: peaks };
+        } catch (err) {
+          console.error("Failed to read or decode audio data:", err);
+          return { ...music, peaks: [] };
+        }
+      })
+    );
+
+    console.log("Music with Peaks:", musicWithPeaks);
+    return NextResponse.json({ status: 200, data: musicWithPeaks });
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ status: 500, message: 'Error occurred' });
+    console.error("Error:", error);
+    return NextResponse.json({ status: 500, message: "Error occurred" });
   }
 }

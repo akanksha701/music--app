@@ -90,12 +90,11 @@ const MusicListContainer = () => {
             progressColor: "#5a17dd",
             cursorColor: "transparent",
             url: song.audioUrl,
-            // peaks: audioPeaksData?.data, // You can uncomment this if you are using peaks data
+            peaks: song.peaks || [], 
           });
   
           wavesurferRefs.current.set(song?._id as string, wavesurfer);
   
-          // Create a new song object with updated duration
           const updatedSong = { ...song, duration: wavesurfer.getDuration() };
   
           wavesurfer.on("interaction", (newTime: number) => {

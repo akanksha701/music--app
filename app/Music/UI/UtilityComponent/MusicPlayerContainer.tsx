@@ -50,16 +50,10 @@ const MusicPlayerContainer = () => {
     (state) => state.musicPlayerSlice.selectedMusicIndex
   );
   const [toggleLike] = useToggleLikeMutation();
-  const {
-    data: audioPeaksData,
-    error,
-    isLoading,
-  } = currentTrack
-    ? useFetchAudioPeaksQuery(currentTrack.audioUrl as string)
-    : { data: null, error: null, isLoading: false };
 
   const createWaveSurfer = async () => {
     const waveformElement = document.getElementById("waveform");
+    console.log('currentTrack.peaks',currentTrack?.peaks)
     if (waveformElement && currentTrack) {
       const ws = WaveSurfer.create({
         container: waveformElement,
@@ -70,12 +64,18 @@ const MusicPlayerContainer = () => {
         barRadius: 200,
         cursorColor: "transparent",
         url: currentTrack?.audioUrl,
+        peaks: currentTrack?.peaks || [],
       });
 
       ws.on("ready", () => {
         dispatch(setIsPlaying(true));
         ws.setVolume(volume);
-        dispatch(setCurrentTrack({...currentTrack,duration:formatTime(ws.getDuration())}))
+        dispatch(
+          setCurrentTrack({
+            ...currentTrack,
+            duration: formatTime(ws.getDuration()),
+          })
+        );
         if (currentTime > 0) {
           ws.seekTo(currentTime / ws.getDuration());
 
@@ -103,13 +103,11 @@ const MusicPlayerContainer = () => {
 
   useEffect(() => {
     if (currentTrack) {
-      // Clear existing wavesurferRef before creating a new one
       if (wavesurferRef) {
         wavesurferRef.destroy();
         dispatch(clearWavesurferRef());
       }
 
-      // Create a new wavesurferRef
       createWaveSurfer();
     }
 
@@ -176,7 +174,7 @@ const MusicPlayerContainer = () => {
 
   const playSong = (direction: "next" | "prev") => {
     if (!currentTrack) return;
-    setCurrentTime(0)
+    setCurrentTime(0);
     const currentIndex = allSongs.findIndex(
       (song) => song._id === currentTrack._id
     );
@@ -192,7 +190,6 @@ const MusicPlayerContainer = () => {
 
   const handlePlayTrack = (track: IMusicProps) =>
     dispatch(setCurrentTrack(track));
-  
 
   if (!currentTrack?._id || selectedMusicIndex === null) {
     return null;

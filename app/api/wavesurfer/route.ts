@@ -121,7 +121,7 @@ import path from "path";
 import { NextResponse } from "next/server";
 import decode from "audio-decode";
 
-const audioDirectory = path.join(process.cwd(), "public");
+export const audioDirectory = path.join(process.cwd(), "public");
 
 export async function GET(req: any) {
   try {
@@ -142,7 +142,6 @@ export async function GET(req: any) {
     const audioData = await fs.promises.readFile(filepath);
     const audioBuffer = await decode(audioData);
 
-    // Extract peaks (you can adjust the number of peaks as necessary)
     const peaks = getPeaksFromAudioBuffer(audioBuffer);
     console.log(peaks.flat());
     return NextResponse.json({ status: 200, data: peaks.flat() });
@@ -154,7 +153,7 @@ export async function GET(req: any) {
   }
 }
 
-const getPeaksFromAudioBuffer = (
+export  const getPeaksFromAudioBuffer = (
   audioBuffer: AudioBuffer,
   blockSize: number = 2048
 ) => {
