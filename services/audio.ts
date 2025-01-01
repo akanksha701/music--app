@@ -5,7 +5,7 @@ export const audioApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL }), // Set the base URL for your API
   endpoints: (builder) => ({
     fetchAudioPeaks: builder.query<any, string>({
-      query: (audioUrl) => `api/wavesurfer?url=${(audioUrl)}`,
+      query: (audioUrl) => `/api/wavesurfer?url=${(audioUrl)}`,
     }),
   }),
 });

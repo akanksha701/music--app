@@ -39,7 +39,7 @@ const Index = () => {
     }
   }, [albumByIdData]);
 
-  if (isAlbumLoading || !albumData || isMusicLoading || isAllAlbumLoading ) return <Loading />;
+  if (isAlbumLoading || !albumData || isMusicLoading || isAllAlbumLoading ) return <></>;
 
   return (
     <div className="flex justify-center items-start min-h-screen pt-8">

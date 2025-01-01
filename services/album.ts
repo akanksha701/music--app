@@ -3,33 +3,33 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 console.log("process.env.APP_URL : ", process.env.APP_URL)
 export const albumApi = createApi({
   reducerPath: "albumApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL }),
 
   tagTypes: ["Albums"],
   endpoints: (builder) => ({
     getAlbums: builder.query({
       query: ({ page, recordsPerPage }) =>
-        `album?page=${page}&recordsPerPage=${recordsPerPage}`,
+        `/api/album?page=${page}&recordsPerPage=${recordsPerPage}`,
       providesTags: ["Albums"],
     }),
     getAlbumById: builder.query({
       query: (id) =>
-        `album?AlbumId=${id}`,
+        `/api/album?AlbumId=${id}`,
       providesTags: ["Albums"],
     }),
     getAlbumByIdAndType: builder.query({
       query: ({id, type}) =>
-        `album?AlbumId=${id}&type=${type}`,
+        `/api/album?AlbumId=${id}&type=${type}`,
       providesTags: ["Albums"],
     }),
     getAlbumByArtistId: builder.query({
       query: (id) =>
-        `album?ArtistId=${id}`,
+        `/api/album?ArtistId=${id}`,
       providesTags: ["Albums"],
     }),
     addAlbum: builder.mutation({
       query: (data) => ({
-        url: `album`,
+        url: `/api/album`,
         method: "POST",
         body: data,
       }),
@@ -37,7 +37,7 @@ export const albumApi = createApi({
     }),
     updateAlbum: builder.mutation({
       query: ({ albumId, data }) => ({
-        url: `album?id=${albumId}`,
+        url: `/api/album?id=${albumId}`,
         method: "PUT",
         body: data,
       }),
@@ -46,7 +46,7 @@ export const albumApi = createApi({
     }),
     deleteAlbum: builder.mutation({
       query: (id) => ({
-        url: `album?id=${id}`,
+        url: `/api/album?id=${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Albums"],
