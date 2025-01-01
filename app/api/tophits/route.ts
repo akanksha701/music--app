@@ -2,11 +2,14 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/DbConnection/dbConnection";
 import Music from "@/lib/models/Music";
 import { currentUser } from "@clerk/nextjs/server";
-import { audioDirectory, getPeaksFromAudioBuffer } from "../wavesurfer/route";
 import path from "path";
 import fs from "fs";
-import decode from "audio-decode";
-import loadWasm from "audio-decode";
+import { audioPeaksFromFile } from "../wavesurfer/route";
+import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import { lastValueFrom } from "rxjs";
+
+
+
 export const getFormattedDurationStage = () => {
   return {
     $addFields: {
@@ -108,6 +111,8 @@ export const getFormattedDurationStage = () => {
     },
   };
 };
+
+
 
 export async function GET() {
   try {
@@ -223,24 +228,24 @@ export async function GET() {
     ]);
 
     const musicWithPeaks = await Promise.all(
-      musics.map(async (music: any) => {
+      musics.map(async (music: IMusicProps, index: number) => {
         const audioFileUrl = music.audioUrl;
+
         if (!audioFileUrl || !audioFileUrl.endsWith(".mp3")) {
           return { ...music, peaks: [] };
         }
 
+        const audioDirectory = path.join(process.cwd(), "public");
         let filepath = path.join(audioDirectory, audioFileUrl);
+
         if (!fs.existsSync(filepath)) {
           console.error(`File not found at path: ${filepath}`);
           return { ...music, peaks: [] };
         }
 
         try {
-          const audioData = await fs.promises.readFile(filepath);
-          const audioBuffer = await decode(audioData);
-
-          const peaks = getPeaksFromAudioBuffer(audioBuffer);
-          console.log('peaks',peaks)
+          const audioPeaksObservable = audioPeaksFromFile(filepath, 70);
+          const peaks = await lastValueFrom(audioPeaksObservable);
           return { ...music, peaks: peaks };
         } catch (err) {
           console.error("Failed to read or decode audio data:", err);
@@ -249,7 +254,6 @@ export async function GET() {
       })
     );
 
-    console.log("Music with Peaks:", musicWithPeaks);
     return NextResponse.json({ status: 200, data: musicWithPeaks });
   } catch (error) {
     console.error("Error:", error);
