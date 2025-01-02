@@ -35,12 +35,12 @@ export default async function RootLayout({
             <Toaster position="top-center" />
             <Tooltip />
             <Modal />
-            <Suspense fallback={<Loading />}>
+            {/* <Suspense fallback={<Loading />}> */}
               <NavbarPage />
               <main className="flex-grow">{children}</main>
               <MusicPlayerContainer />
               <Footer data={data?.footerContent} />
-            </Suspense>
+            {/* </Suspense> */}
           </body>
         </html>
       </ReduxProvider>

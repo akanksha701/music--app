@@ -14,7 +14,7 @@ const Index = () => {
   // const { data: albumData } = useGetAlbumByArtistIdQuery("675ab45ad8496e8fd5fb50db");
  
   if (!albumData) {
-    return <Loading />;
+    // return <Loading />;
   }
  
   return (

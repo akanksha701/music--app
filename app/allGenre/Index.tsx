@@ -31,7 +31,7 @@ const AllGenereIndex = () => {
   const { data: genreData } = useGetAllGenreQuery();
   console.log("ALLADATA", genreData)
   if (!genreData) {
-    return <Loading />;
+    // return <Loading />;
   }
 
   const GenreData = [

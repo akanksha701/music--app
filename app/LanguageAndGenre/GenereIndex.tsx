@@ -26,7 +26,7 @@ const  GenereIndex = () => {
   const { data: genreData } = useGetGenreQuery({ page, recordsPerPage }); 
  
   if (!genreData) {
-    return <Loading />;
+    // return <Loading />;
   }
  
   

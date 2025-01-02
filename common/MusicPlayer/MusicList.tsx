@@ -94,7 +94,7 @@ const MusicList = ({
         </div>
       ))
     ) : (
-      <p className="text-gray-400">No other data available</p>
+      <p className="text-gray-400">...</p>
     );
 
   return (

@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import toast from 'react-hot-toast';
 import { Album } from '../types/types';
 import MusicListContainer from '@/common/MusicPlayer/MusicListContainer';
+import Loading from './loading';
 
 
 const AlbumPage = ({ params }: { params: any }) => {
@@ -43,10 +44,10 @@ const AlbumPage = ({ params }: { params: any }) => {
 
   // Loading and error handling
   if (isLoading) {
-    return <div className="text-center text-xl h-screen flex items-center justify-center"></div>;
+    return  <Loading></Loading>
   }
 
-  if (isError || !albumData) {
+  if (isError) {
     return <div className="text-center text-xl">Album not found or an error occurred!</div>;
   }
 

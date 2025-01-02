@@ -26,7 +26,7 @@ const  AllLanguageIndex = () => {
  
 
   if (!languageData) {
-    return <Loading />;
+    // return <Loading />;
   }
  
   const LangData = [

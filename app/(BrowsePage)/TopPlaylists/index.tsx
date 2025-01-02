@@ -22,7 +22,7 @@ const Index = () => {
     [setSelectedLanguage, redirect]
   );
   if (isLoading) {
-    return <Loading />;
+    // return <Loading />;
   }
   return (
     <div className="p-10">

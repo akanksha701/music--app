@@ -22,7 +22,7 @@ const Index = () => {
   const { data: genreData } = useGetGenreQuery({ page, recordsPerPage });
 
   if (!genreData) {
-    return <Loading />;
+    // return <Loading />;
   }
 
   const tabsData = [

@@ -27,7 +27,7 @@ const Index = () => {
   const { searchQuery, setSearchQuery } = useSearch();
 
   if (!languageData || !artistData || !genreData || !albumData || !musicData) {
-    return <Loading />;
+    // return <Loading />;
   }
 
   const debouncedSearch = debounce((query) => setSearchQuery(query), 100);

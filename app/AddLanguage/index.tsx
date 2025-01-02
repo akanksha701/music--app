@@ -22,7 +22,7 @@ const Index = () => {
   const { data: languageData } = useGetLanguageQuery({ page, recordsPerPage });
 
   if (!languageData) {
-    return <Loading />;
+    // return <Loading />;
   }
 
   const tabsData = [

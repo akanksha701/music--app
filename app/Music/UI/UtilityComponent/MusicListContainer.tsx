@@ -17,7 +17,6 @@ import {
 } from '@/services/like';
 import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
 import { useSearchParams } from 'next/navigation';
-import Loading from '@/app/loading';
 import { useFetchAudioPeaksQuery } from '@/services/audio';
 
 const MusicListContainer = () => {
@@ -189,7 +188,7 @@ const MusicListContainer = () => {
     }
   };
   if (isLoading) {
-    return <Loading />;
+    // return <Loading />;
   } else if (!allSongs) {
     return null;
   }

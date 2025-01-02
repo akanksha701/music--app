@@ -66,7 +66,7 @@ const EditProfile = (props: IEditProfileProps) => {
     }
   });
   if (!user) {
-    return <Loading />;
+    // return <Loading />;
   }
   return (
     <>

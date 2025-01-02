@@ -199,7 +199,7 @@ const MusicListContainer = (props: { AlbumId?: string; GenreId?: string ; Playli
     }
   };
   if (isLoading) {
-    return <Loading />;
+    // return <Loading />;
   } else if (!allSongs) {
     return null;
   }
@@ -418,7 +418,7 @@ export default MusicListContainer;
 //     }
 //   };
 //   if (isLoading) {
-//     return <Loading />;
+//     // return <Loading />;
 //   } else if (!allSongs) {
 //     return null;
 //   }
