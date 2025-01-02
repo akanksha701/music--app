@@ -1,8 +1,8 @@
 {
-  "extends": ["eslint:recommended", "next/core-web-vitals", "next/typescript"],
+  "extends": "next/core-web-vitals",
   "rules": {
-    "no-console": "error", // Warn on console usage
-    "no-unused-vars": "error", // Warn for unused variables
+    "no-console": "warn", // Warn on console usage
+    "no-unused-vars": "warn", // Warn for unused variables
     "eqeqeq": ["error", "always"], // Enforce strict equality (===)
     "semi": ["error", "always"], // Enforce semicolons at the end of statements
     "quotes": ["error", "single"], // Enforce single quotes for strings

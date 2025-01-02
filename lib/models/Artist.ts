@@ -1,4 +1,3 @@
-import User from './User';
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
