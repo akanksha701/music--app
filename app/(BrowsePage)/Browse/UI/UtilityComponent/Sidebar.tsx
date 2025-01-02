@@ -14,6 +14,7 @@ import PrimaryButton from '@/common/buttons/PrimaryButton';
 import { useCreatePlayListMutation, useGetPlayListsQuery } from '@/services/playlists';
 import SecondaryButton from '@/common/buttons/SecondaryButton';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 const Browse = [
   { name: 'New Releases', label: 'NewRelease', route: '/NewRelease' },
@@ -97,9 +98,12 @@ const Sidebar = () => {
         <div className="my-2">
           <p className="text-slate-600">Playlists</p>
           {Playlists.data.map((item: any, index: any) => (
-            <div key={index} className="flex items-center my-2">
-              <span className="ml-2">
+            <div key={index} className="flex items-center my-2  ">
+              <span className="ml-2 border-slate-300 rounded-md p-1 border-2">
+                <Link href={`/Playlist/${item._id}`}>
                 <p className="cursor-pointer font-light">{item.name}</p>
+                
+                </Link>
               </span>
             </div>
           ))}

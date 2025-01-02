@@ -28,8 +28,7 @@ const SkeletonGrid = ({ count }: { count: number }) => (
   </div>
 );
 
-const Index = () => {
-  const { user } = useUser();
+const Index = () => { 
   const { data: topHits, isLoading: isLoadingTopHits } = useGetTopHitsMusicsQuery(undefined);
   const { data: topAlbums, isLoading: isLoadingTopAlbums } = useGetTopAlbumsQuery(undefined);
   const { data: newReleases, isLoading: isLoadingNewReleases } = useGetAllMusicsQuery({});

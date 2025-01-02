@@ -38,7 +38,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
   return (
     <div className="p-4 sm:p-6 md:p-10">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-        {data.map((item, index) => (
+        {data && data.length > 0 && data.map((item, index) => (
           <Card
             key={index}
             className="cursor-pointer bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group mb-3 ml-2 relative"
