@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { currentUser } from '@clerk/nextjs/server';
-import client from '@/lib/DbConnection/dbConnection';
-const db = client.db(process.env.DB_NAME || 'music-app');
+import { db } from '../user/route';
+
+
 export async function GET() {
   try {
     const user: any = await currentUser();
-    const genres = await db
-      .collection('genres').aggregate([
+    const genres = await db.collection('genres').aggregate([
         {
           $lookup: {
             from: 'genres',

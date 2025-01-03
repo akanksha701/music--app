@@ -169,7 +169,6 @@ export const saveFiles = async (file: Blob, folderName: string) => {
   }
 };
 import { parseBuffer } from "music-metadata";
-import client from "@/lib/DbConnection/dbConnection";
 
 export async function getAudioDuration(audioBlob: Blob): Promise<string> {
   try {
