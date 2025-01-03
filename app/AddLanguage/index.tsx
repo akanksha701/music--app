@@ -4,7 +4,6 @@ import TabComp from '@/common/tab/TabComp';
 import TableComp from '@/common/table/TableComp';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetLanguageQuery } from '@/services/languages';
-import Loading from '../loading';
 import AddLanguage from './UI/UtilityComponent/AddLanguage';
 
 const columns = [
@@ -22,7 +21,7 @@ const Index = () => {
   const { data: languageData } = useGetLanguageQuery({ page, recordsPerPage });
 
   if (!languageData) {
-    // return <Loading />;
+    return <></>;
   }
 
   const tabsData = [

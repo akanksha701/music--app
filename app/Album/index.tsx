@@ -1,5 +1,4 @@
 "use client"; 
-import Loading from "../loading";
 import { useGetAlbumByArtistIdQuery, useGetAlbumsQuery } from "@/services/album";
 import AlbumGrid from "./UI/UtilityComponent/Grid";
 

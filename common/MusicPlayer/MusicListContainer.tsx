@@ -17,7 +17,6 @@ import {
 } from '@/services/like';
 import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
 import { useSearchParams } from 'next/navigation';
-import Loading from '@/app/loading';
 import { useFetchAudioPeaksQuery } from '@/services/audio';
 import { useGetMusicsByGenreQuery } from '@/services/music';
 import { useGetAlbumByIdAndTypeQuery } from '@/services/album';

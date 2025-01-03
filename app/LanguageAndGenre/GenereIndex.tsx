@@ -2,7 +2,6 @@
 import React from "react";
   
 import { usePagination } from "@/hooks/usePagination";
-import Loading from "../loading"; 
 import { useGetGenreQuery } from "@/services/genre";
   
 import SmallGrid from "@/common/grid/SmallGrid"; 
@@ -26,7 +25,7 @@ const  GenereIndex = () => {
   const { data: genreData } = useGetGenreQuery({ page, recordsPerPage }); 
  
   if (!genreData) {
-    // return <Loading />;
+    return <></>;
   }
  
   

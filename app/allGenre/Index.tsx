@@ -2,8 +2,7 @@
 import React from "react";
 
 import TableComp from "@/common/table/TableComp";
-import { usePagination } from "@/hooks/usePagination";
-import Loading from "../loading";
+import { usePagination } from "@/hooks/usePagination"; 
 import { useGetAllGenreQuery } from "@/services/genre";
 
 
@@ -31,7 +30,7 @@ const AllGenereIndex = () => {
   const { data: genreData } = useGetAllGenreQuery();
   console.log("ALLADATA", genreData)
   if (!genreData) {
-    // return <Loading />;
+    return <></>;
   }
 
   const GenreData = [

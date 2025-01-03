@@ -1,6 +1,5 @@
 "use client";
-import React from "react";  
-import Loading from "../loading";  
+import React from "react";   
  
 import { Breadcrumb } from "@/common/BreadCrumb/BreadCrumb";
  
@@ -26,7 +25,7 @@ const  AllLanguageIndex = () => {
  
 
   if (!languageData) {
-    // return <Loading />;
+    return <></>;
   }
  
   const LangData = [

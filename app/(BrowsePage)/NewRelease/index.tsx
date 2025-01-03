@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 import NewRelease from './UI/UtilityComponent/NewRelease';
 import MenubarComponent from '@/common/menubar/Menubar';
 import { useGetLanguageQuery } from '@/services/languages';
-import Loading from '@/app/loading';
 import { useNewRelease } from '@/hooks/useNewRelease';
 import { redirect } from 'next/navigation';
 import { newRelease } from '@/utils/apiRoutes';

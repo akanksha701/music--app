@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
-import { useGetLanguageQuery } from '@/services/languages';
-import Loading from '@/app/loading';
+import { useGetLanguageQuery } from '@/services/languages'; 
 import TopCharts from './UI/UtilityComponents/TopCharts';
 
 const Index = () => {

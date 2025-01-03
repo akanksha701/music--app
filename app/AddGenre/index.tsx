@@ -3,7 +3,6 @@ import React from 'react';
 import TabComp from '@/common/tab/TabComp';
 import TableComp from '@/common/table/TableComp';
 import { usePagination } from '@/hooks/usePagination';
-import Loading from '../loading';
 import AddGenre from './UI/UtilityComponent/AddGenre';
 import { useGetGenreQuery } from '@/services/genre';
 
@@ -22,7 +21,7 @@ const Index = () => {
   const { data: genreData } = useGetGenreQuery({ page, recordsPerPage });
 
   if (!genreData) {
-    // return <Loading />;
+    return <></>;
   }
 
   const tabsData = [

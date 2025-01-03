@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
 import { CalendarDate } from '@internationalized/date';
-import Loading from '@/app/loading';
 import NextDatePicker from '@/common/inputs/DatePicker';
 import SelectMenu from '@/common/inputs/SelectMenu';
 import { fetchApi } from '@/utils/helpers';
@@ -67,6 +66,7 @@ const EditProfile = (props: IEditProfileProps) => {
   });
   if (!user) {
     // return <Loading />;
+    return <></>
   }
   return (
     <>

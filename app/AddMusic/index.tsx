@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import Loading from '../loading';
 import TabComp from '@/common/tab/TabComp';
 import { usePagination } from '@/hooks/usePagination';
 import { useGetLanguageQuery } from '@/services/languages';
@@ -27,7 +26,7 @@ const Index = () => {
   const { searchQuery, setSearchQuery } = useSearch();
 
   if (!languageData || !artistData || !genreData || !albumData || !musicData) {
-    // return <Loading />;
+    return <></>;
   }
 
   const debouncedSearch = debounce((query) => setSearchQuery(query), 100);

@@ -3,7 +3,6 @@ import React from "react";
 import { usePagination } from "@/hooks/usePagination";
 import { useGetLanguageQuery } from "@/services/languages";
 import SmallGrid from "@/common/grid/SmallGrid";
-import Loading from "../loading"; 
 import { AddMoreButton, SeeMoreButton } from "./UtilityComponent/NavigateButton";
  
 const languageColumns = [
@@ -22,7 +21,7 @@ const LanguageIndex = () => {
   const { data: languageData } = useGetLanguageQuery({ page, recordsPerPage });
  
   if (!languageData) {
-    // return <Loading />;
+    return <></>
   }  
 
   return (

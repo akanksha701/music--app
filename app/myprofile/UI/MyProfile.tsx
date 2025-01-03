@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import AvatarUploader from '@/common/inputs/avatar-uploader';
-import { useForm } from 'react-hook-form';
-import Loading from '@/app/loading';
+import { useForm } from 'react-hook-form'; 
 import EditProfile from './UtilityComponent/EditProfile';
 
 
@@ -15,8 +14,7 @@ const MyProfile = () => {
   
   if (!isLoaded || !isSignedIn) {
     return (
-      <>
-        <Loading />
+      <> 
       </>
     );
   }

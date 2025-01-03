@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { usePagination } from "@/hooks/usePagination";
-import Loading from "../loading";
 import { useGetAlbumByIdQuery, useGetAlbumsQuery } from "@/services/album";
 import { useGetMusicsOfArtistsQuery } from "@/services/music";
 import MusicList from "@/common/MusicList/MusicList";
