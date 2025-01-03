@@ -1,12 +1,11 @@
-import { currentUser } from '@clerk/nextjs/server';
-import dbConnect from '@/lib/DbConnection/dbConnection';
+import { currentUser, User } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import User from '@/lib/models/User';
+import { db } from '../../user/route';
 
-export async function GET(req: any, { params }: { params: { slug: string } }) {
+export async function GET(req: Request, { params }: { params: { slug: string } }) {
   try {
-    await dbConnect();
-    const user: any = await currentUser();
+    
+    const user: User | null = await currentUser();
 
     if (!user) {
       return NextResponse.json({
@@ -14,7 +13,7 @@ export async function GET(req: any, { params }: { params: { slug: string } }) {
         message: 'Unauthorized',
       });
     }
-    const musics = await User.aggregate([
+    const musics = db.collection('users').aggregate([
       {
         $match: {
           clerkUserId: user.id,
@@ -98,7 +97,7 @@ export async function GET(req: any, { params }: { params: { slug: string } }) {
           imageUrl: '$musics.audioDetails.imageUrl',
         },
       },
-    ]);
+    ]).toArray();
     return NextResponse.json({
       status: 200,
       data: musics,

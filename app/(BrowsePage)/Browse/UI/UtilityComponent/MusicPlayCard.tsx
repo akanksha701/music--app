@@ -54,30 +54,30 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                   className="rounded-lg border-2  shadow-md object-cover"
                 />
 
-                <FaPlay className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
+                  <FaPlay className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
 
-              <div className="mt-4 w-full flex justify-between items-center">
-                <button
-                  onClick={() => handleLikeToggle(item._id as string, name)}
-                  className="group p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
-                >
-                  {item.liked ? (
-                    <FaHeart className="text-red-500 transition-colors duration-300" />
-                  ) : (
-                    <FaRegHeart className="text-gray-500 transition-colors duration-300" />
-                  )}
-                </button>
+                <div className="mt-4 w-full flex justify-between items-center">
+                  <button
+                    onClick={() => handleLikeToggle(item._id as string, name)}
+                    className="group p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
+                  >
+                    {item.liked ? (
+                      <FaHeart className="text-red-500 transition-colors duration-300" />
+                    ) : (
+                      <FaRegHeart className="text-gray-500 transition-colors duration-300" />
+                    )}
+                  </button>
 
-                <span className="flex-1 text-center font-semibold text-lg sm:text-xl">
-                  {item.name}
-                </span>
+                  <span className="flex-1 text-center font-semibold text-lg sm:text-xl">
+                    {item.name}
+                  </span>
 
-                <FaEllipsisH className="cursor-pointer opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300" />
-              </div>
-            </CardBody>
-          </Card>
-        ))}
+                  <FaEllipsisH className="cursor-pointer opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-300" />
+                </div>
+              </CardBody>
+            </Card>
+          ))}
       </div>
     </div>
   );

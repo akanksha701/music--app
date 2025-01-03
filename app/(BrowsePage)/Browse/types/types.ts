@@ -30,6 +30,9 @@ export interface IMusicProps {
   liked?: boolean;
   duration?: number;
   peaks?: Float32Array[];
+  genre?:string,
+  album?:string,
+  language?:string
 }
 export interface IBoxTypes {
   data: Array<{ _id: string; name: string; imageUrl: string; liked: boolean }>;

@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React from "react";
- 
 import NextInput from "@/common/inputs/Input";
 import { useForm } from "react-hook-form";
 import NextTextArea from "@/common/inputs/Textarea";
@@ -11,8 +10,7 @@ import { fetchApi } from "@/utils/helpers";
 import { Method } from "@/app/About/types/types";
 import { IAddGenreProps } from "../types/types";
 import { useAddGenreMutation } from "@/services/genre";
- 
- 
+import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 
 const AddGenre = (props: IAddGenreProps) => {
   const {
@@ -21,26 +19,19 @@ const AddGenre = (props: IAddGenreProps) => {
     control,
     formState: { errors },
   } = useForm({});
-
-  const [addGenre] = useAddGenreMutation()
-
-  const onSubmit = async (data: any) => {
-
-    props.handleCloseDialog()
-    const formData = new FormData();
-    formData.append('image', data.imageUrl);
-    formData.append('name', data.name);
-    formData.append('description', data.description);
-    try {
-      const Res = await addGenre(formData)
-       console.log("Res :  " ,  Res )
-    
-      toast.success("Added...");
-     
-    } catch (error) {
-      toast.error("Error while creating music");
-    } 
- 
+  const onSubmit = async (data: IMusicProps) => {
+      const formData = new FormData();
+      formData.append("image", data.imageUrl as string);
+      formData.append("name", data.name as string);
+      formData.append("description", data.description as string);
+      try {
+        const res = await fetchApi("/api/album", Method.POST, formData);
+        if (res.status === 200) {
+          toast.success(res.message);
+        }
+      } catch (error) {
+        toast.error("Error while creating music");
+      }
   };
 
   return (
@@ -57,7 +48,7 @@ const AddGenre = (props: IAddGenreProps) => {
               label="Name"
               placeholder="Enter your name"
               register={register}
-              options={{ required: 'Name is required' }}
+              options={{ required: "Name is required" }}
               errors={errors}
             />
           </div>
@@ -70,14 +61,13 @@ const AddGenre = (props: IAddGenreProps) => {
               label="Description"
               placeholder="Enter music description"
               register={register}
-              options={{ required: 'Description is required' }}
+              options={{ required: "Description is required" }}
               errors={errors}
             />
           </div>
 
           {/* MultiSelect Grids */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-         
             <div className="flex flex-col">
               <FileUploadInput
                 name="imageUrl"

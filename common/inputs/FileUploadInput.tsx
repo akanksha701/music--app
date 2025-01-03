@@ -14,8 +14,10 @@ const FileUploadInput = ({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [fileType, setFileType] = useState<string | null>(null);
 
-  // Handle file change and preview
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, onChange: any) => {
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    onChange: (selectedFile: File) => void
+  ) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
 
     // If a file is selected, generate the image preview and check the file type
@@ -50,7 +52,9 @@ const FileUploadInput = ({
   return (
     <div className="file-upload-input">
       {label && (
-        <label className="block mb-2 text-sm font-medium text-gray-900">{label}</label>
+        <label className="block mb-2 text-sm font-medium text-gray-900">
+          {label}
+        </label>
       )}
 
       <Controller
@@ -62,7 +66,11 @@ const FileUploadInput = ({
             {/* The container for the upload input */}
             <div
               className={`
-                ${fileType?.startsWith("image/") ? "w-32 h-32 rounded-full" : "w-32 h-32 border-2"} 
+                ${
+                  fileType?.startsWith("image/")
+                    ? "w-32 h-32 rounded-full"
+                    : "w-32 h-32 border-2"
+                } 
                 border-dashed border-gray-300 flex items-center justify-center cursor-pointer
               `}
               style={{
@@ -97,7 +105,9 @@ const FileUploadInput = ({
             />
 
             {fieldState?.error && (
-              <span className="text-red-500 text-xs">{fieldState?.error?.message}</span>
+              <span className="text-red-500 text-xs">
+                {fieldState?.error?.message}
+              </span>
             )}
           </div>
         )}

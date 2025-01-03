@@ -1,18 +1,42 @@
-import mongoose from 'mongoose';
-const connectToDatabase = async() => {
-  try {
-    const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/music-app';
-    
-    await mongoose.connect(uri, {
-      // serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-      // socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
-    });
-    
-    console.log('Successfully connected to MongoDB.');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    throw error;
-  }
-};
+import { MongoClient } from "mongodb";
 
-export default connectToDatabase;
+if (!process.env.MONGODB_URI) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
+}
+
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/music-app";
+const options = {};
+
+let client: MongoClient | null = null;
+
+export async function connectToDatabase() {
+
+  if (process.env.NODE_ENV === "development") {
+    const globalWithMongo = global as typeof globalThis & { _mongoClient?: MongoClient };
+
+    if (!globalWithMongo._mongoClient) {
+      console.log("Development: Creating new MongoDB client...");
+      globalWithMongo._mongoClient = new MongoClient(uri, options);
+      await globalWithMongo._mongoClient.connect(); 
+      console.log("Development: MongoDB client connected.");
+    } else {
+      console.log("Development: Reusing existing MongoDB client...");
+    }
+
+    client = globalWithMongo._mongoClient; 
+  } else {
+    if (!client) {
+      console.log("Production: Creating new MongoDB client...");
+      client = new MongoClient(uri, options);
+      await client.connect(); 
+      console.log("Production: MongoDB client connected.");
+    }
+  }
+
+  return client; 
+}
+
+export async function getDb() {
+  const client = await connectToDatabase(); 
+  return client.db(process.env.DB_NAME || "music-app"); 
+}

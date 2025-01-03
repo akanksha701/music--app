@@ -36,7 +36,7 @@ export async function generateUrl(
   return newUrl;
 }
 
-export async function getCalendarDate(date: any) {
+export async function getCalendarDate(date: Date) {
   const day = (await new Date(date).getDate()) || new Date().getDate();
   const month = (await new Date(date).getMonth()) || new Date().getMonth();
   const year = (await new Date(date).getFullYear()) || new Date().getFullYear();
@@ -59,7 +59,7 @@ export async function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export async function uploadImage(image: any) {
+export async function uploadImage(image: File) {
   cloudinary.v2.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -87,7 +87,7 @@ export async function uploadImage(image: any) {
   });
 }
 
-export async function uploadAudio(audio: any) {
+export async function uploadAudio(audio: File) {
   if (audio.type !== "audio/mpeg") {
     throw new Error("File must be an MP3 audio file.");
   }
@@ -195,7 +195,6 @@ export const saveFiles = async (file: Blob, folderName: string) => {
   }
 };
 
-
 export async function getAudioDuration(audioBlob: Blob): Promise<string> {
   try {
     // Convert Blob to Buffer
@@ -203,19 +202,24 @@ export async function getAudioDuration(audioBlob: Blob): Promise<string> {
     const buffer = Buffer.from(arrayBuffer);
 
     const metadata = await parseBuffer(buffer);
-    
-    const durationInSeconds:any = metadata.format.duration; // Duration is in seconds
-    
+
+    const durationInSeconds: any = metadata.format.duration; // Duration is in seconds
+
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
-    
-    const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    const formattedDuration = `${minutes}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
 
     console.log("Formatted Duration:", formattedDuration);
 
     return formattedDuration;
-  } catch (error:any) {
-    throw new Error('Unable to extract audio duration: ' + error.message);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error("Unable to extract audio duration: " + error.message);
+    } else {
+      throw new Error("An unknown error occurred");
+    }
   }
 }
-

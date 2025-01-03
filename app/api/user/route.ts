@@ -1,11 +1,11 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
-import dbConnect from '@/lib/DbConnection/dbConnection';
 import User from '@/lib/models/User';
 import { getUser } from '@/app/actions/getUser';
 import { redirect } from 'next/navigation';
 import { getCalendarDate, getDateObject } from '@/utils/helpers';
+import { getDb } from '@/lib/DbConnection/dbConnection';
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -13,9 +13,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+
+export const db = await getDb();
+
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
     const body = await req.json();
     if (!body.userId) {
       return redirect('/Signin');

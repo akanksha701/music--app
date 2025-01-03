@@ -1,11 +1,11 @@
-import React from 'react';
-import { FaBackward, FaForward, FaPause, FaPlay } from 'react-icons/fa';
-import { IPlayerButtonsProps } from '../../types/types';
-import { useDispatch } from 'react-redux';
+import React from "react";
+import { FaBackward, FaForward, FaPause, FaPlay } from "react-icons/fa";
+import { IPlayerButtonsProps } from "../../types/types";
+import { useDispatch } from "react-redux";
 import {
   setCurrentSongIndex,
   setCurrentTrack,
-} from '@/Redux/features/musicPlayer/musicPlayerSlice'; // Adjust path as necessary
+} from "@/Redux/features/musicPlayer/musicPlayerSlice"; // Adjust path as necessary
 
 const PlayerButtons = ({
   isPlaying,
@@ -16,13 +16,11 @@ const PlayerButtons = ({
   const dispatch = useDispatch();
 
   const handleMusicClick = async (index: number) => {
-    if(data)
-    {
+    if (data) {
       const newIndex = index < 0 ? data.length - 1 : index % data.length;
       dispatch(setCurrentTrack(data[newIndex]));
       dispatch(setCurrentSongIndex(newIndex));
     }
-   
   };
 
   if (selectedMusicIndex === null) return null;

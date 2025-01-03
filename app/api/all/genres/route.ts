@@ -1,10 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/DbConnection/dbConnection";
+import { NextRequest, NextResponse } from "next/server"; 
 import Genre from "@/lib/models/Genre";
 
 export async function GET(req: NextRequest) {
     try {
-      await dbConnect();
     
       const genreList = await Genre.find({isDeleted: false});
    

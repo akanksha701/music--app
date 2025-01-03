@@ -1,14 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import Genre from "@/lib/models/Genre";
-import { NextApiRequest } from "next";
-import { capitalizeTitle, saveFiles } from "@/utils/helpers";
-import { GENRE_IMAGE_UPLOAD_DIR } from "../music/route";
-import path from "path";
+import { NextRequest, NextResponse } from 'next/server';
+import { NextApiRequest } from 'next';
+import { capitalizeTitle, saveFiles } from '@/utils/helpers';
+import { GENRE_IMAGE_UPLOAD_DIR } from '../music/route';
+import { db } from '../user/route';
+import mongoose from 'mongoose';
+import path from 'path';
 import fs from 'fs/promises';
+
+
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
     const { name, description } = body;
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
       ? await saveFiles(image as Blob, GENRE_IMAGE_UPLOAD_DIR)
       : "/genres/images/default.jpg"; // Replace with your default image URL.
 
-    const newGenre = await Genre.create({
+    const newGenre = await db.collection('genres').insertOne({
       name: await capitalizeTitle(name.toString()),
       description: description,
       imageUrl: imageUrl,
@@ -47,8 +48,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  try { 
-    await dbConnect();
+  try {
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
     const url = new URL(req?.url as string);
@@ -59,13 +59,17 @@ export async function PUT(req: NextRequest) {
 
     let imageUrl;
 
-    const existingGenre = await Genre.findById(id);
+    const existingGenre = await  db.collection('genres').findOne({id: new mongoose.Types.ObjectId(id!)});
 if (img instanceof Blob) {
   // Only delete the old file if it's no longer referenced by other genres
-  if (existingGenre.imageUrl) {
+  if (existingGenre?.imageUrl) {
     const oldFilePath = path.join(GENRE_IMAGE_UPLOAD_DIR, path.basename(existingGenre.imageUrl));
-    const isFileReferenced = await Genre.exists({ imageUrl: existingGenre.imageUrl, _id: { $ne: id } });
-
+    const isFileReferenced = await db.collection('genres').countDocuments({
+      imageUrl: existingGenre.imageUrl,
+      _id: { $ne: id ? new mongoose.Types.ObjectId(id) : undefined }, // Convert `id` to ObjectId
+    });
+    const fileReferenced = !!isFileReferenced; // Convert the result to a boolean
+    
     if (!isFileReferenced) {
       try {
         await fs.unlink(oldFilePath); // Delete the old file
@@ -82,7 +86,7 @@ if (img instanceof Blob) {
   imageUrl = await saveFiles(img, GENRE_IMAGE_UPLOAD_DIR);
 } else {
   // If no new file is uploaded, retain the existing imageUrl
-  imageUrl = existingGenre.imageUrl;
+  imageUrl = existingGenre?.imageUrl;
 }
 
     if (img instanceof Blob) {
@@ -92,12 +96,16 @@ if (img instanceof Blob) {
       // If 'img' is a path/URL, use it directly
       imageUrl = img;
     }
-    const updatedGenre = await Genre.findByIdAndUpdate(
-      id,
+    if (id === null) {
+      throw new Error('ID cannot be null');
+    }
+    const updatedGenre = await db.collection('genres').findOneAndUpdate(
+      
+      { _id: new mongoose.Types.ObjectId(id) },
       { name, description ,imageUrl
          
        },
-      { new: true }
+    {returnDocument: 'after'}
     );
 
     if (updatedGenre) {
@@ -117,11 +125,9 @@ if (img instanceof Blob) {
 }
 export async function GET(req: NextRequest) {
   try {
-    await dbConnect();
-
     const url = new URL(req?.url as string);
-    const page: any = parseInt(url?.searchParams?.get('page') || '1', 10); // Default page is 1
-    const recordsPerPage: any = parseInt(
+    const page: number = parseInt(url?.searchParams?.get('page') || '1', 10); // Default page is 1
+    const recordsPerPage = parseInt(
       url?.searchParams?.get('recordsPerPage') || '10',
       10
     ); // Default records per page is 10
@@ -131,10 +137,14 @@ export async function GET(req: NextRequest) {
     const limit = recordsPerPage;
 
     // If pagination parameters are found, apply skip and limit
-    const genreList = await Genre.find({isDeleted: false}).skip(skip).limit(limit);
- 
+    const genreList = await db
+      .collection('genres')
+      .find({})
+      .skip(skip)
+      .limit(limit).toArray();
+
     // Get total count of genres for pagination info
-    const totalGenres = await Genre.countDocuments();
+    const totalGenres = await db.collection('genres').countDocuments();
 
     if (genreList) {
       return NextResponse.json({
@@ -163,18 +173,26 @@ export async function GET(req: NextRequest) {
 
 export async function DELETE(req: NextApiRequest) {
   try {
-    await dbConnect();
     const url = new URL(req?.url as string);
-    const id = url?.searchParams?.get("id");
+    const id = url?.searchParams?.get('id');
+
+    if (id === null) {
+      throw new Error('ID cannot be null');
+    }
+
+    const deletedGenre = await db
+      .collection('genres')
+      .findOneAndDelete({ _id: new mongoose.Types.ObjectId(id) });
 
     if (!id) {
       return NextResponse.json({ error: "id is required" }, { status: 400 });
     }
 
-    const updatedGenre = await Genre.findByIdAndUpdate(
-      id,
+    const updatedGenre = await  db
+    .collection('genres').findOneAndUpdate(
+      { _id: new mongoose.Types.ObjectId(id) },
       { isDeleted: true },
-      { new: true } // This option ensures the updated document is returned
+      { returnDocument: 'after' } // This option ensures the updated document is returned
     );
 
     if (updatedGenre) {

@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-import dbConnect from "@/lib/DbConnection/dbConnection";
 import PlayList from '@/lib/models/PlayList';
 
 
 export async function GET(req: Request) {
   try {
-    await dbConnect();
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
 
@@ -28,7 +26,6 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    await dbConnect();
 
     const body = await req.json();
     const { user, name } = body;
@@ -49,7 +46,6 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    await dbConnect(); // Ensure the database is connected
 
     const body = await req.json();
     const { id, ...updateData } = body;

@@ -1,8 +1,8 @@
-'use client';
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/Redux/store';
-import WaveSurfer from 'wavesurfer.js';
+"use client";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/Redux/store";
+import WaveSurfer from "wavesurfer.js";
 import {
   setCurrentTrack,
   setCurrentSongIndex,
@@ -12,14 +12,12 @@ import {
   togglePlay,
   setWavesurferRef,
   clearWavesurferRef,
-} from '@/Redux/features/musicPlayer/musicPlayerSlice';
-import { handleLikeToggle } from '@/hooks/useLike';
-import { useToggleLikeMutation } from '@/services/like';
-import MusicPlayer from './MusicPlayer';
-import { formatTime, useMusic } from '@/hooks/useMusic';
-import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
-import { useFetchAudioPeaksQuery } from '@/services/audio';
-import { Duration } from 'svix';
+} from "@/Redux/features/musicPlayer/musicPlayerSlice";
+import { handleLikeToggle } from "@/hooks/useLike";
+import { useToggleLikeMutation } from "@/services/like";
+import MusicPlayer from "./MusicPlayer";
+import { formatTime, useMusic } from "@/hooks/useMusic";
+import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 
 const MusicPlayerContainer = () => {
   let newIndex: number;
@@ -28,8 +26,8 @@ const MusicPlayerContainer = () => {
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
-  const allSongs = useSelector<RootState, IMusicProps[]>(
-    (state: any) => state.musicPlayerSlice.currentList
+  const allSongs = useSelector<RootState, IMusicProps[] | null>(
+    (state) => state.musicPlayerSlice.currentList
   );
   const volume = useSelector<RootState, number>(
     (state) => state.musicPlayerSlice.volume
@@ -43,7 +41,7 @@ const MusicPlayerContainer = () => {
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
-  const wavesurferRef = useSelector<RootState, any>(
+  const wavesurferRef = useSelector<RootState, WaveSurfer|null>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
   const selectedMusicIndex = useSelector<RootState, number | null>(
@@ -52,22 +50,22 @@ const MusicPlayerContainer = () => {
   const [toggleLike] = useToggleLikeMutation();
 
   const createWaveSurfer = async () => {
-    const waveformElement = document.getElementById('waveform');
-    console.log('currentTrack.peaks',currentTrack?.peaks);
+    const waveformElement = document.getElementById("waveform");
+    console.log("currentTrack.peaks", currentTrack?.peaks);
     if (waveformElement && currentTrack) {
       const ws = WaveSurfer.create({
         container: waveformElement,
         width: 600,
         height: 33,
-        waveColor: '#abb6c1',
-        progressColor: '#5a17dd',
+        waveColor: "#abb6c1",
+        progressColor: "#5a17dd",
         barRadius: 200,
-        cursorColor: 'transparent',
+        cursorColor: "transparent",
         url: currentTrack?.audioUrl,
         peaks: currentTrack?.peaks || [],
       });
 
-      ws.on('ready', () => {
+      ws.on("ready", () => {
         dispatch(setIsPlaying(true));
         ws.setVolume(volume);
         dispatch(
@@ -90,7 +88,7 @@ const MusicPlayerContainer = () => {
 
   const playerProgress = () => {
     if (wavesurferRef) {
-      wavesurferRef.on('timeupdate', (time: number) => {
+      wavesurferRef.on("timeupdate", (time: number) => {
         dispatch(
           setSeekPercentage(
             (wavesurferRef.getCurrentTime() / wavesurferRef.getDuration()) * 100
@@ -172,20 +170,22 @@ const MusicPlayerContainer = () => {
     }
   };
 
-  const playSong = (direction: 'next' | 'prev') => {
+  const playSong = (direction: "next" | "prev") => {
     if (!currentTrack) return;
     setCurrentTime(0);
-    const currentIndex = allSongs.findIndex(
-      (song) => song._id === currentTrack._id
-    );
-    if (direction === 'next') {
-      newIndex = (currentIndex + 1) % allSongs.length;
-    } else if (direction === 'prev') {
-      newIndex = (currentIndex - 1 + allSongs.length) % allSongs.length;
+    if (allSongs) {
+      const currentIndex = allSongs.findIndex(
+        (song) => song._id === currentTrack._id
+      );
+      if (direction === "next") {
+        newIndex = (currentIndex + 1) % allSongs.length;
+      } else if (direction === "prev") {
+        newIndex = (currentIndex - 1 + allSongs.length) % allSongs.length;
+      }
+      const newTrack = allSongs[newIndex];
+      dispatch(setCurrentTrack(newTrack));
+      dispatch(setCurrentSongIndex(newIndex));
     }
-    const newTrack = allSongs[newIndex];
-    dispatch(setCurrentTrack(newTrack));
-    dispatch(setCurrentSongIndex(newIndex));
   };
 
   const handlePlayTrack = (track: IMusicProps) =>
@@ -197,7 +197,7 @@ const MusicPlayerContainer = () => {
 
   return (
     <MusicPlayer
-      allSongs={allSongs}
+      allSongs={allSongs || []}
       currentTrack={currentTrack}
       currentTime={formatTime(currentTime)}
       isPlaying={isPlaying}
@@ -207,8 +207,8 @@ const MusicPlayerContainer = () => {
       handlePlayPause={handlePlayPause}
       handleLikeClick={handleLikeClick}
       handlePlayTrack={handlePlayTrack}
-      onNextSong={() => playSong('next')}
-      onPreviousSong={() => playSong('prev')}
+      onNextSong={() => playSong("next")}
+      onPreviousSong={() => playSong("prev")}
     />
   );
 };

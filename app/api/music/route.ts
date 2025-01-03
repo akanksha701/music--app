@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/DbConnection/dbConnection';
-import Music from '@/lib/models/Music';
 import path from 'path';
 import { capitalizeTitle, getAudioDuration, saveFiles } from '@/utils/helpers';
 import mongoose from 'mongoose';
 import Album from '@/lib/models/Album';
-import { currentUser } from '@clerk/nextjs/server';
+import { currentUser, User } from '@clerk/nextjs/server';
+import { db } from '../user/route';
 
 export const config = {
   api: {
@@ -21,8 +20,6 @@ export const LANGUAGE_IMAGE_UPLOAD_DIR = path.resolve("public/languages/images")
 
 export async function POST(req: Request) {
   try {
-    await dbConnect();
-
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
     const audio = (body.audio as Blob) || null;
@@ -36,7 +33,7 @@ export async function POST(req: Request) {
       : [];
 
     if (body.album) {
-      const newMusic = await Music.create({
+      const newMusic = await db.collection('musics').insertOne({
         musicDetails: {
           name: await capitalizeTitle(body?.name.toString()),
           description: body.description,
@@ -57,7 +54,7 @@ export async function POST(req: Request) {
       });
       const updatedAlbum = await Album.updateOne(
         { _id: new mongoose.Types.ObjectId(body.album.toString()) },
-        { $addToSet: { musicIds: newMusic._id } }
+        { $addToSet: { musicIds: newMusic.insertedId } }
       );
 
       if (!updatedAlbum) {
@@ -87,11 +84,11 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: any) {
+export async function GET(req: Request) {
   try {
     const url = new URL(req?.url as string);
-    const page: any = await url?.searchParams?.get('page');
-    const recordsPerPage: any = await url?.searchParams?.get('recordsPerPage');
+    const page = await url?.searchParams?.get('page');
+    const recordsPerPage = await url?.searchParams?.get('recordsPerPage');
     const language: string | null =
       (await url?.searchParams?.get('language')) || null;
 
@@ -105,10 +102,8 @@ export async function GET(req: any) {
 
     const skip = (currentPage - 1) * limit;
 
-    await dbConnect();
-
-    const totalRecords = await Music.countDocuments();
-    const user: any = await currentUser();
+    const totalRecords = await await db.collection('musics').countDocuments();
+    const user: User | null = await currentUser();
 
     const aggregatePipeline: any[] = [
       {
@@ -158,7 +153,7 @@ export async function GET(req: any) {
           from: 'users',
           pipeline: [
             {
-              $match: { clerkUserId: user.id },
+              $match: { clerkUserId: user?.id },
             },
             {
               $project: { likedMusics: 1 },
@@ -239,7 +234,7 @@ export async function GET(req: any) {
       aggregatePipeline.push({ $skip: skip }, { $limit: limit });
     }
 
-    const musics = await Music.aggregate(aggregatePipeline);
+    const musics = await db.collection('musics').aggregate(aggregatePipeline).toArray();
 
     const totalPages = limit > 0 ? Math.ceil(totalRecords / limit) : 1;
 

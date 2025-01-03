@@ -1,12 +1,17 @@
-import React from 'react';
+import React from "react";
 
-const PlayerLabel = ({ title, artists, textColor }: any) => {
+export interface IPlayerLabel {
+  title?: string;
+  artists?: string;
+  textColor?: string;
+}
+const PlayerLabel = ({ title, artists, textColor }: IPlayerLabel) => {
   return (
     <>
       <p className={`text-${textColor} text-sm`}>
-        {title || 'No Track Selected'}
+        {title || "No Track Selected"}
       </p>
-      <p className="text-gray-400 text-xs">{artists || 'Unknown Artist'}</p>
+      <p className="text-gray-400 text-xs">{artists || "Unknown Artist"}</p>
     </>
   );
 };

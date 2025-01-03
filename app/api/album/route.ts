@@ -1,20 +1,14 @@
-import Album from "@/lib/models/Album";
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/DbConnection/dbConnection";
 import { capitalizeTitle, saveFiles } from "@/utils/helpers";
 import { ALBUM_IMAGE_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from "../music/route";
 import mongoose from "mongoose";
 import { currentUser } from "@clerk/nextjs/server";
-import { Label } from "@radix-ui/react-label";
-import Genre from "@/lib/models/Genre";
-import Language from "@/lib/models/Language";
-import Music from "@/lib/models/Music";
 import path from "path";
 import fs from 'fs/promises';
+import { db } from "../user/route";
 
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect(); 
     const formData = await req.formData();
     const body = Object.fromEntries(formData); 
     let image: Blob | undefined;
@@ -31,8 +25,8 @@ export async function POST(req: NextRequest) {
     const languageNames = JSON.parse(languageIds as string);
 
     // Query genre and language collections by name to get the IDs
-    const genres = await Genre.find({ name: { $in: genreNames } }).select('_id');
-    const languages = await Language.find({ name: { $in: languageNames } }).select('_id');
+    const genres = await db.collection('genres').find({ name: { $in: genreNames } }).project({ _id: 1 }).toArray();
+    const languages = await db.collection('languages').find({ name: { $in: languageNames } }).project({ _id: 1 }).toArray();
 
     // Map the names to their corresponding ObjectIds
     const Genres = genres.map((genre: any) => genre._id);
@@ -40,13 +34,26 @@ export async function POST(req: NextRequest) {
  
     const Songs = JSON.parse(songIds as string).map((id: string) => new mongoose.Types.ObjectId(id))
     let DefaultUrl  
-    if(image === undefined){
-      const SongInformation  = await Music.findById(Songs[0]).populate('audioDetails')
- 
-      DefaultUrl = SongInformation?.audioDetails?.imageUrl
+if (image === undefined) {
+  // Find the song
+  const SongInformation = await db.collection('music').aggregate([
+    { $match: Songs[0] },  // Match the song document
+    {
+      $lookup: {
+        from: 'audioDetails',  
+        localField: 'audioDetails', 
+        foreignField: '_id', 
+        as: 'audioDetails'  
+      }
     }
+  ]).toArray();
+
+  // Extract the image URL if available
+  const DefaultUrl = SongInformation[0]?.audioDetails?.[0]?.imageUrl;
+}
+
  
-    const newAlbum = await Album.create({
+    const newAlbum = await db.collection('albums').insertOne({
       name: await capitalizeTitle(name.toString()),
       description: description,
       Price: Number(price),
@@ -97,8 +104,6 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: Request) {
   try {
-    await dbConnect();
-
     const url = new URL(req.url);
     const albumId = url.searchParams.get("AlbumId");
     const artistId = url.searchParams.get("ArtistId");
@@ -110,19 +115,45 @@ export async function GET(req: Request) {
     // If AlbumId and type=musics are provided, fetch musics related to the album
     if (albumId && type === "AlbumSongs") {
       // Fetch the album to get musicIds
-      const album = await Album.findOne({ _id: albumId, isDeleted: false }).populate("musicIds");
-    
-      if (!album || !album.musicIds) {
+      const album = await db.collection('albums').aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(albumId),
+            isDeleted: false
+          }
+        },
+        {
+          $lookup: {
+            from: 'musics',  // Replace with the correct collection name for music
+            localField: 'musicIds',
+            foreignField: '_id',
+            as: 'musicDetails'  // This will be the populated result
+          }
+        },
+        {
+          $project: {
+            musicDetails: 1,  // Include the populated musicDetails
+            _id: 1,  // Include any other fields from the album if needed
+          }
+        }
+      ]).toArray();
+      
+      if (!album || !album.length || !album[0].musicDetails) {
         return NextResponse.json(
           { error: "Album or associated music not found" },
           { status: 404 }
         );
       }
+      
+      // Access the music details and extract the IDs
+      const musicIds = album[0].musicDetails.map((music: any) => music._id);  // Now accessing 'musicDetails'
+      
+      
     
-      const musicIds = album.musicIds.map((music: any) => music._id); // Extract the IDs of associated music
+      
     
       const user: any = await currentUser();
-      const musics = await Music.aggregate([
+      const musics = await db.collection('musics').aggregate([
         {
           $match: { _id: { $in: musicIds }, isDeleted: false }, // Match music by IDs
         },
@@ -236,17 +267,55 @@ export async function GET(req: Request) {
 
     // If AlbumId is provided, fetch the album with that ID
     if (albumId) {
-      const album = await Album.findOne({ _id: albumId, ...filter })
-        .populate("Genre")
-        .populate("Language")
-        .populate("musicIds");
-
-      if (!album) {
+      const album = await db.collection('albums').aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(albumId),
+            ...filter,
+          }
+        },
+        {
+          $lookup: {
+            from: 'genres', // Collection name for genres
+            localField: 'Genre', // Field to match in the albums collection
+            foreignField: '_id',
+            as: 'GenreDetails', // Populated result
+          }
+        },
+        {
+          $lookup: {
+            from: 'languages', // Collection name for languages
+            localField: 'Language', // Field to match in the albums collection
+            foreignField: '_id',
+            as: 'LanguageDetails', // Populated result
+          }
+        },
+        {
+          $lookup: {
+            from: 'musics', // Collection name for music
+            localField: 'musicIds', // Field to match in the albums collection
+            foreignField: '_id',
+            as: 'musicDetails', // Populated result
+          }
+        },
+        {
+          $project: {
+            GenreDetails: 1,
+            LanguageDetails: 1,
+            musicDetails: 1,
+            _id: 1,
+            // Any other fields you want from the album collection
+          }
+        }
+      ]).toArray();
+      
+      if (!album || album.length === 0 || !album[0].musicDetails) {
         return NextResponse.json(
           { error: "Album not found" },
           { status: 404 }
         );
       }
+      
 
       return NextResponse.json({
         status: 200,
@@ -267,11 +336,48 @@ export async function GET(req: Request) {
 
     // If no pagination params provided, fetch all albums matching the filter
     if (!recordsPerPage || recordsPerPage === 0) {
-      const albumList = await Album.find(filter)
-        .populate("Genre")
-        .populate("Language")
-        .populate("musicIds");
-
+      const albumList = await db.collection("albums").aggregate([
+        { $match: filter }, // Apply your filter condition
+        {
+          $lookup: {
+            from: "genres", // The name of the collection for Genre
+            localField: "Genre", // The field in albums that references Genre
+            foreignField: "_id", // The field in Genre collection
+            as: "GenreDetails", // The name of the output array
+          },
+        },
+        {
+          $lookup: {
+            from: "languages", // The name of the collection for Language
+            localField: "Language", // The field in albums that references Language
+            foreignField: "_id", // The field in Language collection
+            as: "LanguageDetails", // The name of the output array
+          },
+        },
+        {
+          $lookup: {
+            from: "musics", // The name of the collection for Music
+            localField: "musicIds", // The field in albums that references musicIds
+            foreignField: "_id", // The field in Musics collection
+            as: "MusicDetails", // The name of the output array
+          },
+        },
+        {
+          $addFields: {
+            Genre: { $arrayElemAt: ["$GenreDetails", 0] }, // Flatten GenreDetails
+            Language: { $arrayElemAt: ["$LanguageDetails", 0] }, // Flatten LanguageDetails
+            musicIds: "$MusicDetails", // Replace musicIds with full details
+          },
+        },
+        {
+          $project: {
+            GenreDetails: 0, // Remove temporary fields
+            LanguageDetails: 0,
+            MusicDetails: 0,
+          },
+        },
+      ]).toArray();
+      
       return NextResponse.json({
         status: 200,
         data: albumList,
@@ -282,9 +388,9 @@ export async function GET(req: Request) {
     const skip = (page - 1) * recordsPerPage;
     const limit = recordsPerPage;
 
-    const albumList = await Album.find(filter).skip(skip).limit(limit);
+    const albumList = await db.collection("albums").find(filter).skip(skip).limit(limit);
 
-    const totalAlbums = await Album.countDocuments(filter); // Count based on the filter
+    const totalAlbums = await db.collection("albums").countDocuments(filter); // Count based on the filter
 
     return NextResponse.json({
       status: 200,
@@ -306,91 +412,10 @@ export async function GET(req: Request) {
 }
 
 
-// export async function GET(req: Request) {
-//   try {
-//     await dbConnect();
 
-//     const url = new URL(req.url);
-//     const albumId = url.searchParams.get("AlbumId");
-//     const artistId = url.searchParams.get("ArtistId");
-
-//     // Filter to fetch only non-deleted documents
-//     let filter: any = { isDeleted: false };
-
-//     // If AlbumId is provided, fetch the album with that ID
-//     if (albumId) {
-//       const album = await Album.findOne({ _id: albumId, ...filter })
-//         .populate("Genre")
-//         .populate("Language")
-//         .populate("musicIds");
-
-//       if (!album) {
-//         return NextResponse.json(
-//           { error: "Album not found" },
-//           { status: 404 }
-//         );
-//       }
-
-//       return NextResponse.json({
-//         status: 200,
-//         data: album,
-//       });
-//     }
-
-//     const page: number = parseInt(url.searchParams.get('page') || '1', 10);
-//     const recordsPerPage: number = parseInt(
-//       url.searchParams.get('recordsPerPage') || '0',
-//       10
-//     );
-
-//     // Add ArtistId to the filter if it's present
-//     if (artistId) {
-//       filter.Label = artistId;
-//     }
-
-//     // If no pagination params provided, fetch all albums matching the filter
-//     if (!recordsPerPage || recordsPerPage === 0) {
-//       const albumList = await Album.find(filter)
-//         .populate("Genre")
-//         .populate("Language")
-//         .populate("musicIds");
-
-//       return NextResponse.json({
-//         status: 200,
-//         data: albumList,
-//       });
-//     }
-
-//     // Pagination logic if recordsPerPage and page are provided
-//     const skip = (page - 1) * recordsPerPage;
-//     const limit = recordsPerPage;
-
-//     const albumList = await Album.find(filter).skip(skip).limit(limit);
-
-//     const totalAlbums = await Album.countDocuments(filter); // Count based on the filter
-
-//     return NextResponse.json({
-//       status: 200,
-//       data: albumList,
-//       pagination: {
-//         page,
-//         recordsPerPage,
-//         totalAlbums,
-//         totalPages: Math.ceil(totalAlbums / recordsPerPage), // Calculate total pages
-//       },
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return NextResponse.json(
-//       { error: 'Internal Server Error' },
-//       { status: 500 }
-//     );
-//   }
-// }
 
 export async function PUT(req: NextRequest) {
   try {
-    await dbConnect();
     const url = new URL(req.url);
     const CurrentUserInfo: any = await currentUser();
     const formData = await req.formData();
@@ -411,15 +436,21 @@ export async function PUT(req: NextRequest) {
     const genreNames = JSON.parse(genreIds as string);
     const languageNames = JSON.parse(languageIds as string);
 
-    const genres = await Genre.find({ name: { $in: genreNames } }).select("_id");
-    const languages = await Language.find({ name: { $in: languageNames } }).select("_id");
+    const genres = await db.collection("genres")
+  .find({ name: { $in: genreNames } })
+  .project({ _id: 1 }) // Include only the `_id` field
+  .toArray(); // Convert the cursor to an array
+
+    const languages = await db.collection("languages").find({ name: { $in: languageNames } })
+    .project({ _id: 1 }) // Include only the `_id` field
+    .toArray();
 
     const Genres = genres.map((genre: any) => genre._id);
     const Languages = languages.map((language: any) => language._id);
 
     const Songs = JSON.parse(songIds as string).map((id: string) => new mongoose.Types.ObjectId(id));
 
-    const existingAlbum = await Album.findById(albumId);
+    const existingAlbum = await db.collection("albums").findOne( { _id: new mongoose.Types.ObjectId(albumId!) });
 
     if (!existingAlbum) {
       return NextResponse.json({ error: "Album not found" }, { status: 404 });
@@ -431,21 +462,21 @@ export async function PUT(req: NextRequest) {
       // Handle old file deletion logic
       if (existingAlbum.imageUrl) {
         const oldFilePath = path.join(ALBUM_IMAGE_UPLOAD_DIR, path.basename(existingAlbum.imageUrl));
-        const isFileReferenced = await Album.exists({
-          imageUrl: existingAlbum.imageUrl,
-          _id: { $ne: albumId },
-        });
+        const isFileReferenced = await db.collection("albums").countDocuments({
+  imageUrl: existingAlbum.imageUrl,
+  _id: { $ne: new mongoose.Types.ObjectId(albumId!) }, // Exclude the current album
+});
 
-        if (!isFileReferenced) {
-          try {
-            await fs.unlink(oldFilePath); // Delete the old file
-            console.log(`Deleted old file: ${oldFilePath}`);
-          } catch (err) {
-            console.error(`Error deleting file: ${oldFilePath}`, err);
-          }
-        } else {
-          console.log(`File is still referenced by other records: ${existingAlbum.imageUrl}`);
-        }
+if (isFileReferenced === 0) {  // If no other album references the image
+  try {
+    await fs.unlink(oldFilePath);  // Delete the old file
+    console.log(`Deleted old file: ${oldFilePath}`);
+  } catch (err) {
+    console.error(`Error deleting file: ${oldFilePath}`, err);
+  }
+} else {
+  console.log(`File is still referenced by other albums. Not deleting.`);
+} 
       }
 
       // Save the new file and update the URL
@@ -465,8 +496,10 @@ export async function PUT(req: NextRequest) {
       musicIds: Songs,
     };
 
-    const updatedAlbum = await Album.findByIdAndUpdate(albumId, updatedAlbumData, {
-      new: true,
+    const updatedAlbum = await db.collection("albums").findOneAndUpdate({
+      _id: new mongoose.Types.ObjectId(albumId!),
+    }, updatedAlbumData, {
+      returnDocument: "after",
     });
 
     if (updatedAlbum) {
@@ -486,7 +519,7 @@ export async function PUT(req: NextRequest) {
 
 // export async function DELETE(req: NextRequest) {
 //   try {
-//     await dbConnect();
+
 
 //     const url = new URL(req.url);
 //     const albumId = url.searchParams.get("id");
@@ -551,7 +584,6 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    await dbConnect();
 
     const url = new URL(req.url);
     const albumId = url.searchParams.get("id");
@@ -567,7 +599,9 @@ export async function DELETE(req: NextRequest) {
     const CurrentUserId = String(CurrentUserInfo?.id);
 
     // Check if the album exists
-    const existingAlbum = await Album.findById(albumId);
+    const existingAlbum = await db.collection('albums').findOne({
+      _id: new mongoose.Types.ObjectId(albumId),
+    });
 
     if (!existingAlbum) {
       return NextResponse.json(

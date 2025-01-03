@@ -1,23 +1,22 @@
-import dbConnect from '@/lib/DbConnection/dbConnection';
-import User from '@/lib/models/User';
 import { NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
+import { currentUser, User } from '@clerk/nextjs/server';
 import { TAGS } from '@/app/(BrowsePage)/Browse/types/types';
 import mongoose from 'mongoose';
+import { db } from '../user/route';
 
-async function handleMusicLike(user: any, id: string, clerkUserId: string) {
+async function handleMusicLike(user:any, id: string, clerkUserId: string) {
   const alreadyLiked = user.likedMusics.includes(
     new mongoose.Types.ObjectId(id)
   );
 
-  const updatedUser = await User.findOneAndUpdate(
+  const updatedUser = await db.collection('users').findOneAndUpdate(
     { clerkUserId },
     {
       [alreadyLiked ? '$pull' : '$addToSet']: {
         likedMusics: new mongoose.Types.ObjectId(id),
       },
     },
-    { new: true }
+    { returnDocument: 'after' }
   );
   return updatedUser;
 }
@@ -27,14 +26,14 @@ async function handleAlbumLike(user: any, id: string, clerkUserId: string) {
     new mongoose.Types.ObjectId(id)
   );
 
-  const updatedUser = await User.findOneAndUpdate(
+  const updatedUser = await db.collection('users').findOneAndUpdate(
     { clerkUserId },
     {
       [alreadyLiked ? '$pull' : '$addToSet']: {
         likedAlbums: new mongoose.Types.ObjectId(id),
       },
     },
-    { new: true }
+    { returnDocument: 'after' }
   );
 
   return updatedUser;
@@ -45,14 +44,14 @@ async function handleGenreLike(user: any, id: string, clerkUserId: string) {
     new mongoose.Types.ObjectId(id)
   );
 
-  const updatedUser = await User.findOneAndUpdate(
+  const updatedUser = await db.collection('users').findOneAndUpdate(
     { clerkUserId },
     {
       [alreadyLiked ? '$pull' : '$addToSet']: {
         likedGenres: new mongoose.Types.ObjectId(id),
       },
     },
-    { new: true }
+    { returnDocument: 'after' }
   );
 
   return updatedUser;
@@ -60,11 +59,10 @@ async function handleGenreLike(user: any, id: string, clerkUserId: string) {
 
 export async function POST(req: Request) {
   try {
-    await dbConnect();
-    const userDetails: any = await currentUser();
+    const userDetails:  User | null = await currentUser();
     const { id, name } = await req.json();
 
-    const user = await User.findOne({ clerkUserId: userDetails?.id });
+    const user = await  db.collection('users').findOne({ clerkUserId: userDetails?.id });
     if (!user) {
       return NextResponse.json({ message: 'User not found.' }, { status: 404 });
     }
@@ -72,18 +70,18 @@ export async function POST(req: Request) {
     let updatedUser;
     switch (name) {
     case TAGS.MUSIC:
-      updatedUser = await handleMusicLike(user, id, userDetails?.id);
+      updatedUser = await handleMusicLike(user, id, userDetails?.id as string);
       break;
     case TAGS.NEW_RELEASE:
-      updatedUser = await handleMusicLike(user, id, userDetails?.id);
+      updatedUser = await handleMusicLike(user, id, userDetails?.id as string);
       break;
 
     case TAGS.ALBUMS:
-      updatedUser = await handleAlbumLike(user, id, userDetails?.id);
+      updatedUser = await handleAlbumLike(user, id, userDetails?.id as string);
       break;
 
     case TAGS.GENRE:
-      updatedUser = await handleGenreLike(user, id, userDetails?.id);
+      updatedUser = await handleGenreLike(user, id, userDetails?.id as string);
       break;
 
     default:

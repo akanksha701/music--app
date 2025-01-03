@@ -37,11 +37,11 @@ export interface IRadioButtonProps {
 }
 
 export interface IDatePickerType {
-  control?: any;
+  control?: Control<FieldValues>;
   label?: string;
   name?: string;
   rules?: object;
-  error?: any;
+  error?: string;
   register: UseFormRegister<UserData>;
 }
 
@@ -72,12 +72,12 @@ export interface INextTextAreaProps<T extends FieldValues> {
   name: string;
 }
 export interface ISelectProps<T extends FieldValues> {
-  control: any;
+  control?: Control<FieldValues>;
   name: Path<T>;
   label?: string;
   items: Array<{ id: string; name: string, imageUrl?: string }>; // Define the structure of items
   rules?: object;
-  error?: any;
+  error: FieldErrors<T>;
   id?: string;
   selectionMode: any;
   placeholder: string;
@@ -108,7 +108,7 @@ export interface IMenuProps {
 export interface IFileUploadProps {
   name: string; // The name of the field (used by react-hook-form)
   control: Control<FieldValues>; // The control object from react-hook-form to manage the form state
-  rules?: any; // Optional validation rules (can be more specific based on your needs)
+  rules?: string; // Optional validation rules (can be more specific based on your needs)
   label?: string; // Optional label for the file input
   defaultValue?: File | null; // Optional default value (default can be null, no file selected initially)
   [key: string]: any; // Al
@@ -139,7 +139,7 @@ export interface ITableProps {
   message: string;
   columns: IColumn[];
   data: Record<string, any>[];
-  handleEdit?: any;
+  handleEdit?: (id: string) => void;
   paginationData?: IPagination;
   page: number;
   setPage: (page: number) => void;
