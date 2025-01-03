@@ -1,16 +1,16 @@
-'use client';
-import React from 'react';
-import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
-import PlayerLabel from './PlayerLabel';
-import { IoAddSharp } from 'react-icons/io5';
-import { FaHeart, FaPause, FaPlay, FaRegHeart } from 'react-icons/fa';
-import { GoDownload } from 'react-icons/go';
-import { FiShoppingCart } from 'react-icons/fi';
-import { useSelector, useDispatch } from 'react-redux';
-import { useSearchParams } from 'next/navigation';
-import { RootState } from '@/Redux/store';
-import { handleLikeToggle } from '@/hooks/useLike';
-import { useToggleLikeMutation } from '@/services/like';
+"use client";
+import React from "react";
+import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
+import PlayerLabel from "./PlayerLabel";
+import { IoAddSharp } from "react-icons/io5";
+import { FaHeart, FaPause, FaPlay, FaRegHeart } from "react-icons/fa";
+import { GoDownload } from "react-icons/go";
+import { FiShoppingCart } from "react-icons/fi";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "next/navigation";
+import { RootState } from "@/Redux/store";
+import { handleLikeToggle } from "@/hooks/useLike";
+import { useToggleLikeMutation } from "@/services/like";
 
 const MusicList = ({
   data,
@@ -22,15 +22,13 @@ const MusicList = ({
   handlePlayTrack: (track: IMusicProps) => void;
 }) => {
   const searchParams = useSearchParams();
-  const listName = searchParams.get('type');
+  const listName = searchParams.get("type");
   const currentTrackId = useSelector<any, string | null>(
     (state) => state.musicPlayerSlice.currentTrack?._id
   );
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
-  const dispatch = useDispatch();
-  const [toggleLike] = useToggleLikeMutation();
 
   const renderedTracks =
     data && data.length > 0 ? (
@@ -50,9 +48,9 @@ const MusicList = ({
 
             <div className="text-left flex-1">
               <PlayerLabel
-                title={track?.name || 'Unknown Track'}
-                artists={track?.artists || ''}
-                textColor={'black'}
+                title={track?.name || "Unknown Track"}
+                artists={track?.artists || ""}
+                textColor={"black"}
               />
             </div>
 
@@ -63,18 +61,13 @@ const MusicList = ({
             ></div>
 
             <p className="text-xs text-slate-600 bg-transparent rounded-md my-2 ml-4 mx-5">
-              {track?.duration || '0:00'}
+              {track?.duration || "0:00"}
             </p>
 
             {track?.liked ? (
-              <FaHeart
-                className="text-red-500 transition-colors duration-300"
-                
-              />
+              <FaHeart className="text-red-500 transition-colors duration-300" />
             ) : (
-              <FaRegHeart
-                className="text-red-500 transition-colors duration-300"
-              />
+              <FaRegHeart className="text-red-500 transition-colors duration-300" />
             )}
 
             <IoAddSharp

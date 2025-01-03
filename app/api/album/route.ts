@@ -1,17 +1,15 @@
-import Album from '@/lib/models/Album';
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/DbConnection/dbConnection';
 import { capitalizeTitle, saveFiles } from '@/utils/helpers';
 import { ALBUM_IMAGE_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from '../music/route';
+import { db } from '../user/route';
 
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
     const image = (body.image as Blob) || null;
     const { name, description } = body;
-    const newAlbum = await Album.create({
+    const newAlbum = await db.collection('albums').insertOne({
       name: await capitalizeTitle(name.toString()),
       description: description,
       imageUrl: image ? await saveFiles(image, ALBUM_IMAGE_UPLOAD_DIR) : null,
@@ -37,8 +35,6 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: Request) {
   try {
-    await dbConnect();
-
     const url = new URL(req.url);
 
     const page: number = parseInt(url.searchParams.get('page') || '1', 10);
@@ -47,7 +43,7 @@ export async function GET(req: Request) {
       10
     );
     if (!recordsPerPage || recordsPerPage) {
-      const albumList = await Album.find({});
+      const albumList = await db.collection('albums').find({});
       return NextResponse.json({
         status: 200,
         data: albumList,
@@ -58,9 +54,14 @@ export async function GET(req: Request) {
     const skip = (page - 1) * recordsPerPage;
     const limit = recordsPerPage;
 
-    const albumList = await Album.find({}).skip(skip).limit(limit);
+    const albumList = await db
+      .collection('albums')
+      .find({})
+      .skip(skip)
+      .limit(limit)
+      .toArray();
 
-    const totalAlbums = await Album.countDocuments();
+    const totalAlbums = await db.collection('albums').countDocuments();
 
     return NextResponse.json({
       status: 200,

@@ -1,35 +1,35 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/DbConnection/dbConnection';
-import Artist from '@/lib/models/Artist';
+import { db } from '../user/route';
 
 export async function GET() {
   try {
-    await dbConnect();
-    const artists = await Artist.aggregate([
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'userId',
-          foreignField: '_id',
-          as: 'userDetails',
-        },
-      },
-      {
-        $unwind: {
-          path: '$userDetails',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          id: '$userDetails._id',
-          fullname: {
-            $concat: ['$userDetails.firstName', ' ', '$userDetails.lastName'],
+    
+    const artists = await  db
+      .collection('artists').aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userDetails',
           },
         },
-      },
-    ]);
+        {
+          $unwind: {
+            path: '$userDetails',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            id: '$userDetails._id',
+            fullname: {
+              $concat: ['$userDetails.firstName', ' ', '$userDetails.lastName'],
+            },
+          },
+        },
+      ]).toArray();
 
     return NextResponse.json({ status: 200, data: artists });
   } catch (error) {

@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/DbConnection/dbConnection';
-import Language from '@/lib/models/Language';
 import { capitalizeTitle } from '@/utils/helpers';
+import { db } from '../user/route';
+import mongoose from 'mongoose';
 
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
     const body = await req?.json();
     const { name, description } = body;
-    const newLanguage = await Language.create({
+    const newLanguage = await db.collection('languages').insertOne({
       name: await capitalizeTitle(name.toString()),
       description: description,
     });
@@ -33,19 +33,21 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    await dbConnect();
-
     const url = new URL(req?.url as string);
     const id = url?.searchParams?.get('id');
     const body = await req?.json();
 
     const { name, description } = body;
-
-    const updatedLanguage = await Language.findByIdAndUpdate(
-      id,
-      { name, description },
-      { new: true }
-    );
+    if (id === null) {
+      throw new Error('ID cannot be null');
+    }
+    const updatedLanguage = await db
+      .collection('languages')
+      .findOneAndUpdate(
+        { _id: new mongoose.Types.ObjectId(id) },
+        { name, description },
+        { returnDocument: 'after' }
+      );
 
     if (updatedLanguage) {
       return NextResponse.json({
@@ -63,16 +65,17 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-
 export async function GET(req: Request) {
   try {
-    await dbConnect();
     const url = new URL(req.url);
-    
+
     const page: any = parseInt(url.searchParams.get('page') || '1', 10); // Default to page 1
-    const recordsPerPage: any = parseInt(url.searchParams.get('recordsPerPage') || '0', 10); // Default to 0 (no pagination)
+    const recordsPerPage: any = parseInt(
+      url.searchParams.get('recordsPerPage') || '0',
+      10
+    ); // Default to 0 (no pagination)
     if (!recordsPerPage || !page) {
-      const languageList = await Language.find({});
+      const languageList = await db.collection('languages').find({}).toArray();
       return NextResponse.json({
         status: 200,
         data: languageList,
@@ -84,10 +87,14 @@ export async function GET(req: Request) {
     const limit = recordsPerPage;
 
     // Fetch paginated data
-    const languageList = await Language.find({}).skip(skip).limit(limit);
+    const languageList = await db
+      .collection('languages')
+      .find({})
+      .skip(skip)
+      .limit(limit).toArray();
 
     // Get total count for pagination
-    const totalLanguages = await Language.countDocuments();
+    const totalLanguages = await db.collection('languages').countDocuments();
     return NextResponse.json({
       status: 200,
       data: languageList,
@@ -108,10 +115,14 @@ export async function GET(req: Request) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    await dbConnect();
     const url = new URL(req?.url);
     const id = url?.searchParams?.get('id');
-    const deletedLanguage = await Language.findByIdAndDelete(id);
+    if (id === null) {
+      throw new Error('ID cannot be null');
+    }
+    const deletedLanguage = await db
+      .collection('languages')
+      .findOneAndDelete({ _id: new mongoose.Types.ObjectId(id) });
 
     if (deletedLanguage) {
       return NextResponse.json({

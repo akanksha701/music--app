@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/DbConnection/dbConnection';
-import Genre from '@/lib/models/Genre';
+
 import { NextApiRequest } from 'next';
 import { capitalizeTitle, saveFiles } from '@/utils/helpers';
 import { GENRE_IMAGE_UPLOAD_DIR } from '../music/route';
+import { db } from '../user/route';
+import mongoose from 'mongoose';
 
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
     const image = (body.image as Blob) || null;
     const { name, description } = body;
-    const newGenre = await Genre.create({
+    const newGenre = await db.collection('genres').insertOne({
       name: await capitalizeTitle(name.toString()),
       description: description,
       imageUrl: image ? await saveFiles(image, GENRE_IMAGE_UPLOAD_DIR) : null,
@@ -37,17 +38,20 @@ export async function POST(req: NextRequest) {
 }
 export async function PUT(req: NextRequest) {
   try {
-    await dbConnect();
     const url = new URL(req?.url as string);
     const id = url?.searchParams?.get('id');
     const body = await req?.json();
     const { name, description } = body;
-
-    const updatedGenre = await Genre.findByIdAndUpdate(
-      id,
-      { name, description },
-      { new: true }
-    );
+    if (id === null) {
+      throw new Error('ID cannot be null');
+    }
+    const updatedGenre = await db
+      .collection('genres')
+      .findOneAndUpdate(
+        { _id: new mongoose.Types.ObjectId(id) },
+        { name, description },
+        { returnDocument: 'after' }
+      );
 
     if (updatedGenre) {
       return NextResponse.json({
@@ -66,8 +70,6 @@ export async function PUT(req: NextRequest) {
 }
 export async function GET(req: NextRequest) {
   try {
-    await dbConnect();
-
     const url = new URL(req?.url as string);
     const page: any = parseInt(url?.searchParams?.get('page') || '1', 10); // Default page is 1
     const recordsPerPage: any = parseInt(
@@ -80,10 +82,14 @@ export async function GET(req: NextRequest) {
     const limit = recordsPerPage;
 
     // If pagination parameters are found, apply skip and limit
-    const genreList = await Genre.find({}).skip(skip).limit(limit);
+    const genreList = await db
+      .collection('genres')
+      .find({})
+      .skip(skip)
+      .limit(limit).toArray();
 
     // Get total count of genres for pagination info
-    const totalGenres = await Genre.countDocuments();
+    const totalGenres = await db.collection('genres').countDocuments();
 
     if (genreList) {
       return NextResponse.json({
@@ -112,10 +118,16 @@ export async function GET(req: NextRequest) {
 
 export async function DELETE(req: NextApiRequest) {
   try {
-    await dbConnect();
     const url = new URL(req?.url as string);
     const id = url?.searchParams?.get('id');
-    const deletedGenre = await Genre.findByIdAndDelete(id);
+
+    if (id === null) {
+      throw new Error('ID cannot be null');
+    }
+
+    const deletedGenre = await db
+      .collection('genres')
+      .findOneAndDelete({ _id: new mongoose.Types.ObjectId(id) });
 
     if (deletedGenre) {
       return NextResponse.json({

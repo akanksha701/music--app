@@ -3,7 +3,7 @@ import User from '@/lib/models/User';
 import dbConnect from '@/lib/DbConnection/dbConnection';
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect();
+    
     const body = await req.json();
     const { id, emailAddresses, firstName, lastName } = body.user;
     const userExisted: any = await User.findOne({ clerkUserId: id });

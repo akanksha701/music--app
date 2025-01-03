@@ -168,7 +168,8 @@ export const saveFiles = async (file: Blob, folderName: string) => {
     return null;
   }
 };
-import { parseBuffer } from 'music-metadata';
+import { parseBuffer } from "music-metadata";
+import client from "@/lib/DbConnection/dbConnection";
 
 export async function getAudioDuration(audioBlob: Blob): Promise<string> {
   try {
@@ -177,19 +178,20 @@ export async function getAudioDuration(audioBlob: Blob): Promise<string> {
     const buffer = Buffer.from(arrayBuffer);
 
     const metadata = await parseBuffer(buffer);
-    
-    const durationInSeconds:any = metadata.format.duration; // Duration is in seconds
-    
+
+    const durationInSeconds: any = metadata.format.duration; // Duration is in seconds
+
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = Math.floor(durationInSeconds % 60);
-    
-    const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    const formattedDuration = `${minutes}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
 
     console.log("Formatted Duration:", formattedDuration);
 
     return formattedDuration;
-  } catch (error:any) {
-    throw new Error('Unable to extract audio duration: ' + error.message);
+  } catch (error: any) {
+    throw new Error("Unable to extract audio duration: " + error.message);
   }
 }
-
