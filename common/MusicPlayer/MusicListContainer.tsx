@@ -55,9 +55,7 @@ const MusicListContainer = (props: { AlbumId?: string; GenreId?: string ; Playli
   const wavesurferRef = useSelector<RootState, any>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
-  const { data: audioPeaksData, error } = currentTrack
-    ? useFetchAudioPeaksQuery(currentTrack.audioUrl as string)
-    : { data: null, error: null };
+ 
  useEffect(() => {
      if (allSongsData && allSongsData.data) {
        const songs =
