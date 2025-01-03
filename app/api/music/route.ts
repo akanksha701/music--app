@@ -3,7 +3,7 @@ import path from 'path';
 import { capitalizeTitle, getAudioDuration, saveFiles } from '@/utils/helpers';
 import mongoose from 'mongoose';
 import Album from '@/lib/models/Album';
-import { currentUser } from '@clerk/nextjs/server';
+import { currentUser, User } from '@clerk/nextjs/server';
 import { db } from '../user/route';
 
 export const config = {
@@ -83,11 +83,11 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: any) {
+export async function GET(req: Request) {
   try {
     const url = new URL(req?.url as string);
-    const page: any = await url?.searchParams?.get('page');
-    const recordsPerPage: any = await url?.searchParams?.get('recordsPerPage');
+    const page = await url?.searchParams?.get('page');
+    const recordsPerPage = await url?.searchParams?.get('recordsPerPage');
     const language: string | null =
       (await url?.searchParams?.get('language')) || null;
 
@@ -102,7 +102,7 @@ export async function GET(req: any) {
     const skip = (currentPage - 1) * limit;
 
     const totalRecords = await await db.collection('musics').countDocuments();
-    const user: any = await currentUser();
+    const user: User | null = await currentUser();
 
     const aggregatePipeline: any[] = [
       {
@@ -152,7 +152,7 @@ export async function GET(req: any) {
           from: 'users',
           pipeline: [
             {
-              $match: { clerkUserId: user.id },
+              $match: { clerkUserId: user?.id },
             },
             {
               $project: { likedMusics: 1 },

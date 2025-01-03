@@ -23,7 +23,7 @@ const MusicList = ({
 }) => {
   const searchParams = useSearchParams();
   const listName = searchParams.get("type");
-  const currentTrackId = useSelector<any, string | null>(
+  const currentTrackId = useSelector<RootState, string | null>(
     (state) => state.musicPlayerSlice.currentTrack?._id
   );
   const isPlaying = useSelector<RootState, boolean>(

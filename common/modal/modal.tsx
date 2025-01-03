@@ -7,22 +7,22 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Copy } from "lucide-react";
-import React from "react";
-
-const Modal = (props: any) => {
-  const { children,title,body } = props;
+import React, { ReactNode } from "react";
+export interface IModalProps {
+  children: ReactNode;
+  title: string;
+  body: string;
+}
+const Modal = (props: IModalProps) => {
+  const { children, title, body } = props;
   return (
     <Dialog>
       {children}
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>
-          </DialogDescription>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         {body}
         {/* <div className="flex items-center space-x-2">

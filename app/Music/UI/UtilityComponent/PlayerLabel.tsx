@@ -1,6 +1,11 @@
 import React from "react";
 
-const PlayerLabel = ({ title, artists, textColor }: any) => {
+export interface IPlayerLabel {
+  title?: string;
+  artists?: string;
+  textColor?: string;
+}
+const PlayerLabel = ({ title, artists, textColor }: IPlayerLabel) => {
   return (
     <>
       <p className={`text-${textColor} text-sm`}>

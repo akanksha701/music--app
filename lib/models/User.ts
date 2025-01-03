@@ -79,7 +79,7 @@ const userSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Playlist',
         validate: {
-          validator: function (array: any[]) {
+          validator: function (array: string[]) {
             return array.length <= 100;
           },
           message: 'Cannot have more than 100 playlists',

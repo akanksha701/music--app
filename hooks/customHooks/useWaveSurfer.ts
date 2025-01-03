@@ -1,10 +1,8 @@
 import { useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js"; // Import WaveSurfer.js
-import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 import { RootState } from "@/Redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setCurrentWaveSurfer,
   setIsPlaying,
   setSeekPercentage,
 } from "@/Redux/features/musicPlayer/musicPlayerSlice";

@@ -19,7 +19,7 @@ const AddLanguage = (props: IAddLanguageProps) => {
     formState: { errors },
   } = useForm({});
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data:IAddLanguageProps) => {
     try {
       const res = await fetchApi('/api/language', Method.POST, data);
       if (res.status === 200) {

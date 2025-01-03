@@ -37,8 +37,8 @@ const MusicListContainer = () => {
   const seekPercentage = useSelector<RootState, number>(
     (state) => state.musicPlayerSlice.seekPercentage
   );
-  const allSongs = useSelector<RootState, IMusicProps[]>(
-    (state: any) => state.musicPlayerSlice.currentList
+  const allSongs = useSelector<RootState, IMusicProps[] | null>(
+    (state) => state.musicPlayerSlice.currentList
   );
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
@@ -47,7 +47,7 @@ const MusicListContainer = () => {
   const wavesurferRefs = useRef<Map<string, any>>(new Map());
   const [waveSurferInstances, setWaveSurferInstances] = useState<any>([]);
   const [toggleLike] = useToggleLikeMutation();
-  const wavesurferRef = useSelector<RootState, any>(
+  const wavesurferRef = useSelector<RootState, WaveSurfer | null>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
   const { data: audioPeaksData, error } = currentTrack

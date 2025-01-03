@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 import { IAddMusicProps } from '../../types/types';
 import NextInput from '@/common/inputs/Input';
-import { useForm } from 'react-hook-form';
+import { FieldErrors, useForm } from 'react-hook-form';
 import NextTextArea from '@/common/inputs/Textarea';
 import MultiSelect from '@/common/inputs/MultiSelect';
 import FileUploadInput from '@/common/inputs/FileUploadInput';
@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
 import NextDatePicker from '@/common/inputs/DatePicker';
+import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
 
 const AddMusic = (props: IAddMusicProps) => {
   const { genreList, languageList, artistList, albumList } = props;
@@ -21,16 +22,16 @@ const AddMusic = (props: IAddMusicProps) => {
     formState: { errors },
   } = useForm({});
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: IMusicProps) => {
     const formData = new FormData();
-    formData.append('audio', data.audioUrl);
-    formData.append('image', data.imageUrl);
-    formData.append('name', data.name);
-    formData.append('description', data.description);
-    formData.append('language', data.language);
-    formData.append('genre', data.genre);
-    formData.append('artists', data.artists);
-    formData.append('album', data.album);
+    formData.append('audio', data.audioUrl as string);
+    formData.append('image', data.imageUrl as string);
+    formData.append('name', data.name as string);
+    formData.append('description', data.description as string);
+    formData.append('language', data.language as string);
+    formData.append('genre', data.genre as string );
+    formData.append('artists', data.artists as string);
+    formData.append('album', data.album as string);
     try {
       const res = await fetchApi('/api/music', Method.POST, formData);
       if (res.status === 200) {
@@ -80,7 +81,7 @@ const AddMusic = (props: IAddMusicProps) => {
                 register={register}
                 control={control}
                 rules={{ required: 'Release date is required' }}
-                error={errors.releasedate?.message}
+                error={errors.releasedate?.message as string}
               />
             </div>
             <div className="flex flex-col">

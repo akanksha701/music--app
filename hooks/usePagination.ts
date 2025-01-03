@@ -1,14 +1,15 @@
+import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 import { create } from "zustand/react";
 
 interface States {
   page: number;
-  data: any[] | null;
+  data: IMusicProps[] | null;
   paginationData: any | null;
 }
 
 interface Actions {
   setPage: (page: number) => void;
-  setData: (data: any[]) => void;
+  setData: (data: IMusicProps[]) => void;
   setPaginationData: (paginationData: any) => void;
 }
 
@@ -17,6 +18,6 @@ export const usePagination = create<States & Actions>((set) => ({
   data: null,
   paginationData: null,
   setPage: (page: number) => set({ page }),
-  setData: (data: any[]) => set({ data }),
+  setData: (data: IMusicProps[]) => set({ data }),
   setPaginationData: (paginationData: any) => set({ paginationData }),
 }));

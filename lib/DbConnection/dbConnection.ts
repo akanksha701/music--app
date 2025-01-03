@@ -7,7 +7,7 @@ if (!process.env.MONGODB_URI) {
 const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/music-app";
 const options = {};
 
-let client: MongoClient | null = null; // To store the client
+let client: MongoClient | null = null;
 
 export async function connectToDatabase() {
 
@@ -17,18 +17,18 @@ export async function connectToDatabase() {
     if (!globalWithMongo._mongoClient) {
       console.log("Development: Creating new MongoDB client...");
       globalWithMongo._mongoClient = new MongoClient(uri, options);
-      await globalWithMongo._mongoClient.connect(); // Ensure client is connected before returning
+      await globalWithMongo._mongoClient.connect(); 
       console.log("Development: MongoDB client connected.");
     } else {
       console.log("Development: Reusing existing MongoDB client...");
     }
 
-    client = globalWithMongo._mongoClient; // Store the client in the global variable
+    client = globalWithMongo._mongoClient; 
   } else {
     if (!client) {
       console.log("Production: Creating new MongoDB client...");
       client = new MongoClient(uri, options);
-      await client.connect(); // Ensure connection is established before returning
+      await client.connect(); 
       console.log("Production: MongoDB client connected.");
     }
   }

@@ -9,6 +9,7 @@ import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast';
 import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
+import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
 
 const AddGenre = (props: IAddGenreProps) => {
   const {
@@ -18,11 +19,11 @@ const AddGenre = (props: IAddGenreProps) => {
     formState: { errors },
   } = useForm({});
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: IMusicProps) => {
     const formData = new FormData();
-    formData.append('image', data.imageUrl);
-    formData.append('name', data.name);
-    formData.append('description', data.description);
+    formData.append('image', data.imageUrl  as string);
+    formData.append('name', data.name  as string);
+    formData.append('description', data.description  as string);
     try {
       const res = await fetchApi('/api/genre', Method.POST, formData);
       if (res.status === 200) {

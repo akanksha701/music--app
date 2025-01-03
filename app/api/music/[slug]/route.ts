@@ -1,11 +1,11 @@
-import { currentUser } from '@clerk/nextjs/server';
+import { currentUser, User } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import { db } from '../../user/route';
 
-export async function GET(req: any, { params }: { params: { slug: string } }) {
+export async function GET(req: Request, { params }: { params: { slug: string } }) {
   try {
     
-    const user: any = await currentUser();
+    const user: User | null = await currentUser();
 
     if (!user) {
       return NextResponse.json({

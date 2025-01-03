@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/DbConnection/dbConnection';
-
 import { NextApiRequest } from 'next';
 import { capitalizeTitle, saveFiles } from '@/utils/helpers';
 import { GENRE_IMAGE_UPLOAD_DIR } from '../music/route';
@@ -71,8 +69,8 @@ export async function PUT(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req?.url as string);
-    const page: any = parseInt(url?.searchParams?.get('page') || '1', 10); // Default page is 1
-    const recordsPerPage: any = parseInt(
+    const page: number = parseInt(url?.searchParams?.get('page') || '1', 10); // Default page is 1
+    const recordsPerPage = parseInt(
       url?.searchParams?.get('recordsPerPage') || '10',
       10
     ); // Default records per page is 10

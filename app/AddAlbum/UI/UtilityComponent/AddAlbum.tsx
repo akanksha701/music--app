@@ -1,14 +1,15 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import React from 'react';
-import { IAddAlbumProps } from '../../types/types';
-import NextInput from '@/common/inputs/Input';
-import { useForm } from 'react-hook-form';
-import NextTextArea from '@/common/inputs/Textarea';
-import FileUploadInput from '@/common/inputs/FileUploadInput';
-import toast from 'react-hot-toast';
-import { fetchApi } from '@/utils/helpers';
-import { Method } from '@/app/About/types/types';
+"use client";
+import { Button } from "@/components/ui/button";
+import React from "react";
+import { IAddAlbumProps } from "../../types/types";
+import NextInput from "@/common/inputs/Input";
+import { useForm } from "react-hook-form";
+import NextTextArea from "@/common/inputs/Textarea";
+import FileUploadInput from "@/common/inputs/FileUploadInput";
+import toast from "react-hot-toast";
+import { fetchApi } from "@/utils/helpers";
+import { Method } from "@/app/About/types/types";
+import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 
 const AddAlbum = (props: IAddAlbumProps) => {
   const {
@@ -18,19 +19,19 @@ const AddAlbum = (props: IAddAlbumProps) => {
     formState: { errors },
   } = useForm({});
 
-  const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    formData.append('image', data.imageUrl);
-    formData.append('name', data.name);
-    formData.append('description', data.description);
-    try {
-      const res = await fetchApi('/api/album', Method.POST, formData);
-      if (res.status === 200) {
-        toast.success(res.message);
+  const onSubmit = async (data: IMusicProps) => {
+      const formData = new FormData();
+      formData.append("image", data.imageUrl as string);
+      formData.append("name", data.name as string);
+      formData.append("description", data.description as string);
+      try {
+        const res = await fetchApi("/api/album", Method.POST, formData);
+        if (res.status === 200) {
+          toast.success(res.message);
+        }
+      } catch (error) {
+        toast.error("Error while creating music");
       }
-    } catch (error) {
-      toast.error('Error while creating music');
-    }
   };
 
   return (
@@ -47,7 +48,7 @@ const AddAlbum = (props: IAddAlbumProps) => {
               label="Name"
               placeholder="Enter your name"
               register={register}
-              options={{ required: 'Name is required' }}
+              options={{ required: "Name is required" }}
               errors={errors}
             />
           </div>
@@ -60,14 +61,13 @@ const AddAlbum = (props: IAddAlbumProps) => {
               label="Description"
               placeholder="Enter music description"
               register={register}
-              options={{ required: 'Description is required' }}
+              options={{ required: "Description is required" }}
               errors={errors}
             />
           </div>
 
           {/* MultiSelect Grids */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-         
             <div className="flex flex-col">
               <FileUploadInput
                 name="imageUrl"

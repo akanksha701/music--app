@@ -1,7 +1,7 @@
 export interface IItem {
-  label?: string;
-  route?: any;
-  key?: string;
+  label: string;
+  key:string;
+  route: string;
 }
 export interface IDropDownItemProps {
   menus: IItem[];

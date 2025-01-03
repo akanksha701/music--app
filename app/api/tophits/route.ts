@@ -1,108 +1,108 @@
-import { NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
-import { audioDirectory, getMusicWithPeaks } from '@/utils/getPeaks';
-import { db } from '../user/route';
+import { NextResponse } from "next/server";
+import { currentUser, User } from "@clerk/nextjs/server";
+import { audioDirectory, getMusicWithPeaks } from "@/utils/getPeaks";
+import { db } from "../user/route";
 
 export async function GET() {
   try {
-    const user: any = await currentUser();
+    const user: User | null = await currentUser();
     const musics = await db
-      .collection('musics')
+      .collection("musics")
       .aggregate([
         {
           $lookup: {
-            from: 'artists',
-            let: { artistsIds: '$musicDetails.artistId' },
+            from: "artists",
+            let: { artistsIds: "$musicDetails.artistId" },
             pipeline: [
               {
                 $match: {
                   $expr: {
-                    $in: ['$_id', '$$artistsIds'],
+                    $in: ["$_id", "$$artistsIds"],
                   },
                 },
               },
             ],
-            as: 'artistDetails',
+            as: "artistDetails",
           },
         },
         {
           $lookup: {
-            from: 'users',
-            let: { artistsIds: '$artistDetails.userId' },
+            from: "users",
+            let: { artistsIds: "$artistDetails.userId" },
             pipeline: [
               {
                 $match: {
                   $expr: {
-                    $in: ['$_id', '$$artistsIds'],
+                    $in: ["$_id", "$$artistsIds"],
                   },
                 },
               },
             ],
-            as: 'artists',
+            as: "artists",
           },
         },
         {
           $lookup: {
-            from: 'users',
+            from: "users",
             pipeline: [
               {
-                $match: { clerkUserId: user.id },
+                $match: { clerkUserId: user?.id },
               },
               {
                 $project: { likedMusics: 1 },
               },
             ],
-            as: 'loggedInUser',
+            as: "loggedInUser",
           },
         },
         {
           $unwind: {
-            path: '$loggedInUser',
+            path: "$loggedInUser",
             preserveNullAndEmptyArrays: true,
           },
         },
         {
           $addFields: {
-            liked: { $in: ['$_id', '$loggedInUser.likedMusics'] },
+            liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
           },
         },
         {
           $unwind: {
-            path: '$artists',
+            path: "$artists",
             preserveNullAndEmptyArrays: true,
           },
         },
         {
           $group: {
-            _id: '$_id',
-            name: { $first: '$musicDetails.name' },
-            description: { $first: '$musicDetails.description' },
-            duration: { $first: '$musicDetails.duration' },
+            _id: "$_id",
+            name: { $first: "$musicDetails.name" },
+            description: { $first: "$musicDetails.description" },
+            duration: { $first: "$musicDetails.duration" },
             artists: {
               $push: {
-                $concat: ['$artists.firstName', ' ', '$artists.lastName'],
+                $concat: ["$artists.firstName", " ", "$artists.lastName"],
               },
             },
-            liked: { $first: '$liked' },
-            email: { $first: '$artists.email' },
-            price: { $first: '$price.amount' },
-            currency: { $first: '$price.currency' },
-            imageUrl: { $first: '$audioDetails.imageUrl' },
-            audioUrl: { $first: '$audioDetails.audioUrl' },
-            playCount: { $first: '$playCount' },
+            liked: { $first: "$liked" },
+            email: { $first: "$artists.email" },
+            price: { $first: "$price.amount" },
+            currency: { $first: "$price.currency" },
+            imageUrl: { $first: "$audioDetails.imageUrl" },
+            audioUrl: { $first: "$audioDetails.audioUrl" },
+            playCount: { $first: "$playCount" },
           },
         },
         {
           $addFields: {
             artists: {
               $reduce: {
-                input: '$artists',
-                initialValue: '',
+                input: "$artists",
+                initialValue: "",
                 in: {
                   $cond: {
-                    if: { $eq: ['$$value', ''] },
-                    then: '$$this',
-                    else: { $concat: ['$$value', ', ', '$$this'] },
+                    if: { $eq: ["$$value", ""] },
+                    then: "$$this",
+                    else: { $concat: ["$$value", ", ", "$$this"] },
                   },
                 },
               },
@@ -118,13 +118,10 @@ export async function GET() {
       ])
       .toArray();
 
-    const musicWithPeaks = await getMusicWithPeaks(
-      musics as any,
-      audioDirectory
-    );
+    const musicWithPeaks = await getMusicWithPeaks(musics, audioDirectory);
     return NextResponse.json({ status: 200, data: musicWithPeaks });
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ status: 500, message: 'Error occurred' });
+    console.error("Error:", error);
+    return NextResponse.json({ status: 500, message: "Error occurred" });
   }
 }

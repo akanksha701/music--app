@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/DbConnection/dbConnection';
 import { capitalizeTitle } from '@/utils/helpers';
 import { db } from '../user/route';
 import mongoose from 'mongoose';
@@ -69,8 +68,8 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
 
-    const page: any = parseInt(url.searchParams.get('page') || '1', 10); // Default to page 1
-    const recordsPerPage: any = parseInt(
+    const page = parseInt(url.searchParams.get('page') || '1', 10); // Default to page 1
+    const recordsPerPage = parseInt(
       url.searchParams.get('recordsPerPage') || '0',
       10
     ); // Default to 0 (no pagination)

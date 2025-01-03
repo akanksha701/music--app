@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
+import { currentUser, User } from '@clerk/nextjs/server';
 import { db } from '../user/route';
 
 
 export async function GET() {
   try {
-    const user: any = await currentUser();
+    const user: User|null = await currentUser();
     const genres = await db.collection('genres').aggregate([
         {
           $lookup: {
@@ -20,7 +20,7 @@ export async function GET() {
             from: 'users',
             pipeline: [
               {
-                $match: { clerkUserId: user.id },
+                $match: { clerkUserId: user?.id },
               },
               {
                 $project: { likedGenres: 1 },
