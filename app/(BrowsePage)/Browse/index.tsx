@@ -1,20 +1,21 @@
 'use client';
-import { useUser } from '@clerk/nextjs';
-import Skeleton from '@mui/material/Skeleton';
-import HeadLine from './UI/UtilityComponent/HeadLine';
-import MusicPlayCard from './UI/UtilityComponent/MusicPlayCard';
-import Box from './UI/UtilityComponent/Card';
-import {
-  useGetAllMusicsQuery,
-  useGetTopAlbumsQuery,
-  useGetTopGenreQuery,
-  useGetTopHitsMusicsQuery,
-  useToggleLikeMutation,
-} from '@/services/like';
-import { handleLikeToggle } from '@/hooks/useLike';
-import { IMusicProps, TAGS } from './types/types';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/Redux/features/musicPlayer/types/types';
+
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { TAGS } from "./types/types";
+import { handleLikeToggle } from "@/hooks/useLike";
+import { RootState } from "@/Redux/features/musicPlayer/types/types";
+import Skeleton from "@mui/material/Skeleton";
+import HeadLine from "./UI/UtilityComponent/HeadLine";
+import MusicPlayCard from "./UI/UtilityComponent/MusicPlayCard";
+import Box from "./UI/UtilityComponent/Card";
+import { IMusicProps } from "./types/types";
+import { fetchApi } from "@/utils/helpers";
+import { Method } from "@/app/About/types/types";
+import { useToggleLikeMutation } from "@/services/like";
+import { getTopHits, userApi } from "@/utils/apiRoutes";
+import { getUser } from "@/app/actions/getUser";
+import { useLazyFetchUserProfileQuery } from "@/services/user";
 
 const SkeletonGrid = ({ count }: { count: number }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -28,26 +29,33 @@ const SkeletonGrid = ({ count }: { count: number }) => (
   </div>
 );
 
-const Index = () => { 
-  const { data: topHits, isLoading: isLoadingTopHits } = useGetTopHitsMusicsQuery(undefined);
-  const { data: topAlbums, isLoading: isLoadingTopAlbums } = useGetTopAlbumsQuery(undefined);
-  const { data: newReleases, isLoading: isLoadingNewReleases } = useGetAllMusicsQuery({});
-  const { data: topGenres, isLoading: isLoadingTopGenres } = useGetTopGenreQuery({});
-  const [toggleLike] = useToggleLikeMutation();
+
+
+const Index = ({ initialData }: { initialData: any }) => {
+  const [data, setData] = useState(initialData);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
 
+ const [toggleLike] = useToggleLikeMutation();
+   
+  useEffect(() => {
+    if (data) setIsLoading(false); 
+    console.log("DATA : "  , data)
+  }, [data]);
+
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col">
+      {/* Top Hits Section */}
       <HeadLine title="Top Hits" subTitle="2024" />
       <hr className="w-full p-2 border-gray-600" />
-      {isLoadingTopHits ? (
+      {isLoading || !data.topHits ? (
         <SkeletonGrid count={10} />
       ) : (
         <MusicPlayCard
-          data={topHits?.data}
+          data={data.topHits.data}
           name={TAGS.MUSIC}
           handleLikeToggle={(itemId) =>
             handleLikeToggle(itemId, TAGS.MUSIC, toggleLike, currentTrack as IMusicProps, dispatch)
@@ -55,17 +63,16 @@ const Index = () => {
         />
       )}
 
+      {/* Popular Albums Section */}
       <div className="mt-8 p-3">
         <HeadLine title="Popular Albums" subTitle="Discover popular album musics" />
-        {isLoadingTopAlbums ? (
+        {isLoading || !data.topAlbums ? (
           <SkeletonGrid count={4} />
         ) : (
           <Box
-            data={topAlbums?.data}
+            data={data.topAlbums.data}
             name={TAGS.ALBUMS}
-            handleLikeToggle={(itemId) =>
-              handleLikeToggle(itemId, TAGS.ALBUMS, toggleLike)
-            }
+            handleLikeToggle={(itemId) => handleLikeToggle(itemId, TAGS.ALBUMS, toggleLike)}
             showLikeIcon={true}
             message="albums not found"
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
@@ -73,13 +80,14 @@ const Index = () => {
         )}
       </div>
 
+      {/* New Releases Section */}
       <HeadLine title="New Releases" subTitle="2024" />
       <hr className="w-full p-2 border-gray-600" />
-      {isLoadingNewReleases ? (
+      {isLoading || !data.newReleases ? (
         <SkeletonGrid count={8} />
       ) : (
         <MusicPlayCard
-          data={newReleases?.data?.data.slice(0, 8)}
+          data={data.newReleases.data.data.slice(0, 8)}
           name={TAGS.NEW_RELEASE}
           handleLikeToggle={(itemId) =>
             handleLikeToggle(itemId, TAGS.MUSIC, toggleLike, currentTrack as IMusicProps, dispatch)
@@ -87,17 +95,16 @@ const Index = () => {
         />
       )}
 
+      {/* Top Genres Section */}
       <div className="mt-8 p-3">
         <HeadLine title="Top Genres & Moods" subTitle="Discover popular genres musics" />
-        {isLoadingTopGenres ? (
+        {isLoading || !data.topGenres ? (
           <SkeletonGrid count={4} />
         ) : (
           <Box
             name={TAGS.GENRE}
-            data={topGenres?.data}
-            handleLikeToggle={(itemId) =>
-              handleLikeToggle(itemId, TAGS.GENRE, toggleLike)
-            }
+            data={data.topGenres.data}
+            handleLikeToggle={(itemId) => handleLikeToggle(itemId, TAGS.GENRE, toggleLike)}
             showLikeIcon={true}
             message="genres not found"
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"

@@ -8,7 +8,7 @@ export const userApi = createApi({
   }),
   endpoints: (builder) => ({
     fetchUserProfile: builder.query<UserResponse, void>({
-      query: () => "api/user",
+      query: () => "/api/user",
     }),
   }),
 });

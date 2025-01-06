@@ -1,11 +1,124 @@
-import { NextResponse } from "next/server";
-import { currentUser, User } from "@clerk/nextjs/server";
-import { audioDirectory, getMusicWithPeaks } from "@/utils/getPeaks";
-import { db } from "../user/route";
+import { NextRequest, NextResponse } from 'next/server'; 
+import Music from '@/lib/models/Music';
+import { currentUser } from '@clerk/nextjs/server';
+import path from 'path';
+import fs from 'fs'; 
+import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
+import { lastValueFrom } from 'rxjs';
+import { db } from '../user/route';
+import { audioDirectory, getMusicWithPeaks } from '@/utils/getPeaks';
 
-export async function GET() {
-  try {
-    const user: User | null = await currentUser();
+
+
+export const getFormattedDurationStage = () => {
+  return {
+    $addFields: {
+      formattedDuration: {
+        $concat: [
+          // Calculate Hours
+          {
+            $toString: {
+              $floor: {
+                $divide: ['$musicDetails.duration', 3600], // 3600 seconds = 1 hour
+              },
+            },
+          },
+          ':',
+          // Calculate Minutes
+          {
+            $toString: {
+              $cond: {
+                if: {
+                  $gte: [
+                    {
+                      $floor: {
+                        $divide: [
+                          { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                          60, // Minutes in remaining time
+                        ],
+                      },
+                    },
+                    10,
+                  ],
+                },
+                then: {
+                  $toString: {
+                    $floor: {
+                      $divide: [
+                        { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                        60, // Minutes in remaining time
+                      ],
+                    },
+                  },
+                },
+                else: {
+                  $concat: [
+                    '0', // Add leading zero for single digit minutes
+                    {
+                      $toString: {
+                        $floor: {
+                          $divide: [
+                            { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                            60, // Minutes in remaining time
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          ':',
+          // Calculate Seconds (without fractional part)
+          {
+            $toString: {
+              $cond: {
+                if: {
+                  $gte: [
+                    {
+                      $mod: ['$musicDetails.duration', 60], // Remaining seconds after removing minutes
+                    },
+                    10,
+                  ],
+                },
+                then: {
+                  $toString: {
+                    $floor: {
+                      // Round to the nearest second
+                      $mod: ['$musicDetails.duration', 60], // Get remaining whole seconds
+                    },
+                  },
+                },
+                else: {
+                  $concat: [
+                    '0', // Add leading zero for single digit seconds
+                    {
+                      $toString: {
+                        $floor: {
+                          // Round to the nearest second
+                          $mod: ['$musicDetails.duration', 60], // Get remaining whole seconds
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  };
+};
+
+
+
+export async function GET(req: NextRequest) {
+  try { 
+    const queryParams = req.nextUrl.searchParams;
+    const UserId = queryParams.get('id'); // Replace with your parameter key 
+    const user: any = await currentUser();
     const musics = await db
       .collection("musics")
       .aggregate([
@@ -46,7 +159,7 @@ export async function GET() {
             from: "users",
             pipeline: [
               {
-                $match: { clerkUserId: user?.id },
+                $match: { clerkUserId: user?.id || UserId },
               },
               {
                 $project: { likedMusics: 1 },
@@ -118,8 +231,8 @@ export async function GET() {
       ])
       .toArray();
 
-    const musicWithPeaks = await getMusicWithPeaks(musics, audioDirectory);
-    return NextResponse.json({ status: 200, data: musicWithPeaks });
+      const musicWithPeaks = await getMusicWithPeaks(musics, audioDirectory);
+      return NextResponse.json({ status: 200, data: musicWithPeaks });
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json({ status: 500, message: "Error occurred" });

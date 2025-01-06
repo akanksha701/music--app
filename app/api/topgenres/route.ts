@@ -1,34 +1,37 @@
-import { NextResponse } from 'next/server';
-import { currentUser, User } from '@clerk/nextjs/server';
+import { NextRequest, NextResponse } from 'next/server'; 
+import Music from '@/lib/models/Music';
+import { currentUser } from '@clerk/nextjs/server'; 
 import { db } from '../user/route';
 
-
-export async function GET() {
-  try {
-    const user: User|null = await currentUser();
-    const genres = await db.collection('genres').aggregate([
-        {
-          $lookup: {
-            from: 'genres',
-            localField: 'musicDetails.genreId',
-            foreignField: '_id',
-            as: 'genreDetails',
-          },
+export async function GET(req: NextRequest) {
+  try { 
+    const user: any = await currentUser();
+    const queryParams = req.nextUrl.searchParams;
+    const UserId = queryParams.get('id'); // Replace with your parameter key 
+    
+    const genres = await db.collection('musics').aggregate([
+      {
+        $lookup: {
+          from: 'genres',
+          localField: 'musicDetails.genreId',
+          foreignField: '_id',
+          as: 'genreDetails',
         },
-        {
-          $lookup: {
-            from: 'users',
-            pipeline: [
-              {
-                $match: { clerkUserId: user?.id },
-              },
-              {
-                $project: { likedGenres: 1 },
-              },
-            ],
-            as: 'loggedInUser',
-          },
-        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          pipeline: [
+            {
+              $match: { clerkUserId: user?.id || UserId },
+            },
+            {
+              $project: { likedGenres: 1 },
+            },
+          ],
+          as: 'loggedInUser',
+        }
+      },
         {
           $unwind: {
             path: '$genreDetails',

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
 import { capitalizeTitle, getAudioDuration, saveFiles } from '@/utils/helpers';
 import mongoose from 'mongoose';
@@ -84,11 +84,13 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const url = new URL(req?.url as string);
-    const page = await url?.searchParams?.get('page');
-    const recordsPerPage = await url?.searchParams?.get('recordsPerPage');
+    const queryParams = req.nextUrl.searchParams;
+    const UserId = queryParams.get('id'); // Replace with your parameter key 
+    const page: any = await url?.searchParams?.get('page');
+    const recordsPerPage: any = await url?.searchParams?.get('recordsPerPage');
     const language: string | null =
       (await url?.searchParams?.get('language')) || null;
 
@@ -153,7 +155,7 @@ export async function GET(req: Request) {
           from: 'users',
           pipeline: [
             {
-              $match: { clerkUserId: user?.id },
+              $match: { clerkUserId: user?.id || UserId  },
             },
             {
               $project: { likedMusics: 1 },
