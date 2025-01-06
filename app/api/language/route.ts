@@ -110,6 +110,7 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json({ error: 'language not found' }, { status: 404 });
   } catch (error) {
+    console.log("ERR :  " , error)
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }

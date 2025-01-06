@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import Language from "@/lib/models/Language";
+import { NextRequest, NextResponse } from "next/server"; 
+import { db } from "../../user/route";
 
 export async function GET(req: NextRequest) {
     try {
     
-      const languageList = await Language.find({isDeleted: false});
+      const languageList = await db.collection("languages").find({isDeleted: false}).toArray();
    
   
       if (languageList) {
@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
         { status: 400 }
       );
     } catch (error) {
+      console.log("error : " , error)
       return NextResponse.json(
         { error: "Internal Server Error" },
         { status: 500 }

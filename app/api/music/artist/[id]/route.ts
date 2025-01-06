@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/DbConnection/dbConnection";
-import Music from "@/lib/models/Music";
+import { NextRequest, NextResponse } from "next/server"; 
 import { currentUser } from "@clerk/nextjs/server";
+import { db } from "@/app/api/user/route";
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   const { id } = params;
@@ -12,9 +11,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid or missing artistId" }, { status: 400 });
     }
-
-    // Connect to MongoDB
-    await dbConnect();
+ 
 
     const user: any = await currentUser();
  
@@ -137,7 +134,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     ];
     
     
-    const musics = await Music.aggregate(aggregatePipeline);
+    const musics = await db.collection("musics").aggregate(aggregatePipeline).toArray();
 
     if (musics.length > 0) {
       return NextResponse.json({

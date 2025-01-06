@@ -25,9 +25,9 @@ const AddGenre = (props: IAddGenreProps) => {
       formData.append("name", data.name as string);
       formData.append("description", data.description as string);
       try {
-        const res = await fetchApi("/api/album", Method.POST, formData);
+        const res = await fetchApi("/api/genre", Method.POST, formData);
         if (res.status === 200) {
-          toast.success(res.message);
+          toast.success(res.message); 
         }
       } catch (error) {
         toast.error("Error while creating music");

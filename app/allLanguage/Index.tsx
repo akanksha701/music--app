@@ -1,14 +1,14 @@
 "use client";
-import React from "react";   
- 
+import React from "react";
+
 import { Breadcrumb } from "@/common/BreadCrumb/BreadCrumb";
- 
+
 import SmallGrid from "@/common/grid/SmallGrid";
 import TabComp from "@/common/tab/TabComp";
 import { useGetAllLanguageQuery } from "@/services/languages";
 import { AddMoreButton } from "../LanguageAndGenre/UtilityComponent/NavigateButton";
 
- 
+
 
 const langugageColumns = [
   { header: "Langugage Name", accessor: "name" },
@@ -19,15 +19,15 @@ const langugageColumns = [
   },
 ];
 
-const  AllLanguageIndex = () => {
-  
-  const { data: languageData } =  useGetAllLanguageQuery({}); 
- 
+const AllLanguageIndex = () => {
+
+  const { data: languageData } = useGetAllLanguageQuery({});
+
 
   if (!languageData) {
     return <></>;
   }
- 
+
   const LangData = [
     {
       value: "Languages",
@@ -42,31 +42,31 @@ const  AllLanguageIndex = () => {
         />
       ),
     },
-    
+
   ];
-      const breadcrumbItems = [
-          { label: "Home", href: "/" },
-          { label: "LanguageAndGenre", href: "/LanguageAndGenre" },
-          { label: `${LangData[0].label}`, href: null },
-        ];
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "LanguageAndGenre", href: "/LanguageAndGenre" },
+    { label: `${LangData[0].label}`, href: null },
+  ];
 
   return (
     <div className="flex justify-center items-start min-h-screen  bg-gray-100 pt-8">
       <div className="w-full sm:w-[500px] md:w-[600px] lg:w-[75%] px-4">
-              <Breadcrumb items={breadcrumbItems} className="mb-6" />
-              <h1 className="text-2xl font-bold  underline">Languages :</h1>
+        <Breadcrumb items={breadcrumbItems} className="mb-6" />
+        <h1 className="text-2xl font-bold  underline">Languages :</h1>
 
-              <SmallGrid
+        <SmallGrid
           label="language"
           columns={langugageColumns}
           data={languageData?.data}
           moreBox={<div className="hidden"></div>}
           addBox={<AddMoreButton label={"language"}></AddMoreButton>}
         />
-  
+
       </div>
     </div>
   );
 };
 
-export default  AllLanguageIndex;
+export default AllLanguageIndex;
