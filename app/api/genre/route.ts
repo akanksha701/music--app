@@ -5,20 +5,17 @@ import { GENRE_IMAGE_UPLOAD_DIR } from '../music/route';
 import { db } from '../user/route';
 import mongoose from 'mongoose';
 import path from 'path';
-import fs from 'fs/promises';
-import { TableBody } from '@mui/material';
-
+import fs from 'fs/promises'; 
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("REACHED>..............")
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
     const { name, description } = body;
 
     const image = body.image || null;
 
-    console.log("body : " , body )
+    console.log("body : ", body)
     const imageUrl = image && image !== "undefined"
       ? await saveFiles(image as Blob, GENRE_IMAGE_UPLOAD_DIR)
       : "/genres/images/default.jpg"; // Replace with your default image URL.
@@ -27,7 +24,7 @@ export async function POST(req: NextRequest) {
       name: await capitalizeTitle(name.toString()),
       description: description,
       imageUrl: imageUrl,
-      isDeleted  : false,
+      isDeleted: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -55,57 +52,50 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    // Parse the request data
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
-    const url = new URL(req?.url as string);
-    const id = url?.searchParams?.get("id");
-    console.log("ID: " ,  id)
+    const url = new URL(req.url as string);
+    const id = url.searchParams.get("id");
+
+    if (!id) {
+      throw new Error('ID cannot be null');
+    }
+
     const img = body?.img || null;
-    console.log("PUT BODY ", body)
     const { name, description } = body;
 
     let imageUrl;
 
-    const existingGenre = await db.collection('genres').findOne({ id: new mongoose.Types.ObjectId(id!) });
+    // Fetch the existing genre record
+    const existingGenre = await db.collection('genres').findOne({ _id: new mongoose.Types.ObjectId(id!) });
+
+    if (!existingGenre) {
+      return NextResponse.json({ error: 'Genre not found' }, { status: 404 });
+    }
+
+    // If a new image is passed, delete the old image and upload the new one
     if (img instanceof Blob) {
-      // Only delete the old file if it's no longer referenced by other genres
+      // Delete the old image if it exists
       if (existingGenre?.imageUrl) {
         const oldFilePath = path.join(GENRE_IMAGE_UPLOAD_DIR, path.basename(existingGenre.imageUrl));
-        const isFileReferenced = await db.collection('genres').countDocuments({
-          imageUrl: existingGenre.imageUrl,
-          _id: { $ne: id ? new mongoose.Types.ObjectId(id) : undefined }, // Convert `id` to ObjectId
-        });
-        const fileReferenced = !!isFileReferenced; // Convert the result to a boolean
 
-        if (!isFileReferenced) {
-          try {
-            await fs.unlink(oldFilePath); // Delete the old file
-            console.log(`Deleted old file: ${oldFilePath}`);
-          } catch (err) {
-            console.error(`Error deleting file: ${oldFilePath}`, err);
-          }
-        } else {
-          console.log(`File is still referenced by other records: ${existingGenre.imageUrl}`);
+        try {
+          await fs.unlink(oldFilePath); // Delete the old image file
+          console.log(`Deleted old image: ${oldFilePath}`);
+        } catch (err) {
+          console.error(`Error deleting old image: ${oldFilePath}`, err);
         }
       }
 
-      // Save the new file and update the URL
+      // Save the new image and get the new image URL
       imageUrl = await saveFiles(img, GENRE_IMAGE_UPLOAD_DIR);
     } else {
-      // If no new file is uploaded, retain the existing imageUrl
+      // If no new image is uploaded, retain the existing imageUrl
       imageUrl = existingGenre?.imageUrl;
     }
 
-    if (img instanceof Blob) {
-      // If 'img' is a Blob (new file), save it and get the new URL
-      imageUrl = await saveFiles(img, GENRE_IMAGE_UPLOAD_DIR);
-    } else {
-      // If 'img' is a path/URL, use it directly
-      imageUrl = img;
-    }
-    if (id === null) {
-      throw new Error('ID cannot be null');
-    }
+    // Update the genre document with the new name, description, and imageUrl
     const updatedGenre = await db.collection('genres').findOneAndUpdate(
       { _id: new mongoose.Types.ObjectId(id!) },
       {
@@ -117,8 +107,8 @@ export async function PUT(req: NextRequest) {
       },
       { returnDocument: 'after' }
     );
-    
 
+    // If the genre is updated successfully, return the updated genre
     if (updatedGenre) {
       return NextResponse.json({
         status: 200,
@@ -126,15 +116,18 @@ export async function PUT(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ error: 'genre not found' }, { status: 404 });
+    // If the genre is not found, return an error response
+    return NextResponse.json({ error: 'Genre not found' }, { status: 404 });
+
   } catch (error) {
-    console.log(error);
+    console.error('Error in PUT request:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
 }
+
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req?.url as string);
@@ -183,39 +176,58 @@ export async function GET(req: NextRequest) {
   }
 }
 
+
 export async function DELETE(req: NextApiRequest) {
   try {
     const url = new URL(req?.url as string);
     const id = url?.searchParams?.get('id');
 
-    if (id === null) {
-      throw new Error('ID cannot be null');
-    }
-
-    const deletedGenre = await db
-      .collection('genres')
-      .findOneAndDelete({ _id: new mongoose.Types.ObjectId(id) });
-
+    // Check if ID is provided
     if (!id) {
-      return NextResponse.json({ error: "id is required" }, { status: 400 });
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
-    const updatedGenre = await db
-      .collection('genres').findOneAndUpdate(
-        { _id: new mongoose.Types.ObjectId(id) },
-        { isDeleted: true },
-        { returnDocument: 'after' } // This option ensures the updated document is returned
-      );
+    // Check if the provided ID is valid
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
+    }
 
+    // Fetch the genre record
+    const genre = await db.collection('genres').findOne({ _id: new mongoose.Types.ObjectId(id) });
+
+    if (!genre) {
+      return NextResponse.json({ error: 'Genre not found' }, { status: 404 });
+    }
+
+    // Delete the image file if it exists
+    if (genre.imageUrl) {
+      const imagePath = path.join(GENRE_IMAGE_UPLOAD_DIR, path.basename(genre.imageUrl));
+      try {
+        await fs.unlink(imagePath); // Attempt to delete the image file
+        console.log(`Deleted image: ${imagePath}`);
+      } catch (err) {
+        console.error(`Failed to delete image: ${imagePath}`, err);
+      }
+    }
+
+    // Mark the genre as deleted (soft delete)
+    const updatedGenre = await db.collection('genres').findOneAndUpdate(
+      { _id: new mongoose.Types.ObjectId(id) },
+      { $set: { isDeleted: true } },
+      { returnDocument: 'after' } // This option ensures the updated document is returned
+    );
+
+    // Respond with success message
     if (updatedGenre) {
       return NextResponse.json({
         status: 200,
-        message: "genre marked as deleted successfully",
+        message: "Genre marked as deleted successfully",
       });
     }
 
-    return NextResponse.json({ error: 'genre not found' }, { status: 404 });
+    return NextResponse.json({ error: 'Failed to mark genre as deleted' }, { status: 500 });
   } catch (error) {
+    console.error('Error in DELETE API:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
