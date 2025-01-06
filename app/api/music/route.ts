@@ -217,6 +217,7 @@ export async function GET(req: Request) {
           currency: { $first: "$price.currency" },
           imageUrl: { $first: "$audioDetails.imageUrl" },
           audioUrl: { $first: "$audioDetails.audioUrl" },
+          peaks: { $first: "$audioDetails.peaks" },
           createdAt: { $first: "$createdAt" },
         },
       },

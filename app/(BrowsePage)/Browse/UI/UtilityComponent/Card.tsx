@@ -36,6 +36,7 @@ const Box = ({
     const newUrl = await generateUrl("/Music", { type: name });
     redirect(newUrl);
   };
+
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>
@@ -55,7 +56,8 @@ const Box = ({
                       "/music/images/Audio Waves.png"
                     }
                     fill
-                    className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
+                    onClick={()=> handleMusicClick(index,item as IMusicProps)}
+                    className="rounded-lg border-2 border-purple-500 shadow-md object-cover cursor-pointer"
                   />
                 </div>
                 <div className="mt-4 w-full flex justify-between items-center">
