@@ -8,7 +8,7 @@ import {
 import WaveSurfer from "wavesurfer.js";
 import MusicList from "./MusicList";
 import { RootState } from "@/Redux/store";
-import { formatTime, useMusic } from "@/hooks/useMusic";
+import { useMusic } from "@/hooks/useMusic";
 import { handleLikeToggle } from "@/hooks/useLike";
 import {
   useGetAllMusicsQuery,

@@ -17,7 +17,7 @@ export async function GET() {
               {
                 $match: {
                   $expr: {
-                    $in: ["$_id", "$$artistsIds"],
+                    $in: ["$userId", "$$artistsIds"],
                   },
                 },
               },
@@ -89,6 +89,7 @@ export async function GET() {
             currency: { $first: "$price.currency" },
             imageUrl: { $first: "$audioDetails.imageUrl" },
             audioUrl: { $first: "$audioDetails.audioUrl" },
+            peaks: { $first: "$audioDetails.peaks" },
             playCount: { $first: "$playCount" },
           },
         },
@@ -117,9 +118,7 @@ export async function GET() {
         },
       ])
       .toArray();
-
-    const musicWithPeaks = await getMusicWithPeaks(musics, audioDirectory);
-    return NextResponse.json({ status: 200, data: musicWithPeaks });
+    return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json({ status: 500, message: "Error occurred" });

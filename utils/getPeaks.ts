@@ -5,7 +5,6 @@ import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
 
 export const audioDirectory = path.join(process.cwd(), "public");
 
-
 export async function decodeAudio(filepath: string): Promise<any> {
   try {
     // Fetch the audio file as an ArrayBuffer
@@ -41,25 +40,25 @@ export async function audioDecode(audioData: ArrayBuffer) {
 }
 
 // Process the audio peaks
-export function processAudioPeaks(
+export async function processAudioPeaks(
   channelData: Float32Array[],
   bufferSize: number
-): number[] {
+): Promise<number[]> {
   const peaks: number[] = [];
 
-  channelData.forEach((data) => {
+  for (const data of channelData) {
     const sampleCount = Math.floor(data.length / bufferSize);
     for (let i = 0; i < sampleCount; i++) {
       const chunk = data.slice(i * bufferSize, (i + 1) * bufferSize);
       const peak = Math.max(...chunk);
       peaks.push(peak);
     }
-  });
+  }
 
+  // Normalize the peaks
   const min = Math.min(...peaks);
   const max = Math.max(...peaks);
-
-  return peaks.map((peak) => (peak - min) / (max - min)); 
+  return peaks.map((peak) => (peak - min) / (max - min));
 }
 
 export async function getAudioPeaks(
@@ -82,51 +81,37 @@ export async function getAudioPeaks(
 
     const channelData: any[] = [];
     for (let i = 0; i < decodedAudio.numberOfChannels; i++) {
-      channelData.push(decodedAudio.getChannelData(i)); // Get data for each channel
+      await channelData.push(decodedAudio.getChannelData(i)); // Get data for each channel
     }
 
     console.log("Audio decoded successfully, processing peaks...");
-    return processAudioPeaks(channelData, bufferSize); // Generate and return the peaks
+    return await processAudioPeaks(channelData, bufferSize); // Generate and return the peaks
   } catch (error) {
     console.error("Error generating peaks:", error);
     throw new Error(`Cannot decode the audio file at ${filepath}`);
   }
 }
 
-export async function getMusicWithPeaks(
-  musics: IMusicProps[],
-  audioDirectory: string
-) {
-  const musicWithPeaks = await Promise.all(
-    musics.map(async (music: IMusicProps) => {
-      const audioFileUrl = music.audioUrl;
+export async function getMusicWithPeaks(audioFileUrl: string) {
+  if (
+    !audioFileUrl ||
+    (!audioFileUrl.endsWith(".mp3") && !audioFileUrl.endsWith(".wav"))
+  ) {
+    return [];
+  }
+  const filepath = await path.join(audioDirectory, audioFileUrl);
+  if (typeof window === "undefined") {
+    if (!fs.existsSync(filepath)) {
+      console.error(`File not found at path: ${filepath}`);
+      return [];
+    }
+  }
 
-      if (
-        !audioFileUrl ||
-        (!audioFileUrl.endsWith(".mp3") && !audioFileUrl.endsWith(".wav"))
-      ) {
-        return { ...music, peaks: [] };
-      }
-
-      const filepath = path.join(audioDirectory, audioFileUrl);
-
-      // If running server-side, use fs to check file existence
-      if (typeof window === "undefined") {
-        if (!fs.existsSync(filepath)) {
-          console.error(`File not found at path: ${filepath}`);
-          return { ...music, peaks: [] };
-        }
-      }
-
-      try {
-        const peaks = await getAudioPeaks(filepath, 512);
-        return { ...music, peaks };
-      } catch (error) {
-        console.error("Error generating peaks:", error);
-        return { ...music, peaks: [] };
-      }
-    })
-  );
-
-  return musicWithPeaks;
+  try {
+    const peaks = await getAudioPeaks(filepath, 512);
+    return peaks;
+  } catch (error) {
+    console.error("Error generating peaks:", error);
+    return [];
+  }
 }
