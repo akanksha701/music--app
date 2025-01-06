@@ -18,7 +18,7 @@ const MusicList = ({
   handlePlayTrack,
 }: {
   data: IMusicProps[];
-  handleLikeClick: () => void;
+  handleLikeClick: (musicId:string) => void;
   handlePlayTrack: (track: IMusicProps) => void;
 }) => {
   const searchParams = useSearchParams();
@@ -65,9 +65,19 @@ const MusicList = ({
             </p>
 
             {track?.liked ? (
-              <FaHeart className="text-red-500 transition-colors duration-300" />
+              <FaHeart
+                className="text-red-500 transition-colors duration-300"
+                onClick={() => {
+                  handleLikeClick(track._id as string);
+                }}
+              />
             ) : (
-              <FaRegHeart className="text-red-500 transition-colors duration-300" />
+              <FaRegHeart
+                className="text-red-500 transition-colors duration-300"
+                onClick={() => {
+                  handleLikeClick(track._id as string);
+                }}
+              />
             )}
 
             <IoAddSharp

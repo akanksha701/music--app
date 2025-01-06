@@ -170,21 +170,16 @@ const MusicListContainer = () => {
     [isPlaying, currentTrack?._id]
   );
 
-  const handleLikeClick = async () => {
+  const handleLikeClick = async (musicId:string) => {
     if (currentTrack) {
       handleLikeToggle(
-        currentTrack?._id as string,
+        musicId as string,
         TAGS.MUSIC,
         toggleLike,
         currentTrack,
         dispatch
       );
-      dispatch(
-        setCurrentTrack({
-          ...currentTrack,
-          liked: !currentTrack.liked,
-        })
-      );
+    
     }
   };
   if (isLoading) {
