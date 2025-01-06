@@ -51,7 +51,6 @@ async function handleGenreLike(user: any, id: string, clerkUserId: string) {
     },
     { returnDocument: "after" }
   );
-
   return updatedUser;
 }
 

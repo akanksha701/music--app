@@ -16,6 +16,12 @@ export async function GET() {
           },
         },
         {
+          $unwind: {
+            path: '$genreDetails',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
           $lookup: {
             from: 'users',
             pipeline: [
@@ -29,12 +35,7 @@ export async function GET() {
             as: 'loggedInUser',
           },
         },
-        {
-          $unwind: {
-            path: '$genreDetails',
-            preserveNullAndEmptyArrays: true,
-          },
-        },
+        
         {
           $unwind: {
             path: '$loggedInUser',
@@ -43,7 +44,7 @@ export async function GET() {
         },
         {
           $addFields: {
-            liked: { $in: ['$genreDetails._id', '$loggedInUser.likedGenres'] },
+            liked: { $in: ['$_id', '$loggedInUser.likedGenres'] },
           },
         },
         {
@@ -51,16 +52,16 @@ export async function GET() {
             _id: 1,
             name: '$musicDetails.name',
             playCount: 1,
-            genre: '$genreDetails.name',
-            genreId: '$genreDetails._id',
-            imageUrl: '$genreDetails.imageUrl' ,
+            genre: '$name',
+            genreId: '$_id',
+            imageUrl: '$imageUrl' ,
             liked:1
           
           },
         },
         {
           $group: {
-            _id: '$genreId',
+            _id: '$_id',
             name: { $first: '$genre' },
             imageUrl: { $first: '$imageUrl' },
             liked: { $first: '$liked' },
@@ -75,7 +76,7 @@ export async function GET() {
           },
         },
         {
-          $sort: { totalPlayTime: -1 },
+          $sort: { totalPlayTime: -1,_id:1 },
         },
         {
           $addFields: {
@@ -94,10 +95,10 @@ export async function GET() {
             musics: 1,
             imageUrl: 1,
             liked: 1,
+            
           },
         },
       ]).toArray();
-
     return NextResponse.json({ status: 200, data: genres });
   } catch (error) {
     console.error('Error:', error);
