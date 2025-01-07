@@ -1,8 +1,7 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
-import User from '@/lib/models/User';
-import dbConnect from '@/lib/DbConnection/dbConnection';
+import User from '@/lib/models/User'; 
 import { redirect } from 'next/navigation';
 
 interface User {

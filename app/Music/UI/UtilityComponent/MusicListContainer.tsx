@@ -144,7 +144,7 @@ const MusicListContainer = () => {
     if (allSongs && allSongs.length > 0) {
       createWaveSurfers(allSongs);
     }
-  }, [allSongs, currentTime, isPlaying, currentTrack]);
+  }, [allSongs]);
 
   const handlePlayTrack = useCallback(
     (track: IMusicProps) => {

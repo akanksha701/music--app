@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { MusicDocument } from "@/common/types/types";
 import { currentUser } from "@clerk/nextjs/server";
+import { db } from "../../user/route";
 
 export const GET = async (req: NextRequest) => {
     try {
@@ -40,7 +41,7 @@ export const GET = async (req: NextRequest) => {
         }
 
         // Query the database
-        const musics = await Music.aggregate([
+        const musics = await db.collection("musics").aggregate([
             { $match: filter },
             {
                 $lookup: {
@@ -111,7 +112,7 @@ export const GET = async (req: NextRequest) => {
                   liked: { $in: ['$_id', '$loggedInUser.likedMusics'] },
                 },
               },
-        ]);
+        ]).toArray() as MusicDocument[];
 
         if (!musics || musics.length === 0) {
             return NextResponse.json(

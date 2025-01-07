@@ -30,7 +30,7 @@ const AlbumPage = ({ params }: { params: any }) => {
   const [isDialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
 
   const handleDelete = async () => {
-    const Res = await deleteAlbum(albumData.data._id);
+    const Res = await deleteAlbum(albumData.data._id); 
     console.log("albumData : " , albumData)
 
     if(Res.error){
@@ -136,7 +136,7 @@ const AlbumPage = ({ params }: { params: any }) => {
           <div className="lg:col-span-2 space-y-6">
             <h3 className="text-2xl font-semibold p-4">Music Tracks</h3>
             
-        <MusicListContainer AlbumId={AlbumId}  ></MusicListContainer>
+              <MusicListContainer AlbumId={AlbumId}  ></MusicListContainer>
 
           </div>
         </div>
