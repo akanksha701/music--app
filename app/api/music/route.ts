@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import { capitalizeTitle, getAudioDuration, saveFiles } from "@/utils/helpers";
 import mongoose from "mongoose";
@@ -12,10 +12,6 @@ export const config = {
   },
 };
 
-export const IMAGE_UPLOAD_DIR = path.resolve("public/music/images");
-export const AUDIO_UPLOAD_DIR = path.resolve("public/music/audio");
-export const ALBUM_IMAGE_UPLOAD_DIR = path.resolve("public/albums/images");
-export const GENRE_IMAGE_UPLOAD_DIR = path.resolve("public/genres/images");
 export const LANGUAGE_IMAGE_UPLOAD_DIR = path.resolve("public/languages/images");
 export const IMAGE_UPLOAD_DIR = path.resolve("public/music/images");
 export const AUDIO_UPLOAD_DIR = path.resolve("public/music/audio");
@@ -106,8 +102,6 @@ export async function GET(req: NextRequest) {
     const UserId = queryParams.get('id'); // Replace with your parameter key 
     const page: any = await url?.searchParams?.get('page');
     const recordsPerPage: any = await url?.searchParams?.get('recordsPerPage');
-    const page = await url?.searchParams?.get("page");
-    const recordsPerPage = await url?.searchParams?.get("recordsPerPage");
     const language: string | null =
       (await url?.searchParams?.get("language")) || null;
 
@@ -172,7 +166,7 @@ export async function GET(req: NextRequest) {
           from: "users",
           pipeline: [
             {
-              $match: { clerkUserId: user?.id },
+              $match: { clerkUserId: user?.id  || UserId },
             },
             {
               $project: { likedMusics: 1 },

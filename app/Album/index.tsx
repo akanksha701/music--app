@@ -9,11 +9,11 @@ import Link from "next/link";
 
 const Index = () => {
  
-  const { data: albumData } = useGetAlbumsQuery({});
+  const { data: albumData } = useGetAlbumsQuery({}); 
   // const { data: albumData } = useGetAlbumByArtistIdQuery("675ab45ad8496e8fd5fb50db");
  
   if (!albumData) {
-    // return <Loading />;
+    return <>...</>
   }
  
   return (

@@ -3,9 +3,13 @@ import { currentUser } from '@clerk/nextjs/server';
 import { db } from '../user/route';
 
 
-export async function GET() {
+export async function GET(req : NextRequest) {
   try {
+    const queryParams = req.nextUrl.searchParams;
+    const UserId = queryParams.get('id');  
+    const limit = parseInt(queryParams.get('limit') || "0", 10); 
     const user: any|null = await currentUser();
+    console.log("skip" , limit)
     const genres = await db.collection('genres').aggregate([
         {
           $lookup: {
@@ -26,7 +30,7 @@ export async function GET() {
             from: 'users',
             pipeline: [
               {
-                $match: { clerkUserId: user?.id },
+                $match: { clerkUserId: user?.id || UserId  },
               },
               {
                 $project: { likedGenres: 1 },
@@ -59,6 +63,7 @@ export async function GET() {
           
           },
         },
+        { $limit: limit },
         {
           $group: {
             _id: '$_id',
@@ -99,6 +104,8 @@ export async function GET() {
           },
         },
       ]).toArray();
+
+      console.log("GENRES : " , genres , genres.length)
     return NextResponse.json({ status: 200, data: genres });
   } catch (error) {
     console.error('Error:', error);

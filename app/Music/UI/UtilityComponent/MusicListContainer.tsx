@@ -14,10 +14,10 @@ import {
   useGetAllMusicsQuery,
   useGetTopHitsMusicsQuery,
   useToggleLikeMutation,
-} from '@/services/like';
-import { useFetchAudioPeaksQuery } from "@/services/audio";
-import { useSearchParams } from "next/navigation";
+} from "@/services/like";
 import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
+import { useSearchParams } from "next/navigation";
+import { useFetchAudioPeaksQuery } from "@/services/audio";
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
@@ -182,7 +182,7 @@ const MusicListContainer = () => {
     }
   };
   if (isLoading) {
-    // return <Loading />;
+    return <></>;
   } else if (!allSongs) {
     return null;
   }

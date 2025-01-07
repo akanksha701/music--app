@@ -28,7 +28,7 @@ const Page = async () => {
         fetchApi(getTopHits+`?id=${userId}`, Method.GET),
         fetchApi(getTopAlbums+`?id=${userId}`, Method.GET),
         fetchApi(music+`?id=${userId}`, Method.GET),
-        fetchApi(getTopGenres+`?id=${userId}`, Method.GET),
+        fetchApi(getTopGenres+`?id=${userId}&limit=8`, Method.GET),
       ]);
   
       return { topHits, topAlbums, newReleases, topGenres };

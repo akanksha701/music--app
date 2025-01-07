@@ -1,13 +1,17 @@
-import React, { useMemo } from 'react';
-import { Card, CardBody } from '@nextui-org/react';
-import Image from 'next/image';
-import { IBoxTypes, IMusicProps } from '../../types/types';
-import { FaRegHeart, FaEllipsisH, FaHeart } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
-import { RootState } from '@/Redux/store';
-import { generateUrl } from '@/utils/helpers';
-import { redirect, useRouter } from 'next/navigation';
+import React, { useMemo } from "react";
+import { Card, CardBody } from "@nextui-org/react";
+import Image from "next/image";
+import { IBoxTypes, IMusicProps } from "../../types/types";
+import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCurrentList,
+  setCurrentSongIndex,
+  setCurrentTrack,
+} from "@/Redux/features/musicPlayer/musicPlayerSlice";
+import { RootState } from "@/Redux/store";
+import { generateUrl } from "@/utils/helpers";
+import { redirect } from "next/navigation";
 import Link from 'next/link';
 
 const Box = ({

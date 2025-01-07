@@ -117,7 +117,7 @@ export const getFormattedDurationStage = () => {
 export async function GET(req: NextRequest) {
   try { 
     const queryParams = req.nextUrl.searchParams;
-    const UserId = queryParams.get('id'); // Replace with your parameter key 
+    const UserId = queryParams.get('id');  
     const user: any = await currentUser();
     const musics = await db
       .collection("musics")
