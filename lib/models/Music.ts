@@ -49,6 +49,10 @@ const musicSchema = new mongoose.Schema(
         type: String,
         required: [true, 'music url is required'],
       },
+      peaks:
+      {
+        type:Float32Array,
+      }
     },
     playCount: {
       type: Number,

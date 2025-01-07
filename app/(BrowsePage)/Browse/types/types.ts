@@ -19,7 +19,7 @@ export const LIST_NAME = {
 
 export interface IMusicProps {
   _id?: string;
-  name?: string;
+  name?: string | null;
   artists?: string;
   audioUrl?: string;
   currency?: string;
@@ -35,7 +35,7 @@ export interface IMusicProps {
   language?:string
 }
 export interface IBoxTypes {
-  data: Array<{ _id: string; name: string; imageUrl: string; liked: boolean }>;
+  data: Array<{ _id: string; name: string; imageUrl?: string | null; liked: boolean }>;
   className: string;
   title?: string;
   name: string;

@@ -1,43 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server'; 
-import Music from '@/lib/models/Music';
 import { currentUser } from '@clerk/nextjs/server'; 
 import { db } from '../user/route';
 
-export async function GET(req: NextRequest) {
-  try { 
-    const user: any = await currentUser();
-    const queryParams = req.nextUrl.searchParams;
-    const UserId = queryParams.get('id'); // Replace with your parameter key 
-    
-    const genres = await db.collection('musics').aggregate([
-      {
-        $lookup: {
-          from: 'genres',
-          localField: 'musicDetails.genreId',
-          foreignField: '_id',
-          as: 'genreDetails',
+
+export async function GET() {
+  try {
+    const user: any|null = await currentUser();
+    const genres = await db.collection('genres').aggregate([
+        {
+          $lookup: {
+            from: 'genres',
+            localField: 'musicDetails.genreId',
+            foreignField: '_id',
+            as: 'genreDetails',
+          },
         },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          pipeline: [
-            {
-              $match: { clerkUserId: user?.id || UserId },
-            },
-            {
-              $project: { likedGenres: 1 },
-            },
-          ],
-          as: 'loggedInUser',
-        }
-      },
         {
           $unwind: {
             path: '$genreDetails',
             preserveNullAndEmptyArrays: true,
           },
         },
+        {
+          $lookup: {
+            from: 'users',
+            pipeline: [
+              {
+                $match: { clerkUserId: user?.id },
+              },
+              {
+                $project: { likedGenres: 1 },
+              },
+            ],
+            as: 'loggedInUser',
+          },
+        },
+        
         {
           $unwind: {
             path: '$loggedInUser',
@@ -46,7 +44,7 @@ export async function GET(req: NextRequest) {
         },
         {
           $addFields: {
-            liked: { $in: ['$genreDetails._id', '$loggedInUser.likedGenres'] },
+            liked: { $in: ['$_id', '$loggedInUser.likedGenres'] },
           },
         },
         {
@@ -54,16 +52,16 @@ export async function GET(req: NextRequest) {
             _id: 1,
             name: '$musicDetails.name',
             playCount: 1,
-            genre: '$genreDetails.name',
-            genreId: '$genreDetails._id',
-            imageUrl: '$genreDetails.imageUrl' ,
+            genre: '$name',
+            genreId: '$_id',
+            imageUrl: '$imageUrl' ,
             liked:1
           
           },
         },
         {
           $group: {
-            _id: '$genreId',
+            _id: '$_id',
             name: { $first: '$genre' },
             imageUrl: { $first: '$imageUrl' },
             liked: { $first: '$liked' },
@@ -78,7 +76,7 @@ export async function GET(req: NextRequest) {
           },
         },
         {
-          $sort: { totalPlayTime: -1 },
+          $sort: { totalPlayTime: -1,_id:1 },
         },
         {
           $addFields: {
@@ -97,10 +95,10 @@ export async function GET(req: NextRequest) {
             musics: 1,
             imageUrl: 1,
             liked: 1,
+            
           },
         },
       ]).toArray();
-
     return NextResponse.json({ status: 200, data: genres });
   } catch (error) {
     console.error('Error:', error);

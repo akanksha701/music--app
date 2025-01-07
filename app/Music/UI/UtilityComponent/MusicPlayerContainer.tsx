@@ -51,7 +51,6 @@ const MusicPlayerContainer = () => {
 
   const createWaveSurfer = async () => {
     const waveformElement = document.getElementById("waveform");
-    console.log("currentTrack.peaks", currentTrack?.peaks);
     if (waveformElement && currentTrack) {
       const ws = WaveSurfer.create({
         container: waveformElement,

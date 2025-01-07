@@ -18,7 +18,7 @@ import AddMusic from './UI/UtilityComponent/Addmusic';
 const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
-  const { data: musicData } = useGetMusicsByUserIdQuery({ slug: '' });
+  const { data: musicData } = useGetMusicsByUserIdQuery({ slug: "" });
   const { data: languageData } = useGetLanguageQuery({});
   const { data: artistData } = useGetArtistsQuery({});
   const { data: genreData } = useGetGenreQuery({});
@@ -30,15 +30,13 @@ const Index = () => {
   }
 
   const debouncedSearch = debounce((query) => setSearchQuery(query), 100);
-
-  const filteredMusicData = musicData?.data.filter((music: IMusicProps) =>
-    music.name!.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredMusicData = musicData?.data?.filter((music: IMusicProps) =>
+    music?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
   const tabsData = [
     {
-      value: 'mymusics',
-      label: 'My Musics',
+      value: "mymusics",
+      label: "My Musics",
       content: (
         <>
           <div className="flex items-center mb-6 space-x-20">
@@ -63,17 +61,17 @@ const Index = () => {
 
           <Box
             name={TAGS.MUSIC}
-            data={filteredMusicData} 
+            data={filteredMusicData}
             showLikeIcon={false}
-            message={filteredMusicData?.length === 0 ? 'No musics found' : ''}
+            message={filteredMusicData?.length === 0 ? "No musics found" : ""}
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
           />
         </>
       ),
     },
     {
-      value: 'createmusic',
-      label: 'Create music',
+      value: "createmusic",
+      label: "Create music",
       content: (
         <div className="flex flex-col items-center justify-items-center">
           <AddMusic

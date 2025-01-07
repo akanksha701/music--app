@@ -22,19 +22,30 @@ const Box = ({
   const dispatch = useDispatch();
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
-  ); 
+  );
 
- const GetUrl = (item : any) => {
-  console.log("name : " , name)
-  switch (name) {
-    case "Album": 
-      return `/Album/${item._id}?type=AlbumSongs`;
-    case "Genres" : 
-      return `/Genre/${item._id}?type=GenreSongs`;
-    default:
-      return ''
+  const GetUrl = (item : any) => {
+    console.log("name : " , name)
+    switch (name) {
+      case "Album": 
+        return `/Album/${item._id}?type=AlbumSongs`;
+      case "Genres" : 
+        return `/Genre/${item._id}?type=GenreSongs`;
+      default:
+        return ''
+    } 
+ 
   }
- }
+
+  const handleMusicClick = async (index: number, music: IMusicProps) => {
+    dispatch(setCurrentList(data));
+    if (!currentTrack || currentTrack._id !== music._id) {
+      dispatch(setCurrentTrack(data[index]));
+      dispatch(setCurrentSongIndex(index));
+    }
+    const newUrl = await generateUrl("/Music", { type: name });
+    redirect(newUrl);
+  };
   const memoizedCards = useMemo(() => {
     return (
       <div className={className}>
@@ -49,16 +60,22 @@ const Box = ({
               <CardBody className="flex flex-col items-center p-4 w-full h-full">
                 <div className="relative w-full h-2/3">
                   <Image
-                    alt={item.name}
-                    src={item?.imageUrl}
+                    alt={item.name || ""}
+                    src={
+                      (item?.imageUrl as string) ||
+                      "/music/images/Audio Waves.png"
+                    }
                     fill
-                    className="rounded-lg border-2 border-purple-500 shadow-md object-cover"
+                    onClick={()=> handleMusicClick(index,item as IMusicProps)}
+                    className="rounded-lg border-2 border-purple-500 shadow-md object-cover cursor-pointer"
                   />
                 </div>
                 <div className="mt-4 w-full flex justify-between items-center">
                   {showLikeIcon && (
                     <button
-                      onClick={() => handleLikeToggle && handleLikeToggle(item._id, name)}
+                      onClick={() =>
+                        handleLikeToggle && handleLikeToggle(item._id, name)
+                      }
                       className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
                     >
                       {item.liked ? (

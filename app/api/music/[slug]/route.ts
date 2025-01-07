@@ -13,7 +13,7 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
         message: 'Unauthorized',
       });
     }
-    const musics = db.collection('users').aggregate([
+    const musics = await db.collection('users').aggregate([
       {
         $match: {
           clerkUserId: user.id,
@@ -97,7 +97,7 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
           imageUrl: '$musics.audioDetails.imageUrl',
         },
       },
-    ]).toArray();
+    ]).toArray()
     return NextResponse.json({
       status: 200,
       data: musics,

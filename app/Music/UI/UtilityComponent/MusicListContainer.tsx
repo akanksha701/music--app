@@ -8,7 +8,7 @@ import {
 import WaveSurfer from "wavesurfer.js";
 import MusicList from "./MusicList";
 import { RootState } from "@/Redux/store";
-import { formatTime, useMusic } from "@/hooks/useMusic";
+import { useMusic } from "@/hooks/useMusic";
 import { handleLikeToggle } from "@/hooks/useLike";
 import {
   useGetAllMusicsQuery,
@@ -169,21 +169,16 @@ const MusicListContainer = () => {
     [isPlaying, currentTrack?._id]
   );
 
-  const handleLikeClick = async () => {
+  const handleLikeClick = async (musicId:string) => {
     if (currentTrack) {
       handleLikeToggle(
-        currentTrack?._id as string,
+        musicId as string,
         TAGS.MUSIC,
         toggleLike,
         currentTrack,
         dispatch
       );
-      dispatch(
-        setCurrentTrack({
-          ...currentTrack,
-          liked: !currentTrack.liked,
-        })
-      );
+    
     }
   };
   if (isLoading) {
