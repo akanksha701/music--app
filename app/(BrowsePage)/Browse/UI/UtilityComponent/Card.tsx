@@ -42,6 +42,9 @@ const Box = ({
   }
 
   const handleMusicClick = async (index: number, music: IMusicProps) => {
+    if(name === "Album" || "Genres"){
+      return 
+    }
     dispatch(setCurrentList(data));
     if (!currentTrack || currentTrack._id !== music._id) {
       dispatch(setCurrentTrack(data[index]));
