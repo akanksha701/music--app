@@ -1,16 +1,34 @@
-'use client';
-import SoundScapeLogo from '@/public/images/SoundScapeLogo.png';
-import Image from 'next/image';
-import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
-import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
-import { useState } from 'react';
-import DropDown from './UtilityComponent/DropDown/DropDown';
-import { redirect } from 'next/navigation';
-import NavItemList from './UtilityComponent/NavItemList';
+"use client";
+import SoundScapeLogo from "@/public/images/SoundScapeLogo.png";
+import Image from "next/image";
+import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
+import DropDown from "./UtilityComponent/DropDown/DropDown";
+import { redirect } from "next/navigation";
+import NavItemList from "./UtilityComponent/NavItemList";
+import { useUserSession } from "@/hooks/customHooks/use-user-session";
+import { checkIfUserExists, createUser } from "@/lib/firebase/userActions";
+import { User } from "firebase/auth";
+import { useEffect } from "react";
 
-export default function NavbarPage() {
-  const [user, setUser] = useState();
-  useFetchUserDetails(setUser);
+export default function NavbarPage({ session }: any) {
+
+  // const saveUser = async (user: User | null) => {
+  //   if (user?.uid as string) {
+  //     const userExists = await checkIfUserExists(user?.uid as string);
+  //     console.log('userExists',userExists)
+  //     if (!userExists) {
+  //       const newUser = await createUser(user);
+  //       console.log(newUser,'newUser')
+  //       if (newUser) {
+  //         console.log("User created successfully in the database");
+  //       } else {
+  //         console.error("Error creating new user in MongoDB");
+  //       }
+  //     } else {
+  //       console.log("User already exists in the database");
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -18,7 +36,7 @@ export default function NavbarPage() {
         <NavbarContent justify="start">
           <NavbarBrand
             className="mr-4 cursor-pointer "
-            onClick={() => redirect('/')}
+            onClick={() => redirect("/")}
           >
             <Image
               src={SoundScapeLogo}
@@ -36,7 +54,7 @@ export default function NavbarPage() {
         </NavbarContent>
 
         <NavbarContent as="div" className="items-center " justify="end">
-          <DropDown />
+          <DropDown session={session}/>
         </NavbarContent>
       </Navbar>
     </>

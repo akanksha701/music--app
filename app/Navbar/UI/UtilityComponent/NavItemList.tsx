@@ -1,21 +1,33 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { redirect, usePathname } from 'next/navigation';
-import { IItem } from '../../types/types';
+import React, { useState } from "react";
+import { redirect, usePathname } from "next/navigation";
+import { IItem } from "../../types/types";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from '@/components/ui/navigation-menu';
-import { FaBars } from 'react-icons/fa'; // Hamburger icon
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/navigation-menu";
+import { FaBars } from "react-icons/fa"; // Hamburger icon
+import { Button } from "@/components/ui/button";
 
 const navItems: IItem[] = [
-  { label: 'Pricing', route: '/Pricing' },
-  { label: 'FAQ', route: '/FAQ' },
-  { label: 'About', route: '/About' },
+  {
+    label: "Pricing",
+    route: "/Pricing",
+    key: "",
+  },
+  {
+    label: "FAQ",
+    route: "/FAQ",
+    key: "",
+  },
+  {
+    label: "About",
+    route: "/About",
+    key: "",
+  },
 ];
 
 const NavItemList: React.FC = () => {
@@ -31,15 +43,14 @@ const NavItemList: React.FC = () => {
       <NavigationMenu>
         <NavigationMenuList>
           <Button
-            onClick={() => redirect('/Browse')}
+            onClick={() => redirect("/Browse")}
             className={`${
-              pathname === '/Browse' ? 'text-purple-600' : 'text-black'
+              pathname === "/Browse" ? "text-purple-600" : "text-black"
             } cursor-pointer hidden sm:block`} // Hide on mobile
           >
             Browse
           </Button>
 
-          {/* Hamburger Icon for Mobile */}
           <div className="sm:hidden flex items-center">
             <Button className="text-black p-2" onClick={toggleMobileMenu}>
               <FaBars size={24} />
@@ -49,15 +60,14 @@ const NavItemList: React.FC = () => {
           {isMobileMenuOpen && (
             <div className="sm:hidden flex flex-col mt-20">
               <Button
-                onClick={() => redirect('/Browse')}
+                onClick={() => redirect("/Browse")}
                 className={`${
-                  pathname === '/Browse' ? 'text-purple-600' : 'text-black'
+                  pathname === "/Browse" ? "text-purple-600" : "text-black"
                 } block px-4 py-2 text-sm`}
               >
                 Browse
               </Button>
 
-              {/* Render Mobile Navigation Items */}
               {navItems.map((item: IItem) => {
                 const isActive = pathname === item.route;
                 return (
@@ -65,7 +75,7 @@ const NavItemList: React.FC = () => {
                     key={item.route}
                     onClick={() => redirect(item.route)}
                     className={`${
-                      isActive ? 'text-purple-600' : 'text-black'
+                      isActive ? "text-purple-600" : "text-black"
                     } block px-4 py-2 text-sm`}
                   >
                     {item.label}
@@ -85,7 +95,7 @@ const NavItemList: React.FC = () => {
                     <Button
                       onClick={() => redirect(item.route)}
                       className={`${
-                        isActive ? 'text-purple-600' : 'text-black'
+                        isActive ? "text-purple-600" : "text-black"
                       } cursor-pointer`}
                     >
                       {item.label}

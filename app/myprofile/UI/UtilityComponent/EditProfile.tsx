@@ -1,7 +1,7 @@
 import NextInput from '@/common/inputs/Input';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
+import useFetchUserDetails from '@/hooks/customHooks/use-user-session';
 import { CalendarDate } from '@internationalized/date';
 import Loading from '@/app/loading';
 import NextDatePicker from '@/common/inputs/DatePicker';

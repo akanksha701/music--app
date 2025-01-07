@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { currentUser, User } from "@clerk/nextjs/server";
-import { audioDirectory, getMusicWithPeaks } from "@/utils/getPeaks";
 import { db } from "../user/route";
 
 export async function GET() {

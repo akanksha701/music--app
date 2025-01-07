@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/Redux/features/musicPlayer/types/types';
 
 const Index = () => {
-  const { user } = useUser();
   const { data: topHits } = useGetTopHitsMusicsQuery(undefined);
   const { data: topAlbums } = useGetTopAlbumsQuery(undefined);
   const { data: newReleases } = useGetAllMusicsQuery({});
@@ -27,7 +26,7 @@ const Index = () => {
   const currentTrack = useSelector<RootState, IMusicProps | null>( (state) => state.musicPlayerSlice.currentTrack);
 
   
-  if (!user || !topHits || !topAlbums || !newReleases || !topGenres) {
+  if ( !topHits || !topAlbums || !newReleases || !topGenres) {
     return <Loading />;
   }
   return (
