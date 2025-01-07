@@ -34,7 +34,7 @@ const Page = async () => {
       return { topHits, topAlbums, newReleases, topGenres };
     } catch (error) {
       console.error("Error fetching data on the server:", error);
-      return { topHits: null, topAlbums: null, newReleases: null, topGenres: null };
+      return { topHits: [], topAlbums: [], newReleases: [], topGenres: [] };
     }
   };
   
@@ -44,10 +44,10 @@ const Page = async () => {
   return (
     <Browse
       initialData={{
-        topHits: data.topHits,
-        topAlbums: data.topAlbums,
-        newReleases: data.newReleases,
-        topGenres: data.topGenres,
+        topHits: data.topHits || [],
+        topAlbums: data.topAlbums || [],
+        newReleases: data.newReleases || [],
+        topGenres: data.topGenres || [],
       }}
     />
   );
