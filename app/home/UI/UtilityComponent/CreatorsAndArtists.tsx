@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image'; // If using Next.js for optimized images
 import { ICreatorsAndArtists } from '../../types/types';
+ 
 
 const CreatorsAndArtists = (props: ICreatorsAndArtists) => {
   const { creatorsAndArtists,title } = props;

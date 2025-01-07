@@ -1,25 +1,25 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import TableComp from "@/common/table/TableComp";
-import { usePagination } from "@/hooks/usePagination"; 
-import { useGetAllGenreQuery } from "@/services/genre";
+import TableComp from '@/common/table/TableComp';
+import { usePagination } from '@/hooks/usePagination'; 
+import { useGetAllGenreQuery } from '@/services/genre';
 
 
-import { Breadcrumb } from "@/common/BreadCrumb/BreadCrumb";
+import { Breadcrumb } from '@/common/BreadCrumb/BreadCrumb';
 
-import SmallGrid from "@/common/grid/SmallGrid";
-import TabComp from "@/common/tab/TabComp";
-import { AddMoreButton } from "../LanguageAndGenre/UtilityComponent/NavigateButton";
+import SmallGrid from '@/common/grid/SmallGrid';
+import TabComp from '@/common/tab/TabComp';
+import { AddMoreButton } from '../LanguageAndGenre/UtilityComponent/NavigateButton';
 
 
 
 const genereColumns = [
-  { header: "Genre Name", accessor: "name" },
+  { header: 'Genre Name', accessor: 'name' },
   {
-    header: "Edit",
-    accessor: "edit",
-    className: "text-center",
+    header: 'Edit',
+    accessor: 'edit',
+    className: 'text-center',
   },
 ];
 
@@ -28,15 +28,15 @@ const AllGenereIndex = () => {
 
   const { page, setPage } = usePagination();
   const { data: genreData } = useGetAllGenreQuery();
-  console.log("ALLADATA", genreData)
+  console.log('ALLADATA', genreData);
   if (!genreData) {
     return <></>;
   }
 
   const GenreData = [
     {
-      value: "Genres",
-      label: "Genres",
+      value: 'Genres',
+      label: 'Genres',
       content: (
         <SmallGrid
 
@@ -45,15 +45,15 @@ const AllGenereIndex = () => {
           data={genreData?.data}
 
           moreBox={<div className="hidden"></div>}
-          addBox={<AddMoreButton label={"genre"}></AddMoreButton>}
+          addBox={<AddMoreButton label={'genre'}></AddMoreButton>}
         />
       ),
     },
 
   ];
   const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    { label: "LanguageAndGenre", href: "/LanguageAndGenre" },
+    { label: 'Home', href: '/' },
+    { label: 'LanguageAndGenre', href: '/LanguageAndGenre' },
     { label: `${GenreData[0].label}`, href: null },
   ];
 
@@ -72,7 +72,7 @@ const AllGenereIndex = () => {
           data={genreData?.data}
 
           moreBox={<div className="hidden"></div>}
-          addBox={<AddMoreButton label={"genre"}></AddMoreButton>}
+          addBox={<AddMoreButton label={'genre'}></AddMoreButton>}
         />
       </div>
     </div>

@@ -35,12 +35,12 @@ export interface IMusicProps {
   language?:string
 }
 export interface IBoxTypes {
-  data: Array<{ _id: string; name: string; imageUrl?: string | null; liked: boolean }>;
-  className: string;
+  data?: Array<{ _id: string; name: string; imageUrl?: string | null; liked: boolean }>;
+  className?: string;
   title?: string;
-  name: string;
-  showLikeIcon: boolean;
-  message: string;
+  name?: string;
+  showLikeIcon?: boolean;
+  message?: string;
   handleLikeToggle?: (id: string, name: string) => void;
 }
 export interface IMusicPlayCardProps {

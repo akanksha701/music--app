@@ -1,13 +1,13 @@
-"use server";
-import path from "path";
-import { Method } from "@/app/About/types/types";
-import { Roles } from "../globals";
-import { auth } from "@clerk/nextjs/server";
-import { CalendarDate } from "@internationalized/date";
-import cloudinary from "cloudinary";
-import queryString from "query-string";
-import fs from "fs";  
-import crypto from "crypto";
+'use server';
+import path from 'path';
+import { Method } from '@/app/About/types/types';
+import { Roles } from '../globals';
+import { auth } from '@clerk/nextjs/server';
+import { CalendarDate } from '@internationalized/date';
+import cloudinary from 'cloudinary';
+import queryString from 'query-string';
+import fs from 'fs';  
+import crypto from 'crypto';
 import { parseBuffer } from 'music-metadata';
 
 export interface IAudioTypes {
@@ -17,9 +17,9 @@ export interface IAudioTypes {
 
 export async function capitalizeTitle(str: string) {
   return str
-    .split(" ")
+    .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export async function generateUrl(
@@ -71,7 +71,7 @@ export async function uploadImage(image: File) {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.v2.uploader.upload_stream(
       {
-        resource_type: "auto",
+        resource_type: 'auto',
         upload_preset: process.env.NEXT_PUBLIC_UPLOAD_PRESET, // optional
       },
       (error, result) => {
@@ -88,15 +88,15 @@ export async function uploadImage(image: File) {
 }
 
 export async function uploadAudio(audio: File) {
-  if (audio.type !== "audio/mpeg") {
-    throw new Error("File must be an MP3 audio file.");
+  if (audio.type !== 'audio/mpeg') {
+    throw new Error('File must be an MP3 audio file.');
   }
   const buffer = await audio.arrayBuffer();
 
   return new Promise((resolve, reject) => {
     const stream = cloudinary.v2.uploader.upload_stream(
       {
-        resource_type: "video", // 'video' is used for audio files in Cloudinary
+        resource_type: 'video', // 'video' is used for audio files in Cloudinary
         upload_preset: process.env.NEXT_PUBLIC_UPLOAD_PRESET,
       },
       (error, result) => {
@@ -117,13 +117,13 @@ export const fetchApi = async (
   method: Method,
   body?: object | FormData // Accept FormData as body
 ) => {
-  const url = new URL(apiUrl, process.env.APP_URL || "http://localhost:3000");
+  const url = new URL(apiUrl, process.env.APP_URL || 'http://localhost:3000');
 
   const isFormData = body instanceof FormData;
 
   const headers: HeadersInit = isFormData
     ? {}
-    : { "Content-Type": "application/json" };
+    : { 'Content-Type': 'application/json' };
 
   try {
     const res = await fetch(url.toString(), {
@@ -136,7 +136,7 @@ export const fetchApi = async (
       const errorResponse = await res.json();
       throw new Error(
         `Error: ${res.status} ${res.statusText} - ${
-          errorResponse.message || "Unknown error"
+          errorResponse.message || 'Unknown error'
         }`
       );
     }
@@ -144,12 +144,12 @@ export const fetchApi = async (
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error);
     throw error;
   }
 };
 const generateRandomKey = (length: number) => {
-  return crypto.randomBytes(length).toString("hex").slice(0, length);
+  return crypto.randomBytes(length).toString('hex').slice(0, length);
 };
 
 export const saveFiles = async (file: Blob, folderName: string) => {
@@ -176,18 +176,16 @@ export const saveFiles = async (file: Blob, folderName: string) => {
 
     try {
       await fs.promises.writeFile(filePath, buffer);
-      console.log("File saved to:", filePath.split("public")[1]);
 
-      let relativePath = filePath.split("public")[1];
+      let relativePath = filePath.split('public')[1];
       // Adjust for Windows path separators
-      if (process.platform === "win32") {
-        relativePath = relativePath.replace(/\\/g, "/");
+      if (process.platform === 'win32') {
+        relativePath = relativePath.replace(/\\/g, '/');
       }
-      console.log("relativePath  : " , relativePath)
 
       return relativePath;
     } catch (err) {
-      console.error("Error saving the file:", err);
+      console.error('Error saving the file:', err);
       return null;
     }
   } else {
@@ -210,16 +208,15 @@ export async function getAudioDuration(audioBlob: Blob): Promise<string> {
 
     const formattedDuration = `${minutes}:${seconds
       .toString()
-      .padStart(2, "0")}`;
+      .padStart(2, '0')}`;
 
-    console.log("Formatted Duration:", formattedDuration);
 
     return formattedDuration;
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error("Unable to extract audio duration: " + error.message);
+      throw new Error('Unable to extract audio duration: ' + error.message);
     } else {
-      throw new Error("An unknown error occurred");
+      throw new Error('An unknown error occurred');
     }
   }
 }

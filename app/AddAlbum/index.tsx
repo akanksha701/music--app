@@ -1,11 +1,11 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { usePagination } from "@/hooks/usePagination";
-import { useGetAlbumByIdQuery, useGetAlbumsQuery } from "@/services/album";
-import { useGetMusicsOfArtistsQuery } from "@/services/music";
-import MusicList from "@/common/MusicList/MusicList";
-import { useSearchParams } from "next/navigation";
-import { MusicData } from "./types/types";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { usePagination } from '@/hooks/usePagination';
+import { useGetAlbumByIdQuery, useGetAlbumsQuery } from '@/services/album';
+import { useGetMusicsOfArtistsQuery } from '@/services/music';
+import MusicList from '@/common/MusicList/MusicList';
+import { useSearchParams } from 'next/navigation';
+import { MusicData } from './types/types';
 
 const Index = () => {
   // Get the 'albumId' query parameter
@@ -16,8 +16,8 @@ const Index = () => {
   const [prevData, setPrevData] = useState<{}>({});
   const recordsPerPage = 5;
   const { page } = usePagination();
-  const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery("6756a19a5833867b6aba2a54");
-    const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId, {
+  const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery('6756a19a5833867b6aba2a54');
+  const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId, {
     skip: !albumId, // Skip the request if no albumId is provided
   });
 
@@ -41,7 +41,7 @@ const Index = () => {
   return (
     <div className="flex justify-center items-start min-h-screen pt-8">
       <div className="w-full">
-        {musicData && <MusicList data={musicData?.data} mode={albumId ? "edit" : "create"} prevData={prevData} MyselectedSongs={selectedSongs} />}
+        {musicData && <MusicList data={musicData?.data} mode={albumId ? 'edit' : 'create'} prevData={prevData} MyselectedSongs={selectedSongs} />}
       </div>
     </div>
   );

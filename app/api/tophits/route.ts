@@ -120,43 +120,43 @@ export async function GET(req: NextRequest) {
     const UserId = queryParams.get('id');  
     const user: any = await currentUser();
     const musics = await db
-      .collection("musics")
+      .collection('musics')
       .aggregate([
         {
           $lookup: {
-            from: "artists",
-            let: { artistsIds: "$musicDetails.artistId" },
+            from: 'artists',
+            let: { artistsIds: '$musicDetails.artistId' },
             pipeline: [
               {
                 $match: {
                   $expr: {
-                    $in: ["$userId", "$$artistsIds"],
+                    $in: ['$userId', '$$artistsIds'],
                   },
                 },
               },
             ],
-            as: "artistDetails",
+            as: 'artistDetails',
           },
         },
         {
           $lookup: {
-            from: "users",
-            let: { artistsIds: "$artistDetails.userId" },
+            from: 'users',
+            let: { artistsIds: '$artistDetails.userId' },
             pipeline: [
               {
                 $match: {
                   $expr: {
-                    $in: ["$_id", "$$artistsIds"],
+                    $in: ['$_id', '$$artistsIds'],
                   },
                 },
               },
             ],
-            as: "artists",
+            as: 'artists',
           },
         },
         {
           $lookup: {
-            from: "users",
+            from: 'users',
             pipeline: [
               {
                 $match: { clerkUserId: user?.id || UserId },
@@ -165,58 +165,58 @@ export async function GET(req: NextRequest) {
                 $project: { likedMusics: 1 },
               },
             ],
-            as: "loggedInUser",
+            as: 'loggedInUser',
           },
         },
         {
           $unwind: {
-            path: "$loggedInUser",
+            path: '$loggedInUser',
             preserveNullAndEmptyArrays: true,
           },
         },
         {
           $addFields: {
-            liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
+            liked: { $in: ['$_id', '$loggedInUser.likedMusics'] },
           },
         },
         {
           $unwind: {
-            path: "$artists",
+            path: '$artists',
             preserveNullAndEmptyArrays: true,
           },
         },
         {
           $group: {
-            _id: "$_id",
-            name: { $first: "$musicDetails.name" },
-            description: { $first: "$musicDetails.description" },
-            duration: { $first: "$musicDetails.duration" },
+            _id: '$_id',
+            name: { $first: '$musicDetails.name' },
+            description: { $first: '$musicDetails.description' },
+            duration: { $first: '$musicDetails.duration' },
             artists: {
               $push: {
-                $concat: ["$artists.firstName", " ", "$artists.lastName"],
+                $concat: ['$artists.firstName', ' ', '$artists.lastName'],
               },
             },
-            liked: { $first: "$liked" },
-            email: { $first: "$artists.email" },
-            price: { $first: "$price.amount" },
-            currency: { $first: "$price.currency" },
-            imageUrl: { $first: "$audioDetails.imageUrl" },
-            audioUrl: { $first: "$audioDetails.audioUrl" },
-            peaks: { $first: "$audioDetails.peaks" },
-            playCount: { $first: "$playCount" },
+            liked: { $first: '$liked' },
+            email: { $first: '$artists.email' },
+            price: { $first: '$price.amount' },
+            currency: { $first: '$price.currency' },
+            imageUrl: { $first: '$audioDetails.imageUrl' },
+            audioUrl: { $first: '$audioDetails.audioUrl' },
+            peaks: { $first: '$audioDetails.peaks' },
+            playCount: { $first: '$playCount' },
           },
         },
         {
           $addFields: {
             artists: {
               $reduce: {
-                input: "$artists",
-                initialValue: "",
+                input: '$artists',
+                initialValue: '',
                 in: {
                   $cond: {
-                    if: { $eq: ["$$value", ""] },
-                    then: "$$this",
-                    else: { $concat: ["$$value", ", ", "$$this"] },
+                    if: { $eq: ['$$value', ''] },
+                    then: '$$this',
+                    else: { $concat: ['$$value', ', ', '$$this'] },
                   },
                 },
               },
@@ -233,7 +233,7 @@ export async function GET(req: NextRequest) {
       .toArray();
     return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json({ status: 500, message: "Error occurred" });
+    console.error('Error:', error);
+    return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }

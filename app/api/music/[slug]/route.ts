@@ -97,7 +97,7 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
           imageUrl: '$musics.audioDetails.imageUrl',
         },
       },
-    ]).toArray()
+    ]).toArray();
     return NextResponse.json({
       status: 200,
       data: musics,

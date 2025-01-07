@@ -40,11 +40,11 @@ export async function POST(req: Request) {
 
     const newPlaylist = new PlayList({ user, 
       name, 
-      mode: "private", 
+      mode: 'private', 
       createdAt: new Date(), 
       updatedAt: new Date(), 
       isDeleted: false });
-    await  db.collection("playlists").insertOne(newPlaylist);
+    await  db.collection('playlists').insertOne(newPlaylist);
 
     return NextResponse.json({ message: 'Playlist created successfully.', data: newPlaylist, status: 201 });
   } catch (error) {

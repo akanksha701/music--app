@@ -66,7 +66,7 @@ const EditProfile = (props: IEditProfileProps) => {
   });
   if (!user) {
     // return <Loading />;
-    return <></>
+    return <></>;
   }
   return (
     <>
@@ -126,7 +126,7 @@ const EditProfile = (props: IEditProfileProps) => {
               register={register}
               control={control}
               rules={{ required: 'Date of birth is required' }}
-              error={errors.dob?.message}
+              error={errors.dob?.message as string}
             />
           </div>
 
@@ -138,7 +138,7 @@ const EditProfile = (props: IEditProfileProps) => {
               label="Select Gender"
               control={control}
               rules={{ required: 'Gender is required' }}
-              error={errors.gender?.message as string}
+              error={errors.gender?.message as {}}
               items={[
                 { id: 'male', name: 'Male' },
                 { id: 'female', name: 'Female' },

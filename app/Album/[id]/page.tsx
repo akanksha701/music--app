@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Button } from '@/components/ui/button'; 
 import { useDeleteAlbumMutation, useGetAlbumByIdQuery } from '@/services/album';
@@ -7,7 +7,7 @@ import { Rating, Button as BTN } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { use,   useState } from 'react';
-import { FaEdit } from "react-icons/fa";
+import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import SecondaryButton from '@/common/buttons/SecondaryButton';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -31,20 +31,20 @@ const AlbumPage = ({ params }: { params: any }) => {
 
   const handleDelete = async () => {
     const Res = await deleteAlbum(albumData.data._id); 
-    console.log("albumData : " , albumData)
+    console.log('albumData : ' , albumData);
 
     if(Res.error){
-      toast.error("Error while deleting album");
-      setDialogOpen(false)
+      toast.error('Error while deleting album');
+      setDialogOpen(false);
     }else{
-      router.push("/Album");
-      toast.success("Album deleted successfully!");
+      router.push('/Album');
+      toast.success('Album deleted successfully!');
     }
   };
 
   // Loading and error handling
   if (isLoading) {
-    return  <Loading></Loading>
+    return  <Loading></Loading>;
   }
 
   if (isError) {
@@ -52,7 +52,7 @@ const AlbumPage = ({ params }: { params: any }) => {
   }
 
   const album : Album  = albumData.data;  // The album data you needs
-  console.log("ALBUM : "   , album)
+  console.log('ALBUM : '   , album);
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
 
@@ -68,8 +68,8 @@ const AlbumPage = ({ params }: { params: any }) => {
             className="border-2 border-[#9333ea] flex justify-between items-center text-white bg-[#9333ea] rounded-full hover:bg-white hover:text-black hover:border-[#9333ea]">
             <FaEdit
               style={{
-                height: "1.5rem",
-                width: "1.5rem",
+                height: '1.5rem',
+                width: '1.5rem',
               }}
             />
             <span className="text-lg">Edit Album</span>
@@ -80,9 +80,9 @@ const AlbumPage = ({ params }: { params: any }) => {
         <SecondaryButton name='Delete'  onClick={() => setDialogOpen(true)} type='button' >
           <MdDelete
             style={{
-              height: "1.5rem",
-              width: "1.5rem",
-              color: "#9333ea",
+              height: '1.5rem',
+              width: '1.5rem',
+              color: '#9333ea',
             }}
           />
         </SecondaryButton>
@@ -118,17 +118,17 @@ const AlbumPage = ({ params }: { params: any }) => {
                   // onChange={(event, newValue) => handleRatingChange(0, newValue || 0)}
                   readOnly={true}
                   sx={{
-                    "& .MuiRating-iconFilled": {
-                      color: "rgba(255, 188, 3, 1)", // Set custom star color
+                    '& .MuiRating-iconFilled': {
+                      color: 'rgba(255, 188, 3, 1)', // Set custom star color
                     },
-                    "& .MuiRating-iconHover": {
-                      color: "rgba(255, 188, 3, 0.8)", // Optional hover effect
+                    '& .MuiRating-iconHover': {
+                      color: 'rgba(255, 188, 3, 0.8)', // Optional hover effect
                     },
                   }}
                 />
               </div>
-              <span className="text-gray-500">Genres: {album.Genre?.map((genre) => genre.name).join(", ")}</span>
-              <span className="text-gray-500">Languages: {album.Language?.map((language) => language.name).join(", ")}</span>
+              <span className="text-gray-500">Genres: {album.Genre?.map((genre) => genre.name).join(', ')}</span>
+              <span className="text-gray-500">Languages: {album.Language?.map((language) => language.name).join(', ')}</span>
             </div>
           </div>
 
@@ -136,7 +136,7 @@ const AlbumPage = ({ params }: { params: any }) => {
           <div className="lg:col-span-2 space-y-6">
             <h3 className="text-2xl font-semibold p-4">Music Tracks</h3>
             
-              <MusicListContainer AlbumId={AlbumId}  ></MusicListContainer>
+            <MusicListContainer AlbumId={AlbumId}  ></MusicListContainer>
 
           </div>
         </div>

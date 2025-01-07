@@ -1,13 +1,13 @@
-"use client"; 
-import React from "react";
+'use client'; 
+import React from 'react';
 
-import NextInput from "@/common/inputs/Input";
-import { useForm } from "react-hook-form";
-import FileUploadInput from "@/common/inputs/FileUploadInput";
-import toast from "react-hot-toast";
-import { useAddAlbumMutation, useUpdateAlbumMutation } from "@/services/album";
-import { useRouter } from "next/navigation";
-import { AddAlbumFormProps, ErrorResponseType } from "../types/types";
+import NextInput from '@/common/inputs/Input';
+import { useForm } from 'react-hook-form';
+import FileUploadInput from '@/common/inputs/FileUploadInput';
+import toast from 'react-hot-toast';
+import { useAddAlbumMutation, useUpdateAlbumMutation } from '@/services/album';
+import { useRouter } from 'next/navigation';
+import { AddAlbumFormProps, ErrorResponseType } from '../types/types';
 
  
 const AddAlbumForm = (props: AddAlbumFormProps) => {
@@ -19,10 +19,10 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
   } = useForm();
 
   const [addAlbum] = useAddAlbumMutation();
-  const [updateAlbum] = useUpdateAlbumMutation()
+  const [updateAlbum] = useUpdateAlbumMutation();
   const router = useRouter();
 
-  const { selectedSongs, defaultData } = props
+  const { selectedSongs, defaultData } = props;
   const SelectedLanguages = selectedSongs.map((song) => song.language);
   const SelectedGenre = selectedSongs.map((song) => song.genre);
   const SelectedMusic = selectedSongs.map((song) => song.id);
@@ -30,21 +30,21 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
  
   const onSubmit = async (data: any) => {
     const formData = new FormData();
-    formData.append("image", data.imageUrl);
-    formData.append("name", data.name);
-    formData.append("description", data.description);
-    formData.append("price", data.price);
-    formData.append("genreIds", JSON.stringify(SelectedGenre));
-    formData.append("songIds", JSON.stringify(SelectedMusic));
-    formData.append("languageIds", JSON.stringify(SelectedLanguages));
+    formData.append('image', data.imageUrl);
+    formData.append('name', data.name);
+    formData.append('description', data.description);
+    formData.append('price', data.price);
+    formData.append('genreIds', JSON.stringify(SelectedGenre));
+    formData.append('songIds', JSON.stringify(SelectedMusic));
+    formData.append('languageIds', JSON.stringify(SelectedLanguages));
 
-    const Tid = toast("Loading...");
+    const Tid = toast('Loading...');
     try {
 
       let Response;
       if (defaultData.albumId) {
         // Update Case
-        formData.append("albumId", defaultData.albumId);
+        formData.append('albumId', defaultData.albumId);
         Response = await updateAlbum({ albumId: defaultData.albumId, data: formData });
       } else {
         // Create Case
@@ -54,13 +54,13 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
 
       if (Response && Response.data) {  // Check if 'data' exists in the Responseponse
         toast.dismiss(Tid);
-        toast.success("Album Added");
+        toast.success('Album Added');
         props.handleCloseDialog();
-        router.push("/Album");
+        router.push('/Album');
 
       } else {
         // Handle Responseponse with no data (failure case)
-        toast.error((Response.error as ErrorResponseType).data?.error || "Something went wrong");
+        toast.error((Response.error as ErrorResponseType).data?.error || 'Something went wrong');
         toast.dismiss(Tid);
       }
     } catch (error) {
@@ -68,7 +68,7 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
       toast.dismiss(Tid);
     }
 
-  }
+  };
   return (
     <div className="bg-gray-100 ">
       <style>
@@ -97,10 +97,10 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
               label="Album Name"
               placeholder="Enter album name"
               register={register}
-              options={{ required: "Name is required" }}
+              options={{ required: 'Name is required' }}
               errors={errors}
               required={true}
-              defaultValue={defaultData?.albumName || ""}
+              defaultValue={defaultData?.albumName || ''}
             />
 
           </div>
@@ -114,10 +114,10 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
                 label="Description"
                 placeholder="Enter description "
                 register={register}
-                options={{ required: "Description is required" }}
+                options={{ required: 'Description is required' }}
                 errors={errors}
                 required={true}
-                defaultValue={defaultData?.albumDescription || ""}
+                defaultValue={defaultData?.albumDescription || ''}
               />
 
             </div>

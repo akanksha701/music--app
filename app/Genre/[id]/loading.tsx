@@ -1,8 +1,8 @@
-import React from "react"; 
+import React from 'react'; 
 
 const Loading = () => {
   return (<div className="w-full h-screen flex justify-center items-center">
-   <div className="middle">
+    <div className="middle">
       <div className="bar bar1"></div>
       <div className="bar bar2"></div>
       <div className="bar bar3"></div>

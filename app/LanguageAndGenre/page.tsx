@@ -1,6 +1,6 @@
-import React from 'react'
-import GenereIndex from './GenereIndex'
-import LanguageIndex from './LanguageIndex'
+import React from 'react';
+import GenereIndex from './GenereIndex';
+import LanguageIndex from './LanguageIndex';
 
 const Page = () => {
   return (
@@ -8,7 +8,7 @@ const Page = () => {
       <GenereIndex />
       <LanguageIndex />
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

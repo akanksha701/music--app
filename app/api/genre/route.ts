@@ -15,10 +15,10 @@ export async function POST(req: NextRequest) {
 
     const image = body.image || null;
 
-    console.log("body : ", body)
-    const imageUrl = image && image !== "undefined"
+    console.log('body : ', body);
+    const imageUrl = image && image !== 'undefined'
       ? await saveFiles(image as Blob, GENRE_IMAGE_UPLOAD_DIR)
-      : "/genres/images/default.jpg"; // Replace with your default image URL.
+      : '/genres/images/default.jpg'; // Replace with your default image URL.
 
     const newGenre = await db.collection('genres').insertOne({
       name: await capitalizeTitle(name.toString()),
@@ -32,17 +32,17 @@ export async function POST(req: NextRequest) {
     if (newGenre) {
       return NextResponse.json({
         status: 200,
-        message: "New genre created successfully",
+        message: 'New genre created successfully',
         data: newGenre,
       });
     }
 
     return NextResponse.json(
-      { error: "Error while creating genres" },
+      { error: 'Error while creating genres' },
       { status: 400 }
     );
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
@@ -56,7 +56,7 @@ export async function PUT(req: NextRequest) {
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
     const url = new URL(req.url as string);
-    const id = url.searchParams.get("id");
+    const id = url.searchParams.get('id');
 
     if (!id) {
       throw new Error('ID cannot be null');
@@ -184,12 +184,12 @@ export async function DELETE(req: NextApiRequest) {
 
     // Check if ID is provided
     if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     }
 
     // Check if the provided ID is valid
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
     }
 
     // Fetch the genre record
@@ -221,7 +221,7 @@ export async function DELETE(req: NextApiRequest) {
     if (updatedGenre) {
       return NextResponse.json({
         status: 200,
-        message: "Genre marked as deleted successfully",
+        message: 'Genre marked as deleted successfully',
       });
     }
 

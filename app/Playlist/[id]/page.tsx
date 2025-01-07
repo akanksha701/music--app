@@ -1,6 +1,6 @@
-"use client"
+'use client';
 import { Button } from '@/components/ui/button'; 
-import { FaEdit } from "react-icons/fa"; 
+import { FaEdit } from 'react-icons/fa'; 
 import { MdDelete } from 'react-icons/md'; 
 import SecondaryButton from '@/common/buttons/SecondaryButton'; 
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'; 
@@ -12,7 +12,7 @@ const PlaylistPage = ({ params }: { params: any }) => {
   const Params: {
       id : string
     } = use(params);
-    const playlistId = Params.id; 
+  const playlistId = Params.id; 
 
   const [isDialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
 
@@ -30,13 +30,13 @@ const PlaylistPage = ({ params }: { params: any }) => {
         }}>
           <Button
             className="border-2 border-[#9333ea] flex justify-between items-center text-white bg-[#9333ea] rounded-full hover:bg-white hover:text-black hover:border-[#9333ea]">
-            <FaEdit style={{ height: "1.5rem", width: "1.5rem" }} />
+            <FaEdit style={{ height: '1.5rem', width: '1.5rem' }} />
             <span className="text-lg">Edit Playlist</span>
           </Button>
         </Link>
 
         <SecondaryButton name='Delete' onClick={() => setDialogOpen(true)} type='button'>
-          <MdDelete style={{ height: "1.5rem", width: "1.5rem", color: "#9333ea" }} />
+          <MdDelete style={{ height: '1.5rem', width: '1.5rem', color: '#9333ea' }} />
         </SecondaryButton>
       </div>
 

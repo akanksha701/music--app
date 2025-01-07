@@ -13,9 +13,9 @@ import { FaBars } from 'react-icons/fa'; // Hamburger icon
 import { Button } from '@/components/ui/button';
 
 const navItems: IItem[] = [
-  { label: 'Pricing', route: '/Pricing' },
-  { label: 'FAQ', route: '/FAQ' },
-  { label: 'About', route: '/About' },
+  { label: 'Pricing', route: '/Pricing' , key: 'Pricing' },
+  { label: 'FAQ', route: '/FAQ'  , key: 'FAQ'},
+  { label: 'About', route: '/About' , key: 'About' },
 ];
 
 const NavItemList: React.FC = () => {

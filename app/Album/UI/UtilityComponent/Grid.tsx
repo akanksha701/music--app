@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from "react";
-import { Card, CardBody } from "@nextui-org/react";
-import Image from "next/image";
-import { IBoxTypes } from "../../types/types";
-import { Rating } from "@mui/material";
-import Link from "next/link";
+import React, { useMemo, useState } from 'react';
+import { Card, CardBody } from '@nextui-org/react';
+import Image from 'next/image';
+import { IBoxTypes } from '../../types/types';
+import { Rating } from '@mui/material';
+import Link from 'next/link';
 
 const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
   const memoizedCards = useMemo(() => {
@@ -43,7 +43,7 @@ const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
                     <span className="font-semibold text-xl truncate my-2">{item.name}</span>
                     <span className="text-sm" style={{
                       fontWeight: '400',
-                      color: "rgba(158, 158, 158, 1)"
+                      color: 'rgba(158, 158, 158, 1)'
                     }}>
                       {item.description}
                     </span>
@@ -59,11 +59,11 @@ const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
                          
                         readOnly
                         sx={{
-                          "& .MuiRating-iconFilled": {
-                            color: "rgba(255, 188, 3, 1)", 
+                          '& .MuiRating-iconFilled': {
+                            color: 'rgba(255, 188, 3, 1)', 
                           },
-                          "& .MuiRating-iconHover": {
-                            color: "rgba(255, 188, 3, 0.8)",  
+                          '& .MuiRating-iconHover': {
+                            color: 'rgba(255, 188, 3, 0.8)',  
                           },
                         }}
                       />
@@ -72,8 +72,8 @@ const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
                     {/* Footer */}
                     <div className="w-full flex justify-between items-center px-4 py-2 pb-4">
                       <span className="text-sm text-gray-400 ">
-                        {item.musicIds!.length}{" "}
-                        {item.musicIds!.length === 1 ? "song" : "songs"}
+                        {item.musicIds!.length}{' '}
+                        {item.musicIds!.length === 1 ? 'song' : 'songs'}
                       </span>
                       <span className="text-sm text-[rgba(18, 18, 18, 1)] font-bold">
                         $  {item.Price}
@@ -86,7 +86,7 @@ const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
             </Card>
           ))
         ) : (
-          <p>{"..."}</p>
+          <p>{'...'}</p>
         )}
       </div>
     );

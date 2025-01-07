@@ -1,10 +1,10 @@
-"use client"; 
-import { useGetAlbumByArtistIdQuery, useGetAlbumsQuery } from "@/services/album";
-import AlbumGrid from "./UI/UtilityComponent/Grid";
+'use client'; 
+import { useGetAlbumByArtistIdQuery, useGetAlbumsQuery } from '@/services/album';
+import AlbumGrid from './UI/UtilityComponent/Grid';
 
-import { IoAddCircleOutline } from "react-icons/io5";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { IoAddCircleOutline } from 'react-icons/io5';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 
 const Index = () => {
@@ -13,7 +13,7 @@ const Index = () => {
   // const { data: albumData } = useGetAlbumByArtistIdQuery("675ab45ad8496e8fd5fb50db");
  
   if (!albumData) {
-    return <>...</>
+    return <>...</>;
   }
  
   return (
@@ -25,10 +25,10 @@ const Index = () => {
             <Button className="border-2 border-[#9333ea] flex justify-between items-center text-white bg-[#9333ea] rounded-full hover:bg-white hover:text-black hover:border-[#9333ea]">
               <IoAddCircleOutline
                 style={{
-                  height: "1.8rem",
-                  width: "1.8rem",
+                  height: '1.8rem',
+                  width: '1.8rem',
                 }}
-            />
+              />
               <span className="text-lg">New Album</span>
             </Button>
           </Link>
@@ -36,7 +36,7 @@ const Index = () => {
         <AlbumGrid
           data={albumData?.data}
           className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 grid-auto-flow-row"
-          message={"musics not found"}
+          message={'musics not found'}
         />
       </div>
     </div>

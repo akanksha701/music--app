@@ -36,7 +36,7 @@ const MultiSelect = <T extends FieldValues>({
               }}
               ref={ref}
               placeholder={placeholder}
-              color={error[name] ? "danger" : "default"}
+              color={error && error[name] ? "danger" : "default"}
             >
               {items.map((item) => (
                 <SelectItem key={item.id} value={item.id}>

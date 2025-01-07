@@ -1,34 +1,34 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setCurrentList,
   setCurrentTrack,
   setIsPlaying,
-} from "@/Redux/features/musicPlayer/musicPlayerSlice";
-import WaveSurfer from "wavesurfer.js";
-import MusicList from "./MusicList";
-import { RootState } from "@/Redux/store";
-import { useMusic } from "@/hooks/useMusic";
-import { handleLikeToggle } from "@/hooks/useLike";
+} from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import WaveSurfer from 'wavesurfer.js';
+import MusicList from './MusicList';
+import { RootState } from '@/Redux/store';
+import { useMusic } from '@/hooks/useMusic';
+import { handleLikeToggle } from '@/hooks/useLike';
 import {
   useGetAllMusicsQuery,
   useGetTopHitsMusicsQuery,
   useToggleLikeMutation,
-} from "@/services/like";
-import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
-import { useSearchParams } from "next/navigation";
-import { useFetchAudioPeaksQuery } from "@/services/audio";
+} from '@/services/like';
+import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+import { useSearchParams } from 'next/navigation';
+import { useFetchAudioPeaksQuery } from '@/services/audio';
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
-  const queryType = searchParams.get("type");
+  const queryType = searchParams.get('type');
   const { data: allSongsData, isLoading } =
     queryType === TAGS.MUSIC
       ? useGetTopHitsMusicsQuery(undefined)
       : queryType === TAGS.NEW_RELEASE
-      ? useGetAllMusicsQuery({})
-      : { data: null, isLoading: false };
+        ? useGetAllMusicsQuery({})
+        : { data: null, isLoading: false };
 
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
@@ -58,8 +58,8 @@ const MusicListContainer = () => {
         queryType === TAGS.MUSIC
           ? allSongsData?.data
           : queryType === TAGS.NEW_RELEASE
-          ? allSongsData?.data?.data
-          : [];
+            ? allSongsData?.data?.data
+            : [];
 
       if (songs?.length > 0) {
         dispatch(setCurrentList(songs));
@@ -85,9 +85,9 @@ const MusicListContainer = () => {
             container: `#${waveformContainerId}`,
             height: 33,
             barRadius: 200,
-            waveColor: "#abb6c1",
-            progressColor: "#5a17dd",
-            cursorColor: "transparent",
+            waveColor: '#abb6c1',
+            progressColor: '#5a17dd',
+            cursorColor: 'transparent',
             url: song.audioUrl,
             peaks: song.peaks || [],
           });
@@ -96,7 +96,7 @@ const MusicListContainer = () => {
 
           const updatedSong = { ...song, duration: wavesurfer.getDuration() };
 
-          wavesurfer.on("interaction", (newTime: number) => {
+          wavesurfer.on('interaction', (newTime: number) => {
             dispatch(setCurrentTrack(updatedSong)); // Use the updated song here
             const duration = wavesurfer.getDuration() || 1;
             const seekPercentage = newTime / duration;
@@ -130,7 +130,7 @@ const MusicListContainer = () => {
     const duration = wavesurfer.getDuration() || 1;
     const seekPercentage = currentTime / duration;
     wavesurfer.seekTo(seekPercentage);
-    wavesurfer.on("interaction", (newTime: number) => {
+    wavesurfer.on('interaction', (newTime: number) => {
       const duration = wavesurfer.getDuration() || 1;
       const seekPercentage = newTime / duration;
       if (wavesurferRef) {

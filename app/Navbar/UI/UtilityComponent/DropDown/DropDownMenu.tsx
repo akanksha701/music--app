@@ -10,10 +10,10 @@ import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
 
 const menus: any = [
-  { label: "My Profile", key: "my_profile", route: "/MyProfile" },
-  { label: "Genre & Language", key: "add_language_genre", route: "/LanguageAndGenre" },
-  { label: "Add Album", key: "add_album", route: "/Album" },
-  { label: "Add Music", key: "add_music", route: "/AddMusic" },
+  { label: 'My Profile', key: 'my_profile', route: '/MyProfile' },
+  { label: 'Genre & Language', key: 'add_language_genre', route: '/LanguageAndGenre' },
+  { label: 'Add Album', key: 'add_album', route: '/Album' },
+  { label: 'Add Music', key: 'add_music', route: '/AddMusic' },
 ];
 const DropDownMenu = () => {
   const { signOut } = useClerk();

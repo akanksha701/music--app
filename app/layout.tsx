@@ -33,12 +33,14 @@ export default async function RootLayout({
           <body className={`${nunito.className} min-h-screen flex flex-col`}>
             <Toaster position="top-center" />
             <Tooltip />
-            <Modal />
+            <Modal >
+              
+            </Modal>
             {/* <Suspense fallback={<Loading />}> */}
-              <NavbarPage />
-              <main className="flex-grow">{children}</main>
-              <MusicPlayerContainer />
-              <Footer data={data?.footerContent} />
+            <NavbarPage />
+            <main className="flex-grow">{children}</main>
+            <MusicPlayerContainer />
+            <Footer data={data?.footerContent} />
             {/* </Suspense> */}
           </body>
         </html>

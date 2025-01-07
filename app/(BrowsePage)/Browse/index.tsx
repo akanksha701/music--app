@@ -1,21 +1,21 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { TAGS } from "./types/types";
-import { handleLikeToggle } from "@/hooks/useLike";
-import { RootState } from "@/Redux/features/musicPlayer/types/types";
-import Skeleton from "@mui/material/Skeleton";
-import HeadLine from "./UI/UtilityComponent/HeadLine";
-import MusicPlayCard from "./UI/UtilityComponent/MusicPlayCard";
-import Box from "./UI/UtilityComponent/Card";
-import { IMusicProps } from "./types/types";
-import { fetchApi } from "@/utils/helpers";
-import { Method } from "@/app/About/types/types";
-import { useToggleLikeMutation } from "@/services/like";
-import { getTopHits, userApi } from "@/utils/apiRoutes";
-import { getUser } from "@/app/actions/getUser";
-import { useLazyFetchUserProfileQuery } from "@/services/user";
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { TAGS } from './types/types';
+import { handleLikeToggle } from '@/hooks/useLike';
+import { RootState } from '@/Redux/features/musicPlayer/types/types';
+import Skeleton from '@mui/material/Skeleton';
+import HeadLine from './UI/UtilityComponent/HeadLine';
+import MusicPlayCard from './UI/UtilityComponent/MusicPlayCard';
+import Box from './UI/UtilityComponent/Card';
+import { IMusicProps } from './types/types';
+import { fetchApi } from '@/utils/helpers';
+import { Method } from '@/app/About/types/types';
+import { useToggleLikeMutation } from '@/services/like';
+import { getTopHits, userApi } from '@/utils/apiRoutes';
+import { getUser } from '@/app/actions/getUser';
+import { useLazyFetchUserProfileQuery } from '@/services/user';
 
 const SkeletonGrid = ({ count }: { count: number }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -39,11 +39,11 @@ const Index = ({ initialData }: { initialData: any }) => {
     (state) => state.musicPlayerSlice.currentTrack
   );
 
- const [toggleLike] = useToggleLikeMutation();
+  const [toggleLike] = useToggleLikeMutation();
    
   useEffect(() => {
     if (data) setIsLoading(false); 
-    console.log("DATA : "  , data)
+    console.log('DATA : '  , data);
   }, [data]);
 
   return (
