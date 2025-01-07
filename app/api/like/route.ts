@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { currentUser, User } from "@clerk/nextjs/server";
 import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import mongoose, { Types } from "mongoose";
 import { db } from "../user/route";
+import { auth } from "@/lib/firebase/firebaseAdmin/auth";
 
 async function handleMusicLike(user: any, id: string, userId: string) {
   const alreadyLiked = user.likedMusics.some((likedMusic: Types.ObjectId) =>
@@ -56,12 +56,15 @@ async function handleGenreLike(user: any, id: string, userId: string) {
 
 export async function POST(req: Request) {
   try {
-    const userDetails: User | null = await currentUser();
+    const authHeader: any = req.headers.get("Authorization");
+    const token = authHeader.split(" ")[1];
+    const decodedToken = await auth.verifyIdToken(token);
+    const userDetails = await auth.getUser(decodedToken.uid);
     const { id, name } = await req.json();
 
     const user = await db
       .collection("users")
-      .findOne({ userId: userDetails?.id });
+      .findOne({ userId: userDetails?.uid });
     if (!user) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
@@ -72,14 +75,14 @@ export async function POST(req: Request) {
         updatedUser = await handleMusicLike(
           user,
           id,
-          userDetails?.id as string
+          userDetails?.uid as string
         );
         break;
       case TAGS.NEW_RELEASE:
         updatedUser = await handleMusicLike(
           user,
           id,
-          userDetails?.id as string
+          userDetails?.uid as string
         );
         break;
 
@@ -87,7 +90,7 @@ export async function POST(req: Request) {
         updatedUser = await handleAlbumLike(
           user,
           id,
-          userDetails?.id as string
+          userDetails?.uid as string
         );
         break;
 
@@ -95,7 +98,7 @@ export async function POST(req: Request) {
         updatedUser = await handleGenreLike(
           user,
           id,
-          userDetails?.id as string
+          userDetails?.uid as string
         );
         break;
 
