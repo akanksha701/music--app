@@ -4,10 +4,10 @@ import {
   signInWithPopup,
   onAuthStateChanged as _onAuthStateChanged,
 } from "firebase/auth";
-import { firebaseAuth } from "./config";
 
 import { redirect } from "next/navigation";
 import { db } from "@/app/api/user/route";
+import { firebaseAuth } from "./firebase/config";
 
 
 export async function onAuthStateChanged(callback: (authUser: User | null) => void) {
