@@ -1,19 +1,14 @@
-'use server'
+"use server";
 import { db } from "@/app/api/user/route";
-import { User } from "firebase/auth";
 
-export async function createUser(user: User | null) {
+export async function createUser(user: any) {
   try {
-    console.log("-----", user);
-
-    const nameParts = user?.displayName?.split(" ") || ["", ""]; // Split the name into first and last
-    const firstName = nameParts[0];
-    const lastName = nameParts[1];
     const newUser = await db.collection("users").insertOne({
       userId: user?.uid,
-      firstName,
-      lastName,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
       email: user?.email,
+      imageUrl:user?.imageUrl,
       isActive: true,
       isDeleted: false,
     });
@@ -25,10 +20,17 @@ export async function createUser(user: User | null) {
   }
 }
 
-export async function checkIfUserExists(uid: string): Promise<boolean> {
+export async function checkIfUserExists(user: any) {
   try {
-    const user = await db.collection("users").findOne({ userId: uid });
-    return user ? true : false; // Return true if the user exists, otherwise false
+    const existedUser = await db
+      .collection("users")
+      .findOne({ userId: user?.uid as string });
+    if (!existedUser) {
+      const newUser = await createUser(user);
+      return newUser;
+    } else {
+      return user;
+    }
   } catch (error) {
     console.error("Error checking user existence", error);
     return false;

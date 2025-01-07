@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server';
-import { currentUser, User } from '@clerk/nextjs/server';
 import { db } from '../user/route';
+import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
 
 
-export async function GET() {
+export async function GET(req:Request) {
   try {
-    const user: User | null = await currentUser();
+    const authHeader: any = req.headers.get("Authorization");
+    const token = authHeader.split(" ")[1];
+    const decodedToken = await auth.verifyIdToken(token);
+    const user = await auth.getUser(decodedToken.uid);
     const albums = await await db
       .collection('albums')
       .aggregate([
@@ -28,7 +31,7 @@ export async function GET() {
             from: 'users',
             pipeline: [
               {
-                $match: { clerkUserId: user?.id },
+                $match: { userId: user?.uid },
               },
               {
                 $project: { likedAlbums: 1 },

@@ -9,7 +9,6 @@ const DropDown = ({ session }: any) => {
   if (!userSession) {
     return null;
   }
-  // console.log(userSession?.reloadUserInfo?.photoUrl)
   return (
     <>
       <Dropdown placement="bottom-end">

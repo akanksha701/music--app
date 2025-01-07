@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     
     const body = await req.json();
     const { id, emailAddresses, firstName, lastName } = body.user;
-    const userExisted = await User.findOne({ clerkUserId: id });
+    const userExisted = await User.findOne({ userId: id });
     if (userExisted) {
       return await NextResponse.json({
         status: 409,
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       });
     } else {
       const newUser = await User.create({
-        clerkUserId: id,
+        userId: id,
         firstName: firstName,
         lastName: lastName,
         email: emailAddresses[0]?.emailAddress,

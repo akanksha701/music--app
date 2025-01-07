@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { currentUser, User } from "@clerk/nextjs/server";
 import { db } from "../user/route";
 import { getMusicWithPeaks } from "@/utils/getPeaks";
+import { auth } from "@/lib/firebase/firebaseAdmin/auth";
 
 export const config = {
   api: {
@@ -113,8 +114,10 @@ export async function GET(req: Request) {
     const skip = (currentPage - 1) * limit;
 
     const totalRecords = await await db.collection("musics").countDocuments();
-    const user: User | null = await currentUser();
-
+    const authHeader: any = req.headers.get("Authorization");
+    const token = authHeader.split(" ")[1];
+    const decodedToken = await auth.verifyIdToken(token);
+    const user = await auth.getUser(decodedToken.uid);
     const aggregatePipeline: any[] = [
       {
         $lookup: {
@@ -163,7 +166,7 @@ export async function GET(req: Request) {
           from: "users",
           pipeline: [
             {
-              $match: { clerkUserId: user?.id },
+              $match: { userId: user?.uid },
             },
             {
               $project: { likedMusics: 1 },

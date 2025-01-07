@@ -5,31 +5,8 @@ import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
 import DropDown from "./UtilityComponent/DropDown/DropDown";
 import { redirect } from "next/navigation";
 import NavItemList from "./UtilityComponent/NavItemList";
-import { useUserSession } from "@/hooks/customHooks/use-user-session";
-import { checkIfUserExists, createUser } from "@/lib/firebase/userActions";
-import { User } from "firebase/auth";
-import { useEffect } from "react";
 
 export default function NavbarPage({ session }: any) {
-
-  // const saveUser = async (user: User | null) => {
-  //   if (user?.uid as string) {
-  //     const userExists = await checkIfUserExists(user?.uid as string);
-  //     console.log('userExists',userExists)
-  //     if (!userExists) {
-  //       const newUser = await createUser(user);
-  //       console.log(newUser,'newUser')
-  //       if (newUser) {
-  //         console.log("User created successfully in the database");
-  //       } else {
-  //         console.error("Error creating new user in MongoDB");
-  //       }
-  //     } else {
-  //       console.log("User already exists in the database");
-  //     }
-  //   }
-  // };
-
   return (
     <>
       <Navbar isBordered className="sticky top-0 z-10">
@@ -54,7 +31,7 @@ export default function NavbarPage({ session }: any) {
         </NavbarContent>
 
         <NavbarContent as="div" className="items-center " justify="end">
-          <DropDown session={session}/>
+          <DropDown session={session} />
         </NavbarContent>
       </Navbar>
     </>

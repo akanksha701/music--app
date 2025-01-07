@@ -16,6 +16,5 @@ export async function createSession(uid: string) {
 
 export async function removeSession() {
   (await cookies()).delete("user_session");
-
   redirect("/");
 }

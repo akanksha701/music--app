@@ -1,11 +1,37 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  createApi,
+  fetchBaseQuery,
+  RootState,
+} from "@reduxjs/toolkit/query/react";
 import { Method } from "@/app/About/types/types";
-import { getTopAlbums, getTopGenres, getTopHits, like, music } from "@/utils/apiRoutes";
+import {
+  getTopAlbums,
+  getTopGenres,
+  getTopHits,
+  like,
+  music,
+} from "@/utils/apiRoutes";
 import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 
 export const likeApi = createApi({
   reducerPath: "likeApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.APP_URL,
+    prepareHeaders: (headers, { getState }) => {
+      let accessToken = (getState() as any).session.accessToken;
+
+      if (!accessToken) {
+        accessToken = localStorage.getItem("accessToken");
+      }
+
+      if (accessToken) {
+        console.log("accessToken", accessToken);
+        headers.set("Authorization", `Bearer ${accessToken}`);
+      }
+
+      return headers;
+    },
+  }),
   tagTypes: Object.values(TAGS),
   endpoints: (builder) => ({
     toggleLike: builder.mutation<void, { id: string; name: string }>({
@@ -18,8 +44,8 @@ export const likeApi = createApi({
         switch (name) {
           case TAGS.MUSIC:
             return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
-            case TAGS.NEW_RELEASE:
-              return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
+          case TAGS.NEW_RELEASE:
+            return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
           case TAGS.ALBUMS:
             return [TAGS.ALBUMS, TAGS.TOP_ALBUMS];
           case TAGS.GENRE:

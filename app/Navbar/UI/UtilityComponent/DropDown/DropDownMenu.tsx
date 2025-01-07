@@ -25,6 +25,8 @@ const DropDownMenu = () => {
   const handleSignOut = async () => {
     await signOutWithGoogle();
     await removeSession();
+    localStorage.clear()
+
   };
 
   return (

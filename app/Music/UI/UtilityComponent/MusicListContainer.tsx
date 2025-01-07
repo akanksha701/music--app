@@ -50,9 +50,7 @@ const MusicListContainer = () => {
   const wavesurferRef = useSelector<RootState, WaveSurfer | null>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
-  const { data: audioPeaksData, error } = currentTrack
-    ? useFetchAudioPeaksQuery(currentTrack.audioUrl as string)
-    : { data: null, error: null };
+  
   useEffect(() => {
     if (allSongsData && allSongsData.data) {
       const songs =
@@ -170,7 +168,7 @@ const MusicListContainer = () => {
     [isPlaying, currentTrack?._id]
   );
 
-  const handleLikeClick = async (musicId:string) => {
+  const handleLikeClick = async (musicId: string) => {
     if (currentTrack) {
       handleLikeToggle(
         musicId as string,
@@ -179,7 +177,6 @@ const MusicListContainer = () => {
         currentTrack,
         dispatch
       );
-    
     }
   };
   if (isLoading) {

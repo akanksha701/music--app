@@ -1,5 +1,8 @@
+import { saveUser } from "@/lib/auth";
 import { onAuthStateChanged } from "@/lib/firebase/auth";
-import { setSession } from "@/Redux/features/user/sessionSlice";
+import { checkIfUserExists } from "@/lib/firebase/userActions";
+import { setAccessToken } from "@/Redux/features/user/sessionSlice";
+import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -10,7 +13,9 @@ export function useUserSession(InitSession: string | null) {
     const unsubscribe = onAuthStateChanged(async (authUser: any) => {
       if (authUser) {
         setUserUid(authUser as any);
-        dispatch(setSession(authUser.reloadUserInfo as any));
+        await dispatch(setAccessToken(authUser?.accessToken));
+        localStorage.setItem('accessToken',authUser?.accessToken)
+        saveUser(authUser);
       } else {
         setUserUid(null);
       }

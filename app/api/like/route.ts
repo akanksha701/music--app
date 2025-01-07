@@ -4,13 +4,13 @@ import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import mongoose, { Types } from "mongoose";
 import { db } from "../user/route";
 
-async function handleMusicLike(user: any, id: string, clerkUserId: string) {
+async function handleMusicLike(user: any, id: string, userId: string) {
   const alreadyLiked = user.likedMusics.some((likedMusic: Types.ObjectId) =>
     likedMusic.equals(new mongoose.Types.ObjectId(id))
   );
 
   const updatedUser = await db.collection("users").findOneAndUpdate(
-    { clerkUserId },
+    { userId },
     {
       [alreadyLiked ? "$pull" : "$addToSet"]: {
         likedMusics: new mongoose.Types.ObjectId(id),
@@ -21,12 +21,12 @@ async function handleMusicLike(user: any, id: string, clerkUserId: string) {
   return updatedUser;
 }
 
-async function handleAlbumLike(user: any, id: string, clerkUserId: string) {
+async function handleAlbumLike(user: any, id: string, userId: string) {
   const alreadyLiked = user.likedMusics.some((likedAlbums: Types.ObjectId) =>
     likedAlbums.equals(new mongoose.Types.ObjectId(id))
   );
   const updatedUser = await db.collection("users").findOneAndUpdate(
-    { clerkUserId },
+    { userId },
     {
       [alreadyLiked ? "$pull" : "$addToSet"]: {
         likedAlbums: new mongoose.Types.ObjectId(id),
@@ -38,12 +38,12 @@ async function handleAlbumLike(user: any, id: string, clerkUserId: string) {
   return updatedUser;
 }
 
-async function handleGenreLike(user: any, id: string, clerkUserId: string) {
+async function handleGenreLike(user: any, id: string, userId: string) {
   const alreadyLiked = user.likedGenres.some((likedGenres: Types.ObjectId) =>
     likedGenres.equals(new mongoose.Types.ObjectId(id))
   );
   const updatedUser = await db.collection("users").findOneAndUpdate(
-    { clerkUserId },
+    { userId },
     {
       [alreadyLiked ? "$pull" : "$addToSet"]: {
         likedGenres: new mongoose.Types.ObjectId(id),
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
     const user = await db
       .collection("users")
-      .findOne({ clerkUserId: userDetails?.id });
+      .findOne({ userId: userDetails?.id });
     if (!user) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
