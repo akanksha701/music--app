@@ -19,7 +19,7 @@ export async function GET(req: Request) {
               {
                 $match: {
                   $expr: {
-                    $in: ['$userId', { $ifNull: ['$$artistsIds', []] }] // Ensure it's always an array
+                    $in: ['$_id', { $ifNull: ['$$artistsIds', []] }] // Ensure it's always an array
                   },
                 },
               },
