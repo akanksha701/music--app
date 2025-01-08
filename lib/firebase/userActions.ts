@@ -29,7 +29,7 @@ export async function checkIfUserExists(user: any) {
       const newUser = await createUser(user);
       return newUser;
     } else {
-      return user;
+      return existedUser;
     }
   } catch (error) {
     console.error("Error checking user existence", error);

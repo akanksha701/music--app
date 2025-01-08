@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   accessToken: null,
+  loggedInUser: null,
 };
 
 const sessionSlice = createSlice({
@@ -14,9 +15,15 @@ const sessionSlice = createSlice({
     clearAccessToken: (state) => {
       state.accessToken = null;
     },
+    setLoggedInUser: (state, action) => {
+      state.loggedInUser = action.payload;  // Set the logged-in user
+    },
+    clearLoggedInUser: (state) => {
+      state.loggedInUser = null;  // Clear the logged-in user
+    },
   },
 });
 
-export const { setAccessToken, clearAccessToken } = sessionSlice.actions;
+export const { setAccessToken, clearAccessToken, setLoggedInUser, clearLoggedInUser } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

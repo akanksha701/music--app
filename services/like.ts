@@ -25,7 +25,6 @@ export const likeApi = createApi({
       }
 
       if (accessToken) {
-        console.log("accessToken", accessToken);
         headers.set("Authorization", `Bearer ${accessToken}`);
       }
 

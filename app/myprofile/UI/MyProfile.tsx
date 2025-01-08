@@ -7,7 +7,6 @@ import EditProfile from "./UtilityComponent/EditProfile";
 const MyProfile = () => {
   const { setValue } = useForm({});
   const [image, setImage] = useState("");
-  
   return (
     <div className="bg-gray-100 flex flex-col justify-center bg-cover bg-mk-bg p-6">
       <div className="w-full sm:max-w-xl sm:mx-auto">
