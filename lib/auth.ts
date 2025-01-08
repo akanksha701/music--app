@@ -34,16 +34,8 @@ export async function signInWithGoogle(): Promise<string | null> {
 
 export const saveUser = async (user: any | null) => {
   if (user) {
-    const name = user?.reloadUserInfo.displayName.split(" ");
-    const photo = user?.reloadUserInfo?.photoUrl;
-    const userDetails = {
-      uid: user?.uid,
-      firstName: name[0],
-      lastName: name[1],
-      email: user?.email,
-      imageUrl: user?.reloadUserInfo?.photoUrl,
-    };
-    await checkIfUserExists(userDetails);
+   const userData=  await checkIfUserExists(user);
+   return userData
   }
 };
 

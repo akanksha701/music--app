@@ -8,12 +8,17 @@ export async function createUser(user: any) {
       firstName: user?.firstName,
       lastName: user?.lastName,
       email: user?.email,
-      imageUrl:user?.imageUrl,
+      imageUrl: user?.imageUrl,
       isActive: true,
       isDeleted: false,
     });
 
-    return newUser;
+    if (newUser.acknowledged) {
+      return {
+        ...user,  // Spread the user data
+        _id: newUser.insertedId,  // Add the insertedId from MongoDB
+      };
+    }
   } catch (error) {
     console.error("Error creating user in MongoDB", error);
     return null;
@@ -29,7 +34,17 @@ export async function checkIfUserExists(user: any) {
       const newUser = await createUser(user);
       return newUser;
     } else {
-      return existedUser;
+      const user = {
+        userId: existedUser?.userId,
+        firstName: existedUser?.firstName,
+        lastName: existedUser?.lastName,
+        email: existedUser?.email,
+        imageUrl: existedUser?.imageUrl,
+        isActive: existedUser?.isActive,
+        isDeleted: existedUser?.isDeleted,
+        gender: existedUser?.gender,
+      };
+      return user;
     }
   } catch (error) {
     console.error("Error checking user existence", error);

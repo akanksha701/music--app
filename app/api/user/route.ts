@@ -40,25 +40,14 @@ export async function PUT(req: Request) {
 
     const body = await req.json();
 
-    const { email, firstName, lastName, dob, gender, profilePicture } = body;
-
-    let profilePictureUrl = null;
-    if (profilePicture) {
-      const cloudinaryResponse = await cloudinary.uploader.upload(
-        profilePicture,
-        {
-          folder: "user_profiles",
-        }
-      );
-      profilePictureUrl = cloudinaryResponse.secure_url;
-    }
+    const { email, firstName, lastName, dob, gender, imageUrl } = body;
 
     const updatedData = {
       ...(email && { email: email }),
       ...(gender && { gender: gender }),
       ...(firstName && { firstName: firstName }),
       ...(lastName && { lastName: lastName }),
-      ...(profilePictureUrl && { imageUrl: profilePictureUrl }),
+      ...(imageUrl && { imageUrl: imageUrl }),
       ...(dob && {
         dateOfBirth: new Date(dob.year, dob.month - 1, dob.day + 1),
       }),

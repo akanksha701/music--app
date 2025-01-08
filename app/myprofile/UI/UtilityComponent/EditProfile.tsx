@@ -12,6 +12,9 @@ import NextInput from "@/common/inputs/Input";
 import NextDatePicker from "@/common/inputs/DatePicker";
 import SelectMenu from "@/common/inputs/SelectMenu";
 import Loading from "@/app/loading";
+import { setLoggedInUser } from "@/Redux/features/user/sessionSlice";
+import { useDispatch } from "react-redux";
+import { useRadioGroup } from "@nextui-org/react";
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;
@@ -24,21 +27,25 @@ const EditProfile = (props: IEditProfileProps) => {
     formState: { errors },
   } = useForm({});
   const { data, isLoading, isError } = useFetchUserProfileQuery({});
+  const dispatch = useDispatch();
   const setUserDetails = useCallback(async () => {
     {
       const user = data?.data;
       if (user) {
-        const day = ( new Date(user.dateOfBirth).getDate()) || new Date().getDate();
-        const month = ( new Date(user.dateOfBirth).getMonth()) || new Date().getMonth();
-        const year = ( new Date(user.dateOfBirth).getFullYear()) || new Date().getFullYear();
-        const calendarDate =  new CalendarDate(year, month+1, day-1);
+        const day =
+          new Date(user.dateOfBirth).getDate() || new Date().getDate();
+        const month =
+          new Date(user.dateOfBirth).getMonth() || new Date().getMonth();
+        const year =
+          new Date(user.dateOfBirth).getFullYear() || new Date().getFullYear();
+        const calendarDate = new CalendarDate(year, month + 1, day - 1);
         setValue("userId", user?.userId);
         setValue("firstName", user?.firstName);
         setValue("lastName", user?.lastName);
         setValue("gender", user?.gender);
         setValue("dob", calendarDate);
         setValue("imageUrl", user?.imageUrl);
-        setValue("emailAddresses", user.email);
+        setValue("emailAddresses", user?.email);
         setImage(user?.imageUrl as string);
       }
     }
@@ -50,9 +57,20 @@ const EditProfile = (props: IEditProfileProps) => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const response = await updateUserProfile(data).unwrap();
-
+      const response = await updateUserProfile({
+        ...data,
+        imageUrl: image,
+      }).unwrap();
       if (response.status === 200) {
+        const user = {
+          userId: data?.userId,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data?.email,
+          imageUrl: image,
+          gender:data?.gender
+        };
+        dispatch(setLoggedInUser(user));
         toast.success("Profile updated successfully");
       }
     } catch (error) {
@@ -61,7 +79,7 @@ const EditProfile = (props: IEditProfileProps) => {
     }
   });
 
-  if (!data) {
+  if (!data || isLoading) {
     return <Loading />;
   }
   return (

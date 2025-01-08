@@ -32,6 +32,9 @@ const DropDownMenu = () => {
     await removeSession();
     localStorage.clear();
   };
+  const name: any = useSelector<any | any>(
+    (state) => state?.session?.loggedInUser
+  );
   if (!userSession) {
     return null;
   }
@@ -41,7 +44,7 @@ const DropDownMenu = () => {
         <DropdownItem key="profile" className="h-14 gap-2 ">
           <p className="font-semibold ">Signed in as</p>
           <p className="font-semibold ">
-            {userSession?.data?.firstName + " " + userSession?.data?.lastName}
+            {name.firstName + " " + name?.lastName}
           </p>
         </DropdownItem>
 
