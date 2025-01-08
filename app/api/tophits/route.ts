@@ -1,22 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server'; 
-import Music from '@/lib/models/Music';
-import { currentUser } from '@clerk/nextjs/server';
-import path from 'path';
-import fs from 'fs'; 
-import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
-import { lastValueFrom } from 'rxjs';
+import { NextResponse } from 'next/server';
 import { db } from '../user/route';
-import { audioDirectory, getMusicWithPeaks } from '@/utils/getPeaks';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
- 
-
-
-export async function GET(req: NextRequest) {
-  try { 
-    const authHeader: any = req.headers.get("Authorization");
-    const token = authHeader.split(" ")[1];
-    const decodedToken = await auth.verifyIdToken(token);
+export async function GET(req: Request) {
+  try {
+    const authHeader: string|null = req.headers.get('Authorization');
+    const token = authHeader?.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token as string);
     const user = await auth.getUser(decodedToken.uid);
     const musics = await db
       .collection('musics')

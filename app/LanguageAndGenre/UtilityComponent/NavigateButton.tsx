@@ -1,25 +1,25 @@
-"use client"
-import AddGenre from "@/app/LanguageAndGenre/UtilityComponent/AddGenre";
-import AddLanguage from "@/app/LanguageAndGenre/UtilityComponent/AddLanguage";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import Link from "next/link"
-import { useState } from "react";
+'use client';
+import AddGenre from '@/app/LanguageAndGenre/UtilityComponent/AddGenre';
+import AddLanguage from '@/app/LanguageAndGenre/UtilityComponent/AddLanguage';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export const SeeMoreButton = ({url}  : {
   url : string
 }) => {
   return (<>
     <Link href={url}>
-    <div
-  className="grid-item flex flex-col justify-end p-4 mt-8 border rounded-xl relative font-bold bg-white text-black bg-[url('/images/eye.png')] bg-[length:50px] bg-center bg-no-repeat"
->
+      <div
+        className="grid-item flex flex-col justify-end p-4 mt-8 border rounded-xl relative font-bold bg-white text-black bg-[url('/images/eye.png')] bg-[length:50px] bg-center bg-no-repeat"
+      >
   See more
-</div>
+      </div>
 
     </Link>
-  </>)
-}
+  </>);
+};
 
 export const AddMoreButton = ({label} : {
   label : string
@@ -33,8 +33,8 @@ export const AddMoreButton = ({label} : {
         <DialogTrigger asChild>
           <Button className="grid-item  flex justify-end flex-col p-4 mt-8 border font-bold rounded-xl  relative text-black self-center" onClick={handleOpenDialog}
             style={{
-              backgroundColor: "white",
-              backgroundImage: `url('/images/add.png')`,
+              backgroundColor: 'white',
+              backgroundImage: 'url(\'/images/add.png\')',
               backgroundSize: '50px',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat'
@@ -51,8 +51,8 @@ export const AddMoreButton = ({label} : {
             </DialogHeader>
             <div className="mt-4 rounded-lg bg-transparent">
               {
-                label === "genre" ? <AddGenre handleCloseDialog={handleCloseDialog} /> : 
-                <AddLanguage handleCloseDialog={handleCloseDialog} />
+                label === 'genre' ? <AddGenre handleCloseDialog={handleCloseDialog} /> : 
+                  <AddLanguage handleCloseDialog={handleCloseDialog} />
               }
               
             </div>

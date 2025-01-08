@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React, { useState } from 'react';
 import { TbHistory } from 'react-icons/tb';
 import { CgMusicNote } from 'react-icons/cg';
@@ -101,7 +101,7 @@ const Sidebar = () => {
             <div key={index} className="flex items-center my-2  ">
               <span className="ml-2 border-slate-300 rounded-md p-1 border-2">
                 <Link href={`/Playlist/${item._id}`}>
-                <p className="cursor-pointer font-light">{item.name}</p>
+                  <p className="cursor-pointer font-light">{item.name}</p>
                 
                 </Link>
               </span>

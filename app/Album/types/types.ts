@@ -44,7 +44,7 @@ export interface Genre {
     isDeleted: boolean;
   }
   
-  export interface Language {
+export interface Language {
     _id: string;
     name: string;
     description: string;
@@ -55,7 +55,7 @@ export interface Genre {
     isDeleted: boolean;
   }
   
-  export interface MusicDetails {
+export interface MusicDetails {
     name: string;
     artistId: string[];
     description: string;
@@ -65,12 +65,12 @@ export interface Genre {
     duration: number;
   }
   
-  export interface AudioDetails {
+export interface AudioDetails {
     imageUrl: string;
     audioUrl: string;
   }
   
-  export interface Music {
+export interface Music {
     musicDetails: MusicDetails;
     audioDetails: AudioDetails;
     price: {
@@ -85,7 +85,7 @@ export interface Genre {
     __v: number;
   }
   
-  export interface Album {
+export interface Album {
     _id: string;
     name: string;
     description: string;

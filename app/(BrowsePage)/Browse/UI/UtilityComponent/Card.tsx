@@ -31,15 +31,15 @@ const Box = ({
 
   const GetUrl = (item : any) => {
     switch (name) {
-      case "Album": 
-        return `/Album/${item._id}?type=AlbumSongs`;
-      case "Genres" : 
-        return `/Genre/${item._id}?type=GenreSongs`;
-      default:
-        return ''
+    case 'Album': 
+      return `/Album/${item._id}?type=AlbumSongs`;
+    case 'Genres' : 
+      return `/Genre/${item._id}?type=GenreSongs`;
+    default:
+      return '';
     } 
  
-  }
+  };
 
   const handleMusicClick = async (index: number, music: IMusicProps) => {
     if(name === "Album" || "Genres"){
@@ -48,10 +48,10 @@ const Box = ({
     }
     dispatch(setCurrentList(data));
     if (!currentTrack || currentTrack._id !== music._id) {
-      dispatch(setCurrentTrack(data[index]));
+      dispatch(setCurrentTrack(data![index]));
       dispatch(setCurrentSongIndex(index));
     }
-    const newUrl = await generateUrl("/Music", { type: name });
+    const newUrl = await generateUrl('/Music', { type: name || '' });
     redirect(newUrl);
   };
   const memoizedCards = useMemo(() => {
@@ -81,7 +81,7 @@ const Box = ({
                   {showLikeIcon && (
                     <button
                       onClick={() =>
-                        handleLikeToggle && handleLikeToggle(item._id, name)
+                        handleLikeToggle && handleLikeToggle(item._id, name as string)
                       }
                       className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer"
                     >

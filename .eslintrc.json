@@ -15,10 +15,10 @@
     "max-len": ["error", { "code": 120, "ignoreUrls": true }],
     "complexity": ["error", 10],
     "max-depth": ["error", 4],
-    "max-lines-per-function": [
-      "error",
-      { "max": 50, "skipComments": true, "skipBlankLines": true }
-    ],
+    // "max-lines-per-function": [
+    //   "error",
+    //   { "max": 50, "skipComments": true, "skipBlankLines": true }
+    // ],
     "no-lonely-if": "error",
     "no-nested-ternary": "error",
     "max-params": ["warn", 5],

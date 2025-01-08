@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import React from "react";
 import Browse from "./index";
@@ -17,7 +17,7 @@ const Page = async () => {
   const getData = async () => {
     try {
       const userId = await fetchUserId();
-      if (!userId) throw new Error("User ID is missing");
+      if (!userId) throw new Error('User ID is missing');
    
       const [topHits, topAlbums, newReleases, topGenres] = await Promise.all([
         fetchApi(getTopHits+`?id=${userId}`, Method.GET),
@@ -35,6 +35,7 @@ const Page = async () => {
   
 
   const data = await getData();
+  console.log("DATA : " , data)
 
   return (
     <Browse

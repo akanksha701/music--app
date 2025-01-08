@@ -3,14 +3,9 @@ import { Tooltip } from '@nextui-org/react';
 import { Toaster } from 'react-hot-toast';
 import ReduxProvider from '@/Redux/storeProvider';
 import NavbarPage from './Navbar/index';
-import { ThemeProvider } from 'next-themes';
 import Footer from './Footer/Footer';
-import { Suspense } from 'react';
-import Modal from '@/common/modal/modal';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Nunito } from 'next/font/google';
-import { cookies } from 'next/headers';
-import store from '@/Redux/store';
 
 
 // Load Nunito font

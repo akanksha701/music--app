@@ -10,7 +10,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   try {
     // Validate the artistId input
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json({ error: "Invalid or missing artistId" }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid or missing artistId' }, { status: 400 });
     }
  
 
@@ -22,111 +22,111 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     const aggregatePipeline = [
       {
         $match: {
-          "musicDetails.artistId": { $in: [new mongoose.Types.ObjectId(id)] }, // Match the provided artistId
+          'musicDetails.artistId': { $in: [new mongoose.Types.ObjectId(id)] }, // Match the provided artistId
           isDeleted: false, // Exclude deleted music
         },
       },
       {
         $lookup: {
-          from: "artists",
-          localField: "musicDetails.artistId", // Match artistId in musicDetails
-          foreignField: "_id", // Match _id in artists collection
-          as: "artistDetails", // Output as artistDetails
+          from: 'artists',
+          localField: 'musicDetails.artistId', // Match artistId in musicDetails
+          foreignField: '_id', // Match _id in artists collection
+          as: 'artistDetails', // Output as artistDetails
         },
       },
       {
         $unwind: {
-          path: "$artistDetails",
+          path: '$artistDetails',
           preserveNullAndEmptyArrays: true, // Allow music without artist details
         },
       },
       {
         $lookup: {
-          from: "users",
-          localField: "artistDetails.userId", // Match userId in artistDetails
-          foreignField: "_id", // Match _id in users collection
-          as: "userDetails", // Output as userDetails
+          from: 'users',
+          localField: 'artistDetails.userId', // Match userId in artistDetails
+          foreignField: '_id', // Match _id in users collection
+          as: 'userDetails', // Output as userDetails
         },
       },
       {
         $unwind: {
-          path: "$userDetails",
+          path: '$userDetails',
           preserveNullAndEmptyArrays: true, // Allow artist without user details
         },
       },
       {
         $lookup: {
-          from: "languages",
-          localField: "musicDetails.languageId",
-          foreignField: "_id",
-          as: "languageDetails",
+          from: 'languages',
+          localField: 'musicDetails.languageId',
+          foreignField: '_id',
+          as: 'languageDetails',
         },
       },
       {
         $unwind: {
-          path: "$languageDetails",
+          path: '$languageDetails',
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
-          from: "genres",
-          localField: "musicDetails.genreId",
-          foreignField: "_id",
-          as: "genreDetails",
+          from: 'genres',
+          localField: 'musicDetails.genreId',
+          foreignField: '_id',
+          as: 'genreDetails',
         },
       },
       {
         $unwind: {
-          path: "$genreDetails",
+          path: '$genreDetails',
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
-          from: "users",
+          from: 'users',
           pipeline: [
             {
-              $match: { clerkUserId: user.uid }, // Match the logged-in user's data
+              $match: { userId: user.uid }, // Match the logged-in user's data
             },
             {
               $project: { likedMusics: 1 }, // Project only likedMusics
             },
           ],
-          as: "loggedInUser",
+          as: 'loggedInUser',
         },
       },
       {
         $unwind: {
-          path: "$loggedInUser",
+          path: '$loggedInUser',
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $group: {
-          _id: "$_id",
-          name: { $first: "$musicDetails.name" },
-          language: { $first: "$languageDetails.name" },
-          genre: { $first: "$genreDetails.name" },
-          description: { $first: "$musicDetails.description" },
-          artists: { $push: { firstName: "$userDetails.firstName", lastName: "$userDetails.lastName", email: "$userDetails.email" } },
-          liked: { $first: { $in: ["$_id", "$loggedInUser.likedMusics"] } },
-          price: { $first: "$price.amount" },
-          currency: { $first: "$price.currency" },
-          imageUrl: { $first: "$audioDetails.imageUrl" },
-          audioUrl: { $first: "$audioDetails.audioUrl" },
-          createdAt: { $first: "$createdAt" },
+          _id: '$_id',
+          name: { $first: '$musicDetails.name' },
+          language: { $first: '$languageDetails.name' },
+          genre: { $first: '$genreDetails.name' },
+          description: { $first: '$musicDetails.description' },
+          artists: { $push: { firstName: '$userDetails.firstName', lastName: '$userDetails.lastName', email: '$userDetails.email' } },
+          liked: { $first: { $in: ['$_id', '$loggedInUser.likedMusics'] } },
+          price: { $first: '$price.amount' },
+          currency: { $first: '$price.currency' },
+          imageUrl: { $first: '$audioDetails.imageUrl' },
+          audioUrl: { $first: '$audioDetails.audioUrl' },
+          createdAt: { $first: '$createdAt' },
         },
       },
       {
         $addFields: {
           artists: {
             $map: {
-              input: "$artists",
-              as: "artist",
+              input: '$artists',
+              as: 'artist',
               in: {
-                fullName: { $concat: ["$$artist.firstName", " ", "$$artist.lastName"] }, // Concatenate firstName and lastName
-                email: "$$artist.email", // Add email field
+                fullName: { $concat: ['$$artist.firstName', ' ', '$$artist.lastName'] }, // Concatenate firstName and lastName
+                email: '$$artist.email', // Add email field
               },
             },
           },
@@ -138,7 +138,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     ];
     
     
-    const musics = await db.collection("musics").aggregate(aggregatePipeline).toArray();
+    const musics = await db.collection('musics').aggregate(aggregatePipeline).toArray();
 
     if (musics.length > 0) {
       return NextResponse.json({
@@ -148,15 +148,15 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     } else {
       return NextResponse.json({
         status: 404,
-        message: "No music found for the given artistId",
+        message: 'No music found for the given artistId',
       });
     }
   } catch (error) {
-    console.error("Error fetching music by artistId:", error);
+    console.error('Error fetching music by artistId:', error);
     return NextResponse.json({
       status: 500,
-      message: "An error occurred while fetching music.",
-      error: error instanceof Error ? error.message : "Unknown error",
+      message: 'An error occurred while fetching music.',
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 }

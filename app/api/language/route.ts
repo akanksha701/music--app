@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { capitalizeTitle, saveFiles } from "@/utils/helpers";
-import { LANGUAGE_IMAGE_UPLOAD_DIR } from "../music/route";
-import path from "path";
+import { NextRequest, NextResponse } from 'next/server';
+import { capitalizeTitle, saveFiles } from '@/utils/helpers';
+import { LANGUAGE_IMAGE_UPLOAD_DIR } from '../music/route';
+import path from 'path';
 import fs from 'fs/promises';
-import { NextApiRequest } from "next";
-import { db } from "../user/route";
-import mongoose from "mongoose";
+import { NextApiRequest } from 'next';
+import { db } from '../user/route';
+import mongoose from 'mongoose';
 
 export async function GET(req: Request) {
   try {
@@ -63,11 +63,11 @@ export async function POST(req: NextRequest) {
 
     const image = body.image || null;
 
-    const imageUrl = image && image !== "undefined"
+    const imageUrl = image && image !== 'undefined'
       ? await saveFiles(image as Blob, LANGUAGE_IMAGE_UPLOAD_DIR)
-      : "/languages/images/default.jpg"; // Replace with your default image URL.
+      : '/languages/images/default.jpg'; // Replace with your default image URL.
 
-    const newLanguage = await db.collection("languages").insertOne({
+    const newLanguage = await db.collection('languages').insertOne({
       name: await capitalizeTitle(name.toString()),
       description: description,
       imageUrl: imageUrl,
@@ -79,13 +79,13 @@ export async function POST(req: NextRequest) {
     if (newLanguage) {
       return NextResponse.json({
         status: 200,
-        message: "New language created successfully",
+        message: 'New language created successfully',
         data: newLanguage,
       });
     }
 
     return NextResponse.json(
-      { error: "Error while creating language" },
+      { error: 'Error while creating language' },
       { status: 400 }
     );
   } catch (error) {
@@ -100,7 +100,7 @@ export async function PUT(req: NextRequest) {
   try {
     // Parse request data
     const url = new URL(req.url as string);
-    const id = url.searchParams.get("id");
+    const id = url.searchParams.get('id');
     if (!id) throw new Error('ID cannot be null');
 
     const formData = await req.formData();
@@ -109,7 +109,7 @@ export async function PUT(req: NextRequest) {
     const { name, description } = body;
 
     // Fetch the existing language record
-    const existingLanguage = await db.collection("languages").findOne({
+    const existingLanguage = await db.collection('languages').findOne({
       _id: new mongoose.Types.ObjectId(id),
     });
 
@@ -123,11 +123,11 @@ export async function PUT(req: NextRequest) {
     if (img instanceof Blob) {
       if (existingLanguage.imageUrl) {
 
-        console.log("existingLanguage.imageUrl : " , existingLanguage.imageUrl)
+        console.log('existingLanguage.imageUrl : ' , existingLanguage.imageUrl);
         const oldFilePath = path.join(LANGUAGE_IMAGE_UPLOAD_DIR, path.basename(existingLanguage.imageUrl));
 
         // Check if the old file is still referenced
-        const isFileReferenced = await db.collection("languages").findOne({
+        const isFileReferenced = await db.collection('languages').findOne({
           imageUrl: existingLanguage.imageUrl,
           _id: { $ne: new mongoose.Types.ObjectId(id) },
         });
@@ -150,13 +150,13 @@ export async function PUT(req: NextRequest) {
     }
 
     // Update the language record
-    const updatedLanguage = await db.collection("languages").findOneAndUpdate(
+    const updatedLanguage = await db.collection('languages').findOneAndUpdate(
       { _id: new mongoose.Types.ObjectId(id) },
       {
         $set: {
           name,
           description,
-          imageUrl: imageUrl === "undefined" ? "/languages/images/default.jpg" : imageUrl,
+          imageUrl: imageUrl === 'undefined' ? '/languages/images/default.jpg' : imageUrl,
         },
       },
       { returnDocument: 'after' }
@@ -171,7 +171,7 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json({ error: 'Language not updated' }, { status: 500 });
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }

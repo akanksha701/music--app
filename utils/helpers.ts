@@ -17,9 +17,9 @@ export interface IAudioTypes {
 
 export async function capitalizeTitle(str: string) {
   return str
-    .split(" ")
+    .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export async function generateUrl(
@@ -71,7 +71,7 @@ export async function uploadImage(image: File) {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.v2.uploader.upload_stream(
       {
-        resource_type: "auto",
+        resource_type: 'auto',
         upload_preset: process.env.NEXT_PUBLIC_UPLOAD_PRESET, // optional
       },
       (error, result) => {
@@ -88,15 +88,15 @@ export async function uploadImage(image: File) {
 }
 
 export async function uploadAudio(audio: File) {
-  if (audio.type !== "audio/mpeg") {
-    throw new Error("File must be an MP3 audio file.");
+  if (audio.type !== 'audio/mpeg') {
+    throw new Error('File must be an MP3 audio file.');
   }
   const buffer = await audio.arrayBuffer();
 
   return new Promise((resolve, reject) => {
     const stream = cloudinary.v2.uploader.upload_stream(
       {
-        resource_type: "video", // 'video' is used for audio files in Cloudinary
+        resource_type: 'video', // 'video' is used for audio files in Cloudinary
         upload_preset: process.env.NEXT_PUBLIC_UPLOAD_PRESET,
       },
       (error, result) => {
@@ -117,15 +117,15 @@ export const fetchApi = async (
   method: Method,
   body?: object | FormData // Accept FormData as body
 ) => {
-  const url = new URL(apiUrl, process.env.APP_URL || "http://localhost:3000");
+  const url = new URL(apiUrl, process.env.APP_URL || 'http://localhost:3000');
 
   const isFormData = body instanceof FormData;
 
   const headers: HeadersInit = isFormData
     ? {}
-    : { "Content-Type": "application/json" };
+    : { 'Content-Type': 'application/json' };
 
-  headers["Authorization"] = `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImMwYTQwNGExYTc4ZmUzNGM5YTVhZGU5NTBhMjE2YzkwYjVkNjMwYjMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQXNoaXNoIFJhdGhvZCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NMVjNVZDhhS2ZCUi1pV3NjUkl4YS1jVm1qNGxTS0luaE5fZVVTYXFQWm0wQnQ3bEE9czk2LWMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbXVzaWMtYXBwLWNkNWFjIiwiYXVkIjoibXVzaWMtYXBwLWNkNWFjIiwiYXV0aF90aW1lIjoxNzM2MjU0MzM2LCJ1c2VyX2lkIjoibWQ2VEFpSzZucFZBRkY0WGdLZmVKakJrRFdyMiIsInN1YiI6Im1kNlRBaUs2bnBWQUZGNFhnS2ZlSmpCa0RXcjIiLCJpYXQiOjE3MzYyNTQzMzYsImV4cCI6MTczNjI1NzkzNiwiZW1haWwiOiJhc2hpc2gucmF0aG9kQHVwZm9yY2UudGVjaCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTE1Njc0MTg0MzgxNjY0NDQ5MjI4Il0sImVtYWlsIjpbImFzaGlzaC5yYXRob2RAdXBmb3JjZS50ZWNoIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZ29vZ2xlLmNvbSJ9fQ.kvfucJAKnRda6GbyUO__FJ64QfIZIsU7zo9gyJclAj1NFvV_I_I7jJ4kjI6SkX3ijmkQMM_HRP5NOxFPnn3r4LZrN81Au1uctdbY_C85fo1Ox_4Hre1QAoKb7NnGy8tYS2tTNvXdZcVsrcMHyLl8-YpzS1lTq1rFeAp51xsGA2GgC2f8BJ8IohifUZdWeNVIjPFEssHEg2RkRoMWERHl-eOHw4Tw4NTJQNCk7AXbe6fAL1hTeO9sd8M-8YwDYwlBtAKSwS3jNeXOITgm0sQrWGEkhg98m25m14bO0p43BOc_iuZTECzTlOWf5Ff_M8QBGAspNE6-bWZdVYx6gSJ0BA`;
+  headers["Authorization"] = `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImMwYTQwNGExYTc4ZmUzNGM5YTVhZGU5NTBhMjE2YzkwYjVkNjMwYjMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQXNoaXNoIFJhdGhvZCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NMVjNVZDhhS2ZCUi1pV3NjUkl4YS1jVm1qNGxTS0luaE5fZVVTYXFQWm0wQnQ3bEE9czk2LWMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbXVzaWMtYXBwLWNkNWFjIiwiYXVkIjoibXVzaWMtYXBwLWNkNWFjIiwiYXV0aF90aW1lIjoxNzM2MzM4NTU5LCJ1c2VyX2lkIjoibWQ2VEFpSzZucFZBRkY0WGdLZmVKakJrRFdyMiIsInN1YiI6Im1kNlRBaUs2bnBWQUZGNFhnS2ZlSmpCa0RXcjIiLCJpYXQiOjE3MzYzMzg1NTksImV4cCI6MTczNjM0MjE1OSwiZW1haWwiOiJhc2hpc2gucmF0aG9kQHVwZm9yY2UudGVjaCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTE1Njc0MTg0MzgxNjY0NDQ5MjI4Il0sImVtYWlsIjpbImFzaGlzaC5yYXRob2RAdXBmb3JjZS50ZWNoIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZ29vZ2xlLmNvbSJ9fQ.XKd0Hq_4xBD2pmSo3ln4ODtNo469qd3SmqByZCb8cm8wfRV8UeMsd0sr8PMbUEMupq4kgZF8QxTDJw5VJkl9w_gRjf_lsBhygJlgcEdajZedO-bd9Sn-wKkvnxHIvTbm4XYqHhJLVbuMGqzGA9BMbJ-SUGAzByGkBQOIMoXCIM9pBmbZcNjXoYQ8AwhQcPu5EpLQanivbpQjvdn-QwXnJdI2hMfiP-ZgbZFzH4eSEYNwwYwqV9lMLyQJNJY4h2BY_YppcrZ6dVQiOTxfi5F_ibt3Kefqq8NFt-Jg26pC2vfIwHvIbQJ-0RVVps2qZAXb99utsh2ZGNdB-GrMJEHFcA`;
   try {
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),
@@ -144,12 +144,12 @@ export const fetchApi = async (
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error);
     throw error;
   }
 };
 const generateRandomKey = (length: number) => {
-  return crypto.randomBytes(length).toString("hex").slice(0, length);
+  return crypto.randomBytes(length).toString('hex').slice(0, length);
 };
 
 export const saveFiles = async (file: Blob, folderName: string) => {
@@ -176,18 +176,17 @@ export const saveFiles = async (file: Blob, folderName: string) => {
 
     try {
       await fs.promises.writeFile(filePath, buffer);
-      console.log("File saved to:", filePath.split("public")[1]);
 
-      let relativePath = filePath.split("public")[1];
+      let relativePath = filePath.split('public')[1];
       // Adjust for Windows path separators
-      if (process.platform === "win32") {
-        relativePath = relativePath.replace(/\\/g, "/");
+      if (process.platform === 'win32') {
+        relativePath = relativePath.replace(/\\/g, '/');
       }
       console.log("relativePath  : ", relativePath)
 
       return relativePath;
     } catch (err) {
-      console.error("Error saving the file:", err);
+      console.error('Error saving the file:', err);
       return null;
     }
   } else {
@@ -210,16 +209,15 @@ export async function getAudioDuration(audioBlob: Blob): Promise<string> {
 
     const formattedDuration = `${minutes}:${seconds
       .toString()
-      .padStart(2, "0")}`;
+      .padStart(2, '0')}`;
 
-    console.log("Formatted Duration:", formattedDuration);
 
     return formattedDuration;
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error("Unable to extract audio duration: " + error.message);
+      throw new Error('Unable to extract audio duration: ' + error.message);
     } else {
-      throw new Error("An unknown error occurred");
+      throw new Error('An unknown error occurred');
     }
   }
 }

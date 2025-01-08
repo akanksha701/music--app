@@ -1,14 +1,14 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import React from "react";
+'use client';
+import { Button } from '@/components/ui/button';
+import React from 'react';
  
-import NextInput from "@/common/inputs/Input";
-import { useForm } from "react-hook-form";
-import NextTextArea from "@/common/inputs/Textarea"; 
-import FileUploadInput from "@/common/inputs/FileUploadInput";
-import toast from "react-hot-toast"; 
-import { IAddLanguageProps } from "../types/types";
-import { useAddLanguageMutation } from "@/services/languages";
+import NextInput from '@/common/inputs/Input';
+import { useForm } from 'react-hook-form';
+import NextTextArea from '@/common/inputs/Textarea'; 
+import FileUploadInput from '@/common/inputs/FileUploadInput';
+import toast from 'react-hot-toast'; 
+import { IAddLanguageProps } from '../types/types';
+import { useAddLanguageMutation } from '@/services/languages';
 
 const AddLanguage = (props: IAddLanguageProps) => {
   const {
@@ -17,21 +17,21 @@ const AddLanguage = (props: IAddLanguageProps) => {
     control,
     formState: { errors },
   } = useForm({});
-  const [AddLanguage ] = useAddLanguageMutation()
+  const [AddLanguage ] = useAddLanguageMutation();
   const onSubmit = async (data: any) => {
-    props.handleCloseDialog()
+    props.handleCloseDialog();
     const formData = new FormData();
-    formData.append("image", data.imageUrl);
-    formData.append("name", data.name);
-    formData.append("description", data.description);
+    formData.append('image', data.imageUrl);
+    formData.append('name', data.name);
+    formData.append('description', data.description);
     try {
-      console.log(".........................")
+      console.log('.........................');
 
       const res = await AddLanguage(formData);
-      console.log(res , "res");
-      toast.success("Added...");
+      console.log(res , 'res');
+      toast.success('Added...');
     } catch (error) {
-      toast.error("Error while creating language");
+      toast.error('Error while creating language');
     }
   };
 
@@ -49,7 +49,7 @@ const AddLanguage = (props: IAddLanguageProps) => {
               label="Name"
               placeholder="Enter your name"
               register={register}
-              options={{ required: "Name is required" }}
+              options={{ required: 'Name is required' }}
               errors={errors}
             />
           </div>
@@ -62,7 +62,7 @@ const AddLanguage = (props: IAddLanguageProps) => {
               label="Description"
               placeholder="Enter music description"
               register={register}
-              options={{ required: "Description is required" }}
+              options={{ required: 'Description is required' }}
               errors={errors}
             />
           </div>

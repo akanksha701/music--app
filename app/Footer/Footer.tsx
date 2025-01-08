@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { IFooterProps } from '../Home/types/types';
 import { FaYoutube, FaInstagram, FaTiktok, FaFacebook } from 'react-icons/fa';
+import { IFooterProps } from '../home/types/types';
 const Footer = (props: IFooterProps) => {
   const { data } = props;
   const icons = [

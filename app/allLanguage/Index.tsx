@@ -1,21 +1,21 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import { Breadcrumb } from "@/common/BreadCrumb/BreadCrumb";
+import { Breadcrumb } from '@/common/BreadCrumb/BreadCrumb';
 
-import SmallGrid from "@/common/grid/SmallGrid";
-import TabComp from "@/common/tab/TabComp";
-import { useGetAllLanguageQuery } from "@/services/languages";
-import { AddMoreButton } from "../LanguageAndGenre/UtilityComponent/NavigateButton";
+import SmallGrid from '@/common/grid/SmallGrid';
+import TabComp from '@/common/tab/TabComp';
+import { useGetAllLanguageQuery } from '@/services/languages';
+import { AddMoreButton } from '../LanguageAndGenre/UtilityComponent/NavigateButton';
 
 
 
 const langugageColumns = [
-  { header: "Langugage Name", accessor: "name" },
+  { header: 'Langugage Name', accessor: 'name' },
   {
-    header: "Edit",
-    accessor: "edit",
-    className: "text-center",
+    header: 'Edit',
+    accessor: 'edit',
+    className: 'text-center',
   },
 ];
 
@@ -30,23 +30,23 @@ const AllLanguageIndex = () => {
 
   const LangData = [
     {
-      value: "Languages",
-      label: "Languages",
+      value: 'Languages',
+      label: 'Languages',
       content: (
         <SmallGrid
           label="language"
           columns={langugageColumns}
           data={languageData?.data}
           moreBox={<div className="hidden"></div>}
-          addBox={<AddMoreButton label={"language"}></AddMoreButton>}
+          addBox={<AddMoreButton label={'language'}></AddMoreButton>}
         />
       ),
     },
 
   ];
   const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    { label: "LanguageAndGenre", href: "/LanguageAndGenre" },
+    { label: 'Home', href: '/' },
+    { label: 'LanguageAndGenre', href: '/LanguageAndGenre' },
     { label: `${LangData[0].label}`, href: null },
   ];
 
@@ -61,7 +61,7 @@ const AllLanguageIndex = () => {
           columns={langugageColumns}
           data={languageData?.data}
           moreBox={<div className="hidden"></div>}
-          addBox={<AddMoreButton label={"language"}></AddMoreButton>}
+          addBox={<AddMoreButton label={'language'}></AddMoreButton>}
         />
 
       </div>

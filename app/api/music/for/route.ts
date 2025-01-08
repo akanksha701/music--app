@@ -8,8 +8,8 @@ import { db } from "../../user/route";
 import { auth } from "@/lib/firebase/firebaseAdmin/auth";
 
 export const GET = async (req: NextRequest) => {
-    try {
-        const { searchParams } = new URL(req.url);
+  try {
+    const { searchParams } = new URL(req.url);
 
         const type = searchParams.get("type");
         const id = searchParams.get("id");
@@ -24,24 +24,24 @@ export const GET = async (req: NextRequest) => {
             );
         }
 
-        // Construct the query dynamically
-        let filter = {};
-        switch (type) {
-            case "genre":
-                filter = { "musicDetails.genreId": new mongoose.Types.ObjectId(id) };
-                break;
-            case "playlist":
-                filter = { "musicDetails.playlistId": new mongoose.Types.ObjectId(id) };
-                break;
-            case "artistId":
-                filter = { "musicDetails.artistId": new mongoose.Types.ObjectId(id) };
-                break;
-            default:
-                return NextResponse.json(
-                    { message: "Invalid 'type' parameter." },
-                    { status: 400 }
-                );
-        }
+    // Construct the query dynamically
+    let filter = {};
+    switch (type) {
+    case 'genre':
+      filter = { 'musicDetails.genreId': new mongoose.Types.ObjectId(id) };
+      break;
+    case 'playlist':
+      filter = { 'musicDetails.playlistId': new mongoose.Types.ObjectId(id) };
+      break;
+    case 'artistId':
+      filter = { 'musicDetails.artistId': new mongoose.Types.ObjectId(id) };
+      break;
+    default:
+      return NextResponse.json(
+        { message: 'Invalid \'type\' parameter.' },
+        { status: 400 }
+      );
+    }
 
         // Query the database
         const musics = await db.collection("musics").aggregate([
@@ -95,7 +95,7 @@ export const GET = async (req: NextRequest) => {
                   from: 'users',
                   pipeline: [
                     {
-                      $match: { clerkUserId: user.uid },
+                      $match: { userId: user.uid },
                     },
                     {
                       $project: { likedMusics: 1 },
@@ -117,47 +117,47 @@ export const GET = async (req: NextRequest) => {
               },
         ]).toArray() as MusicDocument[];
 
-        if (!musics || musics.length === 0) {
-            return NextResponse.json(
-                { message: `No music found for type: ${type} and id: ${id}.` },
-                { status: 404 }
-            );
-        }
-
-        console.log("musics", musics.length);
-
-        // Format the response to include nested fields as needed
-        const formattedResults = musics.map((doc: MusicDocument) => ({
-            _id: doc._id,
-            name: doc.musicDetails?.name,
-            description: doc.musicDetails?.description,
-            duration: doc.musicDetails?.duration,
-            artists: doc.artists || "", // Single string with artist names
-            genreId: doc.musicDetails?.genreId,
-            languageId: doc.musicDetails?.languageId,
-            releaseDate: doc.musicDetails?.releaseDate,
-            audioUrl: doc.audioDetails?.audioUrl,
-            imageUrl: doc.audioDetails?.imageUrl,
-            playTime: doc.playTime,
-            liked: doc.liked,
-            price: {
-                amount: doc.price?.amount,
-                currency: doc.price?.currency,
-            },
-            isDeleted: doc.isDeleted,
-            createdAt: doc.createdAt,
-            updatedAt: doc.updatedAt,
-            type
-        }));
-
-        return NextResponse.json({ status: 200, data: formattedResults });
-    } catch (error) {
-        console.error("Error in GET handler:", error);
-        return NextResponse.json(
-            { error: "An error occurred while processing the request." },
-            { status: 500 }
-        );
+    if (!musics || musics.length === 0) {
+      return NextResponse.json(
+        { message: `No music found for type: ${type} and id: ${id}.` },
+        { status: 404 }
+      );
     }
+
+    console.log('musics', musics.length);
+
+    // Format the response to include nested fields as needed
+    const formattedResults = musics.map((doc: MusicDocument) => ({
+      _id: doc._id,
+      name: doc.musicDetails?.name,
+      description: doc.musicDetails?.description,
+      duration: doc.musicDetails?.duration,
+      artists: doc.artists || '', // Single string with artist names
+      genreId: doc.musicDetails?.genreId,
+      languageId: doc.musicDetails?.languageId,
+      releaseDate: doc.musicDetails?.releaseDate,
+      audioUrl: doc.audioDetails?.audioUrl,
+      imageUrl: doc.audioDetails?.imageUrl,
+      playTime: doc.playTime,
+      liked: doc.liked,
+      price: {
+        amount: doc.price?.amount,
+        currency: doc.price?.currency,
+      },
+      isDeleted: doc.isDeleted,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+      type
+    }));
+
+    return NextResponse.json({ status: 200, data: formattedResults });
+  } catch (error) {
+    console.error('Error in GET handler:', error);
+    return NextResponse.json(
+      { error: 'An error occurred while processing the request.' },
+      { status: 500 }
+    );
+  }
 };
 
 

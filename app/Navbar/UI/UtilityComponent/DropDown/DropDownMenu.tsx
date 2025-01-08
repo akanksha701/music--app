@@ -1,17 +1,11 @@
 'use client';
 import { removeSession } from '@/app/actions/auth';
 import { IItem } from '@/app/Navbar/types/types';
-import Modal from '@/common/modal/modal';
-import Tooltip from '@/common/tooltip/Tooltip';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import { HoverCard } from '@/components/ui/hover-card';
-import { useUserSession } from '@/hooks/customHooks/use-user-session';
 import { signOutWithGoogle } from '@/lib/firebase/auth';
 import { useFetchUserProfileQuery } from '@/services/user';
-import { useClerk, useUser } from '@clerk/nextjs';
 import { DropdownItem, DropdownMenu } from '@nextui-org/react';
 import { redirect } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 const menus: any = [

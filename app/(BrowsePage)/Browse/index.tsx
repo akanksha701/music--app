@@ -34,11 +34,11 @@ const Index = ({ initialData }: { initialData: any }) => {
     (state) => state.musicPlayerSlice.currentTrack
   );
 
- const [toggleLike] = useToggleLikeMutation();
+  const [toggleLike] = useToggleLikeMutation();
    
   useEffect(() => {
     if (data) setIsLoading(false); 
-    console.log("DATA : "  , data)
+    console.log('DATA : '  , data);
   }, [data]);
 
   

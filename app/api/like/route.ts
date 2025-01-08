@@ -67,6 +67,7 @@ export async function POST(req: Request) {
       .findOne({ userId: userDetails?.uid });
     if (!user) {
       return NextResponse.json({ message: 'User not found.' }, { status: 404 });
+      return NextResponse.json({ message: 'User not found.' }, { status: 404 });
     }
 
     let updatedUser;
@@ -114,7 +115,6 @@ export async function POST(req: Request) {
       data: {},  // Removed data from the response ( Updated user object )
     });
   } catch (error) {
-    console.error('Error:', error);
     return NextResponse.json(
       { message: 'Something went wrong.' },
       { status: 500 }

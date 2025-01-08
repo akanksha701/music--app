@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Button } from '@/components/ui/button';
 import { Rating, Button as BTN } from '@mui/material';
@@ -6,7 +6,7 @@ import { Rating, Button as BTN } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { use, useState } from 'react';
-import { FaEdit } from "react-icons/fa";
+import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import SecondaryButton from '@/common/buttons/SecondaryButton';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';

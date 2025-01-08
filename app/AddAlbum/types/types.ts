@@ -31,17 +31,17 @@ export interface MusicDetails {
     duration: number; // duration in seconds
   }
   
-  export interface AudioDetails {
+export interface AudioDetails {
     imageUrl: string;
     audioUrl: string;
   }
   
-  export interface Price {
+export interface Price {
     amount: number;
     currency: string;
   }
   
-  export interface MusicData {
+export interface MusicData {
     musicDetails: MusicDetails;
     audioDetails: AudioDetails;
     price: Price;
@@ -53,7 +53,7 @@ export interface MusicDetails {
     __v: number;
   }
 
- export interface Song {
+export interface Song {
     id: string;
     image: string;
     name: string;
