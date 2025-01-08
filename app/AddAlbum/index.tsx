@@ -1,11 +1,12 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { usePagination } from '@/hooks/usePagination';
-import { useGetAlbumByIdQuery, useGetAlbumsQuery } from '@/services/album';
-import { useGetMusicsOfArtistsQuery } from '@/services/music';
-import MusicList from '@/common/MusicList/MusicList';
-import { useSearchParams } from 'next/navigation';
-import { MusicData } from './types/types';
+"use client";
+import React, { useEffect, useState } from "react";
+import { usePagination } from "@/hooks/usePagination";
+import { useGetAlbumByIdQuery, useGetAlbumsQuery } from "@/services/album";
+import { useGetMusicsOfArtistsQuery } from "@/services/music";
+import MusicList from "@/common/MusicList/MusicList";
+import { useSearchParams } from "next/navigation";
+import { MusicData } from "./types/types";
+import Loading from "./loading";
 
 const Index = () => {
   // Get the 'albumId' query parameter
@@ -36,7 +37,7 @@ const Index = () => {
     }
   }, [albumByIdData]);
 
-  if (isAlbumLoading  || isMusicLoading ) return <></>;
+  if (isAlbumLoading  || isMusicLoading ) return <Loading/>;
 
   return (
     <div className="flex justify-center items-start min-h-screen pt-8">

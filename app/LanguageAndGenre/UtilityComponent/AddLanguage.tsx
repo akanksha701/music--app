@@ -25,10 +25,8 @@ const AddLanguage = (props: IAddLanguageProps) => {
     formData.append('name', data.name);
     formData.append('description', data.description);
     try {
-      console.log('.........................');
 
       const res = await AddLanguage(formData);
-      console.log(res , 'res');
       toast.success('Added...');
     } catch (error) {
       toast.error('Error while creating language');

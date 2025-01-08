@@ -3,10 +3,11 @@ import React from 'react';
 
 import { Breadcrumb } from '@/common/BreadCrumb/BreadCrumb';
 
-import SmallGrid from '@/common/grid/SmallGrid';
-import TabComp from '@/common/tab/TabComp';
-import { useGetAllLanguageQuery } from '@/services/languages';
-import { AddMoreButton } from '../LanguageAndGenre/UtilityComponent/NavigateButton';
+import SmallGrid from "@/common/grid/SmallGrid";
+import TabComp from "@/common/tab/TabComp";
+import { useGetAllLanguageQuery } from "@/services/languages";
+import { AddMoreButton } from "../LanguageAndGenre/UtilityComponent/NavigateButton";
+import Loading from "./loading";
 
 
 
@@ -25,7 +26,7 @@ const AllLanguageIndex = () => {
 
 
   if (!languageData) {
-    return <></>;
+    return <Loading/>;
   }
 
   const LangData = [

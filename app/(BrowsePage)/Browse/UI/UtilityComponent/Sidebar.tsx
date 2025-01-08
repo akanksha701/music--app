@@ -47,7 +47,6 @@ const Sidebar = () => {
   const handleCreatePlaylist = async () => {
     if (playlistName.trim()) {
       const response = await createPlaylist({ name: playlistName, user: '675ab45ad8496e8fd5fb50db' });
-      console.log('Response:', response); 
       toast.success('Playlist created successfully!');
       setPlaylistName('');
       handleCloseDialog();

@@ -2,9 +2,10 @@
 import { useGetAlbumByArtistIdQuery, useGetAlbumsQuery } from '@/services/album';
 import AlbumGrid from './UI/UtilityComponent/Grid';
 
-import { IoAddCircleOutline } from 'react-icons/io5';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { IoAddCircleOutline } from "react-icons/io5";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Loading from "./loading";
 
 
 const Index = () => {
@@ -13,7 +14,7 @@ const Index = () => {
   // const { data: albumData } = useGetAlbumByArtistIdQuery("675ab45ad8496e8fd5fb50db");
  
   if (!albumData) {
-    return <>...</>
+    return <Loading/>
   }
  
   return (

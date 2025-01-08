@@ -17,7 +17,7 @@ export async function GET(req: Request) {
       10
     ); // Default to 0 (no pagination)
     if (!recordsPerPage || !page) {
-      const languageList = await db.collection('languages').find({}).toArray();
+      const languageList = await db.collection('languages').find({isDeleted : false}).toArray();
       return NextResponse.json({
         status: 200,
         data: languageList,
@@ -123,7 +123,6 @@ export async function PUT(req: NextRequest) {
     if (img instanceof Blob) {
       if (existingLanguage.imageUrl) {
 
-        console.log('existingLanguage.imageUrl : ' , existingLanguage.imageUrl);
         const oldFilePath = path.join(LANGUAGE_IMAGE_UPLOAD_DIR, path.basename(existingLanguage.imageUrl));
 
         // Check if the old file is still referenced
@@ -136,9 +135,7 @@ export async function PUT(req: NextRequest) {
         if (!isFileReferenced) {
           try {
             await fs.unlink(oldFilePath);
-            console.log(`Deleted old file: ${oldFilePath}`);
           } catch (err) {
-            console.error(`Error deleting file: ${oldFilePath}`, err);
           }
         } else {
           console.log(`File still referenced: ${existingLanguage.imageUrl}`);
@@ -212,7 +209,7 @@ export async function DELETE(req: NextApiRequest) {
     }
 
     // Delete associated image if it exists
-    if (existingLanguage.imageUrl) {
+    if (existingLanguage.imageUrl && !existingLanguage.imageUrl.includes('default.jpg')) {
       const imagePath = path.join(process.cwd(), 'public', existingLanguage.imageUrl); // Adjust the path as needed
       try {
         await fs.unlink(imagePath); // Attempt to delete the image file

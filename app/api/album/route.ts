@@ -70,11 +70,7 @@ if (image === undefined) {
       ShareCount: 0
     });
 
-    console.log('RESPONSE : ' , {
-      status: 200,
-      message: 'new album created successfully',
-      data: newAlbum,
-    });
+ 
 
     if (newAlbum) {
       return NextResponse.json({
@@ -88,8 +84,7 @@ if (image === undefined) {
       { status: 400 }
     );
   } catch (error : any) {
-    console.log('error : ' , error , error);
-    let msg = 'Internal Server Error';
+    let msg = "Internal Server Error"
 
     switch (error.code) {
     case 11000:
@@ -140,7 +135,6 @@ export async function GET(req: Request) {
           }
         }
       ]).toArray();
-      console.log("- Album : " , album)
       
       if (!album || !album.length || !album[0].musicDetails) {
         return NextResponse.json(
@@ -157,7 +151,7 @@ export async function GET(req: Request) {
       const decodedToken = await auth.verifyIdToken(token);
       const user = await auth.getUser(decodedToken.uid);
 
-      console.log("user INfo: "  , user)
+      
       const musics = await db.collection('musics').aggregate([
         {
           $match: { _id: { $in: musicIds }, isDeleted: false }, // Match music by IDs
@@ -195,7 +189,7 @@ export async function GET(req: Request) {
             from: "users",
             pipeline: [
               {
-                $match: { userId: user.uid  },
+                $match: { userId: user?.uid  },
               },
               {
                 $project: { likedMusics: 1 },
@@ -212,7 +206,7 @@ export async function GET(req: Request) {
         },
         {
           $addFields: {
-            liked: { $in: ["$_id", "$loggedInUser.likedMusics"] },
+            liked: { $in: ["$_id", { $ifNull: ["$loggedInUser.likedMusics", []] }] },
           },
         },
         {
@@ -227,11 +221,13 @@ export async function GET(req: Request) {
             name: { $first: "$musicDetails.name" },
             description: { $first: "$musicDetails.description" },
             duration: { $first: "$musicDetails.duration" },
-            artists: {
-              $push: {
-                $concat: ["$artists.firstName", " ", "$artists.lastName"],
-              },
+
+            artists: { 
+              $addToSet: { 
+                $concat: ["$artists.firstName", " ", "$artists.lastName"] 
+              } 
             },
+             
             liked: { $first: "$liked" },
             email: { $first: "$artists.email" },
             price: { $first: "$price.amount" },
@@ -267,7 +263,6 @@ export async function GET(req: Request) {
       ]).toArray();
 
     
-    
       return NextResponse.json({ status: 200, data: musics });
     }
     
@@ -278,9 +273,10 @@ export async function GET(req: Request) {
         {
           $match: {
             _id: new mongoose.Types.ObjectId(albumId),
-            ...filter,
+            // ...filter,
           }
-        },
+        }
+        ,
         {
           $lookup: {
             from: 'genres', // Collection name for genres
@@ -320,8 +316,7 @@ export async function GET(req: Request) {
           }
         }
       ]).toArray();
-
-      console.log("album ---" , album)
+ 
       
       if (!album || album.length === 0 || !album[0].musicDetails) {
         return NextResponse.json(
@@ -431,11 +426,11 @@ export async function GET(req: Request) {
 export async function PUT(req: NextRequest) {
   try {
     const url = new URL(req.url);
-    const CurrentUserInfo: any = await currentUser();
+   
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
-    const CurrentUserId = String(CurrentUserInfo?.id);
-    const albumId = url.searchParams.get('id');
+ 
+    const albumId = url.searchParams.get("id");
 
     let image: Blob | undefined;
 
@@ -481,16 +476,14 @@ export async function PUT(req: NextRequest) {
           _id: { $ne: new mongoose.Types.ObjectId(albumId!) }, // Exclude the current album
         });
 
-        if (isFileReferenced === 0) {  // If no other album references the image
-          try {
-            await fs.unlink(oldFilePath);  // Delete the old file
-            console.log(`Deleted old file: ${oldFilePath}`);
-          } catch (err) {
-            console.error(`Error deleting file: ${oldFilePath}`, err);
-          }
-        } else {
-          console.log('File is still referenced by other albums. Not deleting.');
-        } 
+if (isFileReferenced === 0) {  // If no other album references the image
+  try {
+    await fs.unlink(oldFilePath);  // Delete the old file
+  } catch (err) {
+  }
+} else {
+  console.log(`File is still referenced by other albums. Not deleting.`);
+} 
       }
 
       // Save the new file and update the URL
@@ -545,8 +538,8 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    const CurrentUserInfo = await currentUser();
-    const CurrentUserId = String(CurrentUserInfo?.id);
+ 
+ 
 
     // Check if the album exists
     const existingAlbum = await db.collection('albums').findOne({
@@ -565,15 +558,21 @@ export async function DELETE(req: NextRequest) {
 
      
 
-    // Update the `isDeleted` flag
-    existingAlbum.isDeleted = true;
-    existingAlbum.imageUrl = null;
-    await existingAlbum.save();
+    const updatedAlbum = await db.collection('albums').findOneAndUpdate(
+      { _id: new mongoose.Types.ObjectId(albumId) },
+      { 
+        $set: { 
+          isDeleted: true,
+          imageUrl: null 
+        }
+      },
+      { returnDocument: 'after' }
+    );
 
     return NextResponse.json({
       status: 200,
-      message: 'Album marked as deleted successfully',
-      data: existingAlbum,
+      message: "Album marked as deleted successfully",
+      data: updatedAlbum,
     });
   } catch (error) {
     console.error(error);
@@ -583,4 +582,3 @@ export async function DELETE(req: NextRequest) {
     );
   }
 }
-

@@ -10,23 +10,23 @@ import { useDispatch } from "react-redux";
 export function useUserSession(InitSession: string | null) {
   const [userUid, setUserUid] = useState(InitSession);
   const dispatch = useDispatch();
+  const setCookie = (name: string, value: string) => {
+    document.cookie = `${name}=${value}; path=/`;  // Set cookie with no expiration
+  };
+
+  const deleteCookie = (name: string) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;  // Expire the cookie immediately
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(async (authUser: any) => {
       if (authUser) {
-        await dispatch(setAccessToken(authUser?.accessToken));
-        await localStorage.setItem("accessToken", authUser?.accessToken);
-        const name = authUser?.reloadUserInfo.displayName.split(" ");
-        const user = {
-          uid: authUser?.uid,
-          firstName: name[0],
-          lastName: name[1],
-          email: authUser?.email,
-          imageUrl: authUser?.reloadUserInfo?.photoUrl,
-        };
-        const userData = await saveUser(user);
-        setUserUid(userData as any);
-        dispatch(setLoggedInUser(userData));
+        setUserUid(authUser as any);
+         await dispatch(setAccessToken(authUser?.accessToken));
+        
+        localStorage.setItem('accessToken', authUser?.accessToken)
+        setCookie("accessToken" ,  authUser?.accessToken)
+        saveUser(authUser);
       } else {
         setUserUid(null);
       }

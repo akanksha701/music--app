@@ -1,9 +1,10 @@
-'use client';
-import React from 'react';
-import { usePagination } from '@/hooks/usePagination';
-import { useGetLanguageQuery } from '@/services/languages';
-import SmallGrid from '@/common/grid/SmallGrid';
-import { AddMoreButton, SeeMoreButton } from './UtilityComponent/NavigateButton';
+"use client";
+import React from "react";
+import { usePagination } from "@/hooks/usePagination";
+import { useGetLanguageQuery } from "@/services/languages";
+import SmallGrid from "@/common/grid/SmallGrid";
+import { AddMoreButton, SeeMoreButton } from "./UtilityComponent/NavigateButton";
+import Loading from "./loading";
  
 const languageColumns = [
   { header: 'Language Name', accessor: 'name' },
@@ -21,7 +22,7 @@ const LanguageIndex = () => {
   const { data: languageData } = useGetLanguageQuery({ page, recordsPerPage });
  
   if (!languageData) {
-    return <></>;
+    return <Loading/>
   }  
 
   return (

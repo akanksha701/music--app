@@ -9,6 +9,7 @@ import queryString from "query-string";
 import fs from "fs";
 import crypto from "crypto";
 import { parseBuffer } from 'music-metadata';
+import { cookies } from "next/headers";
 
 export interface IAudioTypes {
   audioDestination: string;
@@ -121,11 +122,13 @@ export const fetchApi = async (
 
   const isFormData = body instanceof FormData;
 
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get('accessToken') 
   const headers: HeadersInit = isFormData
     ? {}
     : { 'Content-Type': 'application/json' };
 
-  headers["Authorization"] = `Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImMwYTQwNGExYTc4ZmUzNGM5YTVhZGU5NTBhMjE2YzkwYjVkNjMwYjMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQXNoaXNoIFJhdGhvZCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NMVjNVZDhhS2ZCUi1pV3NjUkl4YS1jVm1qNGxTS0luaE5fZVVTYXFQWm0wQnQ3bEE9czk2LWMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbXVzaWMtYXBwLWNkNWFjIiwiYXVkIjoibXVzaWMtYXBwLWNkNWFjIiwiYXV0aF90aW1lIjoxNzM2MzM4NTU5LCJ1c2VyX2lkIjoibWQ2VEFpSzZucFZBRkY0WGdLZmVKakJrRFdyMiIsInN1YiI6Im1kNlRBaUs2bnBWQUZGNFhnS2ZlSmpCa0RXcjIiLCJpYXQiOjE3MzYzMzg1NTksImV4cCI6MTczNjM0MjE1OSwiZW1haWwiOiJhc2hpc2gucmF0aG9kQHVwZm9yY2UudGVjaCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTE1Njc0MTg0MzgxNjY0NDQ5MjI4Il0sImVtYWlsIjpbImFzaGlzaC5yYXRob2RAdXBmb3JjZS50ZWNoIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZ29vZ2xlLmNvbSJ9fQ.XKd0Hq_4xBD2pmSo3ln4ODtNo469qd3SmqByZCb8cm8wfRV8UeMsd0sr8PMbUEMupq4kgZF8QxTDJw5VJkl9w_gRjf_lsBhygJlgcEdajZedO-bd9Sn-wKkvnxHIvTbm4XYqHhJLVbuMGqzGA9BMbJ-SUGAzByGkBQOIMoXCIM9pBmbZcNjXoYQ8AwhQcPu5EpLQanivbpQjvdn-QwXnJdI2hMfiP-ZgbZFzH4eSEYNwwYwqV9lMLyQJNJY4h2BY_YppcrZ6dVQiOTxfi5F_ibt3Kefqq8NFt-Jg26pC2vfIwHvIbQJ-0RVVps2qZAXb99utsh2ZGNdB-GrMJEHFcA`;
+  headers["Authorization"] = `Bearer ${accessToken?.value}`;
   try {
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),

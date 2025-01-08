@@ -6,7 +6,6 @@ export async function GET(req: NextRequest) {
 
     const genreList = await db.collection('genres').find({ isDeleted: false }).toArray();
 
-    console.log('genreList', genreList, genreList.length);
     if (genreList) {
       return NextResponse.json({
         status: 200,

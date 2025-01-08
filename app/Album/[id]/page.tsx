@@ -31,7 +31,6 @@ const AlbumPage = ({ params }: { params: any }) => {
 
   const handleDelete = async () => {
     const Res = await deleteAlbum(albumData.data._id); 
-    console.log("albumData : " , albumData)
 
     if(Res.error){
       toast.error('Error while deleting album');
@@ -52,7 +51,6 @@ const AlbumPage = ({ params }: { params: any }) => {
   }
 
   const album : Album  = albumData.data;  // The album data you needs
-  console.log('ALBUM : '   , album);
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
 

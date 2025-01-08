@@ -2,9 +2,23 @@ import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 console.log("process.env.APP_URL : ", process.env.APP_URL)
 export const albumApi = createApi({
-  reducerPath: "albumApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL }),
+  reducerPath: "albumApi", 
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.APP_URL,  
+    prepareHeaders: (headers, { getState }) => {
+      let accessToken = (getState() as any).session.accessToken;
 
+      if (!accessToken) {
+        accessToken = localStorage.getItem("accessToken");
+      }
+
+      if (accessToken) {
+        headers.set("Authorization", `Bearer ${accessToken}`);
+      }
+
+      return headers;
+    },
+  }),
   tagTypes: ["Albums"],
   endpoints: (builder) => ({
     getAlbums: builder.query({

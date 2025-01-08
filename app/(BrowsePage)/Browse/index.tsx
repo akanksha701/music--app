@@ -22,8 +22,7 @@ const SkeletonGrid = ({ count }: { count: number }) => (
       </div>
     ))}
   </div>
-);
-
+); 
 
 
 const Index = ({ initialData }: { initialData: any }) => {
@@ -38,7 +37,6 @@ const Index = ({ initialData }: { initialData: any }) => {
    
   useEffect(() => {
     if (data) setIsLoading(false); 
-    console.log('DATA : '  , data);
   }, [data]);
 
   

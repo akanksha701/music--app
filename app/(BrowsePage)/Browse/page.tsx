@@ -35,7 +35,6 @@ const Page = async () => {
   
 
   const data = await getData();
-  console.log("DATA : " , data)
 
   return (
     <Browse

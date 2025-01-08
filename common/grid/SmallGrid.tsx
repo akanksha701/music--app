@@ -45,7 +45,6 @@ const SmallGrid = ({
   useEffect(() => {
     setGridData(data)
   } , [data])
-  console.log("DATA : " , data )
 
   const handleDelete = async (id: any) => {
     let res;

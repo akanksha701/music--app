@@ -1,12 +1,124 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import Music from '@/lib/models/Music';
+import { currentUser } from '@clerk/nextjs/server';
+import path from 'path';
+import fs from 'fs';
+import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
+import { lastValueFrom } from 'rxjs';
 import { db } from '../user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
+
+
+export const getFormattedDurationStage = () => {
+  return {
+    $addFields: {
+      formattedDuration: {
+        $concat: [
+          // Calculate Hours
+          {
+            $toString: {
+              $floor: {
+                $divide: ['$musicDetails.duration', 3600], // 3600 seconds = 1 hour
+              },
+            },
+          },
+          ':',
+          // Calculate Minutes
+          {
+            $toString: {
+              $cond: {
+                if: {
+                  $gte: [
+                    {
+                      $floor: {
+                        $divide: [
+                          { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                          60, // Minutes in remaining time
+                        ],
+                      },
+                    },
+                    10,
+                  ],
+                },
+                then: {
+                  $toString: {
+                    $floor: {
+                      $divide: [
+                        { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                        60, // Minutes in remaining time
+                      ],
+                    },
+                  },
+                },
+                else: {
+                  $concat: [
+                    '0', // Add leading zero for single digit minutes
+                    {
+                      $toString: {
+                        $floor: {
+                          $divide: [
+                            { $mod: ['$musicDetails.duration', 3600] }, // Remaining seconds after removing hours
+                            60, // Minutes in remaining time
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          ':',
+          // Calculate Seconds (without fractional part)
+          {
+            $toString: {
+              $cond: {
+                if: {
+                  $gte: [
+                    {
+                      $mod: ['$musicDetails.duration', 60], // Remaining seconds after removing minutes
+                    },
+                    10,
+                  ],
+                },
+                then: {
+                  $toString: {
+                    $floor: {
+                      // Round to the nearest second
+                      $mod: ['$musicDetails.duration', 60], // Get remaining whole seconds
+                    },
+                  },
+                },
+                else: {
+                  $concat: [
+                    '0', // Add leading zero for single digit seconds
+                    {
+                      $toString: {
+                        $floor: {
+                          // Round to the nearest second
+                          $mod: ['$musicDetails.duration', 60], // Get remaining whole seconds
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  };
+};
+
+
+
 export async function GET(req: Request) {
   try {
-    const authHeader: string|null = req.headers.get('Authorization');
-    const token = authHeader?.split(' ')[1];
-    const decodedToken = await auth.verifyIdToken(token as string);
+    const authHeader: any = req.headers.get("Authorization");
+    const token = authHeader.split(" ")[1];
+    const decodedToken = await auth.verifyIdToken(token);
     const user = await auth.getUser(decodedToken.uid);
     const musics = await db
       .collection('musics')
@@ -19,7 +131,7 @@ export async function GET(req: Request) {
               {
                 $match: {
                   $expr: {
-                    $in: ['$_id', { $ifNull: ['$$artistsIds', []] }] // Ensure it's always an array
+                    $in: ["$userId", { $ifNull: ["$$artistsIds", []] }] // Ensure it's always an array
                   },
                 },
               },
@@ -35,7 +147,7 @@ export async function GET(req: Request) {
               {
                 $match: {
                   $expr: {
-                    $in: ['$_id', { $ifNull: ['$$artistsIds', []] }] // Ensure it's always an array
+                    $in: ["$_id", { $ifNull: ["$$artistsIds", []] }] // Ensure it's always an array
                   },
                 },
               },
@@ -65,7 +177,7 @@ export async function GET(req: Request) {
         },
         {
           $addFields: {
-            liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedMusics', []] }] }, // Ensure likedMusics is an array
+            liked: { $in: ["$_id", { $ifNull: ["$loggedInUser.likedMusics", []] }] }, // Ensure likedMusics is an array
           },
         },
         {
@@ -127,3 +239,4 @@ export async function GET(req: Request) {
     return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }
+

@@ -1,8 +1,24 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const musicApi = createApi({
-  reducerPath: "musicApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000" }),
+  reducerPath: "musicApi", 
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:3000" ,  
+    prepareHeaders: (headers, { getState }) => {
+      let accessToken = (getState() as any).session.accessToken;
+
+      if (!accessToken) {
+        accessToken = localStorage.getItem("accessToken");
+      }
+
+      if (accessToken) {
+        console.log("accessToken", accessToken);
+        headers.set("Authorization", `Bearer ${accessToken}`);
+      }
+
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getnewMusics: builder.query({
       query: (language) =>

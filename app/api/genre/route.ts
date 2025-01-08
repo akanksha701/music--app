@@ -15,8 +15,7 @@ export async function POST(req: NextRequest) {
 
     const image = body.image || null;
 
-    console.log('body : ', body);
-    const imageUrl = image && image !== 'undefined'
+    const imageUrl = image && image !== "undefined"
       ? await saveFiles(image as Blob, GENRE_IMAGE_UPLOAD_DIR)
       : '/genres/images/default.jpg'; // Replace with your default image URL.
 
@@ -82,7 +81,6 @@ export async function PUT(req: NextRequest) {
 
         try {
           await fs.unlink(oldFilePath); // Delete the old image file
-          console.log(`Deleted old image: ${oldFilePath}`);
         } catch (err) {
           console.error(`Error deleting old image: ${oldFilePath}`, err);
         }
@@ -144,7 +142,7 @@ export async function GET(req: NextRequest) {
     // If pagination parameters are found, apply skip and limit
     const genreList = await db
       .collection('genres')
-      .find({})
+      .find({isDeleted : false})
       .skip(skip)
       .limit(limit).toArray();
 
@@ -200,11 +198,10 @@ export async function DELETE(req: NextApiRequest) {
     }
 
     // Delete the image file if it exists
-    if (genre.imageUrl) {
+    if (genre.imageUrl && !genre.imageUrl.includes('default.jpg')) {
       const imagePath = path.join(GENRE_IMAGE_UPLOAD_DIR, path.basename(genre.imageUrl));
       try {
         await fs.unlink(imagePath); // Attempt to delete the image file
-        console.log(`Deleted image: ${imagePath}`);
       } catch (err) {
         console.error(`Failed to delete image: ${imagePath}`, err);
       }

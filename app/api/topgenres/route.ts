@@ -50,7 +50,8 @@ export async function GET(req: NextRequest) {
         },
         {
           $addFields: {
-            liked: { $in: ['$_id', '$loggedInUser.likedGenres'] },
+            // liked: { $in: ["$_id", "$loggedInUser.likedGenres"] },
+            liekd : {$in: ["$_id", { $ifNull: ["$loggedInUser.likedMusics", []] }]}
           },
         },
         {

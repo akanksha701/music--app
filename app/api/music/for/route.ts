@@ -48,40 +48,38 @@ export const GET = async (req: NextRequest) => {
             { $match: filter },
             {
                 $lookup: {
-                    from: "artists", // The artists collection
-                    let: { artistsIds: "$musicDetails.artistId" }, // Use artistId array from musicDetails
+                    from: "artists", 
+                    let: { artistsIds: "$musicDetails.artistId" },
                     pipeline: [
                         {
-                            $match: {
-                                $expr: {
-                                    $in: ["$_id", "$$artistsIds"] // Match artistIds
-                                }
+                            $match: { 
+                               $expr: { $in: ["$_id", { $ifNull: ["$$artistsIds", []] }] },
                             }
                         },
                         {
-                            $project: { userId: 1, _id: 0 } // Only fetch the userId field from artists
+                            $project: { userId: 1, _id: 0 }
                         }
                     ],
-                    as: "artistInfo" // Add matched artists as artistInfo
+                    as: "artistInfo"
                 }
             },
             {
                 $lookup: {
-                    from: "users", // The users collection
-                    localField: "artistInfo.userId", // Match userId from artistInfo
-                    foreignField: "_id", // Match against _id in users collection
-                    as: "userInfo" // Add user details as userInfo
+                    from: "users", 
+                    localField: "artistInfo.userId", 
+                    foreignField: "_id", 
+                    as: "userInfo"
                 }
             },
             {
                 $addFields: {
                     "artists": {
                         $reduce: {
-                            input: "$userInfo", // Map over the userInfo array
+                            input: "$userInfo",
                             initialValue: "",
                             in: {
                                 $cond: {
-                                    if: { $eq: ["$$value", ""] }, // If initial value is empty, just return the first name
+                                    if: { $eq: ["$$value", ""] },
                                     then: { $concat: ["$$this.firstName", " ", "$$this.lastName"] },
                                     else: { $concat: ["$$value", ", ", "$$this.firstName", " ", "$$this.lastName"] }
                                 }
@@ -92,30 +90,36 @@ export const GET = async (req: NextRequest) => {
             },
             {
                 $lookup: {
-                  from: 'users',
-                  pipeline: [
-                    {
-                      $match: { userId: user.uid },
-                    },
-                    {
-                      $project: { likedMusics: 1 },
-                    },
-                  ],
-                  as: 'loggedInUser',
+                    from: 'users',
+                    pipeline: [
+                        { $match: { userId: user.uid } },
+                        { $project: { likedMusics: 1 } }
+                    ],
+                    as: 'loggedInUser',
                 },
-              },
-              {
+            },
+            {
                 $unwind: {
-                  path: '$loggedInUser',
-                  preserveNullAndEmptyArrays: true,
+                    path: '$loggedInUser',
+                    preserveNullAndEmptyArrays: true,
                 },
-              },
-              {
+            },
+            {
                 $addFields: {
-                  liked: { $in: ['$_id', '$loggedInUser.likedMusics'] },
+                    liked: { $in: ["$_id", { $ifNull: ["$loggedInUser.likedMusics", []] }] },
                 },
-              },
+            },
+            {
+                $group: {
+                    _id: "$_id", // Group by _id to remove duplicates
+                    musicDetails: { $first: "$$ROOT" }, // Keep the first occurrence
+                }
+            },
+            {
+                $replaceRoot: { newRoot: "$musicDetails" } // Replace the root with the grouped music details
+            },
         ]).toArray() as MusicDocument[];
+        
 
     if (!musics || musics.length === 0) {
       return NextResponse.json(

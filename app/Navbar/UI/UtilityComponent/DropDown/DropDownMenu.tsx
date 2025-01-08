@@ -9,12 +9,14 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const menus: any = [
-  { label: 'My Profile', key: 'my_profile', route: '/MyProfile' },
-  { label: 'Add Language', key: 'add_language', route: '/AddLanguage' },
-  { label: 'Add Genre', key: 'add_genre', route: '/AddGenre' },
-  { label: 'Add Album', key: 'add_album', route: '/AddAlbum' },
-  { label: 'Add Music', key: 'add_music', route: '/AddMusic' },
+  { label: "My Profile", key: "my_profile", route: "/MyProfile" },
+  { label: "Language & Genre", key: "LanguageAndGenre", route: "/LanguageAndGenre" },
+  { label: "Add Album", key: "add_album", route: "/Album" },
+  { label: "Add Music", key: "add_music", route: "/AddMusic" },
 ];
+const deleteCookie = (name: string) => {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;  // Expire the cookie immediately
+};
 const DropDownMenu = () => {
   const {
     data: userSession,
@@ -24,7 +26,8 @@ const DropDownMenu = () => {
   const handleSignOut = async () => {
     await signOutWithGoogle();
     await removeSession();
-    localStorage.clear();
+    localStorage.clear()
+    deleteCookie("accessToken")
   };
   const name: any = useSelector<any | any>(
     (state) => state?.session?.loggedInUser
@@ -38,7 +41,7 @@ const DropDownMenu = () => {
         <DropdownItem key="profile" className="h-14 gap-2 ">
           <p className="font-semibold ">Signed in as</p>
           <p className="font-semibold ">
-            {name.firstName + ' ' + name?.lastName}
+            {name?.firstName + ' ' + name?.lastName}
           </p>
         </DropdownItem>
 

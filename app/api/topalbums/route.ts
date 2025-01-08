@@ -14,6 +14,11 @@ export async function GET(req:Request) {
       .collection('albums')
       .aggregate([
         {
+          $match : {
+            isDeleted : false
+          }
+        },
+        {
           $lookup: {
             from: 'musics',
             localField: 'musicIds',
@@ -57,7 +62,7 @@ export async function GET(req:Request) {
         },
       {
         $addFields: {
-          liked: { $in: ['$_id', '$loggedInUser.likedAlbums'] },
+          liked: { $in: ["$_id", { $ifNull: ["$loggedInUser.likedAlbums", []] }] }, 
         },
       },
       {
