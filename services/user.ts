@@ -1,16 +1,35 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { UserResponse } from "./types";
 
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.APP_URL,
+    baseUrl: "/api/",
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("accessToken") || "";
+
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
-    fetchUserProfile: builder.query<UserResponse, void>({
-      query: () => "api/user",
+    fetchUserProfile: builder.query({
+      query: () => ({
+        url: "user",
+        method: "GET",
+      }),
+    }),
+    
+    updateUserProfile: builder.mutation({
+      query: (userData) => ({
+        url: "user",
+        method: "PUT",
+        body: userData, // Send the user data to be updated
+      }),
     }),
   }),
 });
 
-export const { useLazyFetchUserProfileQuery } = userApi;
+export const { useFetchUserProfileQuery, useUpdateUserProfileMutation } = userApi;

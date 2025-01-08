@@ -30,7 +30,8 @@ const nextConfig = {
       'stat4.bollywoodhungama.in',
       'i1.sndcdn.com',
       'upload.wikimedia.org',
-      'encrypted-tbn0.gstatic.com'
+      'encrypted-tbn0.gstatic.com',
+      'lh3.googleusercontent.com'
       // Added for Pinterest images
     ],
     remotePatterns: [

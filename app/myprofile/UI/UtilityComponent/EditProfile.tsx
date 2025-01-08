@@ -1,22 +1,21 @@
-import NextInput from '@/common/inputs/Input';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import useFetchUserDetails from '@/hooks/customHooks/use-user-session';
-import { CalendarDate } from '@internationalized/date';
-import Loading from '@/app/loading';
-import NextDatePicker from '@/common/inputs/DatePicker';
-import SelectMenu from '@/common/inputs/SelectMenu';
-import { fetchApi } from '@/utils/helpers';
-import { IEditProfileProps, IUserDetails } from '../../types/types';
-import toast from 'react-hot-toast';
-import Button from '@/common/buttons/Button';
-import { Method } from '@/app/About/types/types';
-import { userApi } from '@/utils/apiRoutes';
+import React, { useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { CalendarDate } from "@internationalized/date";
+import { IEditProfileProps } from "../../types/types";
+import toast from "react-hot-toast";
+import {
+  useFetchUserProfileQuery,
+  useUpdateUserProfileMutation,
+} from "@/services/user";
+import Button from "@/common/buttons/Button";
+import NextInput from "@/common/inputs/Input";
+import NextDatePicker from "@/common/inputs/DatePicker";
+import SelectMenu from "@/common/inputs/SelectMenu";
+import Loading from "@/app/loading";
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;
-  const [user, setUser] = useState<IUserDetails>();
-  useFetchUserDetails(setUser);
+  const [updateUserProfile] = useUpdateUserProfileMutation();
   const {
     register,
     handleSubmit,
@@ -24,48 +23,45 @@ const EditProfile = (props: IEditProfileProps) => {
     control,
     formState: { errors },
   } = useForm({});
-  const setUserDetails = useCallback(() => {
+  const { data, isLoading, isError } = useFetchUserProfileQuery({});
+  const setUserDetails = useCallback(async () => {
     {
+      const user = data?.data;
       if (user) {
-        const dob = (user?.unsafeMetadata as IUserDetails)?.dob;
-        const day = dob?.day || new Date().getDate();
-        const year = dob?.year || new Date().getFullYear();
-        const month = dob?.month || new Date().getMonth();
-        const date = new CalendarDate(year, month + 1, day);
-        setValue('userId', user?.id);
-        setValue('firstName', user?.firstName);
-        setValue('lastName', user?.lastName);
-        setValue('gender', user?.unsafeMetadata?.gender);
-        setValue('dob', date);
-        setValue('imageUrl', user?.unsafeMetadata?.imageUrl);
-        setValue('emailAddresses', user.emailAddresses[0].emailAddress);
-        setImage(user?.unsafeMetadata?.imageUrl as string);
+        const day = ( new Date(user.dateOfBirth).getDate()) || new Date().getDate();
+        const month = ( new Date(user.dateOfBirth).getMonth()) || new Date().getMonth();
+        const year = ( new Date(user.dateOfBirth).getFullYear()) || new Date().getFullYear();
+        const calendarDate =  new CalendarDate(year, month+1, day-1);
+        setValue("userId", user?.userId);
+        setValue("firstName", user?.firstName);
+        setValue("lastName", user?.lastName);
+        setValue("gender", user?.gender);
+        setValue("dob", calendarDate);
+        setValue("imageUrl", user?.imageUrl);
+        setValue("emailAddresses", user.email);
+        setImage(user?.imageUrl as string);
       }
     }
-  }, [user]);
+  }, [data]);
 
   useEffect(() => {
     setUserDetails();
-  }, [user]);
+  }, [data]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const year = data?.dob?.year as number;
-      const month = data?.dob?.month as number;
-      const day = data?.dob?.day as number;
-      const response = await fetchApi(userApi, Method.POST, {
-        ...data,
-        imageUrl: image,
-        dob: new Date(`${year}-${month}-${day}`),
-      });
+      const response = await updateUserProfile(data).unwrap();
+
       if (response.status === 200) {
-        toast.success('profile updated successfully');
+        toast.success("Profile updated successfully");
       }
     } catch (error) {
-      console.error('Error submitting form', error);
+      console.error("Error submitting form", error);
+      toast.error("Failed to update profile");
     }
   });
-  if (!user) {
+
+  if (!data) {
     return <Loading />;
   }
   return (
@@ -81,7 +77,7 @@ const EditProfile = (props: IEditProfileProps) => {
               required
               placeholder="Enter your first name"
               errors={errors}
-              options={{ required: 'First name is required' }}
+              options={{ required: "First name is required" }}
             />
           </div>
 
@@ -94,7 +90,7 @@ const EditProfile = (props: IEditProfileProps) => {
               required
               placeholder="Enter your last name"
               errors={errors}
-              options={{ required: 'Last name is required' }}
+              options={{ required: "Last name is required" }}
             />
           </div>
 
@@ -110,10 +106,10 @@ const EditProfile = (props: IEditProfileProps) => {
               placeholder="Enter your email address"
               errors={errors}
               options={{
-                required: 'Email is required',
+                required: "Email is required",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Invalid email address',
+                  message: "Invalid email address",
                 },
               }}
             />
@@ -125,24 +121,24 @@ const EditProfile = (props: IEditProfileProps) => {
               label="Date of Birth"
               register={register}
               control={control}
-              rules={{ required: 'Date of birth is required' }}
-              error={errors.dob?.message}
+              rules={{ required: "Date of birth is required" }}
+              error={errors.dob?.message as any}
             />
           </div>
 
           <div className="flex flex-col">
             <SelectMenu
-              selectionMode={'multiple'}
+              selectionMode={"multiple"}
               name="gender"
               placeholder="select gender"
               label="Select Gender"
               control={control}
-              rules={{ required: 'Gender is required' }}
-              error={errors.gender?.message as string}
+              rules={{ required: "Gender is required" }}
+              error={errors.gender?.message as any}
               items={[
-                { id: 'male', name: 'Male' },
-                { id: 'female', name: 'Female' },
-                { id: 'other', name: 'Other' },
+                { id: "male", name: "Male" },
+                { id: "female", name: "Female" },
+                { id: "other", name: "Other" },
               ]}
             />
           </div>
