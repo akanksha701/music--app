@@ -13,9 +13,21 @@ import { FaBars } from 'react-icons/fa'; // Hamburger icon
 import { Button } from '@/components/ui/button';
 
 const navItems: IItem[] = [
-  { label: 'Pricing', route: '/Pricing' },
-  { label: 'FAQ', route: '/FAQ' },
-  { label: 'About', route: '/About' },
+  {
+    label: 'Pricing',
+    route: '/Pricing',
+    key: '',
+  },
+  {
+    label: 'FAQ',
+    route: '/FAQ',
+    key: '',
+  },
+  {
+    label: 'About',
+    route: '/About',
+    key: '',
+  },
 ];
 
 const NavItemList: React.FC = () => {
@@ -39,7 +51,6 @@ const NavItemList: React.FC = () => {
             Browse
           </Button>
 
-          {/* Hamburger Icon for Mobile */}
           <div className="sm:hidden flex items-center">
             <Button className="text-black p-2" onClick={toggleMobileMenu}>
               <FaBars size={24} />
@@ -57,7 +68,6 @@ const NavItemList: React.FC = () => {
                 Browse
               </Button>
 
-              {/* Render Mobile Navigation Items */}
               {navItems.map((item: IItem) => {
                 const isActive = pathname === item.route;
                 return (

@@ -1,14 +1,19 @@
-import React, { useMemo } from 'react';
-import { Card, CardBody } from '@nextui-org/react';
-import Image from 'next/image';
-import { IBoxTypes, IMusicProps } from '../../types/types';
-import { FaRegHeart, FaEllipsisH, FaHeart } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
-import { RootState } from '@/Redux/store';
-import { generateUrl } from '@/utils/helpers';
-import { redirect, useRouter } from 'next/navigation';
+import React, { useMemo } from "react";
+import { Card, CardBody } from "@nextui-org/react";
+import Image from "next/image";
+import { IBoxTypes, IMusicProps } from "../../types/types";
+import { FaRegHeart, FaEllipsisH, FaHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCurrentList,
+  setCurrentSongIndex,
+  setCurrentTrack,
+} from "@/Redux/features/musicPlayer/musicPlayerSlice";
+import { RootState } from "@/Redux/store";
+import { generateUrl } from "@/utils/helpers";
+import { redirect } from "next/navigation";
 import Link from 'next/link';
+import { red } from "@mui/material/colors";
 
 const Box = ({
   data,
@@ -25,7 +30,6 @@ const Box = ({
   );
 
   const GetUrl = (item : any) => {
-    console.log("name : " , name)
     switch (name) {
       case "Album": 
         return `/Album/${item._id}?type=AlbumSongs`;
@@ -38,6 +42,10 @@ const Box = ({
   }
 
   const handleMusicClick = async (index: number, music: IMusicProps) => {
+    if(name === "Album" || "Genres"){
+      redirect(GetUrl(music))
+      return 
+    }
     dispatch(setCurrentList(data));
     if (!currentTrack || currentTrack._id !== music._id) {
       dispatch(setCurrentTrack(data[index]));
@@ -51,7 +59,6 @@ const Box = ({
       <div className={className}>
         {data && data.length > 0 ? (
           data?.map((item, index) => (
-            <Link key={index} href={GetUrl(item)} >
             <Card
               key={index}
               className="bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group"
@@ -96,7 +103,6 @@ const Box = ({
                 </div>
               </CardBody>
             </Card>
-            </Link>
             
           ))
         ) : (

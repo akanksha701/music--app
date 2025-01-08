@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { MusicDocument } from "@/common/types/types";
 import { currentUser } from "@clerk/nextjs/server";
+import { db } from "../../user/route";
+import { auth } from "@/lib/firebase/firebaseAdmin/auth";
 
 export const GET = async (req: NextRequest) => {
     try {
@@ -11,8 +13,10 @@ export const GET = async (req: NextRequest) => {
 
         const type = searchParams.get("type");
         const id = searchParams.get("id");
-    const user: any = await currentUser();
-
+    const authHeader: any = req.headers.get("Authorization");
+    const token = authHeader.split(" ")[1];
+    const decodedToken = await auth.verifyIdToken(token);
+    const user = await auth.getUser(decodedToken.uid);
         if (!type || !id) {
             return NextResponse.json(
                 { message: "Both 'type' and 'id' parameters are required." },
@@ -40,7 +44,7 @@ export const GET = async (req: NextRequest) => {
         }
 
         // Query the database
-        const musics = await Music.aggregate([
+        const musics = await db.collection("musics").aggregate([
             { $match: filter },
             {
                 $lookup: {
@@ -91,7 +95,7 @@ export const GET = async (req: NextRequest) => {
                   from: 'users',
                   pipeline: [
                     {
-                      $match: { clerkUserId: user.id },
+                      $match: { clerkUserId: user.uid },
                     },
                     {
                       $project: { likedMusics: 1 },
@@ -111,7 +115,7 @@ export const GET = async (req: NextRequest) => {
                   liked: { $in: ['$_id', '$loggedInUser.likedMusics'] },
                 },
               },
-        ]);
+        ]).toArray() as MusicDocument[];
 
         if (!musics || musics.length === 0) {
             return NextResponse.json(

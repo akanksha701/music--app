@@ -2,16 +2,16 @@
 import SoundScapeLogo from '@/public/images/SoundScapeLogo.png';
 import Image from 'next/image';
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
-import useFetchUserDetails from '@/hooks/customHooks/useFetchUserDetails';
-import { useState } from 'react';
 import DropDown from './UtilityComponent/DropDown/DropDown';
 import { redirect } from 'next/navigation';
 import NavItemList from './UtilityComponent/NavItemList';
+import { useUserSession } from '@/hooks/customHooks/use-user-session';
 
-export default function NavbarPage() {
-  const [user, setUser] = useState();
-  useFetchUserDetails(setUser);
-
+export default function NavbarPage({ session }: any) {
+  const userSession: any = useUserSession(session);
+  if (!userSession) {
+    return null;
+  }
   return (
     <>
       <Navbar isBordered className="sticky top-0 z-10">
@@ -36,7 +36,7 @@ export default function NavbarPage() {
         </NavbarContent>
 
         <NavbarContent as="div" className="items-center " justify="end">
-          <DropDown />
+          <DropDown  />
         </NavbarContent>
       </Navbar>
     </>

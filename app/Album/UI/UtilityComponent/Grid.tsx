@@ -86,7 +86,7 @@ const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
             </Card>
           ))
         ) : (
-          <p>{message}</p>
+          <p>{"..."}</p>
         )}
       </div>
     );

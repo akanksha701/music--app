@@ -1,41 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server';
-import Album from '@/lib/models/Album';
-import { currentUser } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 import { db } from '../user/route';
+import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
-export async function GET(req: NextRequest) {
+
+
+export async function GET(req:Request) {
   try {
-
-    const user: any = await currentUser();
-    const queryParams = req.nextUrl.searchParams;
-    const UserId = queryParams.get('id'); // Replace with your parameter key 
-
-    const albums = await db.collection('albums').aggregate([
-      {
-        $match: {
-          isDeleted: false
-        }
-      },
-      {
-        $lookup: {
-          from: 'musics',
-          localField: 'musicIds',
-          foreignField: '_id',
-          as: 'musicDetails',
-        }
-      },
-      {
-        $match: {
-          $or: [{ musicIds: { $ne: [] } }],
+    const authHeader: any = req.headers.get('Authorization');
+    const token = authHeader.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token);
+    const user = await auth.getUser(decodedToken.uid);
+    const albums = await await db
+      .collection('albums')
+      .aggregate([
+        {
+          $lookup: {
+            from: 'musics',
+            localField: 'musicIds',
+            foreignField: '_id',
+            as: 'musicDetails',
+          },
         },
-      },
-
       {
         $lookup: {
           from: 'users',
           pipeline: [
             {
-              $match: { clerkUserId: user?.id || UserId },
+              $match: { userId: user?.uid },
             },
             {
               $project: { likedAlbums: 1 },
@@ -50,12 +41,20 @@ export async function GET(req: NextRequest) {
           preserveNullAndEmptyArrays: true,
         },
       },
-      {
-        $unwind: {
-          path: '$musicDetails',
-          preserveNullAndEmptyArrays: true,
+        {
+          $lookup: {
+            from: 'users',
+            pipeline: [
+              {
+                $match: { userId: user?.uid },
+              },
+              {
+                $project: { likedAlbums: 1 },
+              },
+            ],
+            as: 'loggedInUser',
+          },
         },
-      },
       {
         $addFields: {
           liked: { $in: ['$_id', '$loggedInUser.likedAlbums'] },

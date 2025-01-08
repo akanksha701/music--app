@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server"; 
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/app/api/user/route";
+import { auth } from "@/lib/firebase/firebaseAdmin/auth";
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   const { id } = params;
@@ -13,7 +14,10 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     }
  
 
-    const user: any = await currentUser();
+      const authHeader: any = req.headers.get("Authorization");
+      const token = authHeader.split(" ")[1];
+      const decodedToken = await auth.verifyIdToken(token);
+      const user = await auth.getUser(decodedToken.uid);
  
     const aggregatePipeline = [
       {
@@ -83,7 +87,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           from: "users",
           pipeline: [
             {
-              $match: { clerkUserId: user.id }, // Match the logged-in user's data
+              $match: { clerkUserId: user.uid }, // Match the logged-in user's data
             },
             {
               $project: { likedMusics: 1 }, // Project only likedMusics

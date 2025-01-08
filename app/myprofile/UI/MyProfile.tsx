@@ -1,25 +1,12 @@
 'use client';
 import React, { useState } from 'react';
-import { useUser } from '@clerk/nextjs';
 import AvatarUploader from '@/common/inputs/avatar-uploader';
-import { useForm } from 'react-hook-form'; 
+import { useForm } from 'react-hook-form';
 import EditProfile from './UtilityComponent/EditProfile';
 
-
 const MyProfile = () => {
-  const { isLoaded, isSignedIn ,user} = useUser();
   const { setValue } = useForm({});
   const [image, setImage] = useState('');
-  
-  
-  if (!isLoaded || !isSignedIn) {
-    return (
-      <> 
-      </>
-    );
-  }
-
-
   return (
     <div className="bg-gray-100 flex flex-col justify-center bg-cover bg-mk-bg p-6">
       <div className="w-full sm:max-w-xl sm:mx-auto">
@@ -42,7 +29,7 @@ const MyProfile = () => {
                 </p>
               </div>
             </div>
-            <EditProfile setImage={setImage} image={image}  />
+            <EditProfile setImage={setImage} image={image} />
           </div>
         </div>
       </div>

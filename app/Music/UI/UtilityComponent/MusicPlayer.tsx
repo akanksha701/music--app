@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 import {
   FaBackward,
   FaForward,
@@ -7,14 +7,14 @@ import {
   FaPause,
   FaPlay,
   FaRegHeart,
-} from "react-icons/fa";
-import { IoAddSharp } from "react-icons/io5";
-import { GoDownload } from "react-icons/go";
-import { FiShoppingCart } from "react-icons/fi";
-import VolumeIcon from "./VolumeIcon";
-import PlayerLabel from "./PlayerLabel";
-import Image from "next/image";
-import { IMusicPlayerProps } from "../../types/types";
+} from 'react-icons/fa';
+import { IoAddSharp } from 'react-icons/io5';
+import { GoDownload } from 'react-icons/go';
+import { FiShoppingCart } from 'react-icons/fi';
+import VolumeIcon from './VolumeIcon';
+import PlayerLabel from './PlayerLabel';
+import Image from 'next/image';
+import { IMusicPlayerProps } from '../../types/types';
 const MusicPlayer = ({
   currentTrack,
   isMuted,
@@ -31,7 +31,7 @@ const MusicPlayer = ({
       <div className="flex flex-row items-center flex-1 space-x-4">
         <div className="flex-shrink-0">
           <Image
-            src={currentTrack?.imageUrl || "/default-image.jpg"}
+            src={currentTrack?.imageUrl || '/default-image.jpg'}
             alt="Track Image"
             width={80}
             height={80}
@@ -40,8 +40,8 @@ const MusicPlayer = ({
         </div>
         <div className="text-left">
           <PlayerLabel
-            title={currentTrack?.name || "Unknown Track"}
-            artists={currentTrack?.artists || ""}
+            title={currentTrack?.name || 'Unknown Track'}
+            artists={currentTrack?.artists || ''}
             textColor="white"
           />
         </div>
@@ -57,7 +57,7 @@ const MusicPlayer = ({
           <FaForward size={20} color="white" onClick={onNextSong} />
         </div>
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {currentTime || "0:00"}
+          {currentTime || '0:00'}
         </p>
 
         <div
@@ -67,7 +67,7 @@ const MusicPlayer = ({
         ></div>
 
         <p className="text-small text-slate-600 bg-slate-300 rounded-md p-1">
-          {currentTrack?.duration ? currentTrack.duration : "0:00"}
+          {currentTrack?.duration ? currentTrack.duration : '0:00'}
         </p>
 
         <div className="flex flex-row items-center mt-2">

@@ -31,7 +31,8 @@ const nextConfig = {
       'images.pexels.com',
       "media.istockphoto.com" ,
       "www.gettyimages.in",
-      'encrypted-tbn0.gstatic.com'
+      'encrypted-tbn0.gstatic.com',
+      'lh3.googleusercontent.com'
     ],
     remotePatterns: [
       {

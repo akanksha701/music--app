@@ -1,12 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server'; 
-import { currentUser } from '@clerk/nextjs/server'; 
-import { db } from '../user/route';
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "../user/route";
+import { auth } from "@/lib/firebase/firebaseAdmin/auth";
 
-
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const user: any|null = await currentUser();
-    const genres = await db.collection('genres').aggregate([
+    const authHeader: any = req.headers.get('Authorization');
+    const token = authHeader.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token);
+    const user = await auth.getUser(decodedToken.uid);
+    const queryParams = req.nextUrl.searchParams;
+    const limit = parseInt(queryParams.get('limit') || "0", 10); 
+    const genres = await db
+      .collection('genres')
+      .aggregate([
         {
           $lookup: {
             from: 'genres',
@@ -26,7 +32,7 @@ export async function GET() {
             from: 'users',
             pipeline: [
               {
-                $match: { clerkUserId: user?.id },
+                $match: { userId: user?.uid },
               },
               {
                 $project: { likedGenres: 1 },
@@ -35,7 +41,7 @@ export async function GET() {
             as: 'loggedInUser',
           },
         },
-        
+
         {
           $unwind: {
             path: '$loggedInUser',
@@ -54,11 +60,11 @@ export async function GET() {
             playCount: 1,
             genre: '$name',
             genreId: '$_id',
-            imageUrl: '$imageUrl' ,
-            liked:1
-          
+            imageUrl: '$imageUrl',
+            liked: 1,
           },
         },
+        { $limit: limit },
         {
           $group: {
             _id: '$_id',
@@ -76,7 +82,7 @@ export async function GET() {
           },
         },
         {
-          $sort: { totalPlayTime: -1,_id:1 },
+          $sort: { totalPlayTime: -1, _id: 1 },
         },
         {
           $addFields: {
@@ -95,10 +101,10 @@ export async function GET() {
             musics: 1,
             imageUrl: 1,
             liked: 1,
-            
           },
         },
-      ]).toArray();
+      ])
+      .toArray();
     return NextResponse.json({ status: 200, data: genres });
   } catch (error) {
     console.error('Error:', error);

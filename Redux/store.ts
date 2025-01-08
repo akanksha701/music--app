@@ -10,12 +10,14 @@ import { albumApi } from "@/services/album";
 import { likeApi } from "@/services/like";
 import { audioApi } from "@/services/audio";
 import newReleaseSlice from "./features/newRelease";
+import sessionSlice from "./features/user/sessionSlice"
 import musicPlayerSlice from "./features/musicPlayer/musicPlayerSlice";
 export const store = configureStore({
   reducer: {
     userReducer: userSlice,
     newRelease: newReleaseSlice,
     musicPlayerSlice: musicPlayerSlice,
+    session: sessionSlice,
     [userApi.reducerPath]: userApi.reducer,
     [playlistApi.reducerPath]: playlistApi.reducer,
     [artistApi.reducerPath]: artistApi.reducer,

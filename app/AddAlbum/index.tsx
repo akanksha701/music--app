@@ -11,34 +11,32 @@ const Index = () => {
   // Get the 'albumId' query parameter
   const searchParams = useSearchParams();
   const albumId = searchParams.get('albumId');
- 
+
   const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
   const [prevData, setPrevData] = useState<{}>({});
   const recordsPerPage = 5;
   const { page } = usePagination();
-  const { data: albumData , isLoading : isAllAlbumLoading } = useGetAlbumsQuery({ page, recordsPerPage });
-  const { data: musicData , isLoading : isMusicLoading } = useGetMusicsOfArtistsQuery("6756a19a5833867b6aba2a54");
- 
-  const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId, {
+  const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery("6756a19a5833867b6aba2a54");
+    const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId, {
     skip: !albumId, // Skip the request if no albumId is provided
   });
- 
+
   useEffect(() => {
-    if (albumByIdData) { 
+    if (albumByIdData) {
       setPrevData({
         albumDescription: albumByIdData.data.description,
         albumId: albumId,
         albumImage: albumByIdData.data.imageUrl,
-        albumMusicIds: albumByIdData.data.musicIds ,
+        albumMusicIds: albumByIdData.data.musicDetails,
         albumName: albumByIdData.data.name,
         albumPrice: albumByIdData.data.Price,
       });
-      const Songs = albumByIdData.data.musicIds.map((song: MusicData) => song._id);
+      const Songs = albumByIdData.data.musicDetails.map((song: MusicData) => song._id);
       setSelectedSongs(Songs || []);
     }
   }, [albumByIdData]);
 
-  if (isAlbumLoading || !albumData || isMusicLoading || isAllAlbumLoading ) return <></>;
+  if (isAlbumLoading  || isMusicLoading ) return <></>;
 
   return (
     <div className="flex justify-center items-start min-h-screen pt-8">

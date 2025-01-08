@@ -1,11 +1,8 @@
-import { clerkClient } from '@clerk/nextjs/server';
-import { NextRequest, NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
-import User from '@/lib/models/User';
-import { getUser } from '@/app/actions/getUser';
-import { redirect } from 'next/navigation';
-import { getCalendarDate, getDateObject } from '@/utils/helpers';
 import { getDb } from '@/lib/DbConnection/dbConnection';
+import { NextResponse } from 'next/server';
+import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { getDateObject } from '@/utils/helpers';
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -13,60 +10,67 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 export const db = await getDb();
 
-export async function POST(req: NextRequest) {
+export async function GET(req: Request) {
   try {
-    const body = await req.json();
-    if (!body.userId) {
-      return redirect('/Signin');
-    }
+    const authHeader: any = req.headers.get('Authorization');
+    const token = authHeader.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token);
+    const user = await auth.getUser(decodedToken.uid);
+    const userRef = await db.collection('users').findOne({ userId: user?.uid });
 
-    const params = {
-      firstName: body?.firstName,
-      lastName: body?.lastName,
-      unsafeMetadata: {
-        gender: body?.gender,
-        dob: await getCalendarDate(body?.dob),
-        imageUrl: body?.imageUrl,
-      },
-    };
-    const client = await clerkClient();
-    const updatedUser = await client.users.updateUser(body.userId, params);
-    if (updatedUser) {
-      User.findOneAndUpdate(
-        { clerkUserId: body?.userId },
-        {
-          gender: body?.gender,
-          dateOfBirth: await getDateObject(body?.dob),
-          imageUrl: body?.imageUrl,
-          firstName: body?.firstName,
-          lastName: body?.lastName,
-        },
-        { new: true }
-      );
-
-      return NextResponse.json({ data: updatedUser, status: 200 });
-    }
+    return NextResponse.json({
+      status: 200,
+      message: 'User data fetched successfully',
+      data: userRef,
+    });
   } catch (error) {
-    console.log(error);
-    return NextResponse.json({ error: error, status: 500 });
+    console.error('Error:', error);
+    return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }
 
-export async function GET() {
+export async function PUT(req: Request) {
   try {
-    const user = await getUser();
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    const authHeader: any = req.headers.get('Authorization');
+    const token = authHeader.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token);
+    const user = await auth.getUser(decodedToken.uid);
+
+    const body = await req.json();
+
+    const { email, firstName, lastName, dob, gender, imageUrl } = body;
+
+    const updatedData = {
+      ...(email && { email: email }),
+      ...(gender && { gender: gender }),
+      ...(firstName && { firstName: firstName }),
+      ...(lastName && { lastName: lastName }),
+      ...(imageUrl && { imageUrl: imageUrl }),
+      ...(dob && {
+        dateOfBirth: new Date(dob.year, dob.month - 1, dob.day + 1),
+      }),
+    };
+
+    const userRef = await db
+      .collection('users')
+      .updateOne({ userId: user?.uid }, { $set: updatedData });
+
+    if (userRef.modifiedCount === 0) {
+      return NextResponse.json({
+        status: 404,
+        message: 'No changes made or user not found',
+      });
     }
-    return NextResponse.json(user);
+
+    return NextResponse.json({
+      status: 200,
+      message: 'User details updated successfully',
+      data: updatedData,
+    });
   } catch (error) {
-    console.error('Error fetching user:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('Error updating user details:', error);
+    return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }

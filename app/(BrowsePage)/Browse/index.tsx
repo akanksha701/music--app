@@ -10,12 +10,7 @@ import HeadLine from "./UI/UtilityComponent/HeadLine";
 import MusicPlayCard from "./UI/UtilityComponent/MusicPlayCard";
 import Box from "./UI/UtilityComponent/Card";
 import { IMusicProps } from "./types/types";
-import { fetchApi } from "@/utils/helpers";
-import { Method } from "@/app/About/types/types";
 import { useToggleLikeMutation } from "@/services/like";
-import { getTopHits, userApi } from "@/utils/apiRoutes";
-import { getUser } from "@/app/actions/getUser";
-import { useLazyFetchUserProfileQuery } from "@/services/user";
 
 const SkeletonGrid = ({ count }: { count: number }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -46,6 +41,8 @@ const Index = ({ initialData }: { initialData: any }) => {
     console.log("DATA : "  , data)
   }, [data]);
 
+  
+ 
   return (
     <div className="flex flex-col">
       {/* Top Hits Section */}
