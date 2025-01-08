@@ -1,25 +1,25 @@
-"use client";
-import { removeSession } from "@/app/actions/auth";
-import { IItem } from "@/app/Navbar/types/types";
-import Modal from "@/common/modal/modal";
-import Tooltip from "@/common/tooltip/Tooltip";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { HoverCard } from "@/components/ui/hover-card";
-import { useUserSession } from "@/hooks/customHooks/use-user-session";
-import { signOutWithGoogle } from "@/lib/firebase/auth";
-import { useFetchUserProfileQuery } from "@/services/user";
-import { useClerk, useUser } from "@clerk/nextjs";
-import { DropdownItem, DropdownMenu } from "@nextui-org/react";
-import { redirect } from "next/navigation";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+'use client';
+import { removeSession } from '@/app/actions/auth';
+import { IItem } from '@/app/Navbar/types/types';
+import Modal from '@/common/modal/modal';
+import Tooltip from '@/common/tooltip/Tooltip';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { HoverCard } from '@/components/ui/hover-card';
+import { useUserSession } from '@/hooks/customHooks/use-user-session';
+import { signOutWithGoogle } from '@/lib/firebase/auth';
+import { useFetchUserProfileQuery } from '@/services/user';
+import { useClerk, useUser } from '@clerk/nextjs';
+import { DropdownItem, DropdownMenu } from '@nextui-org/react';
+import { redirect } from 'next/navigation';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const menus: any = [
-  { label: "My Profile", key: "my_profile", route: "/MyProfile" },
-  { label: "Add Language", key: "add_language", route: "/AddLanguage" },
-  { label: "Add Genre", key: "add_genre", route: "/AddGenre" },
-  { label: "Add Album", key: "add_album", route: "/AddAlbum" },
-  { label: "Add Music", key: "add_music", route: "/AddMusic" },
+  { label: 'My Profile', key: 'my_profile', route: '/MyProfile' },
+  { label: 'Add Language', key: 'add_language', route: '/AddLanguage' },
+  { label: 'Add Genre', key: 'add_genre', route: '/AddGenre' },
+  { label: 'Add Album', key: 'add_album', route: '/AddAlbum' },
+  { label: 'Add Music', key: 'add_music', route: '/AddMusic' },
 ];
 const DropDownMenu = () => {
   const {
@@ -44,7 +44,7 @@ const DropDownMenu = () => {
         <DropdownItem key="profile" className="h-14 gap-2 ">
           <p className="font-semibold ">Signed in as</p>
           <p className="font-semibold ">
-            {name.firstName + " " + name?.lastName}
+            {name.firstName + ' ' + name?.lastName}
           </p>
         </DropdownItem>
 

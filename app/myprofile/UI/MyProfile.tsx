@@ -1,12 +1,12 @@
-"use client";
-import React, { useState } from "react";
-import AvatarUploader from "@/common/inputs/avatar-uploader";
-import { useForm } from "react-hook-form";
-import EditProfile from "./UtilityComponent/EditProfile";
+'use client';
+import React, { useState } from 'react';
+import AvatarUploader from '@/common/inputs/avatar-uploader';
+import { useForm } from 'react-hook-form';
+import EditProfile from './UtilityComponent/EditProfile';
 
 const MyProfile = () => {
   const { setValue } = useForm({});
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   return (
     <div className="bg-gray-100 flex flex-col justify-center bg-cover bg-mk-bg p-6">
       <div className="w-full sm:max-w-xl sm:mx-auto">
@@ -17,7 +17,7 @@ const MyProfile = () => {
                 <AvatarUploader
                   onChange={(url) => {
                     setImage(url as string);
-                    setValue("imageUrl", url as string);
+                    setValue('imageUrl', url as string);
                   }}
                   value={image}
                 />

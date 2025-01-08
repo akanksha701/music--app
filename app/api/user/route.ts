@@ -1,8 +1,8 @@
-import { v2 as cloudinary } from "cloudinary";
-import { getDb } from "@/lib/DbConnection/dbConnection";
-import { NextResponse } from "next/server";
-import { auth } from "@/lib/firebase/firebaseAdmin/auth";
-import { getDateObject } from "@/utils/helpers";
+import { v2 as cloudinary } from 'cloudinary';
+import { getDb } from '@/lib/DbConnection/dbConnection';
+import { NextResponse } from 'next/server';
+import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { getDateObject } from '@/utils/helpers';
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -14,27 +14,27 @@ export const db = await getDb();
 
 export async function GET(req: Request) {
   try {
-    const authHeader: any = req.headers.get("Authorization");
-    const token = authHeader.split(" ")[1];
+    const authHeader: any = req.headers.get('Authorization');
+    const token = authHeader.split(' ')[1];
     const decodedToken = await auth.verifyIdToken(token);
     const user = await auth.getUser(decodedToken.uid);
-    const userRef = await db.collection("users").findOne({ userId: user?.uid });
+    const userRef = await db.collection('users').findOne({ userId: user?.uid });
 
     return NextResponse.json({
       status: 200,
-      message: "User data fetched successfully",
+      message: 'User data fetched successfully',
       data: userRef,
     });
   } catch (error) {
-    console.error("Error:", error);
-    return NextResponse.json({ status: 500, message: "Error occurred" });
+    console.error('Error:', error);
+    return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }
 
 export async function PUT(req: Request) {
   try {
-    const authHeader: any = req.headers.get("Authorization");
-    const token = authHeader.split(" ")[1];
+    const authHeader: any = req.headers.get('Authorization');
+    const token = authHeader.split(' ')[1];
     const decodedToken = await auth.verifyIdToken(token);
     const user = await auth.getUser(decodedToken.uid);
 
@@ -54,23 +54,23 @@ export async function PUT(req: Request) {
     };
 
     const userRef = await db
-      .collection("users")
+      .collection('users')
       .updateOne({ userId: user?.uid }, { $set: updatedData });
 
     if (userRef.modifiedCount === 0) {
       return NextResponse.json({
         status: 404,
-        message: "No changes made or user not found",
+        message: 'No changes made or user not found',
       });
     }
 
     return NextResponse.json({
       status: 200,
-      message: "User details updated successfully",
+      message: 'User details updated successfully',
       data: updatedData,
     });
   } catch (error) {
-    console.error("Error updating user details:", error);
-    return NextResponse.json({ status: 500, message: "Error occurred" });
+    console.error('Error updating user details:', error);
+    return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }

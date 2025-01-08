@@ -1,7 +1,7 @@
-"use server";
-import React from "react";
-import Navbar from "./UI/Navbar";
-import { getSession } from "../actions/session";
+'use server';
+import React from 'react';
+import Navbar from './UI/Navbar';
+import { getSession } from '../actions/session';
 
 const Index = async () => {
   const session = await getSession();

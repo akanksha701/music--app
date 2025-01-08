@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { capitalizeTitle, saveFiles } from "@/utils/helpers";
-import { ALBUM_IMAGE_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from "../music/route";
-import { db } from "../user/route";
+import { NextRequest, NextResponse } from 'next/server';
+import { capitalizeTitle, saveFiles } from '@/utils/helpers';
+import { ALBUM_IMAGE_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from '../music/route';
+import { db } from '../user/route';
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const body = Object.fromEntries(formData);
     const image = (body.image as Blob) || null;
     const { name, description } = body;
-    const newAlbum = await db.collection("albums").insertOne({
+    const newAlbum = await db.collection('albums').insertOne({
       name: await capitalizeTitle(name.toString()),
       description: description,
       imageUrl: image ? await saveFiles(image, ALBUM_IMAGE_UPLOAD_DIR) : null,
@@ -17,17 +17,17 @@ export async function POST(req: NextRequest) {
     if (newAlbum) {
       return NextResponse.json({
         status: 200,
-        message: "new album created successfully",
+        message: 'new album created successfully',
         data: newAlbum,
       });
     }
     return NextResponse.json(
-      { error: "error while creating genres" },
+      { error: 'error while creating genres' },
       { status: 400 }
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
@@ -37,13 +37,13 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
 
-    const page: number = parseInt(url.searchParams.get("page") || "1", 10);
+    const page: number = parseInt(url.searchParams.get('page') || '1', 10);
     const recordsPerPage: number = parseInt(
-      url.searchParams.get("recordsPerPage") || "0",
+      url.searchParams.get('recordsPerPage') || '0',
       10
     );
     if (!recordsPerPage || recordsPerPage) {
-      const albumList = await db.collection("albums").find({}).toArray();
+      const albumList = await db.collection('albums').find({}).toArray();
       return NextResponse.json({
         status: 200,
         data: albumList,
@@ -54,13 +54,13 @@ export async function GET(req: Request) {
     const limit = recordsPerPage;
 
     const albumList = await db
-      .collection("albums")
+      .collection('albums')
       .find({})
       .skip(skip)
       .limit(limit)
       .toArray();
 
-    const totalAlbums = await db.collection("albums").countDocuments();
+    const totalAlbums = await db.collection('albums').countDocuments();
 
     return NextResponse.json({
       status: 200,
@@ -74,7 +74,7 @@ export async function GET(req: Request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

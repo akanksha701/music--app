@@ -1,11 +1,11 @@
-"use client";
-import SoundScapeLogo from "@/public/images/SoundScapeLogo.png";
-import Image from "next/image";
-import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
-import DropDown from "./UtilityComponent/DropDown/DropDown";
-import { redirect } from "next/navigation";
-import NavItemList from "./UtilityComponent/NavItemList";
-import { useUserSession } from "@/hooks/customHooks/use-user-session";
+'use client';
+import SoundScapeLogo from '@/public/images/SoundScapeLogo.png';
+import Image from 'next/image';
+import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
+import DropDown from './UtilityComponent/DropDown/DropDown';
+import { redirect } from 'next/navigation';
+import NavItemList from './UtilityComponent/NavItemList';
+import { useUserSession } from '@/hooks/customHooks/use-user-session';
 
 export default function NavbarPage({ session }: any) {
   const userSession: any = useUserSession(session);
@@ -18,7 +18,7 @@ export default function NavbarPage({ session }: any) {
         <NavbarContent justify="start">
           <NavbarBrand
             className="mr-4 cursor-pointer "
-            onClick={() => redirect("/")}
+            onClick={() => redirect('/')}
           >
             <Image
               src={SoundScapeLogo}

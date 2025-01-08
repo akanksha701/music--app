@@ -1,25 +1,25 @@
-"use client";
-import React from "react";
-import Loading from "../loading";
-import TabComp from "@/common/tab/TabComp";
-import { usePagination } from "@/hooks/usePagination";
-import { useGetLanguageQuery } from "@/services/languages";
-import { useGetArtistsQuery } from "@/services/artists";
-import { useGetGenreQuery } from "@/services/genre";
-import { useGetAlbumsQuery } from "@/services/album";
-import HeadLine from "../(BrowsePage)/Browse/UI/UtilityComponent/HeadLine";
-import Box from "../(BrowsePage)/Browse/UI/UtilityComponent/Card";
-import { IMusicProps, TAGS } from "../(BrowsePage)/Browse/types/types";
-import { useGetMusicsByUserIdQuery } from "@/services/music";
-import { Input } from "@/components/ui/input";
-import { debounce } from "lodash";
-import useSearch from "@/hooks/useSearch";
-import AddMusic from "./UI/UtilityComponent/Addmusic";
+'use client';
+import React from 'react';
+import Loading from '../loading';
+import TabComp from '@/common/tab/TabComp';
+import { usePagination } from '@/hooks/usePagination';
+import { useGetLanguageQuery } from '@/services/languages';
+import { useGetArtistsQuery } from '@/services/artists';
+import { useGetGenreQuery } from '@/services/genre';
+import { useGetAlbumsQuery } from '@/services/album';
+import HeadLine from '../(BrowsePage)/Browse/UI/UtilityComponent/HeadLine';
+import Box from '../(BrowsePage)/Browse/UI/UtilityComponent/Card';
+import { IMusicProps, TAGS } from '../(BrowsePage)/Browse/types/types';
+import { useGetMusicsByUserIdQuery } from '@/services/music';
+import { Input } from '@/components/ui/input';
+import { debounce } from 'lodash';
+import useSearch from '@/hooks/useSearch';
+import AddMusic from './UI/UtilityComponent/Addmusic';
 
 const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
-  const { data: musicData } = useGetMusicsByUserIdQuery({ slug: "" });
+  const { data: musicData } = useGetMusicsByUserIdQuery({ slug: '' });
   const { data: languageData } = useGetLanguageQuery({});
   const { data: artistData } = useGetArtistsQuery({});
   const { data: genreData } = useGetGenreQuery({});
@@ -36,8 +36,8 @@ const Index = () => {
   );
   const tabsData = [
     {
-      value: "mymusics",
-      label: "My Musics",
+      value: 'mymusics',
+      label: 'My Musics',
       content: (
         <>
           <div className="flex items-center mb-6 space-x-20">
@@ -64,15 +64,15 @@ const Index = () => {
             name={TAGS.MUSIC}
             data={filteredMusicData}
             showLikeIcon={false}
-            message={filteredMusicData?.length === 0 ? "No musics found" : ""}
+            message={filteredMusicData?.length === 0 ? 'No musics found' : ''}
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
           />
         </>
       ),
     },
     {
-      value: "createmusic",
-      label: "Create music",
+      value: 'createmusic',
+      label: 'Create music',
       content: (
         <div className="flex flex-col items-center justify-items-center">
           <AddMusic
