@@ -5,7 +5,7 @@ import Browse from "./index";
 import { fetchApi } from "@/utils/helpers";
 import { Method } from "@/app/About/types/types";
 import { getTopAlbums, getTopGenres, getTopHits, music } from "@/utils/apiRoutes";
-import { currentUser } from "@clerk/nextjs/server";
+
 import { cookies } from 'next/headers';
 async function fetchUserId() { 
   const cookieStore = await cookies();

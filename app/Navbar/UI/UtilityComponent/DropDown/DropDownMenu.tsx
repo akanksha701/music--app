@@ -27,7 +27,7 @@ const DropDownMenu = () => {
     await signOutWithGoogle();
     await removeSession();
     localStorage.clear()
-    deleteCookie("accessToken")
+    deleteCookie("accessToken");
   };
   const name: any = useSelector<any | any>(
     (state) => state?.session?.loggedInUser

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { capitalizeTitle, saveFiles } from "@/utils/helpers";
 import { ALBUM_IMAGE_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from "../music/route";
 import mongoose from "mongoose";
-import { currentUser } from "@clerk/nextjs/server";
+
 import path from "path";
 import fs from 'fs/promises';
 import { db } from "../user/route"; 

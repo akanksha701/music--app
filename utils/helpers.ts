@@ -1,8 +1,6 @@
 "use server";
 import path from "path";
 import { Method } from "@/app/About/types/types";
-import { Roles } from "../globals";
-import { auth } from "@clerk/nextjs/server";
 import { CalendarDate } from "@internationalized/date";
 import cloudinary from "cloudinary";
 import queryString from "query-string";
@@ -51,10 +49,7 @@ export async function getDateObject(date: CalendarDate) {
   return new Date(`${year}-${month}-${day}`);
 }
 
-export default async function checkRole(role: Roles) {
-  const { sessionClaims } = await auth();
-  return sessionClaims?.metadata.role === role;
-}
+
 
 export async function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);

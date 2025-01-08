@@ -82,7 +82,7 @@ const Index = ({ initialData }: { initialData: any }) => {
         <SkeletonGrid count={8} />
       ) : (
         <MusicPlayCard
-          data={data.newReleases.data.data.slice(0, 8)}
+          data={data?.newReleases?.data?.data?.slice(0, 8)}
           name={TAGS.NEW_RELEASE}
           handleLikeToggle={(itemId) =>
             handleLikeToggle(itemId, TAGS.MUSIC, toggleLike, currentTrack as IMusicProps, dispatch)

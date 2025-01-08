@@ -1,10 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
-import Music from '@/lib/models/Music';
-import { currentUser } from '@clerk/nextjs/server';
-import path from 'path';
-import fs from 'fs';
-import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
-import { lastValueFrom } from 'rxjs';
+import { NextResponse } from 'next/server';
 import { db } from '../user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
