@@ -1,11 +1,10 @@
 'use server';
 
-import React from "react";
-import Browse from "./index";
-import { fetchApi } from "@/utils/helpers";
-import { Method } from "@/app/About/types/types";
-import { getTopAlbums, getTopGenres, getTopHits, music } from "@/utils/apiRoutes";
-import { currentUser } from "@clerk/nextjs/server";
+import React from 'react';
+import Browse from './index';
+import { fetchApi } from '@/utils/helpers';
+import { Method } from '@/app/About/types/types';
+import { getTopAlbums, getTopGenres, getTopHits, music } from '@/utils/apiRoutes';
 import { cookies } from 'next/headers';
 async function fetchUserId() { 
   const cookieStore = await cookies();
@@ -27,14 +26,15 @@ const Page = async () => {
       ]);
   
       return { topHits, topAlbums, newReleases, topGenres };
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("Error fetching data on the server:", error);
       return { topHits: [], topAlbums: [], newReleases: [], topGenres: [] };
     }
   };
   
-
   const data = await getData();
+ 
 
   return (
     <Browse

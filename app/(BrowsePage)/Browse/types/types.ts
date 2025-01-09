@@ -20,19 +20,21 @@ export const LIST_NAME = {
 export interface IMusicProps {
   _id?: string;
   name?: string | null;
-  artists?: string;
-  audioUrl?: string;
-  currency?: string;
+  language?: string | null;
+  duration?: string | number;
   description?: string;
-  email?: string;
-  imageUrl?: string;
-  price?: number;
+  artists?: string;
   liked?: boolean;
-  duration?: number;
-  peaks?: Float32Array[];
-  genre?:string,
-  album?:string,
-  language?:string
+  email?: string | null;
+  price?: number;
+  currency?: string;
+  imageUrl?: string;
+  audioUrl?: string;
+  peaks?: Float32Array[] | Float32Array | null;
+  playCount?: number;
+  genre?: string;
+  album?: string;
+  createdAt?: string;
 }
 export interface IBoxTypes {
   data?: Array<{ _id: string; name: string; imageUrl?: string | null; liked: boolean }>;
@@ -67,3 +69,59 @@ export interface IMemoizedMusicCard {
   handleLikeToggle?: (id: string , name: string) => void;
   NAME:string | undefined;
 }
+
+
+
+
+type Music = {
+  _id: string;
+  name: string;
+  language?: string | null;
+  duration: string | number;
+  description: string;
+  artists: string;
+  liked: boolean;
+  email?: string | null;
+  price: number;
+  currency: string;
+  imageUrl: string;
+  audioUrl: string;
+  peaks?: Float32Array | null;
+  playCount?: number;
+  createdAt?: string;
+};
+
+type Album = {
+  _id: string;
+  name: string;
+  liked: boolean;
+  imageUrl: string;
+  description: string;
+  count: number;
+};
+
+type Genre = {
+  _id: string;
+  name: string;
+  imageUrl: string;
+  liked: boolean;
+  musics: { id: string }[];
+  totalPlayTime: number;
+};
+
+type ApiResponse<T> = {
+  status: number;
+  data: T;
+};
+
+type MusicApiResponse = ApiResponse<Music[]>;
+type AlbumApiResponse = ApiResponse<Album[]>;
+type GenreApiResponse = ApiResponse<Genre[]>;
+type NewReleasesResponse = ApiResponse<{ data: Music[] }>;
+
+export interface MusicDataResponse {
+  topHits: MusicApiResponse;
+  topAlbums: AlbumApiResponse;
+  newReleases: NewReleasesResponse;
+  topGenres: GenreApiResponse;
+};

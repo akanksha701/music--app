@@ -1,15 +1,12 @@
 'use client';
-import Image from 'next/image';
 import React from 'react';
-import { Card, CardBody } from '@nextui-org/react';
 import { IMusicPlayCardProps, IMusicProps } from '../../types/types';
-import { FaEllipsisH, FaHeart, FaRegHeart, FaPlay } from 'react-icons/fa'; // Import play icon
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setCurrentList,
   setCurrentSongIndex,
   setCurrentTrack,
-} from '@/Redux/features/musicPlayer/musicPlayerSlice'; // Adjust the path as necessary
+} from '@/Redux/features/musicPlayer/musicPlayerSlice';  
 import { redirect } from 'next/navigation';
 import { generateUrl } from '@/utils/helpers';
 import { RootState } from '@/Redux/store';

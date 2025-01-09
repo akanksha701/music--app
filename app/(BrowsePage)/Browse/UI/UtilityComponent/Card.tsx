@@ -1,4 +1,4 @@
-import React, {    useMemo,   } from 'react';
+import React from 'react';
 import { IBoxTypes, IMusicProps } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,7 +15,7 @@ const Box = ({
   data,
   className,
   title,
-  name : NAME,
+  name: NAME,
   showLikeIcon,
   message,
   handleLikeToggle,
@@ -25,31 +25,31 @@ const Box = ({
     (state) => state.musicPlayerSlice.currentTrack
   );
 
-  const GetUrl = (item: any) => {
+  const GetUrl = (item: IMusicProps) => {
     switch (NAME) {
-      case 'Album':
-        return `/Album/${item._id}?type=AlbumSongs`;
-      case 'Genres':
-        return `/Genre/${item._id}?type=GenreSongs`;
-      default:
-        return '';
+    case 'Album':
+      return `/Album/${item._id}?type=AlbumSongs`;
+    case 'Genres':
+      return `/Genre/${item._id}?type=GenreSongs`;
+    default:
+      return '';
     }
 
   };
 
   const handleMusicClick = async (index: number, music: IMusicProps) => {
     if (NAME === 'Album' || 'Genres') {
-      redirect(GetUrl(music))
+      redirect(GetUrl(music));
     }
     dispatch(setCurrentList(data));
     if (!currentTrack || currentTrack._id !== music._id) {
-      dispatch(setCurrentTrack(data![index]));
+      dispatch(setCurrentTrack(data?.[index]));
       dispatch(setCurrentSongIndex(index));
     }
     const newUrl = await generateUrl('/Music', { type: NAME || '' });
     redirect(newUrl);
   };
- 
+
 
   return (
     <>
@@ -58,15 +58,15 @@ const Box = ({
         {data && data.length > 0 ? (
           data?.map((item, index) => {
 
-            return (<MemoizedCard 
+            return (<MemoizedCard
               key={index}
-              index={index} 
+              index={index}
               item={item}
               handleMusicClick={handleMusicClick}
               showLikeIcon={showLikeIcon}
               handleLikeToggle={handleLikeToggle}
               NAME={NAME}
-            />)
+            />);
           })
         ) : (
           <p>{message}</p>
