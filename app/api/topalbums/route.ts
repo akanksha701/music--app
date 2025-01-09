@@ -46,20 +46,6 @@ export async function GET(req:Request) {
           preserveNullAndEmptyArrays: true,
         },
       },
-        {
-          $lookup: {
-            from: 'users',
-            pipeline: [
-              {
-                $match: { userId: user?.uid },
-              },
-              {
-                $project: { likedAlbums: 1 },
-              },
-            ],
-            as: 'loggedInUser',
-          },
-        },
       {
         $addFields: {
           liked: { $in: ["$_id", { $ifNull: ["$loggedInUser.likedAlbums", []] }] }, 

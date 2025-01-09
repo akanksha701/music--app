@@ -49,7 +49,9 @@ export const handleLikeToggle = async (
       };
       dispatch && dispatch(setCurrentTrack(updatedTrack));
     }
+    return true
   } catch (error) {
     console.error("Error toggling like status:", error);
+    return false
   }
 };

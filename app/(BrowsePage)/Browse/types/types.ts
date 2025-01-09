@@ -48,3 +48,22 @@ export interface IMusicPlayCardProps {
   name: string;
   handleLikeToggle: (id: string, name: string) => void;
 }
+
+export interface IMemoizedCard {
+  index: number;
+  item: { _id: string; name: string; imageUrl?: string | null; liked: boolean };
+  handleMusicClick: any;
+  showLikeIcon?: boolean | undefined;
+  handleLikeToggle?: (id: string, name: string) => void;
+  NAME:string | undefined;
+}
+
+
+export interface IMemoizedMusicCard {
+  index: number;
+  item: IMusicProps;
+  handleMusicClick: any;
+  showLikeIcon?: boolean | undefined;
+  handleLikeToggle?: (id: string , name: string) => void;
+  NAME:string | undefined;
+}

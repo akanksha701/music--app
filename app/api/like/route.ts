@@ -22,7 +22,7 @@ async function handleMusicLike(user: any, id: string, userId: string) {
 }
 
 async function handleAlbumLike(user: any, id: string, userId: string) {
-  const alreadyLiked = user.likedMusics.some((likedAlbums: Types.ObjectId) =>
+  const alreadyLiked = user.likedAlbums.some((likedAlbums: Types.ObjectId) =>
     likedAlbums.equals(new mongoose.Types.ObjectId(id))
   );
   const updatedUser = await db.collection('users').findOneAndUpdate(
@@ -66,7 +66,6 @@ export async function POST(req: Request) {
       .collection('users')
       .findOne({ userId: userDetails?.uid });
     if (!user) {
-      return NextResponse.json({ message: 'User not found.' }, { status: 404 });
       return NextResponse.json({ message: 'User not found.' }, { status: 404 });
     }
 

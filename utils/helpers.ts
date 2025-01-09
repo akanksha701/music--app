@@ -185,7 +185,6 @@ export const saveFiles = async (file: Blob, folderName: string) => {
       if (process.platform === 'win32') {
         relativePath = relativePath.replace(/\\/g, '/');
       }
-      console.log("relativePath  : ", relativePath)
 
       return relativePath;
     } catch (err) {

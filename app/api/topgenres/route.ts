@@ -11,101 +11,100 @@ export async function GET(req: NextRequest) {
     const queryParams = req.nextUrl.searchParams;
     const limit = parseInt(queryParams.get('limit') || "0", 10); 
     const genres = await db
-      .collection('genres')
-      .aggregate([
-        {
-          $lookup: {
-            from: 'genres',
-            localField: 'musicDetails.genreId',
-            foreignField: '_id',
-            as: 'genreDetails',
-          },
+    .collection('genres')
+    .aggregate([
+      {
+        $lookup: {
+          from: 'genres',
+          localField: 'musicDetails.genreId',
+          foreignField: '_id',
+          as: 'genreDetails',
         },
-        {
-          $unwind: {
-            path: '$genreDetails',
-            preserveNullAndEmptyArrays: true,
-          },
+      },
+      {
+        $unwind: {
+          path: '$genreDetails',
+          preserveNullAndEmptyArrays: true,
         },
-        {
-          $lookup: {
-            from: 'users',
-            pipeline: [
-              {
-                $match: { userId: user?.uid },
-              },
-              {
-                $project: { likedGenres: 1 },
-              },
-            ],
-            as: 'loggedInUser',
-          },
-        },
-
-        {
-          $unwind: {
-            path: '$loggedInUser',
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $addFields: {
-            // liked: { $in: ["$_id", "$loggedInUser.likedGenres"] },
-            liekd : {$in: ["$_id", { $ifNull: ["$loggedInUser.likedMusics", []] }]}
-          },
-        },
-        {
-          $project: {
-            _id: 1,
-            name: '$musicDetails.name',
-            playCount: 1,
-            genre: '$name',
-            genreId: '$_id',
-            imageUrl: '$imageUrl',
-            liked: 1,
-          },
-        },
-        { $limit: limit },
-        {
-          $group: {
-            _id: '$_id',
-            name: { $first: '$genre' },
-            imageUrl: { $first: '$imageUrl' },
-            liked: { $first: '$liked' },
-            musics: {
-              $push: {
-                id: '$_id',
-                playCount: '$playCount',
-                name: '$name',
-              },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          pipeline: [
+            {
+              $match: { userId: user?.uid },
             },
-            totalPlayTime: { $sum: '$playCount' },
+            {
+              $project: { likedGenres: 1 },
+            },
+          ],
+          as: 'loggedInUser',
+        },
+      },
+      {
+        $unwind: {
+          path: '$loggedInUser',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          liked: { $in: ["$_id", { $ifNull: ["$loggedInUser.likedGenres", []] }] }, // Liked logic from album pipeline
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: '$musicDetails.name',
+          playCount: 1,
+          genre: '$name',
+          genreId: '$_id',
+          imageUrl: '$imageUrl',
+          liked: 1, // Ensure liked is included in the output
+        },
+      },
+      { $limit: limit },
+      {
+        $group: {
+          _id: '$_id',
+          name: { $first: '$genre' },
+          imageUrl: { $first: '$imageUrl' },
+          liked: { $first: '$liked' },
+          musics: {
+            $push: {
+              id: '$_id',
+              playCount: '$playCount',
+              name: '$name',
+            },
           },
+          totalPlayTime: { $sum: '$playCount' },
         },
-        {
-          $sort: { totalPlayTime: -1, _id: 1 },
-        },
-        {
-          $addFields: {
-            musics: {
-              $sortArray: {
-                input: '$musics',
-                sortBy: { playCount: -1 },
-              },
+      },
+      {
+        $sort: { totalPlayTime: -1, _id: 1 },
+      },
+      {
+        $addFields: {
+          musics: {
+            $sortArray: {
+              input: '$musics',
+              sortBy: { playCount: -1 },
             },
           },
         },
-        {
-          $project: {
-            name: 1,
-            totalPlayTime: 1,
-            musics: 1,
-            imageUrl: 1,
-            liked: 1,
-          },
+      },
+      {
+        $project: {
+          name: 1,
+          totalPlayTime: 1,
+          musics: 1,
+          imageUrl: 1,
+          liked: 1, // Keep liked in the final projection
         },
-      ])
-      .toArray();
+      },
+    ])
+    .toArray();
+    
     return NextResponse.json({ status: 200, data: genres });
   } catch (error) {
     console.error('Error:', error);
