@@ -9,7 +9,6 @@ import { useGetAllGenreQuery } from '@/services/genre';
 import { Breadcrumb } from '@/common/BreadCrumb/BreadCrumb';
 
 import SmallGrid from "@/common/grid/SmallGrid";
-import TabComp from "@/common/tab/TabComp";
 import { AddMoreButton } from "../LanguageAndGenre/UtilityComponent/NavigateButton";
 import Loading from "./loading";
 

@@ -60,7 +60,7 @@ export async function POST(req: Request) {
 
       const albumIds = Array.isArray(body?.album) ? body?.album : [body?.album];
 
-      const objectIds = albumIds.map((id: any) => id.toString());
+      const objectIds = albumIds.map((id) => id.toString());
       const updatedAlbum = await db
         .collection("albums")
         .updateMany(

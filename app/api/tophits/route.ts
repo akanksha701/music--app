@@ -161,6 +161,7 @@ export async function GET(req: Request) {
             pipeline: [
               {
                 $match: { userId: user?.uid },
+                $match: { userId: user?.uid },
               },
               {
                 $project: { likedMusics: 1 },

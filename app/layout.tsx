@@ -6,6 +6,9 @@ import NavbarPage from './Navbar/index';
 import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Nunito } from 'next/font/google';
+import { cookies } from 'next/headers';
+import store from '@/Redux/store';
+import { setSession } from '@/Redux/features/user/sessionSlice';
 
 
 // Load Nunito font

@@ -1,6 +1,6 @@
 import React from "react";
 import { ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils"; // Use your utility function for class merging
+import { cn } from "@/lib/utils/utils"; // Use your utility function for class merging
 import Link from "next/link";
 
 export function Breadcrumb({ items, className } : any) {

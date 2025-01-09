@@ -1,15 +1,15 @@
-import { NextResponse } from 'next/server';
-import { TAGS } from '@/app/(BrowsePage)/Browse/types/types';
-import mongoose, { Types } from 'mongoose';
-import { db } from '../user/route';
-import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { NextResponse } from "next/server";
+import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
+import mongoose, { Types } from "mongoose";
+import { db } from "../user/route";
+import { verifyToken } from "@/lib/utils/authUtils";
 
 async function handleMusicLike(user: any, id: string, userId: string) {
   const alreadyLiked = user.likedMusics.some((likedMusic: Types.ObjectId) =>
     likedMusic.equals(new mongoose.Types.ObjectId(id))
   );
 
-  const updatedUser = await db.collection('users').findOneAndUpdate(
+  const updatedUser = await db.collection("users").findOneAndUpdate(
     { userId },
     {
       [alreadyLiked ? '$pull' : '$addToSet']: {
@@ -22,10 +22,10 @@ async function handleMusicLike(user: any, id: string, userId: string) {
 }
 
 async function handleAlbumLike(user: any, id: string, userId: string) {
-  const alreadyLiked = user.likedAlbums.some((likedAlbums: Types.ObjectId) =>
+  const alreadyLiked = user.likedMusics.some((likedAlbums: Types.ObjectId) =>
     likedAlbums.equals(new mongoose.Types.ObjectId(id))
   );
-  const updatedUser = await db.collection('users').findOneAndUpdate(
+  const updatedUser = await db.collection("users").findOneAndUpdate(
     { userId },
     {
       [alreadyLiked ? '$pull' : '$addToSet']: {
@@ -42,7 +42,7 @@ async function handleGenreLike(user: any, id: string, userId: string) {
   const alreadyLiked = user.likedGenres.some((likedGenres: Types.ObjectId) =>
     likedGenres.equals(new mongoose.Types.ObjectId(id))
   );
-  const updatedUser = await db.collection('users').findOneAndUpdate(
+  const updatedUser = await db.collection("users").findOneAndUpdate(
     { userId },
     {
       [alreadyLiked ? '$pull' : '$addToSet']: {
@@ -56,14 +56,11 @@ async function handleGenreLike(user: any, id: string, userId: string) {
 
 export async function POST(req: Request) {
   try {
-    const authHeader: any = req.headers.get('Authorization');
-    const token = authHeader.split(' ')[1];
-    const decodedToken = await auth.verifyIdToken(token);
-    const userDetails = await auth.getUser(decodedToken.uid);
+    const { user: userDetails, decodedToken } = await verifyToken(req);
     const { id, name } = await req.json();
 
     const user = await db
-      .collection('users')
+      .collection("users")
       .findOne({ userId: userDetails?.uid });
     if (!user) {
       return NextResponse.json({ message: 'User not found.' }, { status: 404 });
@@ -71,36 +68,36 @@ export async function POST(req: Request) {
 
     let updatedUser;
     switch (name) {
-    case TAGS.MUSIC:
-      updatedUser = await handleMusicLike(
-        user,
-        id,
+      case TAGS.MUSIC:
+        updatedUser = await handleMusicLike(
+          user,
+          id,
           userDetails?.uid as string
-      );
-      break;
-    case TAGS.NEW_RELEASE:
-      updatedUser = await handleMusicLike(
-        user,
-        id,
+        );
+        break;
+      case TAGS.NEW_RELEASE:
+        updatedUser = await handleMusicLike(
+          user,
+          id,
           userDetails?.uid as string
-      );
-      break;
+        );
+        break;
 
-    case TAGS.ALBUMS:
-      updatedUser = await handleAlbumLike(
-        user,
-        id,
+      case TAGS.ALBUMS:
+        updatedUser = await handleAlbumLike(
+          user,
+          id,
           userDetails?.uid as string
-      );
-      break;
+        );
+        break;
 
-    case TAGS.GENRE:
-      updatedUser = await handleGenreLike(
-        user,
-        id,
+      case TAGS.GENRE:
+        updatedUser = await handleGenreLike(
+          user,
+          id,
           userDetails?.uid as string
-      );
-      break;
+        );
+        break;
 
     default:
       return NextResponse.json(

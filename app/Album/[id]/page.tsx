@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button'; 
@@ -15,6 +16,7 @@ import toast from 'react-hot-toast';
 import { Album } from '../types/types';
 import MusicListContainer from '@/common/MusicPlayer/MusicListContainer';
 import Loading from './loading';
+import { useFetchUserProfileQuery } from '@/services/user';
 
 
 const AlbumPage = ({ params }: { params: any }) => {
@@ -23,7 +25,19 @@ const AlbumPage = ({ params }: { params: any }) => {
   } = use(params);
   const AlbumId = Params.id;
 
+  let userId : string;
+  
+  const { data, isLoading : isLoadingUser, isError : isErrorUser } = useFetchUserProfileQuery({});
+
+  if(!isLoadingUser && !isErrorUser){
+    userId = data?.data?._id ;
+  }
+
+
+  
+
   const { data: albumData, isLoading, isError } = useGetAlbumByIdQuery(AlbumId);
+
   const [deleteAlbum] = useDeleteAlbumMutation();
   const router = useRouter();
 
@@ -51,17 +65,23 @@ const AlbumPage = ({ params }: { params: any }) => {
   }
 
   const album : Album  = albumData.data;  // The album data you needs
+ 
+ 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
 
 
+
+
       <div className="edit-container w-full flex justify-end gap-4">
 
-
+ 
         <Link href={{
           pathname: '/AddAlbum',
           query: { albumId: album._id }, // Pass albumId as a query parameter
         }}>
+
+          
           <Button
             className="border-2 border-[#9333ea] flex justify-between items-center text-white bg-[#9333ea] rounded-full hover:bg-white hover:text-black hover:border-[#9333ea]">
             <FaEdit
@@ -134,7 +154,7 @@ const AlbumPage = ({ params }: { params: any }) => {
           <div className="lg:col-span-2 space-y-6">
             <h3 className="text-2xl font-semibold p-4">Music Tracks</h3>
             
-              <MusicListContainer AlbumId={AlbumId}  ></MusicListContainer>
+            <MusicListContainer AlbumId={AlbumId}  ></MusicListContainer>
 
           </div>
         </div>

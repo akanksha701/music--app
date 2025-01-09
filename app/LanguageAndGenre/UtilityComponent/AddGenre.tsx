@@ -49,6 +49,7 @@ const AddGenre = (props: IAddGenreProps) => {
               placeholder="Enter your name"
               register={register}
               options={{ required: 'Name is required' }}
+              options={{ required: 'Name is required' }}
               errors={errors}
             />
           </div>
@@ -61,6 +62,7 @@ const AddGenre = (props: IAddGenreProps) => {
               label="Description"
               placeholder="Enter music description"
               register={register}
+              options={{ required: 'Description is required' }}
               options={{ required: 'Description is required' }}
               errors={errors}
             />

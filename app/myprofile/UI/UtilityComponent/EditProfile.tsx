@@ -11,6 +11,7 @@ import Button from '@/common/buttons/Button';
 import NextInput from '@/common/inputs/Input';
 import NextDatePicker from '@/common/inputs/DatePicker';
 import SelectMenu from '@/common/inputs/SelectMenu';
+import Loading from '@/app/loading';
 import { setLoggedInUser } from '@/Redux/features/user/sessionSlice';
 import { useDispatch } from 'react-redux';
 import { useRadioGroup } from '@nextui-org/react';
@@ -25,7 +26,7 @@ const EditProfile = (props: IEditProfileProps) => {
     control,
     formState: { errors },
   } = useForm({});
-  const { data, isLoading, isError } = useFetchUserProfileQuery(undefined);
+  const { data, isLoading, isError } = useFetchUserProfileQuery({});
   const dispatch = useDispatch();
   const setUserDetails = useCallback(async () => {
     {
@@ -79,7 +80,7 @@ const EditProfile = (props: IEditProfileProps) => {
   });
 
   if (!data || isLoading) {
-    return <></>;
+    return <Loading />;
   }
   return (
     <>

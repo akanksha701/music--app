@@ -14,10 +14,9 @@ import {
   useGetAllMusicsQuery,
   useGetTopHitsMusicsQuery,
   useToggleLikeMutation,
-} from "@/services/like";
-import { IMusicProps, TAGS } from "@/app/(BrowsePage)/Browse/types/types";
-import { useSearchParams } from "next/navigation";
-import { useFetchAudioPeaksQuery } from "@/services/audio";
+} from '@/services/like';
+import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+import { useSearchParams } from 'next/navigation';
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();

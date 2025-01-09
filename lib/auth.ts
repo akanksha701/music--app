@@ -1,19 +1,11 @@
-import {
-  type User,
-  GoogleAuthProvider,
-  signInWithPopup,
-  onAuthStateChanged as _onAuthStateChanged,
-} from 'firebase/auth';
 
-import { redirect } from 'next/navigation';
-import { db } from '@/app/api/user/route';
+import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import { firebaseAuth } from './firebase/config';
 import { checkIfUserExists } from './firebase/userActions';
 
 export async function onAuthStateChanged(
-  callback: (authUser: User | null) => void
-) {
-  return _onAuthStateChanged(firebaseAuth, callback);
+firebaseAuth: unknown, callback: (authUser: User | null) => void) {
+  return onAuthStateChanged(firebaseAuth, callback);
 }
 
 export async function signInWithGoogle(): Promise<string | null> {
@@ -39,4 +31,4 @@ export const saveUser = async (user: any | null) => {
   }
 };
 
-export { User };
+export type { User };

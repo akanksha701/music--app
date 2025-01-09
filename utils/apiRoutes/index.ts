@@ -9,7 +9,7 @@ export const getArtistDetails='/api/artist';
 export const getAlbumDetails='/api/album';
 export const music='/api/music';
 export const getTopHits='/api/tophits';
-export const getTopAlbums='api/topalbums';
-export const getTopGenres='api/topgenres';
-export const like='api/like';
+export const getTopAlbums='/api/topalbums';
+export const getTopGenres='/api/topgenres';
+export const like='/api/like';
 
