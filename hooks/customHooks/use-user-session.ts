@@ -37,6 +37,7 @@ export function useUserSession(InitSession: string | null) {
 
           const userData = await saveUser(user);
           setUserUid(userData as IUserDetails);
+          console.log('userData',userData)
           dispatch(setLoggedInUser(userData));
 
         } catch (error) {
