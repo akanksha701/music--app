@@ -1,15 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '../user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
-
-
-
 export const getFormattedDurationStage = () => {
   return {
     $addFields: {
       formattedDuration: {
         $concat: [
-          // Calculate Hours
           {
             $toString: {
               $floor: {
@@ -18,7 +14,6 @@ export const getFormattedDurationStage = () => {
             },
           },
           ':',
-          // Calculate Minutes
           {
             $toString: {
               $cond: {
@@ -64,7 +59,6 @@ export const getFormattedDurationStage = () => {
             },
           },
           ':',
-          // Calculate Seconds (without fractional part)
           {
             $toString: {
               $cond: {
@@ -110,9 +104,9 @@ export const getFormattedDurationStage = () => {
 
 export async function GET(req: Request) {
   try {
-    const authHeader: any = req.headers.get("Authorization");
-    const token = authHeader.split(" ")[1];
-    const decodedToken = await auth.verifyIdToken(token);
+    const authHeader: string|null = req.headers.get('Authorization');
+    const token = authHeader?.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token as string);
     const user = await auth.getUser(decodedToken.uid);
     const musics = await db
       .collection('musics')
@@ -125,7 +119,7 @@ export async function GET(req: Request) {
               {
                 $match: {
                   $expr: {
-                    $in: ["$userId", { $ifNull: ["$$artistsIds", []] }] // Ensure it's always an array
+                    $in: ['$userId', { $ifNull: ['$$artistsIds', []] }] // Ensure it's always an array
                   },
                 },
               },
@@ -141,7 +135,7 @@ export async function GET(req: Request) {
               {
                 $match: {
                   $expr: {
-                    $in: ["$_id", { $ifNull: ["$$artistsIds", []] }] // Ensure it's always an array
+                    $in: ['$_id', { $ifNull: ['$$artistsIds', []] }] // Ensure it's always an array
                   },
                 },
               },
@@ -171,7 +165,7 @@ export async function GET(req: Request) {
         },
         {
           $addFields: {
-            liked: { $in: ["$_id", { $ifNull: ["$loggedInUser.likedMusics", []] }] }, // Ensure likedMusics is an array
+            liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedMusics', []] }] }, // Ensure likedMusics is an array
           },
         },
         {
@@ -229,8 +223,7 @@ export async function GET(req: Request) {
   
     return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ status: 500, message: 'Error occurred' });
+    return NextResponse.json({ status: 500,error:error, message: 'Error occurred' });
   }
 }
 

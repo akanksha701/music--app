@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand/react';
 
 interface States {
   language: string | null;
@@ -6,13 +6,14 @@ interface States {
 }
 
 interface Actions {
-  setSelectedLanguage: (value: string,index:number) => void;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  setSelectedLanguage: Function
 }
 
 export const useNewRelease = create<States & Actions>((set) => ({
   language: null,
   activeButtonIndex:null,
-  setSelectedLanguage: (value,index) => {
+  setSelectedLanguage: (value:string,index:number) => {
     set({ language: value,activeButtonIndex:index });
   },
 }));

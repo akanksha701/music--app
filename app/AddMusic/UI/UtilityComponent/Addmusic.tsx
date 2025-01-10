@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 import { IAddMusicProps } from '../../types/types';
 import NextInput from '@/common/inputs/Input';
-import { FieldErrors, useForm } from 'react-hook-form';
 import NextTextArea from '@/common/inputs/Textarea';
 import MultiSelect from '@/common/inputs/MultiSelect';
 import FileUploadInput from '@/common/inputs/FileUploadInput';
@@ -12,6 +11,7 @@ import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
 import NextDatePicker from '@/common/inputs/DatePicker';
 import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
+import { useForm } from 'react-hook-form';
 
 const AddMusic = (props: IAddMusicProps) => {
   const { genreList, languageList, artistList, albumList } = props;
@@ -38,15 +38,20 @@ const AddMusic = (props: IAddMusicProps) => {
         toast.success(res.message);
       }
     } catch (error) {
-      toast.error('Error while creating music');
+      if (error instanceof Error) {
+        toast.error(error?.message as string);
+      } else {
+        toast.error('unknown error occured');
+      }
     }
   };
-
+console.log('artistList',artistList)
   return (
     <div className="min-h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 p-6 bg-white rounded-lg shadow-lg w-full sm:w-[800px] md:w-[900px] lg:w-[600px] max-w-full mx-2 sm:mx-4"
+        className="space-y-6 p-6 bg-white rounded-lg shadow-lg w-full sm:w-[800px] md:w-[900px] 
+        lg:w-[600px] max-w-full mx-2 sm:mx-4"
       >
         <div className="flex flex-col w-full space-y-6">
           <div className="flex flex-col">

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'; 
+import { NextResponse } from 'next/server'; 
 import { db } from '../../user/route';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
 
     const genreList = await db.collection('genres').find({ isDeleted: false }).toArray();
@@ -20,8 +20,9 @@ export async function GET(req: NextRequest) {
     );
   } catch (error) {
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: error },
       { status: 500 }
+   
     );
   }
 }

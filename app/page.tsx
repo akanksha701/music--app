@@ -1,5 +1,5 @@
 import React from 'react'; 
-import Marketing from './home/UI/Marketing';
+import Marketing from './Home/UI/Marketing';
 
 const Page = () => {
   return <Marketing />;

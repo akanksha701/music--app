@@ -7,51 +7,29 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { Button } from '@/components/ui/button';
 import AddAlbumForm from './AlbumForm';
-import { Song } from '../types/types';
-
+import { IAlbumDialogProps } from '../types/types';
 export default function AlbumDialog({
   openDialog,
   handleCloseDialog,
   selectedSongs,
   formId,
   defaultData
-}: {
-    openDialog: boolean,
-    handleCloseDialog: () => void,
-    selectedSongs: Song[],
-    formId: string,
-    defaultData: {
-        albumDescription: string;
-        albumId: string;
-        albumImage: string;
-        albumMusicIds: string[];
-        albumName: string;
-        albumPrice: number;
-    }
-}) {
-
-
-
+}: IAlbumDialogProps) {
   const handleSubmitForm = () => {
     const form = document.getElementById(formId);
     if (form) {
       form.dispatchEvent(new Event('submit', { bubbles: true }));
     }
   };
-
   return <Dialog open={openDialog} onClose={handleCloseDialog} >
-
     <div className="flex justify-between gap-4 mx-4 items-center   " >
-
       <div className="flex  justify-start items-center">
         <DialogTitle>Create Album</DialogTitle>
         <p className="text-xs text-gray-500">{selectedSongs.length} songs </p>
       </div>
-
       <CloseIcon onClick={handleCloseDialog} className="cursor-pointer mr-4 text-2xl  " ></CloseIcon>
 
     </div>
-
     <DialogContent>
       <AddAlbumForm formId={formId} selectedSongs={selectedSongs} handleCloseDialog={handleCloseDialog} defaultData={defaultData} ></AddAlbumForm>
     </DialogContent>

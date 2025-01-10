@@ -1,36 +1,31 @@
 'use client';
 import React from 'react';
-import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+import { IMusicProps} from '@/app/(BrowsePage)/Browse/types/types';
 import PlayerLabel from './PlayerLabel';
 import { IoAddSharp } from 'react-icons/io5';
 import { FaHeart, FaPause, FaPlay, FaRegHeart } from 'react-icons/fa';
 import { GoDownload } from 'react-icons/go';
 import { FiShoppingCart } from 'react-icons/fi';
-import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 import { RootState } from '@/Redux/store';
-import { handleLikeToggle } from '@/hooks/useLike';
-import { useToggleLikeMutation } from '@/services/like';
+import { useSelector } from 'react-redux';
 
 const MusicList = ({
   data,
-  handleLikeClick,
   handlePlayTrack,
 }: {
   data: IMusicProps[];
   handleLikeClick: () => void;
-  handlePlayTrack: (track: IMusicProps) => void;
+  handlePlayTrack:(track:IMusicProps)=>void
 }) => {
   const searchParams = useSearchParams();
   const listName = searchParams.get('type');
-  const currentTrackId = useSelector<any, string | null>(
-    (state) => state.musicPlayerSlice.currentTrack?._id
+  const currentTrackId = useSelector<RootState, string | null>(
+    (state) => state.musicPlayerSlice.currentTrack?._id as string
   );
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
-  const dispatch = useDispatch();
-  const [toggleLike] = useToggleLikeMutation();
 
   const renderedTracks =
     data && data.length > 0 ? (
@@ -59,7 +54,7 @@ const MusicList = ({
             <div
               key={`${track._id}`}
               id={`waveform_${track._id}`} // Use consistent ID format
-              className="cursor-pointer  w-full sm:w-32 md:w-1/2 hidden md:block" // Hidden on mobile, block on md and larger
+              className="cursor-pointer  w-full sm:w-32 md:w-1/2 hidden md:block" 
             ></div>
 
             <p className="text-xs text-slate-600 bg-transparent rounded-md my-2 ml-4 mx-5">

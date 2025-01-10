@@ -1,16 +1,17 @@
-import Cover from './UtilityComponent/Cover';
-import Section from './UtilityComponent/Section';
-import PopularTrackCoverPage from './UtilityComponent/PopularTrackCoverPage';
+import Cover from '@/app/Home/UI/UtilityComponent/Cover';
+import Section from '@/app/Home/UI/UtilityComponent//Section';
+import PopularTrackCoverPage from '@/app/Home/UI/UtilityComponent/PopularTrackCoverPage';
 import Questions from '@/app/FAQ/UI/Questions';
 import { fetchApi } from '@/utils/helpers';
-import ReadMore from './UtilityComponent/ReadMore';
-import Views from './UtilityComponent/Views';
+import ReadMore from '@/app/Home/UI/UtilityComponent/ReadMore';
+import Views from '@/app/Home/UI/UtilityComponent/Views';
 import { Method } from '@/app/About/types/types';
 import { getGenreDetails, getMarketingDetails } from '@/utils/apiRoutes';
-import CategoryCard from './UtilityComponent/CategoryCard';
-import Artists from './UtilityComponent/Artists';
-import Next from './UtilityComponent/Next';
-import CreatorsAndArtists from './UtilityComponent/CreatorsAndArtists';
+import CategoryCard from '@/app/Home/UI/UtilityComponent//CategoryCard';
+import Artists from '@/app/Home/UI/UtilityComponent//Artists';
+import Next from'@/app/Home/UI/UtilityComponent/Next';
+import CreatorsAndArtists from '@/app/Home/UI/UtilityComponent/CreatorsAndArtists';
+
 const Marketing = async () => {
   const data = await fetchApi(getMarketingDetails, Method.GET);
   const genre = await fetchApi(getGenreDetails, Method.GET);

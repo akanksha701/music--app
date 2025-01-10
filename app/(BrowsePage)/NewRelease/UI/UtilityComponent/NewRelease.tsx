@@ -5,7 +5,7 @@ import { handleLikeToggle } from '@/hooks/useLike';
 import { RootState } from '@/Redux/store';
 import { useGetAllMusicsQuery, useToggleLikeMutation } from '@/services/like';
 import { useSearchParams } from 'next/navigation';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 const NewRelease = () => {
@@ -22,25 +22,21 @@ const NewRelease = () => {
   });
 
 
-  const memorizedNewRelease = useMemo(
-    () => (
-      <>
-        <div className="mt-3">
-          <Box
-            title={`New ${language || '' + 'Songs'}`}
-            data={newReleases?.data?.data}
-            className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            name={TAGS.MUSIC}
-            showLikeIcon={true}
-            message={'musics not found'}
-            handleLikeToggle={(itemId) =>handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
-          />
-        </div>
-      </>
-    ),
-    [newReleases]
-  );
-  return <> {memorizedNewRelease}</>;
+  
+  return <> 
+    <div className="mt-3">
+      <Box
+        title={`New ${language || '' + 'Songs'}`}
+        data={newReleases?.data?.data}
+        className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+        name={TAGS.MUSIC}
+        showLikeIcon={true}
+        message={'musics not found'}
+        handleLikeToggle={(itemId) =>
+          handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
+      />
+    </div>
+  </>;
 };
 
 export default NewRelease;

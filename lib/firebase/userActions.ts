@@ -1,7 +1,8 @@
 'use server';
 import { db } from '@/app/api/user/route';
+import { IUserDetails } from '@/app/MyProfile/types/types';
 
-export async function createUser(user: any) {
+export async function createUser(user:IUserDetails) {
   try {
     const newUser = await db.collection('users').insertOne({
       userId: user?.uid,
@@ -15,17 +16,18 @@ export async function createUser(user: any) {
 
     if (newUser.acknowledged) {
       return {
-        ...user,  // Spread the user data
-        _id: newUser.insertedId,  // Add the insertedId from MongoDB
+        ...user, // Spread the user data
+        _id: newUser.insertedId, // Add the insertedId from MongoDB
       };
     }
   } catch (error) {
-    console.error('Error creating user in MongoDB', error);
-    return null;
+    if (error instanceof Error) {
+      return null;
+    }
   }
 }
 
-export async function checkIfUserExists(user: any) {
+export async function checkIfUserExists(user: IUserDetails) {
   try {
     const existedUser = await db
       .collection('users')
@@ -47,7 +49,8 @@ export async function checkIfUserExists(user: any) {
       return user;
     }
   } catch (error) {
-    console.error('Error checking user existence', error);
-    return false;
+    if (error instanceof Error) {
+      return false;
+    }
   }
 }

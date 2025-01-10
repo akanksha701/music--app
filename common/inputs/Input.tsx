@@ -1,20 +1,20 @@
-"use client";
-import React from "react";
-import { FieldError, FieldValues } from "react-hook-form";
-import { INextInputProps } from "../types/types";
-import { Input as NextUIInput } from "@/components/ui/input";
+'use client';
+import React from 'react';
+import { FieldError, FieldValues } from 'react-hook-form';
+import { INextInputProps } from '../types/types';
+import { Input as NextUIInput } from '@/components/ui/input';
 
 const NextInput = <T extends FieldValues>({
   label,
   placeholder,
   required,
-  type = "text",
+  type = 'text',
   id,
   register,
   errors,
   disabled,
   options,
-  className = "",
+  className = '',
   defaultValue, // New defaultValue prop
 }: INextInputProps<T> & { defaultValue?: string | number | undefined }) => {
   const hasError = errors[id] as FieldError;
@@ -23,13 +23,13 @@ const NextInput = <T extends FieldValues>({
       {label && (
         <label
           style={{
-            fontFamily: "Montserrat, sans-serif",
-            fontWeight: "500",
-            fontSize: "14px",
+            fontFamily: 'Montserrat, sans-serif',
+            fontWeight: '500',
+            fontSize: '14px',
           }}
           htmlFor={id}
           className={`block mb-2 ${
-            hasError ? "text-red-500" : "text-gray-900"
+            hasError ? 'text-red-500' : 'text-gray-900'
           }`}
         >
           {label}
@@ -38,16 +38,17 @@ const NextInput = <T extends FieldValues>({
       )}
       <NextUIInput
         id={id}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {...register(id as any, options)}
         placeholder={placeholder}
         type={type}
         disabled={disabled}
-        defaultValue={defaultValue} // Pass defaultValue to the input
+        defaultValue={defaultValue} 
         className={`p-2 border rounded-md shadow-sm w-full ${
-          hasError ? "" : "border-green-300"
+          hasError ? '' : 'border-green-300'
         } ${className}`}
         style={{
-          outline: hasError ? "1px solid red" : "none",
+          outline: hasError ? '1px solid red' : 'none',
         }}
       />
       {hasError && (

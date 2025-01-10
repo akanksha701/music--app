@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
+/* eslint-disable max-lines */
 'use client';
 
 import * as React from 'react';

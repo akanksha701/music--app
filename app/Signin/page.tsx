@@ -3,15 +3,10 @@ import React from 'react';
 import { createSession } from '../actions/auth';
 import { signInWithGoogle } from '@/lib/firebase/auth';
 import { FcGoogle } from 'react-icons/fc';
-
 const Page = () => {
   const handleSignIn = async () => {
-    try {
-      const userUid = await signInWithGoogle();
-      await createSession(userUid as string);
-    } catch (error) {
-      console.error('Sign in error:', error);
-    }
+    const userUid = await signInWithGoogle();
+    await createSession(userUid as string);
   };
 
   return (

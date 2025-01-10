@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import { TAGS } from '@/app/(BrowsePage)/Browse/types/types';
 import mongoose, { Types } from 'mongoose';
 import { db } from '../user/route';
-import { auth } from '@/lib/firebase/firebaseAdmin/auth';
-
+import { verifyToken } from '@/lib/utils/authUtils';
+// import { UserRecord } from 'firebase-admin/auth';
 async function handleMusicLike(user: any, id: string, userId: string) {
   const alreadyLiked = user.likedMusics.some((likedMusic: Types.ObjectId) =>
     likedMusic.equals(new mongoose.Types.ObjectId(id))
@@ -56,10 +56,7 @@ async function handleGenreLike(user: any, id: string, userId: string) {
 
 export async function POST(req: Request) {
   try {
-    const authHeader: any = req.headers.get('Authorization');
-    const token = authHeader.split(' ')[1];
-    const decodedToken = await auth.verifyIdToken(token);
-    const userDetails = await auth.getUser(decodedToken.uid);
+    const { user: userDetails } = await verifyToken(req);
     const { id, name } = await req.json();
 
     const user = await db
@@ -67,40 +64,22 @@ export async function POST(req: Request) {
       .findOne({ userId: userDetails?.uid });
     if (!user) {
       return NextResponse.json({ message: 'User not found.' }, { status: 404 });
-      return NextResponse.json({ message: 'User not found.' }, { status: 404 });
     }
 
-    let updatedUser;
     switch (name) {
     case TAGS.MUSIC:
-      updatedUser = await handleMusicLike(
-        user,
-        id,
-          userDetails?.uid as string
-      );
+      await handleMusicLike(user, id, userDetails?.uid as string);
       break;
     case TAGS.NEW_RELEASE:
-      updatedUser = await handleMusicLike(
-        user,
-        id,
-          userDetails?.uid as string
-      );
+      await handleMusicLike(user, id, userDetails?.uid as string);
       break;
 
     case TAGS.ALBUMS:
-      updatedUser = await handleAlbumLike(
-        user,
-        id,
-          userDetails?.uid as string
-      );
+      await handleAlbumLike(user, id, userDetails?.uid as string);
       break;
 
     case TAGS.GENRE:
-      updatedUser = await handleGenreLike(
-        user,
-        id,
-          userDetails?.uid as string
-      );
+      await handleGenreLike(user, id, userDetails?.uid as string);
       break;
 
     default:
@@ -112,12 +91,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       status: 200,
-      data: {},  // Removed data from the response ( Updated user object )
+      data: {}, 
     });
   } catch (error) {
     return NextResponse.json(
-      { message: 'Something went wrong.' },
-      { status: 500 }
+      { message: 'Something went wrong.' ,
+        status: 500,error:error }
+    
     );
   }
 }

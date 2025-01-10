@@ -38,7 +38,7 @@ const Sidebar = () => {
   const [playlistName, setPlaylistName] = useState('');
   const pathname = usePathname();
   const [createPlaylist] = useCreatePlayListMutation();
-  const { data: Playlists, isLoading } = useGetPlayListsQuery({});
+  const { data: Playlists } = useGetPlayListsQuery({});
 
   const handleOpenDialog = () => setIsDialogOpen(true);
 
@@ -46,7 +46,7 @@ const Sidebar = () => {
 
   const handleCreatePlaylist = async () => {
     if (playlistName.trim()) {
-      const response = await createPlaylist({ name: playlistName, user: '675ab45ad8496e8fd5fb50db' });
+      await createPlaylist({ name: playlistName, user: '675ab45ad8496e8fd5fb50db' });
       toast.success('Playlist created successfully!');
       setPlaylistName('');
       handleCloseDialog();
@@ -87,7 +87,8 @@ const Sidebar = () => {
       </div>
 
       <Button
-        className="border-1 border-electric-purple text-electric-purple rounded-full hover:bg-electric-purple hover:text-white"
+        className={`border-1 border-electric-purple text-electric-purple 
+          rounded-full hover:bg-electric-purple hover:text-white`}
         onClick={handleOpenDialog}
       >
         <GoPlus size={50} /> New Playlist
@@ -96,7 +97,7 @@ const Sidebar = () => {
       {Playlists?.data?.length > 0 && (
         <div className="my-2">
           <p className="text-slate-600">Playlists</p>
-          {Playlists.data.map((item: any, index: any) => (
+          {Playlists.data.map((item: {_id:string,name:string}, index: number) => (
             <div key={index} className="flex items-center my-2  ">
               <span className="ml-2 border-slate-300 rounded-md p-1 border-2">
                 <Link href={`/Playlist/${item._id}`}>

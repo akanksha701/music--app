@@ -1,19 +1,11 @@
-import React from 'react'
-
-import { Breadcrumb } from '@/common/BreadCrumb/BreadCrumb';
+import React from 'react';
 import AllLanguageIndex from './Index';
 const Page = () => {
-
   return (
     <>
-
-      <AllLanguageIndex></AllLanguageIndex>
-
-
-
-
+      <AllLanguageIndex />
     </>
-  )
-}
+  );
+};
 
 export default Page;

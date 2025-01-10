@@ -6,12 +6,13 @@ import NavbarPage from './Navbar/index';
 import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Nunito } from 'next/font/google';
+import { Suspense } from 'react';
+import Loading from './AddAlbum/loading';
 
 
-// Load Nunito font
 const nunito = Nunito({
   subsets: ['latin'],
-  weight: ['300', '400', '600', '700'], // Define the weights you need
+  weight: ['300', '400', '600', '700'],
 });
 
 export default async function RootLayout({
@@ -30,13 +31,12 @@ export default async function RootLayout({
         <body className={`${nunito.className} min-h-screen flex flex-col`}>
           <Toaster position="top-center" />
           <Tooltip />
-          {/* <Modal /> */}
-          {/* <Suspense fallback={<Loading />}> */}
+          <Suspense fallback={<Loading />}>
             <NavbarPage />
             <main className="flex-grow">{children}</main>
             <MusicPlayerContainer />
             <Footer data={data?.footerContent} />
-          {/* </Suspense> */}
+          </Suspense>
         </body>
       </html>
     </ReduxProvider>

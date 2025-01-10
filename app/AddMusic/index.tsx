@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import TabComp from '@/common/tab/TabComp';
-import { usePagination } from '@/hooks/usePagination';
 import { useGetLanguageQuery } from '@/services/languages';
 import { useGetArtistsQuery } from '@/services/artists';
 import { useGetGenreQuery } from '@/services/genre';
@@ -16,8 +15,6 @@ import useSearch from '@/hooks/useSearch';
 import AddMusic from './UI/UtilityComponent/Addmusic';
 
 const Index = () => {
-  const recordsPerPage = 5;
-  const { page, setPage } = usePagination();
   const { data: musicData } = useGetMusicsByUserIdQuery({ slug: '' });
   const { data: languageData } = useGetLanguageQuery({});
   const { data: artistData } = useGetArtistsQuery({});

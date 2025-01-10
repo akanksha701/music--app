@@ -1,36 +1,37 @@
-'use client'; 
+'use client';
 import React from 'react';
-
 import NextInput from '@/common/inputs/Input';
-import { useForm } from 'react-hook-form';
 import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast';
 import { useAddAlbumMutation, useUpdateAlbumMutation } from '@/services/album';
 import { useRouter } from 'next/navigation';
-import { AddAlbumFormProps, ErrorResponseType } from '../types/types';
+import { IAddAlbumFormProps, ErrorResponseType } from '../types/types';
+import {   SubmitHandler, useForm } from 'react-hook-form';
 
- 
-const AddAlbumForm = (props: AddAlbumFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
-
+const AddAlbumForm = (props: IAddAlbumFormProps) => {
+  const { register, handleSubmit, control, formState: { errors } } = useForm<FormDataType>();
   const [addAlbum] = useAddAlbumMutation();
   const [updateAlbum] = useUpdateAlbumMutation();
   const router = useRouter();
-
   const { selectedSongs, defaultData } = props;
   const SelectedLanguages = selectedSongs.map((song) => song.language);
   const SelectedGenre = selectedSongs.map((song) => song.genre);
   const SelectedMusic = selectedSongs.map((song) => song.id);
 
- 
-  const onSubmit = async (data: any) => {
+  type FormDataType = {
+    imageUrl?: File | string|null;
+    name: string;
+    description: string;
+    price: string;
+    genreIds: string[]; 
+    songIds: string[];
+    languageIds: string[];
+  };
+  const onSubmit: SubmitHandler<FormDataType>= async (data)=> {
     const formData = new FormData();
-    formData.append('image', data.imageUrl);
+    if (data.imageUrl instanceof File) {
+      formData.append('image', data.imageUrl);  
+    }
     formData.append('name', data.name);
     formData.append('description', data.description);
     formData.append('price', data.price);
@@ -40,34 +41,33 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
 
     const Tid = toast('Loading...');
     try {
-
       let Response;
       if (defaultData.albumId) {
-        // Update Case
         formData.append('albumId', defaultData.albumId);
-        Response = await updateAlbum({ albumId: defaultData.albumId, data: formData });
+        Response = await updateAlbum({
+          albumId: defaultData.albumId,
+          data: formData,
+        });
       } else {
-        // Create Case
         Response = await addAlbum(formData);
       }
- 
 
-      if (Response && Response.data) {  // Check if 'data' exists in the Responseponse
+      if (Response && Response.data) {
         toast.dismiss(Tid);
         toast.success('Album Added');
         props.handleCloseDialog();
         router.push('/Album');
-
       } else {
-        // Handle Responseponse with no data (failure case)
-        toast.error((Response.error as ErrorResponseType).data?.error || 'Something went wrong');
+        toast.error(
+          (Response.error as ErrorResponseType).data?.error ||
+            'Something went wrong'
+        );
         toast.dismiss(Tid);
       }
     } catch (error) {
-      // Handle unexpected errors
+      throw new Error(`${error}`);
       toast.dismiss(Tid);
     }
-
   };
   return (
     <div className="bg-gray-100 ">
@@ -89,8 +89,6 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
       >
         <div className="flex flex-col w-full space-y-6 flex-wrap">
           <div className="flex flex-col">
-
-
             <NextInput
               id="name"
               name="name"
@@ -102,7 +100,6 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
               required={true}
               defaultValue={defaultData?.albumName || ''}
             />
-
           </div>
 
           <div className="flex flex-row justify-between flex-wrap ">
@@ -119,7 +116,6 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
                 required={true}
                 defaultValue={defaultData?.albumDescription || ''}
               />
-
             </div>
             <div className="selectBoxInput w-[45%]">
               <NextInput
@@ -132,9 +128,7 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
                 errors={errors}
                 defaultValue={defaultData?.albumPrice || 0}
               />
-
             </div>
-
           </div>
 
           <div className="flex flex-row justify-between flex-wrap">
@@ -142,7 +136,8 @@ const AddAlbumForm = (props: AddAlbumFormProps) => {
               name="imageUrl"
               control={control}
               label="Album Image"
-              accept="image/png, image/jpeg" />
+              accept="image/png, image/jpeg"
+            />
           </div>
         </div>
       </form>

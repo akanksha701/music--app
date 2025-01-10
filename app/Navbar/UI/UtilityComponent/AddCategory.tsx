@@ -1,25 +1,18 @@
 import NextInput from '@/common/inputs/Input';
 import NextTextArea from '@/common/inputs/Textarea';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectItem } from '@nextui-org/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 const AddCategory = () => {
   const {
     register,
     handleSubmit,
-    setValue,
-    control,
     formState: { errors },
   } = useForm({});
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-    } catch (error) {
-      console.error('Error submitting form', error);
-    }
+  
+  const onSubmit = handleSubmit(async () => {
+   
   });
 
   return (

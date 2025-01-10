@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import { use, useState } from 'react'; 
 import MusicListContainer from '@/common/MusicPlayer/MusicListContainer'; 
 import Link from 'next/link';
+import Image from 'next/image';
 
 const PlaylistPage = ({ params }: { params: any }) => {
   const Params: {
@@ -29,7 +30,8 @@ const PlaylistPage = ({ params }: { params: any }) => {
           query: { playlistId }, // Pass playlistId as a query parameter
         }}>
           <Button
-            className="border-2 border-[#9333ea] flex justify-between items-center text-white bg-[#9333ea] rounded-full hover:bg-white hover:text-black hover:border-[#9333ea]">
+            className="border-2 border-[#9333ea] flex justify-between items-center text-white bg-[#9333ea]
+             rounded-full hover:bg-white hover:text-black hover:border-[#9333ea]">
             <FaEdit style={{ height: '1.5rem', width: '1.5rem' }} />
             <span className="text-lg">Edit Playlist</span>
           </Button>
@@ -42,10 +44,9 @@ const PlaylistPage = ({ params }: { params: any }) => {
 
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-3 gap-12">
-          {/* Left Section: Playlist Info */}
           <div className="lg:col-span-1 space-y-6">
-            <img
-              src="/genres/images/default.jpg" // Placeholder for cover image
+            <Image
+              src="/genres/images/default.jpg" 
               alt="Playlist Cover"
               className="h-80 object-cover rounded-lg shadow-lg"
             />
@@ -59,7 +60,6 @@ const PlaylistPage = ({ params }: { params: any }) => {
             </div>
           </div>
 
-          {/* Right Section: Music Tracks */}
           <div className="lg:col-span-2 space-y-6">
             <h3 className="text-2xl font-semibold p-4">Music Tracks</h3>
             <MusicListContainer PlaylistId={playlistId} />
@@ -68,7 +68,6 @@ const PlaylistPage = ({ params }: { params: any }) => {
         </div>
       </div>
 
-      {/* Confirmation Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>

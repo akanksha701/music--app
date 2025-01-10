@@ -1,13 +1,13 @@
-"use server";
-import path from "path";
-import { Method } from "@/app/About/types/types";
-import { CalendarDate } from "@internationalized/date";
-import cloudinary from "cloudinary";
-import queryString from "query-string";
-import fs from "fs";
-import crypto from "crypto";
+'use server';
+import path from 'path';
+import { Method } from '@/app/About/types/types';
+import { CalendarDate } from '@internationalized/date';
+import cloudinary from 'cloudinary';
+import queryString from 'query-string';
+import fs from 'fs';
+import crypto from 'crypto';
 import { parseBuffer } from 'music-metadata';
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
 
 export interface IAudioTypes {
   audioDestination: string;
@@ -117,13 +117,13 @@ export const fetchApi = async (
 
   const isFormData = body instanceof FormData;
 
-  const cookieStore = await cookies()
-  const accessToken = cookieStore.get('accessToken') 
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('accessToken'); 
   const headers: HeadersInit = isFormData
     ? {}
     : { 'Content-Type': 'application/json' };
 
-  headers["Authorization"] = `Bearer ${accessToken?.value}`;
+  headers['Authorization'] = `Bearer ${accessToken?.value}`;
   try {
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),
@@ -134,7 +134,7 @@ export const fetchApi = async (
     if (!res.ok) {
       const errorResponse = await res.json();
       throw new Error(
-        `Error: ${res.status} ${res.statusText} - ${errorResponse.message || "Unknown error"
+        `Error: ${res.status} ${res.statusText} - ${errorResponse.message || 'Unknown error'
         }`
       );
     }
@@ -142,7 +142,6 @@ export const fetchApi = async (
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Error fetching data:', error);
     throw error;
   }
 };
@@ -176,34 +175,30 @@ export const saveFiles = async (file: Blob, folderName: string) => {
       await fs.promises.writeFile(filePath, buffer);
 
       let relativePath = filePath.split('public')[1];
-      // Adjust for Windows path separators
       if (process.platform === 'win32') {
         relativePath = relativePath.replace(/\\/g, '/');
       }
-      console.log("relativePath  : ", relativePath)
 
       return relativePath;
-    } catch (err) {
-      console.error('Error saving the file:', err);
-      return null;
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   } else {
     return null;
   }
 };
 
-export async function getAudioDuration(audioBlob: Blob): Promise<string> {
+export async function getAudioDuration(audioBlob:Blob) {
   try {
-    // Convert Blob to Buffer
     const arrayBuffer = await audioBlob.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
     const metadata = await parseBuffer(buffer);
 
-    const durationInSeconds: any = metadata.format.duration; // Duration is in seconds
+    const durationInSeconds: number|undefined = metadata.format.duration; // Duration is in seconds
 
-    const minutes = Math.floor(durationInSeconds / 60);
-    const seconds = Math.floor(durationInSeconds % 60);
+    const minutes = Math.floor(durationInSeconds as number/ 60);
+    const seconds = Math.floor(durationInSeconds as number% 60);
 
     const formattedDuration = `${minutes}:${seconds
       .toString()

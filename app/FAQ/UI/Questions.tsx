@@ -1,7 +1,6 @@
 'use client';
 import React, { useMemo } from 'react';
 import AccordionCard from './UtilityComponent/AccordionCard';
-import Button from '@/common/buttons/Button';
 import { IQuestionProps } from '../types/types';
 const Questions = (props: IQuestionProps) => {
   const { data,faqDescription } = props;

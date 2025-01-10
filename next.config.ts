@@ -1,5 +1,4 @@
-import { ESLint } from 'eslint';
-import { after } from 'node:test';
+import { NextConfig } from 'next';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -29,8 +28,8 @@ const nextConfig = {
       'www.bollywoodhungama.com',
       'stat4.bollywoodhungama.in',
       'images.pexels.com',
-      "media.istockphoto.com" ,
-      "www.gettyimages.in",
+      'media.istockphoto.com' ,
+      'www.gettyimages.in',
       'encrypted-tbn0.gstatic.com',
       'lh3.googleusercontent.com'
     ],
@@ -43,7 +42,7 @@ const nextConfig = {
     ],
   },
 
-  webpack: (config: any) => {
+  webpack: (config: NextConfig) => {
     config.stats = {
       logging: 'verbose',
     };

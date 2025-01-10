@@ -1,4 +1,4 @@
-import { IIconProps } from "../types/types";
+import { IIconProps } from '../types/types';
 
 export const VerticalDotsIcon = ({
   size = 24,
@@ -17,7 +17,8 @@ export const VerticalDotsIcon = ({
     {...props}
   >
     <path
-      d='M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z'
+      d='M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 
+      12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z'
       fill='currentColor'
     />
   </svg>

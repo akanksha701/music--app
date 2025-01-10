@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import marketingData from './marketing.json';
 export async function GET() {
   try {
-    
     return NextResponse.json({
       status: 200,
       coverTitle:marketingData.coverTitle,
@@ -24,6 +23,6 @@ export async function GET() {
       artistTitle:marketingData.artistTitle
     });
   } catch (error) {
-    return NextResponse.json({ status: 500, message: 'Internal Server Error' });
+    return NextResponse.json({ status: 500,error:error, message: 'Internal Server Error' });
   }
 }

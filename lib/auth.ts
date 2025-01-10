@@ -1,19 +1,12 @@
-import {
-  type User,
-  GoogleAuthProvider,
-  signInWithPopup,
-  onAuthStateChanged as _onAuthStateChanged,
-} from 'firebase/auth';
 
-import { redirect } from 'next/navigation';
-import { db } from '@/app/api/user/route';
+import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import { firebaseAuth } from './firebase/config';
 import { checkIfUserExists } from './firebase/userActions';
+import { IUserDetails } from '@/app/MyProfile/types/types';
 
 export async function onAuthStateChanged(
-  callback: (authUser: User | null) => void
-) {
-  return _onAuthStateChanged(firebaseAuth, callback);
+  firebaseAuth: unknown, callback: (authUser: User | null) => void) {
+  return onAuthStateChanged(firebaseAuth, callback);
 }
 
 export async function signInWithGoogle(): Promise<string | null> {
@@ -27,16 +20,19 @@ export async function signInWithGoogle(): Promise<string | null> {
     const user = result.user;
     return user.uid;
   } catch (error) {
-    console.error('Error signing in with Google', error);
-    return null;
+    if (error instanceof Error) {
+      throw new Error(error.message); 
+    } else {
+      throw new Error('An unknown error occurred');
+    }
   }
 }
 
-export const saveUser = async (user: any | null) => {
+export const saveUser = async (user: IUserDetails | null) => {
   if (user) {
     const userData=  await checkIfUserExists(user);
     return userData;
   }
 };
 
-export { User };
+export type { User };

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'; 
+import {  NextResponse } from 'next/server'; 
 import { db } from '../../user/route';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     
     const languageList = await db.collection('languages').find({isDeleted: false}).toArray();
@@ -20,9 +20,8 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   } catch (error) {
-    console.log('error : ' , error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: error },
       { status: 500 }
     );
   }

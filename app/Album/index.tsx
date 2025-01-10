@@ -1,20 +1,19 @@
 'use client'; 
-import { useGetAlbumByArtistIdQuery, useGetAlbumsQuery } from '@/services/album';
+import { useGetAlbumsQuery } from '@/services/album';
 import AlbumGrid from './UI/UtilityComponent/Grid';
 
-import { IoAddCircleOutline } from "react-icons/io5";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import Loading from "./loading";
+import { IoAddCircleOutline } from 'react-icons/io5';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import Loading from './loading';
 
 
 const Index = () => {
  
   const { data: albumData } = useGetAlbumsQuery({}); 
-  // const { data: albumData } = useGetAlbumByArtistIdQuery("675ab45ad8496e8fd5fb50db");
  
   if (!albumData) {
-    return <Loading/>
+    return <Loading/>;
   }
  
   return (
@@ -23,7 +22,8 @@ const Index = () => {
         <div className="head-container flex justify-between items-center">
           <h2 className="text-3xl font-bold underline text-slate-500">Albums</h2>
           <Link href="/AddAlbum">
-            <Button className="border-2 border-[#9333ea] flex justify-between items-center text-white bg-[#9333ea] rounded-full hover:bg-white hover:text-black hover:border-[#9333ea]">
+            <Button className="border-2 border-[#9333ea] flex justify-between items-center text-white 
+            bg-[#9333ea] rounded-full hover:bg-white hover:text-black hover:border-[#9333ea]">
               <IoAddCircleOutline
                 style={{
                   height: '1.8rem',

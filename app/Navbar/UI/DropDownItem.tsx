@@ -7,7 +7,7 @@ const DropDownItem = ({ menus }: IDropDownItemProps) => {
   return (
     <>
       {menus.length > 0 &&
-        menus.map((ele: IItem, index: number) => (
+        menus.map((ele: IItem) => (
           <DropdownItem key={ele.key} onClick={() => redirect(ele.route)}>
             {ele.label}
           </DropdownItem>
