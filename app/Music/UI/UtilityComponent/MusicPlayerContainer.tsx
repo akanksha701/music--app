@@ -18,10 +18,7 @@ import { useToggleLikeMutation } from '@/services/like';
 import MusicPlayer from './MusicPlayer';
 import { formatTime, useMusic } from '@/hooks/useMusic';
 import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
-<<<<<<< HEAD
-=======
 import { WritableDraft } from 'immer';
->>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
 const MusicPlayerContainer = () => {
   let newIndex: number;

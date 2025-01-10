@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-=======
 import React, { useEffect, useRef, useCallback } from 'react';
->>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setCurrentList,
@@ -21,25 +17,12 @@ import {
 } from '@/services/like';
 import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
 import { useSearchParams } from 'next/navigation';
-<<<<<<< HEAD
-import Loading from '@/app/loading';
-import { useFetchAudioPeaksQuery } from '@/services/audio';
-=======
 import { WritableDraft } from 'immer';
->>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const queryType = searchParams.get('type');
-<<<<<<< HEAD
-  const { data: allSongsData, isLoading } =
-    queryType === TAGS.MUSIC
-      ? useGetTopHitsMusicsQuery(undefined)
-      : queryType === TAGS.NEW_RELEASE
-        ? useGetAllMusicsQuery({})
-        : { data: null, isLoading: false };
-=======
   const topHitsMusicsQuery = useGetTopHitsMusicsQuery(undefined);
   const allMusicsQuery = useGetAllMusicsQuery({});
 
@@ -57,7 +40,6 @@ const MusicListContainer = () => {
   //     : queryType === TAGS.NEW_RELEASE
   //       ? useGetAllMusicsQuery({})
   //       : { data: null, isLoading: false };
->>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
@@ -72,21 +54,6 @@ const MusicListContainer = () => {
   const { currentTime, setCurrentTime } = useMusic();
   const wavesurferRefs = useRef<Map<string, any>>(new Map());
   const [toggleLike] = useToggleLikeMutation();
-<<<<<<< HEAD
-  const wavesurferRef = useSelector<RootState, WaveSurfer | null>(
-    (state) => state.musicPlayerSlice.wavesurferRef
-  );
-  
-  useEffect(() => {
-    if (allSongsData && allSongsData.data) {
-      const songs =
-        queryType === TAGS.MUSIC
-          ? allSongsData?.data
-          : queryType === TAGS.NEW_RELEASE
-            ? allSongsData?.data?.data
-            : [];
-
-=======
   const wavesurferRef = useSelector<RootState, WritableDraft<WaveSurfer> | null>((state) => state.musicPlayerSlice.wavesurferRef);
   useEffect(() => {
     if (allSongsData && allSongsData.data) {
@@ -96,7 +63,6 @@ const MusicListContainer = () => {
       } else if (queryType === TAGS.NEW_RELEASE) {
         songs = allSongsData.data?.data || []; // If `data` is wrapped inside another `data` object
       }
->>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
       if (songs?.length > 0) {
         dispatch(setCurrentList(songs));
       }

@@ -1,26 +1,14 @@
 'use client';
 import React from 'react';
-<<<<<<< HEAD
-import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
-=======
 import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
->>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 import PlayerLabel from './PlayerLabel';
 import { IoAddSharp } from 'react-icons/io5';
 import { FaHeart, FaPause, FaPlay, FaRegHeart } from 'react-icons/fa';
 import { GoDownload } from 'react-icons/go';
 import { FiShoppingCart } from 'react-icons/fi';
-<<<<<<< HEAD
-import { useSelector, useDispatch } from 'react-redux';
-import { useSearchParams } from 'next/navigation';
-import { RootState } from '@/Redux/store';
-import { handleLikeToggle } from '@/hooks/useLike';
-import { useToggleLikeMutation } from '@/services/like';
-=======
 import { useSelector} from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 import { RootState } from '@/Redux/store';
->>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
 const MusicList = ({
   data,

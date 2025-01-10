@@ -64,7 +64,7 @@ export interface IMemoizedCard {
 export interface IMemoizedMusicCard {
   index: number;
   item: IMusicProps;
-  handleMusicClick: (index:number) => void;
+  handleMusicClick: (index:number,item:IMusicProps) => void;
   showLikeIcon?: boolean | undefined;
   handleLikeToggle?: (id: string , name: string) => void;
   NAME:string | undefined;
