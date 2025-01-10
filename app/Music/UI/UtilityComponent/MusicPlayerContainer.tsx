@@ -18,6 +18,10 @@ import { useToggleLikeMutation } from '@/services/like';
 import MusicPlayer from './MusicPlayer';
 import { formatTime, useMusic } from '@/hooks/useMusic';
 import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+<<<<<<< HEAD
+=======
+import { WritableDraft } from 'immer';
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
 const MusicPlayerContainer = () => {
   let newIndex: number;
@@ -35,13 +39,11 @@ const MusicPlayerContainer = () => {
   const isMuted = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isMuted
   );
-  const seekPercentage = useSelector<RootState, number>(
-    (state) => state.musicPlayerSlice.seekPercentage
-  );
+  
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
-  const wavesurferRef = useSelector<RootState, WaveSurfer|null>(
+  const wavesurferRef = useSelector<RootState, WritableDraft<WaveSurfer> | null>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
   const selectedMusicIndex = useSelector<RootState, number | null>(
@@ -61,7 +63,7 @@ const MusicPlayerContainer = () => {
         barRadius: 200,
         cursorColor: 'transparent',
         url: currentTrack?.audioUrl,
-        peaks: currentTrack?.peaks || [],
+        peaks: currentTrack?.peaks as Float32Array[] || [],
       });
 
       ws.on('ready', () => {
@@ -80,7 +82,7 @@ const MusicPlayerContainer = () => {
         } else {
           ws.play();
         }
-        dispatch(setWavesurferRef(ws));
+        dispatch(setWavesurferRef(ws as WritableDraft<WaveSurfer> | null));
       });
     }
   };
@@ -133,7 +135,6 @@ const MusicPlayerContainer = () => {
       if (isPlaying) {
         wavesurferRef.pause();
       } else {
-        // If currentTime > 0, start from that position
         if (currentTime > 0) {
           wavesurferRef.seekTo(currentTime / wavesurferRef.getDuration());
         }

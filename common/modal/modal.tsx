@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -7,12 +7,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import React, { ReactNode } from "react";
+} from '@/components/ui/dialog';
+import React, { ReactNode } from 'react';
 export interface IModalProps {
-  children: ReactNode;
-  title: string;
-  body: string;
+  children?: ReactNode;
+  title?: string;
+  body?: string;
 }
 const Modal = (props: IModalProps) => {
   const { children, title, body } = props;

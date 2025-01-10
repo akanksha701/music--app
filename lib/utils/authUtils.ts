@@ -1,4 +1,4 @@
-import { auth } from "@/lib/firebase/firebaseAdmin/auth";
+import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
 export async function verifyToken(req: Request) {
   try {

@@ -1,8 +1,10 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 export enum Name {
-  Category = "category",
-  Artist = "artist",
+  // eslint-disable-next-line no-unused-vars
+  Category = 'category',
+  // eslint-disable-next-line no-unused-vars
+  Artist = 'artist',
 }
 
 interface States {
@@ -18,7 +20,8 @@ interface States {
 }
 
 interface Actions {
-  setSelectedIndex: (index: number, name: Name, value: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  setSelectedIndex: Function
 }
 
 export const useSelectCard = create<States & Actions>((set) => ({
@@ -26,16 +29,16 @@ export const useSelectCard = create<States & Actions>((set) => ({
   selectedIndexArtist: null,
   category: null,
   artist: null,
-  bgColor: "bg-white",
+  bgColor: 'bg-white',
   selectedValues: { category: null, artist: null },
 
-  setSelectedIndex: (index, name, value) => {
+  setSelectedIndex: (index:number, name:string, value:string) => {
     set((state) => {
       let updatedSelectedIndexCategory = state.selectedIndexCategory;
       let updatedSelectedIndexArtist = state.selectedIndexArtist;
       let updatedCategory = state.category;
       let updatedArtist = state.artist;
-      let updatedSelectedValues = { ...state.selectedValues };
+      const updatedSelectedValues = { ...state.selectedValues };
 
       if (name === Name.Category) {
         updatedSelectedIndexCategory = updatedSelectedIndexCategory === index ? null : index;

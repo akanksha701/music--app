@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+=======
+import React, { useEffect, useRef, useCallback } from 'react';
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setCurrentList,
@@ -17,26 +21,48 @@ import {
 } from '@/services/like';
 import { IMusicProps, TAGS } from '@/app/(BrowsePage)/Browse/types/types';
 import { useSearchParams } from 'next/navigation';
+<<<<<<< HEAD
 import Loading from '@/app/loading';
 import { useFetchAudioPeaksQuery } from '@/services/audio';
+=======
+import { WritableDraft } from 'immer';
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
 const MusicListContainer = () => {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const queryType = searchParams.get('type');
+<<<<<<< HEAD
   const { data: allSongsData, isLoading } =
     queryType === TAGS.MUSIC
       ? useGetTopHitsMusicsQuery(undefined)
       : queryType === TAGS.NEW_RELEASE
         ? useGetAllMusicsQuery({})
         : { data: null, isLoading: false };
+=======
+  const topHitsMusicsQuery = useGetTopHitsMusicsQuery(undefined);
+  const allMusicsQuery = useGetAllMusicsQuery({});
+
+  let allSongsData = null;
+  if (queryType === TAGS.MUSIC) {
+    allSongsData = topHitsMusicsQuery.data;
+  } else if (queryType === TAGS.NEW_RELEASE) {
+    allSongsData = allMusicsQuery.data;
+  }
+
+
+  // const { data: allSongsData, isLoading } =
+  //   queryType === TAGS.MUSIC
+  //     ? useGetTopHitsMusicsQuery(undefined)
+  //     : queryType === TAGS.NEW_RELEASE
+  //       ? useGetAllMusicsQuery({})
+  //       : { data: null, isLoading: false };
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
-  const seekPercentage = useSelector<RootState, number>(
-    (state) => state.musicPlayerSlice.seekPercentage
-  );
+  
   const allSongs = useSelector<RootState, IMusicProps[] | null>(
     (state) => state.musicPlayerSlice.currentList
   );
@@ -45,8 +71,8 @@ const MusicListContainer = () => {
   );
   const { currentTime, setCurrentTime } = useMusic();
   const wavesurferRefs = useRef<Map<string, any>>(new Map());
-  const [waveSurferInstances, setWaveSurferInstances] = useState<any>([]);
   const [toggleLike] = useToggleLikeMutation();
+<<<<<<< HEAD
   const wavesurferRef = useSelector<RootState, WaveSurfer | null>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
@@ -60,11 +86,36 @@ const MusicListContainer = () => {
             ? allSongsData?.data?.data
             : [];
 
+=======
+  const wavesurferRef = useSelector<RootState, WritableDraft<WaveSurfer> | null>((state) => state.musicPlayerSlice.wavesurferRef);
+  useEffect(() => {
+    if (allSongsData && allSongsData.data) {
+      let songs: IMusicProps[] = [];
+      if (queryType === TAGS.MUSIC) {
+        songs = allSongsData.data; // Assuming the data is in a direct array form
+      } else if (queryType === TAGS.NEW_RELEASE) {
+        songs = allSongsData.data?.data || []; // If `data` is wrapped inside another `data` object
+      }
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
       if (songs?.length > 0) {
         dispatch(setCurrentList(songs));
       }
     }
   }, [allSongsData]);
+  // useEffect(() => {
+  //   if (allSongsData && allSongsData.data) {
+  //     const songs =
+  //       queryType === TAGS.MUSIC
+  //         ? allSongsData?.data
+  //         : queryType === TAGS.NEW_RELEASE
+  //           ? allSongsData?.data?.data
+  //           : [];
+
+  //     if (songs?.length > 0) {
+  //       dispatch(setCurrentList(songs));
+  //     }
+  //   }
+  // }, [allSongsData]);
   const currentTrackRef = useRef(currentTrack);
 
   useEffect(() => {
@@ -73,7 +124,7 @@ const MusicListContainer = () => {
 
   const createWaveSurfers = (songs: IMusicProps[]) => {
     if (songs && songs.length > 0) {
-      const instances = songs.map((song) => {
+       songs.map((song) => {
         const waveformContainerId = `waveform_${song?._id}`;
         const waveformContainer = document.getElementById(waveformContainerId);
 
@@ -88,7 +139,7 @@ const MusicListContainer = () => {
             progressColor: '#5a17dd',
             cursorColor: 'transparent',
             url: song.audioUrl,
-            peaks: song.peaks || [],
+            peaks: song.peaks as Float32Array[]|| [],
           });
 
           wavesurferRefs.current.set(song?._id as string, wavesurfer);
@@ -115,7 +166,6 @@ const MusicListContainer = () => {
         return null; // Return null if instance already exists
       });
 
-      setWaveSurferInstances(instances.filter(Boolean));
     }
   };
 
@@ -143,7 +193,7 @@ const MusicListContainer = () => {
     if (allSongs && allSongs.length > 0) {
       createWaveSurfers(allSongs);
     }
-  }, [allSongs, currentTime, isPlaying, currentTrack]);
+  }, [allSongs]);
 
   const handlePlayTrack = useCallback(
     (track: IMusicProps) => {
@@ -179,15 +229,15 @@ const MusicListContainer = () => {
       );
     }
   };
-  if (isLoading) {
-    return <Loading />;
-  } else if (!allSongs) {
+
+  
+  if (!allSongs) {
     return null;
   }
   return (
     <div>
       <MusicList
-        data={allSongs}
+        data={allSongs || []}
         handlePlayTrack={handlePlayTrack}
         handleLikeClick={handleLikeClick}
       />

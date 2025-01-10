@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '../../user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
+<<<<<<< HEAD
 export async function GET(
   req: Request,
   { params }: { params: { slug: string } }
@@ -10,6 +11,13 @@ export async function GET(
     const authHeader: any = req.headers.get('Authorization');
     const token = authHeader.split(' ')[1];
     const decodedToken = await auth.verifyIdToken(token);
+=======
+export async function GET(req: Request,{ }: { params: { slug: string } }) {
+  try {
+    const authHeader:string|null = req.headers.get('Authorization');
+    const token = authHeader?.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token as string);
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
     const user = await auth.getUser(decodedToken.uid);
 
     if (!user) {
@@ -111,9 +119,9 @@ export async function GET(
       data: musics,
     });
   } catch (error) {
-    console.error('Error:', error);
     return NextResponse.json({
       status: 500,
+      error:error,
       message: 'Error occurred',
     });
   }

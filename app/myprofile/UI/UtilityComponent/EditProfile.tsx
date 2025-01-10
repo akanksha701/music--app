@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
+<<<<<<< HEAD
 import { useForm } from 'react-hook-form';
+=======
+import { FieldError, useForm } from 'react-hook-form';
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 import { CalendarDate } from '@internationalized/date';
 import { IEditProfileProps } from '../../types/types';
 import toast from 'react-hot-toast';
@@ -11,10 +15,16 @@ import Button from '@/common/buttons/Button';
 import NextInput from '@/common/inputs/Input';
 import NextDatePicker from '@/common/inputs/DatePicker';
 import SelectMenu from '@/common/inputs/SelectMenu';
+<<<<<<< HEAD
 import Loading from '@/app/loading';
 import { setLoggedInUser } from '@/Redux/features/user/sessionSlice';
 import { useDispatch } from 'react-redux';
 import { useRadioGroup } from '@nextui-org/react';
+=======
+import { setLoggedInUser } from '@/Redux/features/user/sessionSlice';
+import { useDispatch } from 'react-redux';
+import Loading from '@/app/AddAlbum/loading';
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;
@@ -26,7 +36,11 @@ const EditProfile = (props: IEditProfileProps) => {
     control,
     formState: { errors },
   } = useForm({});
+<<<<<<< HEAD
   const { data, isLoading, isError } = useFetchUserProfileQuery({});
+=======
+  const { data, isLoading } = useFetchUserProfileQuery(undefined);
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
   const dispatch = useDispatch();
   const setUserDetails = useCallback(async () => {
     {
@@ -49,11 +63,19 @@ const EditProfile = (props: IEditProfileProps) => {
         setImage(user?.imageUrl as string);
       }
     }
+<<<<<<< HEAD
   }, [data]);
 
   useEffect(() => {
     setUserDetails();
   }, [data]);
+=======
+  }, [data,setImage,setValue]);
+
+  useEffect(() => {
+    setUserDetails();
+  }, [data,setUserDetails]);
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -68,14 +90,26 @@ const EditProfile = (props: IEditProfileProps) => {
           lastName: data.lastName,
           email: data?.email,
           imageUrl: image,
+<<<<<<< HEAD
           gender:data?.gender
+=======
+          gender: data?.gender,
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
         };
         dispatch(setLoggedInUser(user));
         toast.success('Profile updated successfully');
       }
     } catch (error) {
+<<<<<<< HEAD
       console.error('Error submitting form', error);
       toast.error('Failed to update profile');
+=======
+      if (error instanceof Error) {
+        toast.error(error?.message as string);
+      } else {
+        toast.error('unknown error occured');
+      }
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
     }
   });
 
@@ -140,7 +174,11 @@ const EditProfile = (props: IEditProfileProps) => {
               register={register}
               control={control}
               rules={{ required: 'Date of birth is required' }}
+<<<<<<< HEAD
               error={errors.dob?.message as any}
+=======
+              error={errors.dob?.message as string}
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
             />
           </div>
 
@@ -152,7 +190,11 @@ const EditProfile = (props: IEditProfileProps) => {
               label="Select Gender"
               control={control}
               rules={{ required: 'Gender is required' }}
+<<<<<<< HEAD
               error={errors.gender?.message as any}
+=======
+              error={errors?.gender?.message as FieldError}
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
               items={[
                 { id: 'male', name: 'Male' },
                 { id: 'female', name: 'Female' },

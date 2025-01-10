@@ -1,16 +1,18 @@
 import React, { useMemo } from 'react';
-import { IFooterProps } from '../Home/types/types';
 import { FaYoutube, FaInstagram, FaTiktok, FaFacebook } from 'react-icons/fa';
+import { IFooterProps } from '../home/types/types';
+
 const Footer = (props: IFooterProps) => {
   const { data } = props;
-  const icons = [
-    <FaYoutube key="youtube" size={30} />,
-    <FaInstagram key="instagram" size={30} />,
-    <FaTiktok key="tiktok" size={30} />,
-    <FaFacebook key="facebook" size={30} />,
-  ];
 
   const renderedLinks = useMemo(() => {
+    const icons = [
+      <FaYoutube key="youtube" size={30} />,
+      <FaInstagram key="instagram" size={30} />,
+      <FaTiktok key="tiktok" size={30} />,
+      <FaFacebook key="facebook" size={30} />,
+    ];
+
     return (
       <div className="flex flex-col md:flex-row md:space-x-8 text-center md:text-left">
         <div className="flex flex-row items-center justify-center space-x-5 my-5">

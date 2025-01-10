@@ -1,11 +1,12 @@
 import React from 'react';
-import Image from 'next/image';
+import Image from 'next/image'; 
 import { IViewProps } from '../../types/types';
 
 const Views = (props: IViewProps) => {
   const { title, viewImg, views, points } = props;
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between px-8 md:px-20 py-12 md:py-16  rounded-lg shadow-lg">
+    <div className="flex flex-col md:flex-row items-center justify-between px-8 md:px-20 py-12 md:py-16  
+    rounded-lg shadow-lg">
       <div className="flex-shrink-0">
         <Image
           className="rounded-lg shadow-lg"
@@ -17,7 +18,8 @@ const Views = (props: IViewProps) => {
       </div>
 
       <div className="flex flex-col md:flex-row md:items-start justify-center mt-8 md:mt-0 md:pl-12">
-        <div className="text-center text-3xl font-semibold text-slate-900 mb-8 sm:text-4xl md:text-5xl lg:text-4xl text-transparent bg-gradient-to-r from-pink-500 via-indigo-500 to-purple-600 bg-clip-text">
+        <div className="text-center text-3xl font-semibold text-slate-900 mb-8 sm:text-4xl md:text-5xl 
+        lg:text-4xl text-transparent bg-gradient-to-r from-pink-500 via-indigo-500 to-purple-600 bg-clip-text">
           {title}
         </div>
 

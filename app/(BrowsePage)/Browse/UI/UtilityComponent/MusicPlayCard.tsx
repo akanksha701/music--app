@@ -1,19 +1,32 @@
 'use client';
+<<<<<<< HEAD
 import Image from 'next/image';
 import React from 'react';
 import { Card, CardBody } from '@nextui-org/react';
 import { IMusicPlayCardProps, IMusicProps } from '../../types/types';
 import { FaEllipsisH, FaHeart, FaRegHeart, FaPlay } from 'react-icons/fa'; // Import play icon
+=======
+import React from 'react';
+import { IMusicPlayCardProps, IMusicProps } from '../../types/types';
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setCurrentList,
   setCurrentSongIndex,
   setCurrentTrack,
+<<<<<<< HEAD
 } from '@/Redux/features/musicPlayer/musicPlayerSlice'; // Adjust the path as necessary
+=======
+} from '@/Redux/features/musicPlayer/musicPlayerSlice';  
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 import { redirect } from 'next/navigation';
 import { generateUrl } from '@/utils/helpers';
 import { RootState } from '@/Redux/store';
 import { useMusic } from '@/hooks/useMusic';
+<<<<<<< HEAD
+=======
+import MemoizedMusicCard from './MemoizedMusicCard';
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, handleLikeToggle } = props;
@@ -40,8 +53,10 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
         {data &&
           data.length > 0 &&
           data.map((item, index) => (
-            <Card
+
+            <MemoizedMusicCard
               key={index}
+<<<<<<< HEAD
               className="cursor-pointer bg-white text-black rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105 group mb-3 ml-2 relative"
               style={{ height: '320px' }}
             >
@@ -78,6 +93,15 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                 </div>
               </CardBody>
             </Card>
+=======
+              index={index}
+              item={item}
+              handleMusicClick={handleMusicClick}
+              handleLikeToggle={handleLikeToggle}
+              NAME={name}
+            />
+          
+>>>>>>> f6869aab30e9b84697a9d105ef09db87074fe67b
           ))}
       </div>
     </div>

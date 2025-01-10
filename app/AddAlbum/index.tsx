@@ -1,55 +1,46 @@
 'use client';
-import React from 'react';
-import TabComp from '@/common/tab/TabComp';
-import TableComp from '@/common/table/TableComp';
-import { usePagination } from '@/hooks/usePagination';
-import Loading from '../loading';
-import { useGetAlbumsQuery } from '@/services/album';
-import AddAlbum from './UI/UtilityComponent/AddAlbum';
-
-const columns = [
-  { header: 'Album Name', accessor: 'name' },
-  {
-    header: 'Edit',
-    accessor: 'edit',
-    className: 'text-center',
-  },
-];
-
+import React, { useEffect, useState } from 'react';
+import { useGetAlbumByIdQuery} from '@/services/album';
+import { useGetMusicsOfArtistsQuery } from '@/services/music';
+import MusicList from '@/common/MusicList/MusicList';
+import { useSearchParams } from 'next/navigation';
+import { MusicData } from './types/types';
+import Loading from './loading';
 const Index = () => {
-  const recordsPerPage = 5;
-  const { page, setPage } = usePagination();
-  const { data: albumData } = useGetAlbumsQuery({page,recordsPerPage});
+  const searchParams = useSearchParams();
+  const albumId = searchParams.get('albumId');
+  const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
+  const [prevData, setPrevData] = useState<{}>({});
+  const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery('675bbfb9af30013c7e5c5f13');
+  const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId, {
+    skip: !albumId, 
+  });
+  useEffect(() => {
+    if (albumByIdData) {
+      setPrevData({
+        albumDescription: albumByIdData.data.description,
+        albumId: albumId,
+        albumImage: albumByIdData.data.imageUrl,
+        albumMusicIds: albumByIdData.data.musicDetails,
+        albumName: albumByIdData.data.name,
+        albumPrice: albumByIdData.data.Price,
+      });
+      const Songs = albumByIdData.data.musicDetails.map((song: MusicData) => song._id);
+      setSelectedSongs(Songs || []);
+    }
+  }, [albumByIdData, albumId]);
 
-  if (!albumData) {
-    return <Loading />;
-  }
+  if (isAlbumLoading  || isMusicLoading ) return <Loading/>;
 
-  const tabsData = [
-    {
-      value: 'albums',
-      label: 'Albums',
-      content: (
-        <TableComp
-          message="A list of your recent languages."
-          columns={columns}
-          data={albumData.data}
-          setPage={setPage}
-          page={page}
-          paginationData={albumData.pagination}
-        />
-      ),
-    },
-    {
-      value: 'createalbum',
-      label: 'Create Album',
-      content: <AddAlbum />,
-    },
-  ];
   return (
-    <div className="flex justify-center items-start min-h-screen bg-gray-100 pt-8">
-      <div className="w-full sm:w-[500px] md:w-[600px] lg:w-[700px] px-4">
-        <TabComp tabsData={tabsData} />
+    <div className="flex justify-center items-start min-h-screen pt-8">
+      <div className="w-full">
+        { musicData && 
+        <MusicList 
+          data={musicData?.data}
+          mode={albumId ? 'edit' : 'create'} 
+          prevData={prevData}
+          MyselectedSongs={selectedSongs} />}
       </div>
     </div>
   );

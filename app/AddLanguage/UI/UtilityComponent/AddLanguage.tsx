@@ -1,32 +1,32 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import React from 'react';
-import { IAddLanguageProps } from '../../types/types';
 import NextInput from '@/common/inputs/Input';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import NextTextArea from '@/common/inputs/Textarea';
-import MultiSelect from '@/common/inputs/MultiSelect';
-import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast';
 import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
+interface ILanguageFormData {
+  name: string;
+  description: string;
+  imageUrl: string; 
+}
 
-const AddLanguage = (props: IAddLanguageProps) => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({});
-
-  const onSubmit = async (data:IAddLanguageProps) => {
+const AddLanguage = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm<ILanguageFormData>();
+  const onSubmit: SubmitHandler<ILanguageFormData> = async (data) => {
     try {
       const res = await fetchApi('/api/language', Method.POST, data);
       if (res.status === 200) {
         toast.success(res.message);
       }
     } catch (error) {
-      toast.error('Error while creating language');
+      if (error instanceof Error) {
+        toast.error(error?.message);
+      } else {
+        toast.error('unknown error occurred');
+      }
     }
   };
 
@@ -34,7 +34,8 @@ const AddLanguage = (props: IAddLanguageProps) => {
     <div className="min-h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6 p-6 bg-white rounded-lg shadow-lg w-full sm:w-[800px] md:w-[900px] lg:w-[600px] max-w-full mx-2 sm:mx-4"
+        className="space-y-6 p-6 bg-white rounded-lg shadow-lg w-full sm:w-[800px] md:w-[900px] 
+        lg:w-[600px] max-w-full mx-2 sm:mx-4"
       >
         <div className="flex flex-col w-full space-y-6">
           <div className="flex flex-col">
@@ -42,20 +43,18 @@ const AddLanguage = (props: IAddLanguageProps) => {
               id="name"
               name="name"
               label="Name"
-              placeholder="Enter your name"
+              placeholder="Enter language name"
               register={register}
               options={{ required: 'Name is required' }}
               errors={errors}
             />
           </div>
-
-          {/* Description Field */}
           <div className="flex flex-col">
             <NextTextArea
               id="description"
               name="description"
               label="Description"
-              placeholder="Enter music description"
+              placeholder="Enter language description"
               register={register}
               options={{ required: 'Description is required' }}
               errors={errors}

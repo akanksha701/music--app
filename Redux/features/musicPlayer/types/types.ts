@@ -1,4 +1,4 @@
-import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
 
 export interface IMusicState {
   currentTrack: IMusicProps;

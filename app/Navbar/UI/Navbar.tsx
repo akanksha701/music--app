@@ -7,8 +7,8 @@ import { redirect } from 'next/navigation';
 import NavItemList from './UtilityComponent/NavItemList';
 import { useUserSession } from '@/hooks/customHooks/use-user-session';
 
-export default function NavbarPage({ session }: any) {
-  const userSession: any = useUserSession(session);
+export default function NavbarPage({ session }:{  session: string | null; }) {
+  const userSession = useUserSession(session);
   if (!userSession) {
     return null;
   }

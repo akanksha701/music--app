@@ -1,12 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { IUserDetails } from '@/app/MyProfile/types/types';
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+interface ISessionProps
+{
+  accessToken: string|null,
+  loggedInUser: IUserDetails| null,
+}
+const initialState :ISessionProps= {
   accessToken: null,
   loggedInUser: null,
 };
 
 const sessionSlice = createSlice({
-  name: "session",
+  name: 'session',
   initialState,
   reducers: {
     setAccessToken: (state, action) => {
@@ -16,10 +22,10 @@ const sessionSlice = createSlice({
       state.accessToken = null;
     },
     setLoggedInUser: (state, action) => {
-      state.loggedInUser = action.payload;  // Set the logged-in user
+      state.loggedInUser = action.payload;  
     },
     clearLoggedInUser: (state) => {
-      state.loggedInUser = null;  // Clear the logged-in user
+      state.loggedInUser = null;  
     },
   },
 });

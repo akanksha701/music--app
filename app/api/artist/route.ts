@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { db } from '../user/route';
-
 export async function GET() {
   try {
     
@@ -22,8 +21,8 @@ export async function GET() {
         },
         {
           $project: {
-            _id: 0,
-            id: '$userDetails._id',
+            _id:0,
+            id: '$_id',
             fullname: {
               $concat: ['$userDetails.firstName', ' ', '$userDetails.lastName'],
             },
@@ -33,6 +32,10 @@ export async function GET() {
 
     return NextResponse.json({ status: 200, data: artists });
   } catch (error) {
-    console.log('error', error);
+    return NextResponse.json(
+      { error: error },
+      { status: 500 }
+   
+    );
   }
 }

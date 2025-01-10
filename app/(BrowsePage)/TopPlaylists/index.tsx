@@ -1,7 +1,6 @@
 'use client';
 import React, { useCallback } from 'react';
 import { useGetLanguageQuery } from '@/services/languages';
-import Loading from '@/app/loading';
 import MenubarComponent from '@/common/menubar/Menubar';
 import { useNewRelease } from '@/hooks/useNewRelease';
 import { redirect } from 'next/navigation';
@@ -19,10 +18,10 @@ const Index = () => {
       setSelectedLanguage(value, index);
       redirect(newUrl);
     },
-    [setSelectedLanguage, redirect]
+    [setSelectedLanguage]
   );
   if (isLoading) {
-    return <Loading />;
+    // return <Loading />;
   }
   return (
     <div className="p-10">

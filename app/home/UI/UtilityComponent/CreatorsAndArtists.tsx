@@ -1,13 +1,15 @@
 import React from 'react';
-import Image from 'next/image'; // If using Next.js for optimized images
+import Image from 'next/image'; 
 import { ICreatorsAndArtists } from '../../types/types';
+ 
 
 const CreatorsAndArtists = (props: ICreatorsAndArtists) => {
   const { creatorsAndArtists,title } = props;
 
   return (
     <div className="flex flex-col rounded-lg mt-10 px-4 md:px-10">
-      <h3 className="text-center text-3xl font-semibold text-slate-900 mb-8 sm:text-4xl md:text-5xl lg:text-3xl text-transparent bg-gradient-to-r from-purple-600 via-indigo-500 to-pink-500 bg-clip-text">
+      <h3 className="text-center text-3xl font-semibold text-slate-900 mb-8 sm:text-4xl md:text-5xl 
+      lg:text-3xl text-transparent bg-gradient-to-r from-purple-600 via-indigo-500 to-pink-500 bg-clip-text">
         {title}
       </h3>
 

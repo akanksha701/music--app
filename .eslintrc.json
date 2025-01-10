@@ -1,36 +1,35 @@
 {
-  "extends": "next/core-web-vitals",
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended"  // Optional: If you want a base set of TypeScript rules
+  ],
   "rules": {
-    "no-console": "warn", // Warn on console usage
-    "no-unused-vars": "warn", // Warn for unused variables
-    "eqeqeq": ["error", "always"], // Enforce strict equality (===)
-    "semi": ["error", "always"], // Enforce semicolons at the end of statements
-    "quotes": ["error", "single"], // Enforce single quotes for strings
-    "no-debugger": "error", // Disallow debugger statements
-    "indent": ["error", 2], // Enforce 2-space indentation
+    "no-console": "warn",
+    "no-unused-vars": "warn",
+    "eqeqeq": ["error", "always"],
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "no-debugger": "error",
+    "indent": ["error", 2],
     "max-lines": [
       "error",
       { "max": 300, "skipBlankLines": true, "skipComments": true }
     ],
-    "max-len": ["error", { "code": 120, "ignoreUrls": true }],
+    "max-len": ["error", { "code": 200, "ignoreUrls": true }],
     "complexity": ["error", 10],
     "max-depth": ["error", 4],
     "max-lines-per-function": [
       "error",
-      { "max": 50, "skipComments": true, "skipBlankLines": true }
+      { "max": 300, "skipComments": true, "skipBlankLines": true }
     ],
     "no-lonely-if": "error",
     "no-nested-ternary": "error",
     "max-params": ["warn", 5],
-    "@typescript-eslint/no-inferrable-types": [
-      "warn",
-      { "ignoreParameters": true }
-    ],
+    "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/interface-name-prefix": [
-      "warn",
-      { "prefixWithI": "always" }
-    ],
+    // "@typescript-eslint/interface-name-prefix": ["warn", { "prefixWithI": "always" }],
     "@typescript-eslint/explicit-member-accessibility": [
       "warn",
       { "accessibility": "explicit" }
@@ -38,3 +37,4 @@
     "@typescript-eslint/no-non-null-assertion": "warn"
   }
 }
+

@@ -1,13 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '../user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const authHeader: any = req.headers.get('Authorization');
-    const token = authHeader.split(' ')[1];
+    const authHeader: string | null = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        {error: 'Unauthorized: No token provided' },
+        { status: 401 }
+      );
+    }
+    const token = authHeader?.split(' ')[1];
     const decodedToken = await auth.verifyIdToken(token);
     const user = await auth.getUser(decodedToken.uid);
+    const queryParams = req.nextUrl.searchParams;
+    const limit = parseInt(queryParams.get('limit') || '0', 10); 
     const genres = await db
       .collection('genres')
       .aggregate([
@@ -39,7 +47,6 @@ export async function GET(req: Request) {
             as: 'loggedInUser',
           },
         },
-
         {
           $unwind: {
             path: '$loggedInUser',
@@ -48,7 +55,7 @@ export async function GET(req: Request) {
         },
         {
           $addFields: {
-            liked: { $in: ['$_id', '$loggedInUser.likedGenres'] },
+            liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedGenres', []] }] }, // Liked logic from album pipeline
           },
         },
         {
@@ -59,9 +66,10 @@ export async function GET(req: Request) {
             genre: '$name',
             genreId: '$_id',
             imageUrl: '$imageUrl',
-            liked: 1,
+            liked: 1, // Ensure liked is included in the output
           },
         },
+        { $limit: limit },
         {
           $group: {
             _id: '$_id',
@@ -97,14 +105,15 @@ export async function GET(req: Request) {
             totalPlayTime: 1,
             musics: 1,
             imageUrl: 1,
-            liked: 1,
+            liked: 1, // Keep liked in the final projection
           },
         },
       ])
       .toArray();
+    
     return NextResponse.json({ status: 200, data: genres });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.error('Error:', error);
     return NextResponse.json({ status: 500, message: 'Error occurred' });
   }
 }

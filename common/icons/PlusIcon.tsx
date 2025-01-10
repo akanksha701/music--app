@@ -1,4 +1,4 @@
-import { IPlusIconProps } from "../types/types";
+import { IPlusIconProps } from '../types/types';
 
 
 export const PlusIcon = ({ size = 24, width, height, ...props }:IPlusIconProps) => (

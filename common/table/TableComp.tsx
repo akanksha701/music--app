@@ -1,6 +1,6 @@
-"use client";
-import React, { useCallback, useMemo } from "react";
-import { ITableProps } from "../types/types";
+'use client';
+import React, {  useMemo } from 'react';
+import { ITableProps } from '../types/types';
 import {
   Table,
   TableBody,
@@ -9,9 +9,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import PaginationComp from "../pagination/paginationComp";
-import { FaEdit } from "react-icons/fa";
+} from '@/components/ui/table';
+import PaginationComp from '../pagination/paginationComp';
+import { FaEdit } from 'react-icons/fa';
 
 const TableComp = ({
   message,
@@ -21,14 +21,11 @@ const TableComp = ({
   page,
   setPage,
 }: ITableProps) => {
-  const handleEdit = useCallback((rowData: any) => {
-    console.log("Editing row:", rowData);
-  }, []);
 
   const memoizedColumns = useMemo(() => {
     return columns.map((column) => ({
       ...column,
-      className: column.className || "",
+      className: column.className || '',
     }));
   }, [columns]);
 
@@ -55,15 +52,14 @@ const TableComp = ({
             <TableRow key={rowIndex}>
               {memoizedColumns.map((column, colIndex) => (
                 <TableCell key={colIndex} className={column.className}>
-                  {column.accessor === "edit" ? (
+                  {column.accessor === 'edit' ? (
                     <button
                       className="text-purple-500"
-                      onClick={() => handleEdit(row)}
                     >
                       <FaEdit />
                     </button>
                   ) : (
-                    row[column.accessor] || "-"
+                    row[column.accessor] || '-'
                   )}
                 </TableCell>
               ))}

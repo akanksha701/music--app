@@ -11,7 +11,8 @@ export const Index = async () => {
     <div>
       <div className="p-20">
         <div className="grid grid-cols-2 gap-8 ">
-          <div className=" text-6xl p-10 text-white font-semibold bg-purple-600 transform transition duration-1000 hover:scale-105 bg-purple-500 rounded-md">
+          <div className=" text-6xl p-10 text-white font-semibold bg-purple-600 transform transition 
+          duration-1000 hover:scale-105 bg-purple-500 rounded-md">
             {data.aboutTitle}
           </div>
           <div className="text-6xl bg-slate-200 rounded-md">
