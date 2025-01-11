@@ -97,7 +97,7 @@ const Sidebar = () => {
       {Playlists?.data?.length > 0 && (
         <div className="my-2">
           <p className="text-slate-600">Playlists</p>
-          {Playlists.data.map((item: {_id : string, name : string}, index: number) => (
+          {Playlists.data.map((item: {_id:string,name:string}, index: number) => (
             <div key={index} className="flex items-center my-2  ">
               <span className="ml-2 border-slate-300 rounded-md p-1 border-2">
                 <Link href={`/Playlist/${item._id}`}>

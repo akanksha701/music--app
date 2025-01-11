@@ -1,19 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { RootState } from '@/Redux/store';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const musicApi = createApi({
-  reducerPath: "musicApi", 
+  reducerPath: 'musicApi', 
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000" ,  
+    baseUrl: 'http://localhost:3000' ,  
     prepareHeaders: (headers, { getState }) => {
-      let accessToken = (getState() as any).session.accessToken;
+      let accessToken:string|null = (getState() as RootState).session.accessToken;
 
       if (!accessToken) {
-        accessToken = localStorage.getItem("accessToken");
+        accessToken = localStorage.getItem('accessToken');
       }
 
       if (accessToken) {
-        console.log("accessToken", accessToken);
-        headers.set("Authorization", `Bearer ${accessToken}`);
+        headers.set('Authorization', `Bearer ${accessToken}`);
       }
 
       return headers;
@@ -22,10 +22,10 @@ export const musicApi = createApi({
   endpoints: (builder) => ({
     getnewMusics: builder.query({
       query: (language) =>
-        language ? `api/newRelease?language=${language}}` : "api/newRelease",
+        language ? `api/newRelease?language=${language}}` : 'api/newRelease',
     }),
     getAllMusics: builder.query({
-      query: () => `api/music`,
+      query: () => 'api/music',
     }),
     getMusicsOfArtists: builder.query({
       query: (id) => `api/music/artist/${id}`,  
@@ -41,5 +41,5 @@ export const musicApi = createApi({
 
 export const { useGetnewMusicsQuery, useGetMusicsOfArtistsQuery, useGetAllMusicsQuery ,useGetMusicsByUserIdQuery, 
   useGetMusicsByGenreQuery
- } =
+} =
   musicApi;

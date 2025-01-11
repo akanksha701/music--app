@@ -1,12 +1,12 @@
 'use client';
 import React, { useCallback } from 'react';
 import NewRelease from './UI/UtilityComponent/NewRelease';
-import MenubarComponent from '@/common/menubar/Menubar';
 import { useGetLanguageQuery } from '@/services/languages';
 import { useNewRelease } from '@/hooks/useNewRelease';
 import { redirect } from 'next/navigation';
 import { newRelease } from '@/utils/apiRoutes';
 import { generateUrl } from '@/utils/helpers';
+import MenubarComponent from '@/common/menubar/Menubar';
 const Index = () => {
   const { data: languageList, isLoading } = useGetLanguageQuery({});
   const { setSelectedLanguage } = useNewRelease();
@@ -16,7 +16,7 @@ const Index = () => {
       setSelectedLanguage(value, index);
       redirect(newUrl);
     },
-    [setSelectedLanguage, redirect]
+    [setSelectedLanguage]
   );
   if (isLoading) {
     // return <Loading />;
@@ -25,7 +25,9 @@ const Index = () => {
     <div className="p-10">
       <div className="relative mx-10">
         <hr className="w-full border-gray-600" />
-        <MenubarComponent data={languageList?.data} handleClick={handleClick} />
+        <MenubarComponent 
+          data={languageList?.data } 
+          handleClick={handleClick} />
         <hr className="w-full border-gray-600" />
         <NewRelease />
       </div>

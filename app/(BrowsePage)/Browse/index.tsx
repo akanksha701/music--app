@@ -1,15 +1,13 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MusicDataResponse, TAGS } from './types/types';
 import { handleLikeToggle } from '@/hooks/useLike';
 import { RootState } from '@/Redux/features/musicPlayer/types/types';
 import Skeleton from '@mui/material/Skeleton';
 import HeadLine from './UI/UtilityComponent/HeadLine';
 import MusicPlayCard from './UI/UtilityComponent/MusicPlayCard';
 import Box from './UI/UtilityComponent/Card';
-import { IMusicProps } from './types/types';
+import { IMusicProps, TAGS } from './types/types';
 import { useToggleLikeMutation } from '@/services/like';
 
 const SkeletonGrid = ({ count }: { count: number }) => (
@@ -25,8 +23,8 @@ const SkeletonGrid = ({ count }: { count: number }) => (
 ); 
 
 
-const Index = ({ initialData }: { initialData:  MusicDataResponse }) => {
-  const [data, setData] = useState(initialData);
+const Index = ({ initialData }: { initialData: any}) => {
+  const [data,setData] = useState(initialData);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const currentTrack = useSelector<RootState, IMusicProps | null>(
@@ -83,7 +81,7 @@ const Index = ({ initialData }: { initialData:  MusicDataResponse }) => {
         <SkeletonGrid count={8} />
       ) : (
         <MusicPlayCard
-          data={data.newReleases.data.data.slice(0, 8)}
+          data={data?.newReleases?.data?.data?.slice(0, 8)}
           name={TAGS.NEW_RELEASE}
           handleLikeToggle={(itemId) =>
             handleLikeToggle(itemId, TAGS.MUSIC, toggleLike, currentTrack as IMusicProps, dispatch)

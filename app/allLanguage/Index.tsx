@@ -1,15 +1,10 @@
 'use client';
 import React from 'react';
-
 import { Breadcrumb } from '@/common/BreadCrumb/BreadCrumb';
-
-import SmallGrid from "@/common/grid/SmallGrid";
-import TabComp from "@/common/tab/TabComp";
-import { useGetAllLanguageQuery } from "@/services/languages";
-import { AddMoreButton } from "../LanguageAndGenre/UtilityComponent/NavigateButton";
-import Loading from "./loading";
-
-
+import SmallGrid from '@/common/grid/SmallGrid';
+import { useGetAllLanguageQuery } from '@/services/languages';
+import { AddMoreButton } from '../LanguageAndGenre/UtilityComponent/NavigateButton';
+import Loading from './loading';
 
 const langugageColumns = [
   { header: 'Langugage Name', accessor: 'name' },
@@ -23,7 +18,6 @@ const langugageColumns = [
 const AllLanguageIndex = () => {
 
   const { data: languageData } = useGetAllLanguageQuery({});
-
 
   if (!languageData) {
     return <Loading/>;

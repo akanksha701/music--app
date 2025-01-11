@@ -13,7 +13,7 @@ const CustomerSupport = (props: ICustomerSupportProps) => {
           </p>
           <div className=" mt-3">
             <ol className="list-decimal">
-              {CustomerServiceAndSupport.map((service, index) => (
+              {CustomerServiceAndSupport.map((service) => (
                 <>
                   <li className="p-2 flex">
                     <span className="underline underline-offset-4 text-green-600 cursor-pointer">

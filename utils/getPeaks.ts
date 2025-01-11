@@ -1,45 +1,40 @@
-import decode from "audio-decode";
-import path from "path";
-import fs from "fs";
-import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
+import decode from 'audio-decode';
+import path from 'path';
+import fs from 'fs';
 
-export const audioDirectory = path.join(process.cwd(), "public");
+export const audioDirectory = path.join(process.cwd(), 'public');
 
-export async function decodeAudio(filepath: string): Promise<any> {
+export async function decodeAudio(filepath: string) {
   try {
-    // Fetch the audio file as an ArrayBuffer
     const response = await fetch(
-      "http://localhost:3000/music/audio/cinematic-designed-sci-fi-whoosh-transition-nexawave-228295.mp3"
+      'http://localhost:3000/music/audio/cinematic-designed-sci-fi-whoosh-transition-nexawave-228295.mp3'
     );
     if (!response.ok) {
       throw new Error(`Failed to fetch audio file: ${response.statusText}`);
     }
 
-    // Convert the response to an ArrayBuffer (binary format)
     const audioData = await response.arrayBuffer();
 
-    // Now decode the audio from the ArrayBuffer
-    const decodedAudio = await decode(audioData); // Assuming your decode function works with ArrayBuffer
-
+    const decodedAudio = await decode(audioData); 
     return decodedAudio;
   } catch (error) {
-    console.error("Error decoding audio:", error);
-    throw new Error(`Cannot decode the audio file at ${filepath}`);
+    throw new Error(`Cannot decode the audio file at ${filepath},${error}`);
   }
 }
 
-// Decode the ArrayBuffer to audio data
 export async function audioDecode(audioData: ArrayBuffer) {
   try {
     const decodedAudio = await decode(audioData); // Replace with your actual decoding logic
     return decodedAudio;
   } catch (error) {
-    console.error("Error in decoding:", error);
-    throw new Error("Audio decoding failed.");
+    if (error instanceof Error) {
+      throw new Error('Audio decoding failed: ' + error.message);
+    } else {
+      throw new Error('Audio decoding failed due to an unknown error');
+    }
   }
 }
 
-// Process the audio peaks
 export async function processAudioPeaks(
   channelData: Float32Array[],
   bufferSize: number
@@ -67,42 +62,37 @@ export async function getAudioPeaks(
 ): Promise<number[]> {
   try {
     const response = await fetch(
-      `http://localhost:3000${filepath.split("public")[1]}`
+      `http://localhost:3000${filepath.split('public')[1]}`
     );
-    console.log("Fetching audio file:", filepath);
     if (!response.ok) {
       throw new Error(`Failed to fetch audio file: ${response.statusText}`);
     }
 
     const audioData = await response.arrayBuffer();
-    console.log("Audio file fetched, decoding...");
 
     const decodedAudio = await decode(audioData);
 
-    const channelData: any[] = [];
+    const channelData: Float32Array[] = [];
     for (let i = 0; i < decodedAudio.numberOfChannels; i++) {
       await channelData.push(decodedAudio.getChannelData(i)); // Get data for each channel
     }
 
-    console.log("Audio decoded successfully, processing peaks...");
     return await processAudioPeaks(channelData, bufferSize); // Generate and return the peaks
   } catch (error) {
-    console.error("Error generating peaks:", error);
-    throw new Error(`Cannot decode the audio file at ${filepath}`);
+    throw new Error(`Cannot decode the audio file at ${filepath},${error}`);
   }
 }
 
 export async function getMusicWithPeaks(audioFileUrl: string) {
   if (
     !audioFileUrl ||
-    (!audioFileUrl.endsWith(".mp3") && !audioFileUrl.endsWith(".wav"))
+    (!audioFileUrl.endsWith('.mp3') && !audioFileUrl.endsWith('.wav'))
   ) {
     return [];
   }
   const filepath = await path.join(audioDirectory, audioFileUrl);
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     if (!fs.existsSync(filepath)) {
-      console.error(`File not found at path: ${filepath}`);
       return [];
     }
   }
@@ -111,7 +101,7 @@ export async function getMusicWithPeaks(audioFileUrl: string) {
     const peaks = await getAudioPeaks(filepath, 512);
     return peaks;
   } catch (error) {
-    console.error("Error generating peaks:", error);
-    return [];
+    throw new Error(`${error}`);
+
   }
 }

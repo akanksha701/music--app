@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/Redux/store';
 import WaveSurfer from 'wavesurfer.js';
+import { WritableDraft } from 'immer';
 import {
   setCurrentTrack,
   setCurrentSongIndex,
@@ -26,8 +27,8 @@ const MusicPlayerContainer = () => {
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
-  const allSongs = useSelector<RootState, IMusicProps[] | null>(
-    (state) => state.musicPlayerSlice.currentList
+  const allSongs = useSelector<RootState, IMusicProps[]>(
+    (state) => state.musicPlayerSlice.currentList as IMusicProps[]
   );
   const volume = useSelector<RootState, number>(
     (state) => state.musicPlayerSlice.volume
@@ -35,13 +36,11 @@ const MusicPlayerContainer = () => {
   const isMuted = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isMuted
   );
-  const seekPercentage = useSelector<RootState, number>(
-    (state) => state.musicPlayerSlice.seekPercentage
-  );
+ 
   const isPlaying = useSelector<RootState, boolean>(
     (state) => state.musicPlayerSlice.isPlaying
   );
-  const wavesurferRef = useSelector<RootState, WaveSurfer|null>(
+  const wavesurferRef = useSelector<RootState,  WritableDraft<WaveSurfer> | null>(
     (state) => state.musicPlayerSlice.wavesurferRef
   );
   const selectedMusicIndex = useSelector<RootState, number | null>(
@@ -61,7 +60,7 @@ const MusicPlayerContainer = () => {
         barRadius: 200,
         cursorColor: 'transparent',
         url: currentTrack?.audioUrl,
-        peaks: currentTrack?.peaks || [],
+        peaks: currentTrack?.peaks as Float32Array[],
       });
 
       ws.on('ready', () => {
@@ -70,7 +69,7 @@ const MusicPlayerContainer = () => {
         dispatch(
           setCurrentTrack({
             ...currentTrack,
-            duration: formatTime(ws.getDuration()),
+            duration: formatTime(ws.getDuration())  ,
           })
         );
         if (currentTime > 0) {
@@ -80,7 +79,7 @@ const MusicPlayerContainer = () => {
         } else {
           ws.play();
         }
-        dispatch(setWavesurferRef(ws));
+        dispatch(setWavesurferRef(ws as WritableDraft<WaveSurfer> | null));
       });
     }
   };

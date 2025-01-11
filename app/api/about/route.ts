@@ -10,7 +10,6 @@ export async function GET() {
       aboutImage:aboutData.aboutImage
     });
   } catch (error) {
-    console.error('Error fetching about data:', error);
-    return NextResponse.json({ status: 500, message: 'Internal Server Error' });
+    return NextResponse.json({ status: 500,error:error, message: 'Internal Server Error' });
   }
 }

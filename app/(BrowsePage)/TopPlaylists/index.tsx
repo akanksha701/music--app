@@ -18,7 +18,7 @@ const Index = () => {
       setSelectedLanguage(value, index);
       redirect(newUrl);
     },
-    [setSelectedLanguage, redirect]
+    [setSelectedLanguage]
   );
   if (isLoading) {
     // return <Loading />;

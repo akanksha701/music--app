@@ -41,9 +41,9 @@ const Box = ({
     if (NAME === 'Album' || 'Genres') {
       redirect(GetUrl(music));
     }
-    dispatch(setCurrentList(data));
+    dispatch(setCurrentList(data as IMusicProps[]));
     if (!currentTrack || currentTrack._id !== music._id) {
-      dispatch(setCurrentTrack(data?.[index]));
+      dispatch(setCurrentTrack(data?.[index] as IMusicProps));
       dispatch(setCurrentSongIndex(index));
     }
     const newUrl = await generateUrl('/Music', { type: NAME || '' });

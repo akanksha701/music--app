@@ -1,20 +1,21 @@
 // tailwind.config.js
-const { nextui } = require("@nextui-org/react");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { nextui } = require('@nextui-org/react');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}", // Add your app files
-    "./components/**/*.{js,ts,jsx,tsx,mdx}", // Add your component files
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    './app/**/*.{js,ts,jsx,tsx,mdx}', // Add your app files
+    './components/**/*.{js,ts,jsx,tsx,mdx}', // Add your component files
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
-  darkMode: ["class", "class"],
+  darkMode: ['class', 'class'],
   theme: {
   	extend: {
   		colors: {
-			'vivid-violet': '#9333ea',
-			'electric-purple': '#5a17dd',
-			'vivid-orange': '#f98f03',
-			'gunmetal': '#0f172a',
+        'vivid-violet': '#9333ea',
+        'electric-purple': '#5a17dd',
+        'vivid-orange': '#f98f03',
+        'gunmetal': '#0f172a',
   			primary: {
   				purple: '#9333ea'
   			},
@@ -58,5 +59,6 @@ module.exports = {
   		}
   	}
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [nextui(), require('tailwind-scrollbar')],
 };

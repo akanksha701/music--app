@@ -1,7 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import React from 'react';
- 
 import NextInput from '@/common/inputs/Input';
 import { useForm } from 'react-hook-form';
 import NextTextArea from '@/common/inputs/Textarea'; 
@@ -9,7 +8,6 @@ import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast'; 
 import { IAddLanguageProps } from '../types/types';
 import { useAddLanguageMutation } from '@/services/languages';
-
 const AddLanguage = (props: IAddLanguageProps) => {
   const {
     register,
@@ -25,11 +23,14 @@ const AddLanguage = (props: IAddLanguageProps) => {
     formData.append('name', data.name);
     formData.append('description', data.description);
     try {
-
-      const res = await AddLanguage(formData);
+     await AddLanguage(formData);
       toast.success('Added...');
     } catch (error) {
-      toast.error('Error while creating language');
+      if (error instanceof Error) {
+        toast.error(error?.message as string);
+      } else {
+        toast.error('unknown error occured');
+      }
     }
   };
 

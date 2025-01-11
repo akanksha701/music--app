@@ -1,7 +1,3 @@
-import exp from 'constants';
-import { title } from 'process';
-import { string } from 'zod';
-
 export interface IFeature {
   title: string;
   description: string;
@@ -61,7 +57,7 @@ export interface ICarousalProps {
   data: Array<string>;
 }
 export interface ICoverProps {
-  data: { title?: string; description?: string };
+  data: { title?: string | null; description?: string | null};
 }
 
 export interface IViewProps {

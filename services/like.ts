@@ -1,31 +1,29 @@
-import {
-  createApi,
-  fetchBaseQuery,
-  RootState,
-} from "@reduxjs/toolkit/query/react";
-import { Method } from "@/app/About/types/types";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { Method } from '@/app/About/types/types';
 import {
   getTopAlbums,
   getTopGenres,
   getTopHits,
   like,
   music,
-} from "@/utils/apiRoutes";
-import { TAGS } from "@/app/(BrowsePage)/Browse/types/types";
+} from '@/utils/apiRoutes';
+import { TAGS } from '@/app/(BrowsePage)/Browse/types/types';
+import { RootState } from '@/Redux/store';
 
 export const likeApi = createApi({
-  reducerPath: "likeApi",
+  reducerPath: 'likeApi',
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.APP_URL,
     prepareHeaders: (headers, { getState }) => {
-      let accessToken = (getState() as any).session.accessToken;
+      let accessToken: string | null = (getState() as RootState).session
+        .accessToken;
 
       if (!accessToken) {
-        accessToken = localStorage.getItem("accessToken");
+        accessToken = localStorage.getItem('accessToken');
       }
 
       if (accessToken) {
-        headers.set("Authorization", `Bearer ${accessToken}`);
+        headers.set('Authorization', `Bearer ${accessToken}`);
       }
 
       return headers;
@@ -41,20 +39,20 @@ export const likeApi = createApi({
       }),
       invalidatesTags: (result, error, { name }) => {
         switch (name) {
-          case TAGS.MUSIC:
-            return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
-          case TAGS.NEW_RELEASE:
-            return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
-          case TAGS.ALBUMS:
-            return [TAGS.ALBUMS, TAGS.TOP_ALBUMS];
-          case TAGS.GENRE:
-            return [TAGS.GENRE];
-          default:
-            return [];
+        case TAGS.MUSIC:
+          return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
+        case TAGS.NEW_RELEASE:
+          return [TAGS.MUSIC, TAGS.TOP_HITS, TAGS.NEW_RELEASE];
+        case TAGS.ALBUMS:
+          return [TAGS.ALBUMS, TAGS.TOP_ALBUMS];
+        case TAGS.GENRE:
+          return [TAGS.GENRE];
+        default:
+          return [];
         }
       },
     }),
-    getTopHitsMusics: builder.query<any, void>({
+    getTopHitsMusics: builder.query({
       query: () => getTopHits,
       providesTags: [TAGS.TOP_HITS],
     }),

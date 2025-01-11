@@ -8,11 +8,8 @@ import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast';
 import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
-import { IAddGenreProps } from '../types/types';
-import { useAddGenreMutation } from '@/services/genre';
 import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
-
-const AddGenre = (props: IAddGenreProps) => {
+const AddGenre = () => {
   const {
     register,
     handleSubmit,
@@ -30,7 +27,11 @@ const AddGenre = (props: IAddGenreProps) => {
         toast.success(res.message); 
       }
     } catch (error) {
-      toast.error('Error while creating music');
+      if (error instanceof Error) {
+        toast.error(error?.message as string);
+      } else {
+        toast.error('unknown error occured');
+      }
     }
   };
 
@@ -49,12 +50,9 @@ const AddGenre = (props: IAddGenreProps) => {
               placeholder="Enter your name"
               register={register}
               options={{ required: 'Name is required' }}
-              options={{ required: 'Name is required' }}
               errors={errors}
             />
           </div>
-
-          {/* Description Field */}
           <div className="flex flex-col">
             <NextTextArea
               id="description"
@@ -63,12 +61,9 @@ const AddGenre = (props: IAddGenreProps) => {
               placeholder="Enter music description"
               register={register}
               options={{ required: 'Description is required' }}
-              options={{ required: 'Description is required' }}
               errors={errors}
             />
           </div>
-
-          {/* MultiSelect Grids */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="flex flex-col">
               <FileUploadInput

@@ -22,8 +22,7 @@ export async function GET(req: Request) {
     const playlists = await db.collection('playlists').find().toArray();
     return NextResponse.json({ data: playlists, status: 200 });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: 'Server error. Could not fetch playlists.', status: 500 });
+    return NextResponse.json({error:error, message: 'Server error. Could not fetch playlists.', status: 500 });
   }
 }
 
@@ -48,8 +47,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: 'Playlist created successfully.', data: newPlaylist, status: 201 });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: 'Server error. Could not create playlist.', status: 500 });
+    return NextResponse.json({error:error, message: 'Server error. Could not create playlist.', status: 500 });
   }
 }
 
@@ -75,8 +73,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json({ message: 'Playlist updated successfully.', data: updatedPlaylist, status: 200 });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: 'Server error. Could not update playlist.', status: 500 });
+    return NextResponse.json({error:error, message: 'Server error. Could not update playlist.', status: 500 });
   }
 }
 

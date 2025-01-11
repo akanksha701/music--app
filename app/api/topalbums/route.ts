@@ -53,8 +53,28 @@ export async function GET(req:Request) {
           },
         },
         {
+          $lookup: {
+            from: 'users',
+            pipeline: [
+              {
+                $match: { userId: user?.uid },
+              },
+              {
+                $project: { likedAlbums: 1 },
+              },
+            ],
+            as: 'loggedInUser',
+          }
+        },
+        {
+          $unwind: {
+            path: '$loggedInUser',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
           $addFields: {
-            liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedAlbums', []] }] },
+            liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedAlbums', []] }] }, 
           },
         },
         {

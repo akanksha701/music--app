@@ -1,20 +1,22 @@
-import { IMusicProps } from "@/app/(BrowsePage)/Browse/types/types";
-import { setCurrentTrack } from "@/Redux/features/musicPlayer/musicPlayerSlice";
-import { create } from "zustand";
+import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
+import { setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import { create } from 'zustand';
 
 interface States {
   likedItems: Record<string, boolean>;
 }
 
 interface Actions {
-  toggleLocalLike: (id: string) => void;
-  setLike: (id: string, liked: boolean) => void;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  toggleLocalLike: Function;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  setLike: Function;
 }
 
 export const useLike = create<States & Actions>((set) => ({
   likedItems: {},
 
-  toggleLocalLike: (id) =>
+  toggleLocalLike: (id: string) =>
     set((state) => ({
       likedItems: {
         ...state.likedItems,
@@ -22,7 +24,7 @@ export const useLike = create<States & Actions>((set) => ({
       },
     })),
 
-  setLike: (id, liked) =>
+  setLike: (id: string, liked: boolean) =>
     set((state) => ({
       likedItems: {
         ...state.likedItems,
@@ -34,8 +36,10 @@ export const useLike = create<States & Actions>((set) => ({
 export const handleLikeToggle = async (
   id: string,
   name: string,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   toggleLike: Function,
   currentTrack?: IMusicProps,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   dispatch?: Function
 ) => {
   try {
@@ -47,11 +51,13 @@ export const handleLikeToggle = async (
         ...currentTrack,
         liked: !currentTrack?.liked as boolean,
       };
-      dispatch && dispatch(setCurrentTrack(updatedTrack));
+      if(dispatch)
+      {
+        dispatch(setCurrentTrack(updatedTrack));
+      }
     }
-    return true
+    return true;
   } catch (error) {
-    console.error("Error toggling like status:", error);
-    return false
+    throw new Error(`${error}`);
   }
 };

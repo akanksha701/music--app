@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo} from 'react';
 import { Card, CardBody } from '@nextui-org/react';
 import Image from 'next/image';
 import { IBoxTypes } from '../../types/types';
 import { Rating } from '@mui/material';
 import Link from 'next/link';
 
-const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
+const AlbumGrid = ({ data, className }: IBoxTypes) => {
   const memoizedCards = useMemo(() => {
     return (
       <div className={`grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ${className}`}>
@@ -13,16 +13,15 @@ const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
           data.map((item, index) => (
             <Card
               key={index}
-              className="bg-white  border-2 border-solid border-[rgb(201, 201, 201)] shadow-none hover:shadow-[0px_0px_14px_0px_rgba(0,0,0,0.15)] text-black transition-all duration-300 ease-in-out hover:scale-[1.01] group rounded-xl cursor-pointer"
-              style={{
-                transition: 'box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out',
-              }}
+              className="bg-white  border-2 border-solid border-[rgb(201, 201, 201)] shadow-none 
+              hover:shadow-[0px_0px_14px_0px_rgba(0,0,0,0.15)] text-black transition-all 
+              duration-300 ease-in-out hover:scale-[1.01] group rounded-xl cursor-pointer"
+              style={{transition: 'box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out' }}
 
             > 
               <Link href={`/Album/${item._id}?type=AlbumSongs`}>
                 <CardBody className="flex flex-col justify-between w-full h-full p-0 ">
 
-                  {/* Image */}
                   <div className="relative w-full h-60">
                     {item?.imageUrl ? (
                       <Image
@@ -86,7 +85,7 @@ const AlbumGrid = ({ data, className, message }: IBoxTypes) => {
             </Card>
           ))
         ) : (
-          <p>{"..."}</p>
+          <p>{'...'}</p>
         )}
       </div>
     );

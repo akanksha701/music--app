@@ -1,10 +1,11 @@
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useState } from "react";
-import { BiDotsVerticalRounded } from "react-icons/bi";
-import { FaEdit } from "react-icons/fa";
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useState } from 'react';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { FaEdit } from 'react-icons/fa';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-export function MenuButton({ row, handleMenuToggle, handleEdit, handleDelete }: any) {
+import { IMenuProps } from '../types/types';
+export function MenuButton({ row, handleMenuToggle, handleEdit, handleDelete }: IMenuProps) {
   const [open, setOpen] = useState(false);
   return (
     <div>
@@ -12,7 +13,7 @@ export function MenuButton({ row, handleMenuToggle, handleEdit, handleDelete }: 
         <PopoverTrigger asChild>
           <button
             className="text-black p-2 bg-white rounded-lg menu-btn"
-            onClick={() => handleMenuToggle(row._id)}
+            onClick={() => handleMenuToggle && handleMenuToggle(row?._id)}
           >
             <BiDotsVerticalRounded />
           </button>
@@ -25,8 +26,8 @@ export function MenuButton({ row, handleMenuToggle, handleEdit, handleDelete }: 
         >
           <ul className="flex gap-1 ">
             <IconButton aria-label="update" size="small"><FaEdit onClick={() => {
-              handleEdit(row)
-              setOpen(false)
+              handleEdit(row);
+              setOpen(false);
             }}
 
             /></IconButton>
@@ -34,8 +35,8 @@ export function MenuButton({ row, handleMenuToggle, handleEdit, handleDelete }: 
             <IconButton aria-label="delete" size="small" >
               <DeleteIcon fontSize="small" onClick={
                 () => {
-                  handleDelete(row._id)
-                  setOpen(false)
+                  handleDelete(row._id);
+                  setOpen(false);
                 }
               } />
             </IconButton>

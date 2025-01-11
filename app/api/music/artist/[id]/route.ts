@@ -1,23 +1,21 @@
-import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server"; 
-import { currentUser } from "@clerk/nextjs/server";
-import { db } from "@/app/api/user/route";
-import { auth } from "@/lib/firebase/firebaseAdmin/auth";
+import mongoose from 'mongoose';
+import { db } from '@/app/api/user/route';
+import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { NextResponse } from 'next/server';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   const { id } = params;
 
   try {
-    // Validate the artistId input
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid or missing artistId' }, { status: 400 });
     }
  
 
-      const authHeader: any = req.headers.get("Authorization");
-      const token = authHeader.split(" ")[1];
-      const decodedToken = await auth.verifyIdToken(token);
-      const user = await auth.getUser(decodedToken.uid);
+    const authHeader: string|null = req.headers.get('Authorization');
+    const token = authHeader?.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token as string);
+    const user = await auth.getUser(decodedToken.uid);
  
     const aggregatePipeline = [
       {
@@ -109,7 +107,13 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           language: { $first: '$languageDetails.name' },
           genre: { $first: '$genreDetails.name' },
           description: { $first: '$musicDetails.description' },
-          artists: { $push: { firstName: '$userDetails.firstName', lastName: '$userDetails.lastName', email: '$userDetails.email' } },
+          artists: { 
+            $push: { 
+              firstName: '$userDetails.firstName', 
+              lastName: '$userDetails.lastName', 
+              email: '$userDetails.email' 
+            } 
+          },
           liked: { $first: { $in: ['$_id', '$loggedInUser.likedMusics'] } },
           price: { $first: '$price.amount' },
           currency: { $first: '$price.currency' },
@@ -125,15 +129,17 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
               input: '$artists',
               as: 'artist',
               in: {
-                fullName: { $concat: ['$$artist.firstName', ' ', '$$artist.lastName'] }, // Concatenate firstName and lastName
-                email: '$$artist.email', // Add email field
+                fullName: { 
+                  $concat: ['$$artist.firstName', ' ', '$$artist.lastName'] 
+                }, 
+                email: '$$artist.email', 
               },
             },
           },
         },
       },
       {
-        $sort: { createdAt: -1, _id: 1 }, // Sort by newest first
+        $sort: { createdAt: -1, _id: 1 }, 
       },
     ];
     
@@ -152,7 +158,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       });
     }
   } catch (error) {
-    console.error('Error fetching music by artistId:', error);
     return NextResponse.json({
       status: 500,
       message: 'An error occurred while fetching music.',

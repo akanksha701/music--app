@@ -17,7 +17,7 @@
       "error",
       { "max": 300, "skipBlankLines": true, "skipComments": true }
     ],
-    "max-len": ["error", { "code": 120, "ignoreUrls": true }],
+    "max-len": ["error", { "code": 200, "ignoreUrls": true }],
     "complexity": ["error", 10],
     "max-depth": ["error", 4],
     "max-lines-per-function": [

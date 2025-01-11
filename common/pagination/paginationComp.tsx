@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Pagination,
   PaginationContent,
@@ -7,12 +7,13 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
+} from '@/components/ui/pagination';
 
 interface PaginationCompProps {
   totalPages: number;
   page: number;
-  setPage: (page: number) => void;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  setPage:Function
 }
 
 const PaginationComp: React.FC<PaginationCompProps> = ({

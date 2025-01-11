@@ -1,30 +1,27 @@
  
-import Music from "@/lib/models/Music";
-import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
-import { MusicDocument } from "@/common/types/types";
-import { currentUser } from "@clerk/nextjs/server";
-import { db } from "../../user/route";
-import { auth } from "@/lib/firebase/firebaseAdmin/auth";
+import mongoose from 'mongoose';
+import { NextRequest, NextResponse } from 'next/server';
+import { MusicDocument } from '@/common/types/types';
+import { db } from '../../user/route';
+import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
 export const GET = async (req: NextRequest) => {
   try {
     const { searchParams } = new URL(req.url);
 
-        const type = searchParams.get("type");
-        const id = searchParams.get("id");
-    const authHeader: any = req.headers.get("Authorization");
-    const token = authHeader.split(" ")[1];
-    const decodedToken = await auth.verifyIdToken(token);
+    const type = searchParams.get('type');
+    const id = searchParams.get('id');
+    const authHeader: string|null = req.headers.get('Authorization');
+    const token = authHeader?.split(' ')[1];
+    const decodedToken = await auth.verifyIdToken(token as string);
     const user = await auth.getUser(decodedToken.uid);
-        if (!type || !id) {
-            return NextResponse.json(
-                { message: "Both 'type' and 'id' parameters are required." },
-                { status: 400 }
-            );
-        }
+    if (!type || !id) {
+      return NextResponse.json(
+        { message: 'Both \'type\' and \'id\' parameters are required.' },
+        { status: 400 }
+      );
+    }
 
-    // Construct the query dynamically
     let filter = {};
     switch (type) {
     case 'genre':
@@ -43,82 +40,82 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
-        // Query the database
-        const musics = await db.collection("musics").aggregate([
-            { $match: filter },
+    // Query the database
+    const musics = await db.collection('musics').aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: 'artists', 
+          let: { artistsIds: '$musicDetails.artistId' },
+          pipeline: [
             {
-                $lookup: {
-                    from: "artists", 
-                    let: { artistsIds: "$musicDetails.artistId" },
-                    pipeline: [
-                        {
-                            $match: { 
-                               $expr: { $in: ["$_id", { $ifNull: ["$$artistsIds", []] }] },
-                            }
-                        },
-                        {
-                            $project: { userId: 1, _id: 0 }
-                        }
-                    ],
-                    as: "artistInfo"
+              $match: { 
+                $expr: { $in: ['$_id', { $ifNull: ['$$artistsIds', []] }] },
+              }
+            },
+            {
+              $project: { userId: 1, _id: 0 }
+            }
+          ],
+          as: 'artistInfo'
+        }
+      },
+      {
+        $lookup: {
+          from: 'users', 
+          localField: 'artistInfo.userId', 
+          foreignField: '_id', 
+          as: 'userInfo'
+        }
+      },
+      {
+        $addFields: {
+          'artists': {
+            $reduce: {
+              input: '$userInfo',
+              initialValue: '',
+              in: {
+                $cond: {
+                  if: { $eq: ['$$value', ''] },
+                  then: { $concat: ['$$this.firstName', ' ', '$$this.lastName'] },
+                  else: { $concat: ['$$value', ', ', '$$this.firstName', ' ', '$$this.lastName'] }
                 }
-            },
-            {
-                $lookup: {
-                    from: "users", 
-                    localField: "artistInfo.userId", 
-                    foreignField: "_id", 
-                    as: "userInfo"
-                }
-            },
-            {
-                $addFields: {
-                    "artists": {
-                        $reduce: {
-                            input: "$userInfo",
-                            initialValue: "",
-                            in: {
-                                $cond: {
-                                    if: { $eq: ["$$value", ""] },
-                                    then: { $concat: ["$$this.firstName", " ", "$$this.lastName"] },
-                                    else: { $concat: ["$$value", ", ", "$$this.firstName", " ", "$$this.lastName"] }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    pipeline: [
-                        { $match: { userId: user.uid } },
-                        { $project: { likedMusics: 1 } }
-                    ],
-                    as: 'loggedInUser',
-                },
-            },
-            {
-                $unwind: {
-                    path: '$loggedInUser',
-                    preserveNullAndEmptyArrays: true,
-                },
-            },
-            {
-                $addFields: {
-                    liked: { $in: ["$_id", { $ifNull: ["$loggedInUser.likedMusics", []] }] },
-                },
-            },
-            {
-                $group: {
-                    _id: "$_id", // Group by _id to remove duplicates
-                    musicDetails: { $first: "$$ROOT" }, // Keep the first occurrence
-                }
-            },
-            {
-                $replaceRoot: { newRoot: "$musicDetails" } // Replace the root with the grouped music details
-            },
-        ]).toArray() as MusicDocument[];
+              }
+            }
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          pipeline: [
+            { $match: { userId: user.uid } },
+            { $project: { likedMusics: 1 } }
+          ],
+          as: 'loggedInUser',
+        },
+      },
+      {
+        $unwind: {
+          path: '$loggedInUser',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $addFields: {
+          liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedMusics', []] }] },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id', // Group by _id to remove duplicates
+          musicDetails: { $first: '$$ROOT' }, // Keep the first occurrence
+        }
+      },
+      {
+        $replaceRoot: { newRoot: '$musicDetails' } // Replace the root with the grouped music details
+      },
+    ]).toArray() as MusicDocument[];
         
 
     if (!musics || musics.length === 0) {
@@ -128,15 +125,13 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
-    console.log('musics', musics.length);
 
-    // Format the response to include nested fields as needed
     const formattedResults = musics.map((doc: MusicDocument) => ({
       _id: doc._id,
       name: doc.musicDetails?.name,
       description: doc.musicDetails?.description,
       duration: doc.musicDetails?.duration,
-      artists: doc.artists || '', // Single string with artist names
+      artists: doc.artists || '', 
       genreId: doc.musicDetails?.genreId,
       languageId: doc.musicDetails?.languageId,
       releaseDate: doc.musicDetails?.releaseDate,
@@ -156,9 +151,8 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.json({ status: 200, data: formattedResults });
   } catch (error) {
-    console.error('Error in GET handler:', error);
     return NextResponse.json(
-      { error: 'An error occurred while processing the request.' },
+      { error: error},
       { status: 500 }
     );
   }

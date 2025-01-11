@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { userApi } from "@/services/user";
+import { createSlice } from '@reduxjs/toolkit';
+import { userApi } from '@/services/user';
 
 const initialState = {
   userDetails: {},
@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: "users",
+  name: 'users',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -26,8 +26,8 @@ const userSlice = createSlice({
     );
     builder.addMatcher(
       userApi.endpoints.fetchUserProfile.matchRejected,
-      (state, action) => {
-        state.loading = false
+      (state) => {
+        state.loading = false;
       }
     );
   },

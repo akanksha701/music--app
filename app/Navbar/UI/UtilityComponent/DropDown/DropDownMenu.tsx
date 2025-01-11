@@ -1,5 +1,6 @@
 'use client';
 import { removeSession } from '@/app/actions/auth';
+import { IUserDetails } from '@/app/MyProfile/types/types';
 import { IItem } from '@/app/Navbar/types/types';
 import Modal from '@/common/modal/modal';
 import Tooltip from '@/common/tooltip/Tooltip';
@@ -7,6 +8,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { HoverCard } from '@/components/ui/hover-card';
 import { useUserSession } from '@/hooks/customHooks/use-user-session';
 import { signOutWithGoogle } from '@/lib/firebase/auth';
+import { RootState } from '@/Redux/store';
 import { useFetchUserProfileQuery } from '@/services/user';
 import { useClerk, useUser } from '@clerk/nextjs';
 import { DropdownItem, DropdownMenu } from '@nextui-org/react';
@@ -15,29 +17,27 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const menus: any = [
-  { label: "My Profile", key: "my_profile", route: "/MyProfile" },
-  { label: "Language & Genre", key: "LanguageAndGenre", route: "/LanguageAndGenre" },
-  { label: "Add Album", key: "add_album", route: "/Album" },
-  { label: "Add Music", key: "add_music", route: "/AddMusic" },
+  { label: 'My Profile', key: 'my_profile', route: '/MyProfile' },
+  {
+    label: 'Language & Genre',
+    key: 'LanguageAndGenre',
+    route: '/LanguageAndGenre',
+  },
+  { label: 'Add Album', key: 'add_album', route: '/Album' },
+  { label: 'Add Music', key: 'add_music', route: '/AddMusic' },
 ];
 const deleteCookie = (name: string) => {
-  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;  // Expire the cookie immediately
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`; // Expire the cookie immediately
 };
 const DropDownMenu = () => {
-  const {
-    data: userSession,
-    isLoading,
-    isError,
-  } = useFetchUserProfileQuery({});
+  const { data: userSession } = useFetchUserProfileQuery({});
   const handleSignOut = async () => {
     await signOutWithGoogle();
     await removeSession();
-    localStorage.clear();4
-    deleteCookie("accessToken")
+    localStorage.clear();
+    deleteCookie('accessToken');
   };
-  const name: any = useSelector<any | any>(
-    (state) => state?.session?.loggedInUser
-  );
+  const name = useSelector<RootState , IUserDetails|null>((state) => state?.session?.loggedInUser);
   if (!userSession) {
     return null;
   }
@@ -51,7 +51,7 @@ const DropDownMenu = () => {
           </p>
         </DropdownItem>
 
-        {menus.map((ele: IItem, index: number) => (
+        {menus.map((ele: IItem) => (
           <DropdownItem
             key={ele.key}
             onClick={() => {

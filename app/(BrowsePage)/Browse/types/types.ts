@@ -32,9 +32,9 @@ export interface IMusicProps {
   audioUrl?: string;
   peaks?: Float32Array[] | Float32Array | null;
   playCount?: number;
-  genre?: string;
-  album?: string;
   createdAt?: string;
+  genre?:string,
+  album?:string,
 }
 export interface IBoxTypes {
   data?: Array<{ _id: string; name: string; imageUrl?: string | null; liked: boolean }>;
@@ -54,7 +54,7 @@ export interface IMusicPlayCardProps {
 export interface IMemoizedCard {
   index: number;
   item: { _id: string; name: string; imageUrl?: string | null; liked: boolean };
-  handleMusicClick: any;
+  handleMusicClick: (index:number) => void;
   showLikeIcon?: boolean | undefined;
   handleLikeToggle?: (id: string, name: string) => void;
   NAME:string | undefined;
@@ -64,7 +64,7 @@ export interface IMemoizedCard {
 export interface IMemoizedMusicCard {
   index: number;
   item: IMusicProps;
-  handleMusicClick: any;
+  handleMusicClick: (index:number) => void;
   showLikeIcon?: boolean | undefined;
   handleLikeToggle?: (id: string , name: string) => void;
   NAME:string | undefined;
