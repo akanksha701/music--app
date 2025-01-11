@@ -6,7 +6,7 @@ import { verifyToken } from '@/lib/utils/authUtils';
 import { IUserProfile } from './types/types';
 
 async function handleMusicLike(user: IUserProfile, id: string, userId: string) {
-  const alreadyLiked = user.likedMusics.some((likedMusic: Types.ObjectId) =>
+  const alreadyLiked = user?.likedMusics?.some((likedMusic: Types.ObjectId) =>
     likedMusic.equals(new mongoose.Types.ObjectId(id))
   );
   const updatedUser = await db.collection('users').findOneAndUpdate(

@@ -6,7 +6,7 @@ import {
   setCurrentList,
   setCurrentSongIndex,
   setCurrentTrack,
-} from '@/Redux/features/musicPlayer/musicPlayerSlice';  
+} from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { redirect } from 'next/navigation';
 import { generateUrl } from '@/utils/helpers';
 import { RootState } from '@/Redux/store';
@@ -14,7 +14,7 @@ import { useMusic } from '@/hooks/useMusic';
 import MemoizedMusicCard from './MemoizedMusicCard';
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
-  const { data, name, handleLikeToggle } = props;
+  const { data, name, message, handleLikeToggle } = props;
   const dispatch = useDispatch();
   const { setCurrentTime } = useMusic();
   const currentTrack = useSelector<RootState, IMusicProps | null>(
@@ -38,7 +38,6 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
         {data &&
           data.length > 0 &&
           data.map((item, index) => (
-
             <MemoizedMusicCard
               key={index}
               index={index}
@@ -47,8 +46,8 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
               handleLikeToggle={handleLikeToggle}
               NAME={name}
             />
-          
           ))}
+        <> {data.length === 0 && <p>{message}</p>}</>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 'use client';
+
 import { removeSession } from '@/app/actions/auth';
 import { IUserDetails } from '@/app/MyProfile/types/types';
 import { IItem } from '@/app/Navbar/types/types';
@@ -12,7 +13,11 @@ import { useSelector } from 'react-redux';
 
 const menus: IItem[] = [
   { label: 'My Profile', key: 'my_profile', route: '/MyProfile' },
-  { label: 'Language & Genre', key: 'LanguageAndGenre', route: '/LanguageAndGenre' },
+  {
+    label: 'Language & Genre',
+    key: 'LanguageAndGenre',
+    route: '/LanguageAndGenre',
+  },
   { label: 'Add Album', key: 'add_album', route: '/Album' },
   { label: 'Add Music', key: 'add_music', route: '/AddMusic' },
 ];
@@ -21,7 +26,7 @@ const deleteCookie = (name: string) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`; // Expire the cookie immediately
 };
 
-const DropDownMenu = () => {
+const DropDownMenu: React.FC = () => {
   const { data: userSession } = useFetchUserProfileQuery({});
   const handleSignOut = async () => {
     await signOutWithGoogle();
@@ -30,7 +35,9 @@ const DropDownMenu = () => {
     deleteCookie('accessToken');
   };
 
-  const name = useSelector<RootState, IUserDetails | null>((state) => state?.session?.loggedInUser);
+  const name = useSelector<RootState, IUserDetails | null>(
+    (state) => state?.session?.loggedInUser
+  );
 
   if (!userSession) {
     return null;
@@ -38,33 +45,28 @@ const DropDownMenu = () => {
 
   return (
     <DropdownMenu aria-label="Profile Actions" variant="flat">
-      <DropdownItem key="profile" className="h-14 gap-2">
-        <p className="font-semibold">Signed in as</p>
-        <p className="font-semibold">
-          {name?.firstName + ' ' + name?.lastName}
-        </p>
-      </DropdownItem>
       <>
+        <DropdownItem key="profile" className="h-14 gap-2">
+          <p className="font-semibold">Signed in as</p>
+          <p className="font-semibold">
+            {name?.firstName + ' ' + name?.lastName}
+          </p>
+        </DropdownItem>
+  
         {menus.map((ele: IItem) => (
           <DropdownItem
             key={ele.key}
-            onClick={() => {
-              redirect(ele.route);
-            }}
+            onClick={() => redirect(ele.route)}
           >
             {ele.label}
           </DropdownItem>
         ))}
       </>
-
-      <DropdownItem
-        key="logout"
-        color="danger"
-        onClick={handleSignOut}
-      >
-        Log Out
+      <DropdownItem key="logout" color="danger" onClick={handleSignOut}>
+              Log Out
       </DropdownItem>
     </DropdownMenu>
+  
   );
 };
 

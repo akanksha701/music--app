@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import {Paper, Select, MenuItem,FormControl,InputLabel,SelectChangeEvent,} from '@mui/material';
+import { Paper, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent, } from '@mui/material';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import PrimaryButton from '../buttons/PrimaryButton';
 import { Input } from '@nextui-org/react';
@@ -7,7 +7,7 @@ import AlbumDialog from '@/app/AddAlbum/UI/AlbumDialog';
 import Image from 'next/image';
 import { IMusic, IPrevData } from '../types/types';
 import { ISong } from '@/app/AddAlbum/types/types';
-const SearchIcon: React.FC<{className?: string }> = (props) => {
+const SearchIcon: React.FC<{ className?: string }> = (props) => {
   return (
     <svg
       aria-hidden="true"
@@ -42,7 +42,12 @@ const columns: GridColDef[] = [
     minWidth: 100,
     flex: 1,
     renderCell: (params) => (
-      <Image src={params.value} alt={params.row.name} style={{ width: '50px', height: '50px', borderRadius: '4px' }}/>
+      <Image
+        src={params.value}
+        alt={params.row.name}
+        width={50}
+        height={50}
+        style={{ borderRadius: '4px' }} />
     ),
   },
   {
@@ -98,13 +103,13 @@ const columns: GridColDef[] = [
   },
 ];
 
-const MusicList = ({ data,MyselectedSongs,mode,prevData}: {
+const MusicList = ({ data, MyselectedSongs, mode, prevData }: {
   data: Array<IMusic>;
   MyselectedSongs: Array<string>;
   mode: string;
-  prevData: IPrevData ;
+  prevData: IPrevData;
 }) => {
-  const [selectedSongs, setSelectedSongs] = useState<ISong[]|string[]>(MyselectedSongs);
+  const [selectedSongs, setSelectedSongs] = useState<ISong[] | string[]>(MyselectedSongs);
   const [filteredData, setFilteredData] = useState(data);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>(MyselectedSongs);
   const [selectedGenre, setSelectedGenre] = useState<string>('');
@@ -127,7 +132,7 @@ const MusicList = ({ data,MyselectedSongs,mode,prevData}: {
 
   const handleSelectionChange = (selectionModel: GridRowSelectionModel) => {
     setSelectionModel(selectionModel);
-    const selectedRows:ISong[] = rows.filter((row) => selectionModel.includes(row.id));
+    const selectedRows: ISong[] = rows?.filter((row) => selectionModel?.includes(row?.id));
     setSelectedSongs(selectedRows);
   };
 
@@ -192,7 +197,7 @@ const MusicList = ({ data,MyselectedSongs,mode,prevData}: {
             width: '33%',
           }}
         >
-          {selectedSongs.length >= 2 && (
+          {selectedSongs?.length >= 2 && (
             <PrimaryButton
               name={mode === 'edit' ? 'Edit Album' : 'Create Album'}
               mode={mode}
@@ -260,7 +265,7 @@ const MusicList = ({ data,MyselectedSongs,mode,prevData}: {
       </div>
 
       <p className="text-gray-500 text-md mx-2 my-1">
-        {selectedSongs.length} selected
+        {selectedSongs?.length} selected
       </p>
       <Paper sx={{ height: '100%', width: '100%' }}>
         <DataGrid
@@ -289,8 +294,8 @@ const MusicList = ({ data,MyselectedSongs,mode,prevData}: {
         />
       </Paper>
       <div className="dialog-container">
-        <AlbumDialog openDialog={openDialog}  handleCloseDialog={handleCloseDialog} selectedSongs={selectedSongs as ISong[]}
-          formId={'albumForm'} defaultData={prevData }/>
+        <AlbumDialog openDialog={openDialog} handleCloseDialog={handleCloseDialog} selectedSongs={selectedSongs as ISong[]}
+          formId={'albumForm'} defaultData={prevData} />
       </div>
     </div>
   );

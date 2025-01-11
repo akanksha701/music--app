@@ -11,7 +11,7 @@ export async function createSession(uid: string) {
     path: '/',
   });
 
-  redirect('/Browse');
+  redirect('/');
 }
 
 export async function removeSession() {

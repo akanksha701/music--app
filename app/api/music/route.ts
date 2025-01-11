@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
 import { capitalizeTitle, getAudioDuration, saveFiles } from '@/utils/helpers';
-import mongoose, { PipelineStage, Types } from 'mongoose';
+import mongoose, { PipelineStage } from 'mongoose';
 import { db } from '../user/route';
 import { getMusicWithPeaks } from '@/utils/getPeaks';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
@@ -56,8 +56,8 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const body:Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
     const albumIds = Array.isArray(body?.album)
-      ? body?.album.map((id) => new Types.ObjectId(id))  
-      : [new Types.ObjectId(body?.album)]; 
+      ? body?.album.map((id) => (id))  
+      : [body?.album]; 
     const musicDetails = await getMusicPrimaryDetails(body);
     const audioDetails = await getAudioDetails(body);
     const price = {

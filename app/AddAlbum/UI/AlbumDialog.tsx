@@ -25,7 +25,7 @@ export default function AlbumDialog({
     <div className="flex justify-between gap-4 mx-4 items-center   " >
       <div className="flex  justify-start items-center">
         <DialogTitle>Create Album</DialogTitle>
-        <p className="text-xs text-gray-500">{selectedSongs.length} songs </p>
+        <p className="text-xs text-gray-500">{selectedSongs?.length} songs </p>
       </div>
       <CloseIcon onClick={handleCloseDialog} className="cursor-pointer mr-4 text-2xl  " ></CloseIcon>
 

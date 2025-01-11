@@ -48,13 +48,14 @@ export interface IBoxTypes {
 export interface IMusicPlayCardProps {
   data: Array<IMusicProps>;
   name: string;
+  message?: string;
   handleLikeToggle: (id: string, name: string) => void;
 }
 
 export interface IMemoizedCard {
   index: number;
   item: { _id: string; name: string; imageUrl?: string | null; liked: boolean };
-  handleMusicClick: (index:number) => void;
+  handleMusicClick: (index:number,music:IMusicProps) => void;
   showLikeIcon?: boolean | undefined;
   handleLikeToggle?: (id: string, name: string) => void;
   NAME:string | undefined;

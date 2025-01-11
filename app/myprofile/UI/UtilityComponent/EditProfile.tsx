@@ -31,7 +31,7 @@ const EditProfile = (props: IEditProfileProps) => {
   const dispatch = useDispatch();
   const setUserDetails = useCallback(async () => {
     {
-      const user = userDetails ? userDetails :data.data;
+      const user = userDetails ? userDetails :data?.data;
       if (user) {
         const day =
           new Date(user.dateOfBirth).getDate() || new Date().getDate();

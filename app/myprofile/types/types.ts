@@ -6,9 +6,7 @@ export interface IDateOfBirth {
 }
 
 export interface IUserDetails {
-  _id?: {
-    $oid: string;  // MongoDB ObjectId as a string
-  };
+  _id?: string;  // MongoDB ObjectId as a string
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -26,6 +24,7 @@ export interface IUserDetails {
   userId?: string; 
   uid?: string;
   emailAddresses?: string;
+  artistId?:string
 }
 
 
