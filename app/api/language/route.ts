@@ -9,7 +9,6 @@ import mongoose from 'mongoose';
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-
     const page = parseInt(url.searchParams.get('page') || '1', 10); 
     const recordsPerPage = parseInt(
       url.searchParams.get('recordsPerPage') || '0',
@@ -17,7 +16,6 @@ export async function GET(req: Request) {
     );
     if (!recordsPerPage || !page) {
       const languageList = await db.collection('languages').find({isDeleted : false}).toArray();
-      console.log('lan',languageList)
       return NextResponse.json({
         status: 200,
         data: languageList,
@@ -86,11 +84,57 @@ export async function POST(req: NextRequest) {
   }
 }
 
+const getIdFromUrl = (url: string): string | null => {
+  const parsedUrl = new URL(url);
+  return parsedUrl.searchParams.get('id');
+};
+
+const deleteOldImageIfNeeded = async (imageUrl: string, id: string): Promise<void> => {
+  const oldFilePath = path.join(LANGUAGE_IMAGE_UPLOAD_DIR, path.basename(imageUrl));
+  const isFileReferenced = await db.collection('languages').findOne({
+    imageUrl,
+    _id: { $ne: new mongoose.Types.ObjectId(id) },
+  });
+  if (!isFileReferenced) {
+    try {
+      await fs.unlink(oldFilePath);
+    } catch (err) {
+      if(err instanceof Error)
+        throw new Error('Error deleting old image',err);
+    }
+  }
+};
+
+const saveNewImage = async (img: Blob): Promise<string|null> => {
+  return await saveFiles(img, LANGUAGE_IMAGE_UPLOAD_DIR);
+};
+
+const updateLanguageInDb = async (
+  id: string,
+  name: string,
+  description: string,
+  imageUrl: string
+) => {
+  const updatedLanguage = await db.collection('languages').findOneAndUpdate(
+    { _id: new mongoose.Types.ObjectId(id) },
+    {
+      $set: {
+        name,
+        description,
+        imageUrl: imageUrl === 'undefined' ? '/languages/images/default.jpg' : imageUrl,
+      },
+    },
+    { returnDocument: 'after' }
+  );
+
+  return updatedLanguage;
+};
+
 export async function PUT(req: NextRequest) {
   try {
-    const url = new URL(req.url as string);
-    const id = url.searchParams.get('id');
+    const id = getIdFromUrl(req.url);
     if (!id) throw new Error('ID cannot be null');
+
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
     const img = body.img || null;
@@ -104,49 +148,89 @@ export async function PUT(req: NextRequest) {
     let imageUrl = existingLanguage.imageUrl;
     if (img instanceof Blob) {
       if (existingLanguage.imageUrl) {
-        const oldFilePath = path.join(LANGUAGE_IMAGE_UPLOAD_DIR, path.basename(existingLanguage.imageUrl));
-        const isFileReferenced = await db.collection('languages').findOne({
-          imageUrl: existingLanguage.imageUrl,
-          _id: { $ne: new mongoose.Types.ObjectId(id) },
-        });
-        if (!isFileReferenced) {
-          try {
-            await fs.unlink(oldFilePath);
-          } catch (err) {
-            return NextResponse.json(
-              { error: err },
-              { status: 500 }
-            );
-          }
-        }
+        await deleteOldImageIfNeeded(existingLanguage.imageUrl, id);
       }
-      imageUrl = await saveFiles(img, LANGUAGE_IMAGE_UPLOAD_DIR);
+      imageUrl = await saveNewImage(img);
     }
-    const updatedLanguage = await db.collection('languages').findOneAndUpdate(
-      { _id: new mongoose.Types.ObjectId(id) },
-      {
-        $set: {
-          name,
-          description,
-          imageUrl: imageUrl === 'undefined' ? '/languages/images/default.jpg' : imageUrl,
-        },
-      },
-      { returnDocument: 'after' }
-    );
+
+    const updatedLanguage = await updateLanguageInDb(id, name as string, description as string, imageUrl);
     if (updatedLanguage) {
       return NextResponse.json({
         status: 200,
         data: updatedLanguage,
       });
     }
+
     return NextResponse.json({ error: 'Language not updated' }, { status: 500 });
   } catch (error) {
     return NextResponse.json(
-      { error: error },
+      { error: error || error },
       { status: 500 }
     );
   }
 }
+
+// export async function PUT(req: NextRequest) {
+//   try {
+//     const url = new URL(req.url as string);
+//     const id = url.searchParams.get('id');
+//     if (!id) throw new Error('ID cannot be null');
+//     const formData = await req.formData();
+//     const body = Object.fromEntries(formData);
+//     const img = body.img || null;
+//     const { name, description } = body;
+//     const existingLanguage = await db.collection('languages').findOne({
+//       _id: new mongoose.Types.ObjectId(id),
+//     });
+//     if (!existingLanguage) {
+//       return NextResponse.json({ error: 'Language not found' }, { status: 404 });
+//     }
+//     let imageUrl = existingLanguage.imageUrl;
+//     if (img instanceof Blob) {
+//       if (existingLanguage.imageUrl) {
+//         const oldFilePath = path.join(LANGUAGE_IMAGE_UPLOAD_DIR, path.basename(existingLanguage.imageUrl));
+//         const isFileReferenced = await db.collection('languages').findOne({
+//           imageUrl: existingLanguage.imageUrl,
+//           _id: { $ne: new mongoose.Types.ObjectId(id) },
+//         });
+//         if (!isFileReferenced) {
+//           try {
+//             await fs.unlink(oldFilePath);
+//           } catch (err) {
+//             return NextResponse.json(
+//               { error: err },
+//               { status: 500 }
+//             );
+//           }
+//         }
+//       }
+//       imageUrl = await saveFiles(img, LANGUAGE_IMAGE_UPLOAD_DIR);
+//     }
+//     const updatedLanguage = await db.collection('languages').findOneAndUpdate(
+//       { _id: new mongoose.Types.ObjectId(id) },
+//       {
+//         $set: {
+//           name,
+//           description,
+//           imageUrl: imageUrl === 'undefined' ? '/languages/images/default.jpg' : imageUrl,
+//         },
+//       },
+//       { returnDocument: 'after' }
+//     );
+//     if (updatedLanguage) {
+//       return NextResponse.json({
+//         status: 200,
+//         data: updatedLanguage,
+//       });
+//     }
+//     return NextResponse.json({ error: 'Language not updated' }, { status: 500 });
+//   } catch (error) {
+//     return NextResponse.json(
+//       { error: error },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 export async function DELETE(req: NextApiRequest) {
   try {

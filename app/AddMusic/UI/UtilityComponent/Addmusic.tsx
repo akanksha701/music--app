@@ -45,7 +45,6 @@ const AddMusic = (props: IAddMusicProps) => {
       }
     }
   };
-console.log('artistList',artistList)
   return (
     <div className="min-h-screen bg-gray-100">
       <form

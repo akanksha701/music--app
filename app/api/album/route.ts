@@ -157,7 +157,7 @@ export async function PUT(req: NextRequest) {
     const existingAlbum = await getExistingAlbum(albumId);
     if (!existingAlbum) return NextResponse.json({ error: 'Album not found' }, { status: 404 });
 
-    const updatedImageUrl = await updateImage(existingAlbum, imageBlob, albumId);
+    const updatedImageUrl = await updateImage(existingAlbum as IAlbum, imageBlob, albumId);
 
     const updatedAlbumData = {
       name: await capitalizeTitle(name.toString()),
@@ -168,7 +168,7 @@ export async function PUT(req: NextRequest) {
       Language: languages,
       musicIds: songs,
     }; 
-    const updatedAlbum = await updateAlbumData(albumId, updatedAlbumData);
+    const updatedAlbum = await updateAlbumData(albumId, updatedAlbumData as IAlbum);
 
     if (updatedAlbum) {
       return NextResponse.json({
@@ -210,11 +210,11 @@ async function getExistingAlbum(albumId: string | null) {
   return db.collection('albums').findOne({ _id: new mongoose.Types.ObjectId(albumId || '') });
 }
 
-async function updateImage(existingAlbum: any, imageBlob: Blob | undefined, albumId: string | null) {
-  let updatedImageUrl = existingAlbum.imageUrl;
+async function updateImage(existingAlbum:IAlbum, imageBlob: Blob | undefined, albumId: string | null) {
+  let updatedImageUrl:string|null = existingAlbum.imageUrl;
 
   if (imageBlob instanceof Blob) {
-    const oldFilePath = path.join(ALBUM_IMAGE_UPLOAD_DIR, path.basename(existingAlbum.imageUrl));
+    const oldFilePath = path.join(ALBUM_IMAGE_UPLOAD_DIR, path.basename(existingAlbum.imageUrl as string));
 
     if (existingAlbum.imageUrl && !(await db.collection('albums').countDocuments({
       imageUrl: existingAlbum.imageUrl,
@@ -223,7 +223,10 @@ async function updateImage(existingAlbum: any, imageBlob: Blob | undefined, albu
       try {
         await fs.unlink(oldFilePath); 
       } catch (err) {
-        console.error('Error deleting old file:', err);
+        if(err instanceof Error)
+        {
+          throw new Error('Error deleting old file:', err);
+        }
       }
     }
 

@@ -7,7 +7,7 @@ import Skeleton from '@mui/material/Skeleton';
 import HeadLine from './UI/UtilityComponent/HeadLine';
 import MusicPlayCard from './UI/UtilityComponent/MusicPlayCard';
 import Box from './UI/UtilityComponent/Card';
-import { IMusicProps, TAGS } from './types/types';
+import { IMusicProps, IMusicDataResponse, TAGS } from './types/types';
 import { useToggleLikeMutation } from '@/services/like';
 
 const SkeletonGrid = ({ count }: { count: number }) => (
@@ -23,7 +23,7 @@ const SkeletonGrid = ({ count }: { count: number }) => (
 ); 
 
 
-const Index = ({ initialData }: { initialData: any}) => {
+const Index = ({ initialData }: { initialData: IMusicDataResponse}) => {
   const [data,setData] = useState(initialData);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
@@ -42,10 +42,9 @@ const Index = ({ initialData }: { initialData: any}) => {
  
   return (
     <div className='flex flex-col'>
-      {/* Top Hits Section */}
       <HeadLine title='Top Hits' subTitle='2024' />
       <hr className='w-full p-2 border-gray-600' />
-      {isLoading || !data.topHits ? (
+      {isLoading || !data.topHits.data ? (
         <SkeletonGrid count={10} />
       ) : (
         <MusicPlayCard
@@ -57,7 +56,6 @@ const Index = ({ initialData }: { initialData: any}) => {
         />
       )}
 
-      {/* Popular Albums Section */}
       <div className='mt-8 p-3'>
         <HeadLine title='Popular Albums' subTitle='Discover popular album musics' />
         {isLoading || !data.topAlbums ? (
@@ -73,8 +71,6 @@ const Index = ({ initialData }: { initialData: any}) => {
           />
         )}
       </div>
-
-      {/* New Releases Section */}
       <HeadLine title='New Releases' subTitle='2024' />
       <hr className='w-full p-2 border-gray-600' />
       {isLoading || !data.newReleases ? (

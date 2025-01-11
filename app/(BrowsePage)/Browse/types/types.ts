@@ -71,8 +71,20 @@ export interface IMemoizedMusicCard {
 }
 
 
-
-
+export interface ITopHitsData {
+  artists: string | null;        // Artists could be a string or null if not available
+  audioUrl: string;              // URL to the audio file (must be a string)
+  currency: string;              // Currency type (e.g., USD)
+  description: string;           // Short description (e.g., track name or details)
+  duration: string;              // Duration of the track in a string format (e.g., "0:05")
+  email: string | null;          // Optional email field, can be null
+  imageUrl: string;              // URL to the image associated with the track
+  liked: boolean;                // Whether the track is liked or not
+  name: string;      
+  placeCount:number;
+  peaks:Float32Array[],
+  _id:string            // Track name (e.g., "Despacito")
+}
 type Music = {
   _id: string;
   name: string;
@@ -113,15 +125,16 @@ type ApiResponse<T> = {
   status: number;
   data: T;
 };
-
 type MusicApiResponse = ApiResponse<Music[]>;
 type AlbumApiResponse = ApiResponse<Album[]>;
 type GenreApiResponse = ApiResponse<Genre[]>;
 type NewReleasesResponse = ApiResponse<{ data: Music[] }>;
-
-export interface MusicDataResponse {
+export interface IMusicDataResponse {
   topHits: MusicApiResponse;
   topAlbums: AlbumApiResponse;
   newReleases: NewReleasesResponse;
   topGenres: GenreApiResponse;
 };
+
+
+

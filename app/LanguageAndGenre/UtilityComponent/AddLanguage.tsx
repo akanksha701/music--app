@@ -6,30 +6,37 @@ import { useForm } from 'react-hook-form';
 import NextTextArea from '@/common/inputs/Textarea'; 
 import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast'; 
-import { IAddLanguageProps } from '../types/types';
+import { IAddLanguageFormData, IAddLanguageProps } from '../types/types';
 import { useAddLanguageMutation } from '@/services/languages';
+
 const AddLanguage = (props: IAddLanguageProps) => {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm({});
-  const [AddLanguage ] = useAddLanguageMutation();
-  const onSubmit = async (data: any) => {
+  } = useForm<IAddLanguageFormData>(); 
+
+  const [AddLanguage] = useAddLanguageMutation();
+
+  const onSubmit = async (data: IAddLanguageFormData) => {
     props.handleCloseDialog();
     const formData = new FormData();
-    formData.append('image', data.imageUrl);
+    if (data.imageUrl?.length > 0) {
+      formData.append('image', data.imageUrl[0]);
+    }
+
     formData.append('name', data.name);
     formData.append('description', data.description);
+
     try {
-     await AddLanguage(formData);
+      await AddLanguage(formData);
       toast.success('Added...');
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(error?.message as string);
+        toast.error(error?.message);
       } else {
-        toast.error('unknown error occured');
+        toast.error('Unknown error occurred');
       }
     }
   };
@@ -46,28 +53,24 @@ const AddLanguage = (props: IAddLanguageProps) => {
               id="name"
               name="name"
               label="Name"
-              placeholder="Enter your name"
+              placeholder="Enter language name"
               register={register}
               options={{ required: 'Name is required' }}
               errors={errors}
             />
           </div>
-
-          {/* Description Field */}
           <div className="flex flex-col">
             <NextTextArea
               id="description"
               name="description"
               label="Description"
-              placeholder="Enter music description"
+              placeholder="Enter language description"
               register={register}
               options={{ required: 'Description is required' }}
               errors={errors}
             />
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-         
             <div className="flex flex-col">
               <FileUploadInput
                 name="imageUrl"
@@ -77,8 +80,6 @@ const AddLanguage = (props: IAddLanguageProps) => {
               />
             </div>
           </div>
-
-          {/* Submit Button */}
           <div className="flex justify-center sm:justify-start mt-4">
             <Button
               type="submit"

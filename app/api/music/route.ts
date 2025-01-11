@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
 import { capitalizeTitle, getAudioDuration, saveFiles } from '@/utils/helpers';
-import mongoose, { PipelineStage } from 'mongoose';
+import mongoose, { PipelineStage, Types } from 'mongoose';
 import { db } from '../user/route';
 import { getMusicWithPeaks } from '@/utils/getPeaks';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
-import { IMusicFormData } from './types/types';
-
 export const config = {
   api: {
     bodyParser: false,
@@ -21,7 +19,7 @@ export const AUDIO_UPLOAD_DIR = path.resolve('public/music/audio');
 export const ALBUM_IMAGE_UPLOAD_DIR = path.resolve('public/albums/images');
 export const GENRE_IMAGE_UPLOAD_DIR = path.resolve('public/genres/images');
 
-async function getAudioDetails(body:IMusicFormData) {
+async function getAudioDetails(body:Record<string, string|Blob>) {
   const audio = (body.audio as Blob) || null;
   const image = (body.image as Blob) || null;
   const audioUrl = audio ? await saveFiles(audio, AUDIO_UPLOAD_DIR) : null;
@@ -33,7 +31,7 @@ async function getAudioDetails(body:IMusicFormData) {
   };
   return audioDetails;
 }
-async function getMusicPrimaryDetails(body:IMusicFormData) {
+async function getMusicPrimaryDetails(body:Record<string, string|Blob>) {
   const audio = (body.audio as Blob) || null;
   const artistIds = body.artists
     ? body.artists
@@ -41,8 +39,6 @@ async function getMusicPrimaryDetails(body:IMusicFormData) {
       .split(',')
       .map((id: string) => new mongoose.Types.ObjectId(id))
     : [];
-  console.log('artistIds',artistIds)
-
   const musicDetails = {
     name: await capitalizeTitle(body?.name.toString()),
     description: body.description,
@@ -58,8 +54,10 @@ async function getMusicPrimaryDetails(body:IMusicFormData) {
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const body:any = Object.fromEntries(formData);
-    const albumIds = Array.isArray(body?.album) ? body?.album : [body?.album];
+    const body:Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
+    const albumIds = Array.isArray(body?.album)
+      ? body?.album.map((id) => new Types.ObjectId(id))  
+      : [new Types.ObjectId(body?.album)]; 
     const musicDetails = await getMusicPrimaryDetails(body);
     const audioDetails = await getAudioDetails(body);
     const price = {

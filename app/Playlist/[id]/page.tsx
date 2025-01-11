@@ -4,23 +4,14 @@ import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md'; 
 import SecondaryButton from '@/common/buttons/SecondaryButton'; 
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'; 
-import { use, useState } from 'react'; 
+import { Usable, use, useState } from 'react'; 
 import MusicListContainer from '@/common/MusicPlayer/MusicListContainer'; 
 import Link from 'next/link';
 import Image from 'next/image';
-
-const PlaylistPage = ({ params }: { params: any }) => {
-  const Params: {
-      id : string
-    } = use(params);
+const PlaylistPage = ({ params }: { params: Usable<{ id: string }>}) => {
+  const Params: { id : string } = use(params);
   const playlistId = Params.id; 
-
   const [isDialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
-
-  // Placeholder for handle delete
-  const handleDelete = () => {
-    // Logic for deleting playlist
-  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
@@ -78,7 +69,7 @@ const PlaylistPage = ({ params }: { params: any }) => {
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
               Cancel
             </Button>
-            <Button variant="destructive" className='bg-red-600 hover:bg-red-700 text-white' onClick={handleDelete}>
+            <Button variant="destructive" className='bg-red-600 hover:bg-red-700 text-white'>
               Delete
             </Button>
           </DialogFooter>

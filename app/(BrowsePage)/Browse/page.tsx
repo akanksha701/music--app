@@ -1,5 +1,4 @@
 'use server';
-
 import React from 'react';
 import Browse from './index';
 import { fetchApi } from '@/utils/helpers';

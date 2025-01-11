@@ -30,20 +30,19 @@ export async function POST(req: NextRequest) {
     }
   } catch (error) {
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error },
       { status: 500 }
     );
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const users = await User.find();
     return NextResponse.json({ users });
   } catch (error) {
-    console.error('Signup error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error },
       { status: 500 }
     );
   }

@@ -6,11 +6,12 @@ import MusicList from '@/common/MusicList/MusicList';
 import { useSearchParams } from 'next/navigation';
 import { MusicData } from './types/types';
 import Loading from './loading';
+import { IPrevData } from '@/common/types/types';
 const Index = () => {
   const searchParams = useSearchParams();
   const albumId = searchParams.get('albumId');
   const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
-  const [prevData, setPrevData] = useState<{}>({});
+  const [prevData, setPrevData] = useState<object>({});
   const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery('675bbfb9af30013c7e5c5f13');
   const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId, {
     skip: !albumId, 
@@ -39,7 +40,7 @@ const Index = () => {
         <MusicList 
           data={musicData?.data}
           mode={albumId ? 'edit' : 'create'} 
-          prevData={prevData}
+          prevData={prevData as IPrevData}
           MyselectedSongs={selectedSongs} />}
       </div>
     </div>

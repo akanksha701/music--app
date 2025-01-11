@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 export interface IGenre {
     _id?: string;
     name?: string;
@@ -9,7 +11,7 @@ export interface IGenre {
     isDeleted?: boolean;
   }
   
-  export interface ILanguage {
+export interface ILanguage {
     _id?: string; 
     name?: string;
     description?: string;
@@ -20,12 +22,22 @@ export interface IGenre {
     imageUrl?: string;
   }
   
-  export interface Ifilter {
+export interface Ifilter {
     isDeleted ?: boolean,
     Label ?: string
   }
   
-  export interface IAlbum 
-  { name: string; description: FormDataEntryValue; Price: number; 
-    imageUrl: string; Genre: (string | undefined)[]; Language: (string | undefined)[]; 
-    musicIds: (string | undefined)[];   }
+export interface IAlbum {
+  _id?: mongoose.Types.ObjectId;             
+  name: string;                             
+  price?: number;                             
+  createdAt?: Date;                          
+  updatedAt?: Date;                          
+  description: string;                       
+  imageUrl: string | null;                  
+  Genre: (string | undefined)[];             
+  Language: (string | undefined)[];          
+  musicIds: mongoose.Types.ObjectId[];    
+    
+  }
+  
