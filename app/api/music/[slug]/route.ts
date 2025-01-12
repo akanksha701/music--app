@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '../../user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 
-export async function GET(req: Request) {
+export async function GET(req: Request,{ }: { params: { slug: string } }) {
   try {
     
     const authHeader:string|null = req.headers.get('Authorization');

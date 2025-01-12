@@ -2,8 +2,13 @@ import mongoose from 'mongoose';
 import { db } from '@/app/api/user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { NextResponse } from 'next/server';
-
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+type RouteContext = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+export async function GET(req: Request, context: RouteContext) {
+  const params = await context.params;
   const { id } = params;
 
   try {
@@ -16,12 +21,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     const token = authHeader?.split(' ')[1];
     const decodedToken = await auth.verifyIdToken(token as string);
     const user = await auth.getUser(decodedToken.uid);
- 
     const aggregatePipeline = [
       {
         $match: {
           'musicDetails.artistId': { $in: [new mongoose.Types.ObjectId(id)] }, // Match the provided artistId
-          isDeleted: false, // Exclude deleted music
+          // isDeleted: false,
         },
       },
       {
@@ -114,7 +118,14 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
               email: '$userDetails.email' 
             } 
           },
-          liked: { $first: { $in: ['$_id', '$loggedInUser.likedMusics'] } },
+          liked: {
+            $first: {
+              $in: [
+                '$_id', 
+                { $ifNull: ['$loggedInUser.likedMusics', []] }  
+              ]
+            }
+          },
           price: { $first: '$price.amount' },
           currency: { $first: '$price.currency' },
           imageUrl: { $first: '$audioDetails.imageUrl' },
@@ -145,7 +156,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     
     
     const musics = await db.collection('musics').aggregate(aggregatePipeline).toArray();
-
+   
+    console.log(musics);
     if (musics.length > 0) {
       return NextResponse.json({
         status: 200,

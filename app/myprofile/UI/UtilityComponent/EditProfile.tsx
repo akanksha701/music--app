@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { FieldError, useForm } from 'react-hook-form';
 import { CalendarDate } from '@internationalized/date';
-import { IEditProfileProps } from '../../types/types';
+import { IEditProfileProps, IUserDetails } from '../../types/types';
 import toast from 'react-hot-toast';
 import {
   useFetchUserProfileQuery,
@@ -12,8 +12,9 @@ import NextInput from '@/common/inputs/Input';
 import NextDatePicker from '@/common/inputs/DatePicker';
 import SelectMenu from '@/common/inputs/SelectMenu';
 import { setLoggedInUser } from '@/Redux/features/user/sessionSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Loading from '@/app/AddAlbum/loading';
+import { RootState } from '@/Redux/store';
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;
@@ -26,10 +27,11 @@ const EditProfile = (props: IEditProfileProps) => {
     formState: { errors },
   } = useForm({});
   const { data, isLoading } = useFetchUserProfileQuery(undefined);
+  const userDetails = useSelector<RootState , IUserDetails|null>((state) => state?.session?.loggedInUser);
   const dispatch = useDispatch();
   const setUserDetails = useCallback(async () => {
     {
-      const user = data?.data;
+      const user = userDetails ? userDetails :data?.data;
       if (user) {
         const day =
           new Date(user.dateOfBirth).getDate() || new Date().getDate();
@@ -65,7 +67,7 @@ const EditProfile = (props: IEditProfileProps) => {
           userId: data?.userId,
           firstName: data.firstName,
           lastName: data.lastName,
-          email: data?.email,
+          email: data?.emailAddresses,
           imageUrl: image,
           gender: data?.gender,
         };

@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { db } from '../user/route';
 export async function GET() {
   try {
-    
     const artists = await  db
       .collection('artists').aggregate([
         {

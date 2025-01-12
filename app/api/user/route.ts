@@ -31,11 +31,8 @@ export async function PUT(req: Request) {
     const token = authHeader?.split(' ')[1];
     const decodedToken = await auth.verifyIdToken(token as string);
     const user = await auth.getUser(decodedToken.uid);
-
     const body = await req.json();
-
     const { email, firstName, lastName, dob, gender, imageUrl } = body;
-
     const updatedData = {
       ...(email && { email: email }),
       ...(gender && { gender: gender }),

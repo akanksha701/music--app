@@ -20,7 +20,6 @@ export async function signInWithGoogle() {
     console.error('Error signing in with Google', error);
   }
 }
-
 export async function signOutWithGoogle() {
   try {
     await firebaseAuth.signOut();

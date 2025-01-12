@@ -158,7 +158,7 @@ const AddMusic = (props: IAddMusicProps) => {
                   name: album.name,
                 }))}
                 error={errors}
-                rules={{ required: true }}
+                rules={{ required: false }}
                 selectionMode={'multiple'}
                 placeholder="Select Album"
               />

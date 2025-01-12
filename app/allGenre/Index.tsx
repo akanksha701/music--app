@@ -5,6 +5,7 @@ import { Breadcrumb } from '@/common/BreadCrumb/BreadCrumb';
 import SmallGrid from '@/common/grid/SmallGrid';
 import { AddMoreButton } from '../LanguageAndGenre/UtilityComponent/NavigateButton';
 import Loading from './loading';
+import { Column } from '@/common/types/types';
 
 
 
@@ -30,7 +31,7 @@ const AllGenereIndex = () => {
       content: (
         <SmallGrid
           label="genre"
-          columns={genereColumns}
+          columns={genereColumns as Column[]}
           data={genreData?.data}
           moreBox={<div className="hidden"></div>}
           addBox={<AddMoreButton label={'genre'}></AddMoreButton>}
@@ -52,7 +53,7 @@ const AllGenereIndex = () => {
         <h1 className="text-2xl font-bold  underline">Genres :</h1>
         <SmallGrid
           label="genre"
-          columns={genereColumns as any}
+          columns={genereColumns as Column[]}
           data={genreData?.data}
           moreBox={<div className="hidden"></div>}
           addBox={<AddMoreButton label={'genre'}></AddMoreButton>}

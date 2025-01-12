@@ -1,8 +1,9 @@
 'use server';
 import { db } from '@/app/api/user/route';
 import { IUserDetails } from '@/app/MyProfile/types/types';
+import mongoose from 'mongoose';
 
-export async function createUser(user:IUserDetails) {
+export async function createUser(user: IUserDetails) {
   try {
     const newUser = await db.collection('users').insertOne({
       userId: user?.uid,
@@ -12,9 +13,11 @@ export async function createUser(user:IUserDetails) {
       imageUrl: user?.imageUrl,
       isActive: true,
       isDeleted: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
-
     if (newUser.acknowledged) {
+      await createArtist(newUser?.insertedId.toString());
       return {
         ...user, // Spread the user data
         _id: newUser.insertedId, // Add the insertedId from MongoDB
@@ -26,25 +29,78 @@ export async function createUser(user:IUserDetails) {
     }
   }
 }
-
+export async function createArtist(userObjectId: string) {
+  try {
+    const newArtist = await db.collection('artists').insertOne({
+      userId: new mongoose.Types.ObjectId(userObjectId),
+      isDeleted: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+    if (newArtist.acknowledged) {
+      return newArtist;
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      return null;
+    }
+  }
+}
 export async function checkIfUserExists(user: IUserDetails) {
   try {
-    const existedUser = await db
-      .collection('users')
-      .findOne({ userId: user?.uid as string });
+    const existedUser = await db.collection('users').aggregate([
+      { $match: { userId: user?.uid as string } },
+      {
+        $lookup: {
+          from: 'artists',
+          let: { userId: '$_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ['$userId', '$$userId'] }
+              }
+            }
+          ],
+          as: 'artistDetails'
+        }
+      },
+      {
+        $unwind: {
+          path: '$artistDetails',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $project:
+        {
+          firstName: 1,
+          lastName: 1,
+          email: 1,
+          imageUrl: 1,
+          isDeleted: 1,
+          gender: 1,
+          _id: 1,
+          userId: 1,
+          isActive: 1,
+          artistId: '$artistDetails._id'
+        }
+      },
+    ]).toArray();
     if (!existedUser) {
       const newUser = await createUser(user);
       return newUser;
     } else {
       const user = {
-        userId: existedUser?.userId,
-        firstName: existedUser?.firstName,
-        lastName: existedUser?.lastName,
-        email: existedUser?.email,
-        imageUrl: existedUser?.imageUrl,
-        isActive: existedUser?.isActive,
-        isDeleted: existedUser?.isDeleted,
-        gender: existedUser?.gender,
+        _id: existedUser[0]?._id.toString(),
+        userId: existedUser[0]?.userId,
+        firstName: existedUser[0]?.firstName,
+        lastName: existedUser[0]?.lastName,
+        email: existedUser[0]?.email,
+        imageUrl: existedUser[0]?.imageUrl,
+        isActive: existedUser[0]?.isActive,
+        isDeleted: existedUser[0]?.isDeleted,
+        gender: existedUser[0]?.gender,
+        artistId:existedUser[0]?.artistId
       };
       return user;
     }

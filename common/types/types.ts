@@ -160,7 +160,6 @@ export interface ITableProps {
   handleEdit?: (id: string) => void;
   paginationData?: IPagination;
   page: number;
-  // eslint-disable-next-line no-unused-vars
   setPage: (page: number) => void;
 }
 export interface IGridrops {
@@ -225,4 +224,46 @@ export interface ISmallGridProps
   label: string;
   moreBox?: JSX.Element;
   addBox?: JSX.Element;
+}
+
+export interface IArtist {
+  fullName: string;
+  email: string;
+}
+
+export interface IMusic {
+  _id: string;
+  name: string;
+  language: string;
+  genre: string;
+  description: string;
+  artists: IArtist[];
+  liked?: boolean;
+  price: number;
+  currency: string;
+  imageUrl: string;
+  audioUrl: string;
+  createdAt: string;
+}
+
+export interface ISelectedRow
+{
+  id: string;
+  image: string;
+  name: string;
+  description: string;
+  genre: string;
+  language: string;
+  artists: string[];
+}
+
+export interface  IPrevData
+  {
+    albumDescription: string;
+    albumId: string;
+    albumImage: string;
+    albumMusicIds: string[];
+    albumName: string;
+    albumPrice: number;
+    
 }

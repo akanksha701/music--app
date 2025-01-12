@@ -10,7 +10,7 @@ import { useUserSession } from '@/hooks/customHooks/use-user-session';
 export default function NavbarPage({ session }:{  session: string | null; }) {
   const userSession = useUserSession(session);
   if (!userSession) {
-    return null;
+    // return null;
   }
   return (
     <>

@@ -52,7 +52,7 @@ const MusicListContainer = () => {
     (state) => state.musicPlayerSlice.isPlaying
   );
   const { currentTime, setCurrentTime } = useMusic();
-  const wavesurferRefs = useRef<Map<string, any>>(new Map());
+  const wavesurferRefs = useRef(new Map());
   const [toggleLike] = useToggleLikeMutation();
   const wavesurferRef = useSelector<RootState, WritableDraft<WaveSurfer> | null>((state) => state.musicPlayerSlice.wavesurferRef);
   useEffect(() => {
@@ -90,7 +90,7 @@ const MusicListContainer = () => {
 
   const createWaveSurfers = (songs: IMusicProps[]) => {
     if (songs && songs.length > 0) {
-       songs.map((song) => {
+      songs.map((song) => {
         const waveformContainerId = `waveform_${song?._id}`;
         const waveformContainer = document.getElementById(waveformContainerId);
 

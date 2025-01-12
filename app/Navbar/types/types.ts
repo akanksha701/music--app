@@ -1,6 +1,6 @@
 export interface IItem {
+  key: string;
   label: string;
-  key:string;
   route: string;
 }
 export interface IDropDownItemProps {
