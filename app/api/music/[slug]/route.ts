@@ -2,9 +2,8 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { db } from '@/lib/DbConnection/dbConnection';
 
-export async function GET(req: Request,{ }: { params: { slug: string } }) {
+export async function GET(req: Request) {
   try {
-    
     const authHeader:string|null = req.headers.get('Authorization');
     const token = authHeader?.split(' ')[1];
     const decodedToken = await auth.verifyIdToken(token as string);

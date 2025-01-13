@@ -1,6 +1,6 @@
 import React  from 'react';
 import Image from 'next/image';
-import CarouselPopularTracks from '@/app/home/UI/UtilityComponent/CarouselPopularTracks';
+import CarouselPopularTracks from '@/app/Home/UI/UtilityComponent/CarouselPopularTracks';
 interface IPopularTracksTypes {
   data: Array<string>;
   users: Array<string>;

@@ -7,12 +7,8 @@ import { useSearchParams } from 'next/navigation';
 import { MusicData } from './types/types';
 import Loading from './loading';
 import { IPrevData } from '@/common/types/types';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/Redux/store';
-import { IUserDetails } from '../MyProfile/types/types';
 const Index = () => {
   const searchParams = useSearchParams();
-  const loggedInUser = useSelector<RootState, IUserDetails | null>((state) => state?.session?.loggedInUser);
   const albumId = searchParams.get('albumId');
   const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
   const [prevData, setPrevData] = useState<object>({});

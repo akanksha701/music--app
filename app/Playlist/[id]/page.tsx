@@ -4,11 +4,11 @@ import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md'; 
 import SecondaryButton from '@/common/buttons/SecondaryButton'; 
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'; 
-import { Usable, use, useState } from 'react'; 
+import {  use, useState } from 'react'; 
 import MusicListContainer from '@/common/MusicPlayer/MusicListContainer'; 
 import Link from 'next/link';
 import Image from 'next/image';
-const PlaylistPage = ({ params }: { params: Usable<{ id: string }>}) => {
+const PlaylistPage = ({ params }: { params: Promise<{ id: string }>}) => {
   const Params: { id : string } = use(params);
   const playlistId = Params.id; 
   const [isDialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
