@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/Redux/store';
 import { redirect } from 'next/navigation';
 import MemoizedCard from './MemoizedCard';
-import { setCurrentList, setCurrentTrack, setCurrentSongIndex } from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { generateUrl } from '@/utils/helpers';
 
 const Box = ({
