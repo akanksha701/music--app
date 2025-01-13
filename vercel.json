@@ -1,12 +1,9 @@
 {
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node"
-    }
-  ],
-  "scripts": {
-    "install": "npm install --legacy-peer-deps"
-  },
-  "debug": true
-}
+    "build": {
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "installCommand": "npm install --legacy-peer-deps"
+  }
+  
