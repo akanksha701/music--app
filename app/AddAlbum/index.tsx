@@ -13,7 +13,12 @@ const Index = () => {
   const albumId = searchParams.get('albumId');
   const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
   const [prevData, setPrevData] = useState<IPrevData | null>(null);
-  const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery(albumId);
+
+  // Ensure albumId is defined before making queries
+  const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery(albumId || '', {
+    skip: !albumId,
+  });
+  
   const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId || '', {
     skip: !albumId,
   });
@@ -36,17 +41,20 @@ const Index = () => {
 
   if (isAlbumLoading || isMusicLoading) return <Loading />;
 
+  // Handle case where no music data is found
+  if (!musicData) {
+    return <div>No music data found.</div>;
+  }
+
   return (
     <div className="flex justify-center items-start min-h-screen pt-8">
       <div className="w-full">
-        {musicData && (
-          <MusicList 
-            data={musicData.data}
-            mode={albumId ? 'edit' : 'create'} 
-            prevData={prevData as IPrevData}
-            MyselectedSongs={selectedSongs} 
-          />
-        )}
+        <MusicList 
+          data={musicData.data}
+          mode={albumId ? 'edit' : 'create'} 
+          prevData={prevData as IPrevData}
+          MyselectedSongs={selectedSongs} 
+        />
       </div>
     </div>
   );
