@@ -1,4 +1,4 @@
-'use client';
+// 'use client';
 // import React, { useEffect, useState } from 'react';
 // import { useGetAlbumByIdQuery } from '@/services/album';
 // import { useGetMusicsOfArtistsQuery } from '@/services/music';
@@ -8,45 +8,45 @@
 // import { MusicData } from './types/types';
 // import { IPrevData } from '@/common/types/types';
 
-const Index = () => {
-  // const searchParams = useSearchParams();
-  // const albumId = searchParams.get('albumId');
-  // const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
-  // const [prevData, setPrevData] = useState<IPrevData | null>(null);
+// const Index = () => {
+// const searchParams = useSearchParams();
+// const albumId = searchParams.get('albumId');
+// const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
+// const [prevData, setPrevData] = useState<IPrevData | null>(null);
 
-  // const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery(albumId || '', {
-  //   skip: !albumId,
-  // });
+// const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery(albumId || '', {
+//   skip: !albumId,
+// });
 
-  // const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId || '', {
-  //   skip: !albumId,
-  // });
+// const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId || '', {
+//   skip: !albumId,
+// });
 
-  // useEffect(() => {
-  //   if (albumByIdData?.data) {
-  //     setPrevData({
-  //       albumDescription: albumByIdData.data.description,
-  //       albumId: albumId || '',
-  //       albumImage: albumByIdData.data.imageUrl,
-  //       albumMusicIds: albumByIdData.data.musicDetails,
-  //       albumName: albumByIdData.data.name,
-  //       albumPrice: albumByIdData.data.Price,
-  //     });
+// useEffect(() => {
+//   if (albumByIdData?.data) {
+//     setPrevData({
+//       albumDescription: albumByIdData.data.description,
+//       albumId: albumId || '',
+//       albumImage: albumByIdData.data.imageUrl,
+//       albumMusicIds: albumByIdData.data.musicDetails,
+//       albumName: albumByIdData.data.name,
+//       albumPrice: albumByIdData.data.Price,
+//     });
 
-  //     const Songs = albumByIdData.data.musicDetails.map((song: MusicData) => song._id);
-  //     setSelectedSongs(Songs);
-  //   }
-  // }, [albumByIdData, albumId]);
+//     const Songs = albumByIdData.data.musicDetails.map((song: MusicData) => song._id);
+//     setSelectedSongs(Songs);
+//   }
+// }, [albumByIdData, albumId]);
 
-  // if (isAlbumLoading || isMusicLoading) return <Loading />;
+// if (isAlbumLoading || isMusicLoading) return <Loading />;
 
-  // if (!musicData || !albumByIdData) {
-  //   return <div>No music or album data found.</div>;
-  // }
+// if (!musicData || !albumByIdData) {
+//   return <div>No music or album data found.</div>;
+// }
 
-  return (
-    <div className="flex justify-center items-start min-h-screen pt-8">
-      {/* <div className="w-full">
+// return (
+// <div className="flex justify-center items-start min-h-screen pt-8">
+{/* <div className="w-full">
         <MusicList 
           data={musicData.data}
           mode={albumId ? 'edit' : 'create'} 
@@ -54,8 +54,8 @@ const Index = () => {
           MyselectedSongs={selectedSongs} 
         />
       </div> */}
-    </div>
+{/* </div>
   );
 };
 
-export default Index;
+export default Index; */}
