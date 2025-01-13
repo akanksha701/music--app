@@ -1,11 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import AvatarUploader from '@/common/inputs/avatar-uploader';
-import { useForm } from 'react-hook-form';
+// import AvatarUploader from '@/common/inputs/avatar-uploader';
+// import { useForm } from 'react-hook-form';
 import EditProfile from './UtilityComponent/EditProfile';
 
 const MyProfile = () => {
-  const { setValue } = useForm({});
+  // const { setValue } = useForm({});
   const [image, setImage] = useState('');
   return (
     <div className="bg-gray-100 flex flex-col justify-center bg-cover bg-mk-bg p-6">
@@ -14,13 +14,13 @@ const MyProfile = () => {
           <div className="max-w-md mx-auto">
             <div className="flex items-center space-x-5">
               <div className="block relative">
-                <AvatarUploader
+                {/* <AvatarUploader
                   onChange={(url) => {
                     setImage(url as string);
                     setValue('imageUrl', url as string);
                   }}
                   value={image}
-                />
+                /> */}
               </div>
               <div className="block pl-2 font-semibold text-xl text-gray-700">
                 <h2 className="leading-relaxed">Edit Profile</h2>
