@@ -9,6 +9,9 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
+  "engines": {
+  "node": "20.x"
+},
   "dependencies": {
     "@clerk/nextjs": "^6.3.3",
     "@clerk/types": "^4.33.0",
