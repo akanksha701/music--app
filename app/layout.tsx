@@ -7,7 +7,7 @@ import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 // import { Nunito } from 'next/font/google';
 import { Suspense } from 'react';
-import Loading from './AddAlbum/loading';
+import Loading from './Album/loading';
 
 
 // const nunito = Nunito({
