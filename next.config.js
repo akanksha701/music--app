@@ -44,6 +44,7 @@ const nextConfig = {
   },
 
   webpack: (config) => {
+    config.resolve.alias['framer-motion'] = require.resolve('framer-motion');
     config.stats = {
       logging: 'verbose',
     };
