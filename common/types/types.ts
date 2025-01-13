@@ -99,16 +99,29 @@ export interface IHoverCardProps {
   children: React.ReactNode;
 }
 
+export interface ILanguage {
+  _id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isDeleted: boolean;
+  imageUrl: string;
+}
+
 export interface IMenuProps {
-  row:Record<string,string>;
+  row?:Record<string,string>;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   handleMenuToggle?:Function
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  handleEdit:Function
+  handleEdit?:Function
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  handleDelete:Function
-
+  handleDelete?:Function
+  data?:ILanguage[]
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  handleClick?:(value?: string | null, index?: number | null) => Promise<never>
 }
 
 export type FormDataType = {

@@ -1,7 +1,10 @@
 import React from 'react';
 import Image from 'next/image'; 
-import { ICreatorsAndArtists } from '../../types/types';
- 
+interface ICreatorsAndArtists
+{
+  title:string
+  creatorsAndArtists :Array<{ title:string,description:string,imageUrl:string}>
+}
 
 const CreatorsAndArtists = (props: ICreatorsAndArtists) => {
   const { creatorsAndArtists,title } = props;

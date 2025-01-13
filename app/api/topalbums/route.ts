@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import { db } from '../user/route';
+import { NextResponse } from 'next/server'; 
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { db } from '@/lib/DbConnection/dbConnection';
 
 
 

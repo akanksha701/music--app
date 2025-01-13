@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { capitalizeTitle, saveFiles } from '@/utils/helpers';
-import { ALBUM_IMAGE_UPLOAD_DIR } from '../music/route';
+import { capitalizeTitle, saveFiles } from '@/utils/helpers'; 
 import mongoose from 'mongoose';
 import path from 'path';
 import fs from 'fs/promises';
-import { db } from '../user/route'; 
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { getAlbumByFilter, getAlbumByIDPipeline, getAlbumPipeline, musicAggregationPipeline } from './queries';
 import { IAlbum, Ifilter, IGenre, ILanguage } from './types/types';
+import { ALBUM_IMAGE_UPLOAD_DIR } from '../music/exports';
+import { db } from '@/lib/DbConnection/dbConnection';
   
 export async function POST(req: NextRequest) {
   try {
@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: 200, message: 'new album created successfully', data: newAlbum});
     }
     return NextResponse.json(
-      { error: 'error while creating genres' },
       { error: 'error while creating genres' },
       { status: 400 }
     );

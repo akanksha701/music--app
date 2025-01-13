@@ -8,8 +8,9 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import { ICarousalProps } from '../../types/types';
-
+interface ICarousalProps {
+  data: Array<string>;
+}
 const CarouselPopularTracks = (props: ICarousalProps) => {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })

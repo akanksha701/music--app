@@ -14,7 +14,7 @@ const MenubarComponent = (props: IMenuProps) => {
   const searchParams = useSearchParams();
   const { data: languageList, handleClick } = props;
   const languageName = searchParams.get('language');
-  <>
+  return(<>
     <Carousel className="max-w-full">
       <CarouselContent className="flex gap-2">
         <CarouselItem className="basis-1/3 flex-shrink-0">
@@ -24,7 +24,7 @@ const MenubarComponent = (props: IMenuProps) => {
               className={`${
                 !languageName ? 'bg-slate-200' : 'bg-white'
               } font-light text-black`}
-              onClick={() => handleClick(null)}
+              onClick={() => handleClick && handleClick()}
             >
               For you
             </Button>
@@ -42,7 +42,7 @@ const MenubarComponent = (props: IMenuProps) => {
                     className={`${
                       isActive ? 'bg-slate-200' : 'bg-white'
                     } font-light text-black`}
-                    onClick={() => handleClick(item.name, index)}
+                    onClick={() => handleClick && handleClick(item.name, index)}
                   >
                     {item?.name}
                   </Button>
@@ -54,7 +54,7 @@ const MenubarComponent = (props: IMenuProps) => {
       <CarouselPrevious />
       <CarouselNext />
     </Carousel>
-  </>;
+  </>);
 };
 
 export default MenubarComponent;

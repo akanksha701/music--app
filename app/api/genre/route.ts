@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { NextApiRequest } from 'next';
 import { capitalizeTitle, saveFiles } from '@/utils/helpers';
-import { GENRE_IMAGE_UPLOAD_DIR } from '../music/route';
-import { db } from '../user/route';
 import mongoose from 'mongoose';
 import path from 'path';
 import fs from 'fs/promises';
+import { GENRE_IMAGE_UPLOAD_DIR } from '../music/exports';
+import { db } from '@/lib/DbConnection/dbConnection';
 
 export async function POST(req: NextRequest) {
   try {
@@ -68,7 +67,7 @@ export async function PUT(req: NextRequest) {
 
     const existingGenre = await db
       .collection('genres')
-      .findOne({ _id: new mongoose.Types.ObjectId(id!) });
+      .findOne({ _id: new mongoose.Types.ObjectId(id) });
 
     if (!existingGenre) {
       return NextResponse.json({ error: 'Genre not found' }, { status: 404 });
@@ -99,7 +98,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const updatedGenre = await db.collection('genres').findOneAndUpdate(
-      { _id: new mongoose.Types.ObjectId(id!) },
+      { _id: new mongoose.Types.ObjectId(id) },
       {
         $set: {
           name,
@@ -177,7 +176,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function DELETE(req: NextApiRequest) {
+export async function DELETE(req: NextRequest) {
   try {
     const url = new URL(req?.url as string);
     const id = url?.searchParams?.get('id');

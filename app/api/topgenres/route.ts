@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '../user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { db } from '@/lib/DbConnection/dbConnection';
 
 export async function GET(req: NextRequest) {
   try {

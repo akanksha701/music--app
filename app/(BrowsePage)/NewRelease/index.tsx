@@ -19,7 +19,7 @@ const Index = () => {
     [setSelectedLanguage]
   );
   if (isLoading) {
-    // return <Loading />;
+    // return <Loading/>;
   }
   return (
     <div className="p-10">
@@ -27,7 +27,7 @@ const Index = () => {
         <hr className="w-full border-gray-600" />
         <MenubarComponent 
           data={languageList?.data } 
-          handleClick={handleClick} />
+          handleClick={handleClick as (value?: string | null, index?: number | null) => Promise<never>} />
         <hr className="w-full border-gray-600" />
         <NewRelease />
       </div>

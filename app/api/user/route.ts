@@ -1,13 +1,12 @@
-import { v2 as cloudinary } from 'cloudinary';
-import { getDb } from '@/lib/DbConnection/dbConnection';
+import { v2 as cloudinary } from 'cloudinary'; 
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { db } from '@/lib/DbConnection/dbConnection';
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-export const db = await getDb();
 export async function GET(req: Request) {
   try {
     const authHeader: string|null = req.headers.get('Authorization');

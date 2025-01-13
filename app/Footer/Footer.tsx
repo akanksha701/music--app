@@ -1,7 +1,12 @@
 import React, { useMemo } from 'react';
 import { FaYoutube, FaInstagram, FaTiktok, FaFacebook } from 'react-icons/fa';
-import { IFooterProps } from '../home/types/types';
-
+interface IfooterLinks {
+  title?: string;
+  links?: Array<string>;
+}
+interface IFooterProps {
+  data?: IfooterLinks[];
+}
 const Footer = (props: IFooterProps) => {
   const { data } = props;
 

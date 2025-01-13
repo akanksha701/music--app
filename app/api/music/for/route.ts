@@ -2,8 +2,8 @@
 import mongoose from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
 import { MusicDocument } from '@/common/types/types';
-import { db } from '../../user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { db } from '@/lib/DbConnection/dbConnection';
 
 export const GET = async (req: NextRequest) => {
   try {

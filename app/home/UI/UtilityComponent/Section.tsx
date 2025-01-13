@@ -1,7 +1,13 @@
 import React, { useMemo } from 'react';
-import { IFeature, ISectionProps } from '../../types/types';
 import Image from 'next/image';
-
+interface IFeature {
+  title: string;
+  description: string;
+  image: string;
+}
+interface ISectionProps {
+  data: IFeature[];
+}
 const Section = (props: ISectionProps) => {
   const { data } = props;
 

@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { capitalizeTitle, saveFiles } from '@/utils/helpers';
-import { LANGUAGE_IMAGE_UPLOAD_DIR } from '../music/route';
+import { capitalizeTitle, saveFiles } from '@/utils/helpers'; 
 import path from 'path';
 import fs from 'fs/promises';
-import { NextApiRequest } from 'next';
-import { db } from '../user/route';
 import mongoose from 'mongoose';
+import { LANGUAGE_IMAGE_UPLOAD_DIR } from '../music/exports';
+import { db } from '@/lib/DbConnection/dbConnection';
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
@@ -232,7 +231,7 @@ export async function PUT(req: NextRequest) {
 //   }
 // }
 
-export async function DELETE(req: NextApiRequest) {
+export async function DELETE(req: NextRequest) {
   try {
     const url = new URL(req.url as string);
     const id = url.searchParams.get('id');

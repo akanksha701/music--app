@@ -1,23 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
 import { capitalizeTitle, getAudioDuration, saveFiles } from '@/utils/helpers';
 import mongoose, { PipelineStage } from 'mongoose';
-import { db } from '../user/route';
 import { getMusicWithPeaks } from '@/utils/getPeaks';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { AUDIO_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from './exports';
+import { db } from '@/lib/DbConnection/dbConnection';
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-export const LANGUAGE_IMAGE_UPLOAD_DIR = path.resolve(
-  'public/languages/images'
-);
-export const IMAGE_UPLOAD_DIR = path.resolve('public/music/images');
-export const AUDIO_UPLOAD_DIR = path.resolve('public/music/audio');
-export const ALBUM_IMAGE_UPLOAD_DIR = path.resolve('public/albums/images');
-export const GENRE_IMAGE_UPLOAD_DIR = path.resolve('public/genres/images');
 
 async function getAudioDetails(body:Record<string, string|Blob>) {
   const audio = (body.audio as Blob) || null;

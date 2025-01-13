@@ -7,6 +7,7 @@ import { useGetGenreQuery } from '@/services/genre';
 import SmallGrid from '@/common/grid/SmallGrid'; 
 import { AddMoreButton, SeeMoreButton } from './UtilityComponent/NavigateButton';
 import Loading from './loading';
+import { Column } from '@/common/types/types';
 
  
 
@@ -39,7 +40,7 @@ const  GenereIndex = () => {
 
         <SmallGrid
           label="genre"
-          columns={genereColumns}
+          columns={genereColumns as Column[]}
           data={genreData?.data}
           moreBox={<SeeMoreButton url={'/allGenre'}/>}
           addBox={<AddMoreButton label={'genre'}/>}

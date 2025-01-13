@@ -2,8 +2,17 @@
 import React from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import Image from 'next/image';
-import { IArtistProps } from '../../types/types';
 import { Name, useSelectCard } from '@/hooks/useSelectCard';
+
+interface IArtistProps
+{
+  title:string
+  artistsData:Array<{
+    id:string,
+    name:string,
+    imageUrl:string
+  }>
+}
 const Artists = (props: IArtistProps) => {
   const { artistsData, title } = props;
   const { selectedIndexArtist, setSelectedIndex } = useSelectCard();

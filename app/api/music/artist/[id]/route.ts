@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
-import { db } from '@/app/api/user/route';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/DbConnection/dbConnection';
 type RouteContext = {
   params: Promise<{
     id: string;
   }>;
 };
-export async function GET(req: Request, context: RouteContext) {
+
+export async function GET(req: NextRequest, context: RouteContext) {
   const params = await context.params;
   const { id } = params;
-
   try {
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid or missing artistId' }, { status: 400 });
@@ -157,7 +157,6 @@ export async function GET(req: Request, context: RouteContext) {
     
     const musics = await db.collection('musics').aggregate(aggregatePipeline).toArray();
    
-    console.log(musics);
     if (musics.length > 0) {
       return NextResponse.json({
         status: 200,

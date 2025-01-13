@@ -1,7 +1,7 @@
-'use server';
-import { db } from '@/app/api/user/route';
+'use server'; 
 import { IUserDetails } from '@/app/MyProfile/types/types';
 import mongoose from 'mongoose';
+import { db } from '../DbConnection/dbConnection';
 
 export async function createUser(user: IUserDetails) {
   try {
@@ -102,7 +102,7 @@ export async function checkIfUserExists(user: IUserDetails) {
         gender: existedUser[0]?.gender,
         artistId:existedUser[0]?.artistId
       };
-      return user;
+      return JSON.stringify(user);
     }
   } catch (error) {
     if (error instanceof Error) {

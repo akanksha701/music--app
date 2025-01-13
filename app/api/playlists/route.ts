@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import PlayList from '@/lib/models/PlayList';
-import { db } from '../user/route';
 import mongoose from 'mongoose';
+import { db } from '@/lib/DbConnection/dbConnection';
 
 
 export async function GET(req: Request) {

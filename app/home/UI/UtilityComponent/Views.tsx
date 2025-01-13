@@ -1,7 +1,11 @@
 import React from 'react';
 import Image from 'next/image'; 
-import { IViewProps } from '../../types/types';
-
+interface IViewProps {
+  title?: string;
+  viewImg: string;
+  points: Array<string>;
+  views: Array<{ title?: string; views?: string; color?: string }>;
+}
 const Views = (props: IViewProps) => {
   const { title, viewImg, views, points } = props;
   return (

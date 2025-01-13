@@ -1,8 +1,12 @@
 import React  from 'react';
-import { IPopularTracksTypes } from '../../types/types';
 import Image from 'next/image';
-import CarouselPopularTracks from '@/app/Home/UI/UtilityComponent/CarouselPopularTracks';
-
+import CarouselPopularTracks from '@/app/home/UI/UtilityComponent/CarouselPopularTracks';
+interface IPopularTracksTypes {
+  data: Array<string>;
+  users: Array<string>;
+  title:string
+  popularTrackTitle:string
+}
 const PopularTrackCoverPage = (props: IPopularTracksTypes) => {
   const { data, users,title,popularTrackTitle } = props;
   return (
@@ -32,6 +36,7 @@ const PopularTrackCoverPage = (props: IPopularTracksTypes) => {
           </h3>
           <hr className="my-5 border-t border-purple-600" />
           <CarouselPopularTracks data={data} />
+
         </div>
       </div>
     </section>

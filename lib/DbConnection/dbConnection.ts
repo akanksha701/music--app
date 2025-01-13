@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 
 if (!process.env.MONGODB_URI) {
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
@@ -9,7 +9,7 @@ const options = {};
 
 let client: MongoClient | null = null;
 
-export async function connectToDatabase() {
+export async function connectToDatabase() :  Promise<MongoClient>  {
 
   if (process.env.NODE_ENV === 'development') {
     const globalWithMongo = global as typeof globalThis & { _mongoClient?: MongoClient };
@@ -34,7 +34,9 @@ export async function connectToDatabase() {
   return client; 
 }
 
-export async function getDb() {
-  const client = await connectToDatabase(); 
-  return client.db(process.env.DB_NAME || 'music-app'); 
+export async function getDb(): Promise<Db> {
+  const client: MongoClient = await connectToDatabase();
+  return client.db(process.env.DB_NAME || 'music-app');
 }
+
+export const db = await getDb();

@@ -1,8 +1,15 @@
 import React, { useMemo } from 'react'; 
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { IPlans, IPricingPlan } from '@/app/Home/types/types';
-
+interface IPricingPlan {
+  title: string;
+  description: string;
+  price: string;
+  features: string[];
+}
+interface IPlans {
+  data?: IPricingPlan[];
+}
 const Plans = (props: IPlans) => {
   const { data } = props;
 

@@ -5,6 +5,7 @@ import SmallGrid from '@/common/grid/SmallGrid';
 import { useGetAllLanguageQuery } from '@/services/languages';
 import { AddMoreButton } from '../LanguageAndGenre/UtilityComponent/NavigateButton';
 import Loading from './loading';
+import { Column } from '@/common/types/types';
 
 const langugageColumns = [
   { header: 'Langugage Name', accessor: 'name' },
@@ -30,7 +31,7 @@ const AllLanguageIndex = () => {
       content: (
         <SmallGrid
           label="language"
-          columns={langugageColumns}
+          columns={langugageColumns as Column[]}
           data={languageData?.data}
           moreBox={<div className="hidden"></div>}
           addBox={<AddMoreButton label={'language'}></AddMoreButton>}
@@ -48,12 +49,12 @@ const AllLanguageIndex = () => {
   return (
     <div className="flex justify-center items-start min-h-screen  bg-gray-100 pt-8">
       <div className="w-full sm:w-[500px] md:w-[600px] lg:w-[75%] px-4">
-        <Breadcrumb items={breadcrumbItems} className="mb-6" />
+        <Breadcrumb items={breadcrumbItems as Array<{ href: string; label: string }>} className="mb-6" />
         <h1 className="text-2xl font-bold  underline">Languages :</h1>
 
         <SmallGrid
           label="language"
-          columns={langugageColumns}
+          columns={langugageColumns as Column[]}
           data={languageData?.data}
           moreBox={<div className="hidden"></div>}
           addBox={<AddMoreButton label={'language'}></AddMoreButton>}

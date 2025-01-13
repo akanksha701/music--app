@@ -59,7 +59,7 @@ const TableComp = ({
                       <FaEdit />
                     </button>
                   ) : (
-                    row[column.accessor] || '-'
+                    row[column.accessor as string] || '-'
                   )}
                 </TableCell>
               ))}

@@ -6,7 +6,7 @@ import { useDeleteAlbumMutation, useGetAlbumByIdQuery } from '@/services/album';
 import { Rating } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Usable, use, useState } from 'react';
+import { use, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import SecondaryButton from '@/common/buttons/SecondaryButton';
@@ -24,7 +24,7 @@ import Loading from './loading';
 import { useFetchUserProfileQuery } from '@/services/user';
 import Image from 'next/image';
 
-const AlbumPage = ({ params }: { params: Usable<{ id: string }> }) => {
+const AlbumPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const Params: {
     id: string;
   } = use(params);

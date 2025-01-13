@@ -13,7 +13,10 @@ const Index = () => {
   const { setSelectedLanguage } = useNewRelease();
 
   const handleClick = useCallback(
-    async (value: string, index: number) => {
+    async (value?: string | null, index?: number | null) => {
+      if (!value || index === null || index === undefined) {
+        return; // Handle the case where value or index is invalid.
+      }
       const newUrl = await generateUrl(topPlaylists, { language: value });
       setSelectedLanguage(value, index);
       redirect(newUrl);
@@ -29,9 +32,9 @@ const Index = () => {
         <hr className="w-full border-gray-600" />
         <MenubarComponent
           data={languageList?.data}
-          handleClick={handleClick}
+          handleClick={handleClick as (value?: string | null, index?: number | null) => Promise<never>}
         />
-        <hr className="w-full border-gray-600" />
+        <hr className="w-full border-gray-600" /> 
         <TopPlayList />
       </div>
     </div>

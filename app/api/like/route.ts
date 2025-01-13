@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { TAGS } from '@/app/(BrowsePage)/Browse/types/types';
 import mongoose, { Types } from 'mongoose';
-import { db } from '../user/route';
 import { verifyToken } from '@/lib/utils/authUtils';
 import { IUserProfile } from './types/types';
+import { db } from '@/lib/DbConnection/dbConnection';
 
 async function handleMusicLike(user: IUserProfile, id: string, userId: string) {
   const alreadyLiked = user?.likedMusics?.some((likedMusic: Types.ObjectId) =>

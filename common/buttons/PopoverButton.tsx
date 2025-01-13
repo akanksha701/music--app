@@ -7,6 +7,20 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IMenuProps } from '../types/types';
 export function MenuButton({ row, handleMenuToggle, handleEdit, handleDelete }: IMenuProps) {
   const [open, setOpen] = useState(false);
+
+  const handleEditClick = () => {
+    if (handleEdit && row) {
+      handleEdit(row);
+      setOpen(false);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    if (handleDelete && row) {
+      handleDelete(row._id);
+      setOpen(false);
+    }
+  };
   return (
     <div>
       <Popover open={open} onOpenChange={setOpen}>
@@ -26,8 +40,7 @@ export function MenuButton({ row, handleMenuToggle, handleEdit, handleDelete }: 
         >
           <ul className="flex gap-1 ">
             <IconButton aria-label="update" size="small"><FaEdit onClick={() => {
-              handleEdit(row);
-              setOpen(false);
+              handleEditClick();
             }}
 
             /></IconButton>
@@ -35,8 +48,7 @@ export function MenuButton({ row, handleMenuToggle, handleEdit, handleDelete }: 
             <IconButton aria-label="delete" size="small" >
               <DeleteIcon fontSize="small" onClick={
                 () => {
-                  handleDelete(row._id);
-                  setOpen(false);
+                  handleDeleteClick();
                 }
               } />
             </IconButton>

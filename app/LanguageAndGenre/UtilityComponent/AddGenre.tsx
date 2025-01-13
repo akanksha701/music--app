@@ -9,7 +9,8 @@ import toast from 'react-hot-toast';
 import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
 import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
-const AddGenre = () => {
+import { IAddGenreProps } from '../types/types';
+const AddGenre = (props:IAddGenreProps) => {
   const {
     register,
     handleSubmit,
@@ -25,6 +26,7 @@ const AddGenre = () => {
       const res = await fetchApi('/api/genre', Method.POST, formData);
       if (res.status === 200) {
         toast.success(res.message); 
+        props.handleCloseDialog();
       }
     } catch (error) {
       if (error instanceof Error) {
