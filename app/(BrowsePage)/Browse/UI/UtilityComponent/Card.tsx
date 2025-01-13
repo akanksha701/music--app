@@ -2,10 +2,10 @@ import React from 'react';
 import { IBoxTypes, IMusicProps } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/Redux/store';
-import { generateUrl } from '@/utils/helpers';
 import { redirect } from 'next/navigation';
 import MemoizedCard from './MemoizedCard';
 import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import { generateUrl } from '@/utils/helpers';
 
 const Box = ({
   data,
