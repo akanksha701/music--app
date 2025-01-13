@@ -1,11 +1,12 @@
-// import React from 'react';
+import React from 'react';
 // import Index from '.';
 
-// const Page = () => {
-// return (
-// <></>
-// <Index/>
-// );
-// };
+const Page = () => {
+  return (
+    <>
+      {/* <Index/> */}
 
-// export default Page;
+    </>  );
+};
+
+export default Page;
