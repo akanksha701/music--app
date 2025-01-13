@@ -5,8 +5,8 @@ import { useGetMusicsOfArtistsQuery } from '@/services/music';
 import MusicList from '@/common/MusicList/MusicList';
 import { useSearchParams } from 'next/navigation';
 import { MusicData } from './types/types';
-import Loading from './loading';
 import { IPrevData } from '@/common/types/types';
+import Loading from '../Album/loading';
 
 const Index = () => {
   const searchParams = useSearchParams();

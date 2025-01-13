@@ -3,7 +3,9 @@ import AllGenereIndex from './Index';
 const Page = () => {
 
   return (
-    <><AllGenereIndex/></>
+    <>
+      <AllGenereIndex/>
+    </>
   );
 };
 
