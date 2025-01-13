@@ -2,16 +2,12 @@
 import React from 'react';
 import { IMusicPlayCardProps, IMusicProps } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setCurrentList,
-  setCurrentSongIndex,
-  setCurrentTrack,
-} from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { redirect } from 'next/navigation';
-import { generateUrl } from '@/utils/helpers';
 import { RootState } from '@/Redux/store';
 import { useMusic } from '@/hooks/useMusic';
 import MemoizedMusicCard from './MemoizedMusicCard';
+import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import { generateUrl } from '@/utils/helpers';
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, message, handleLikeToggle } = props;

@@ -5,15 +5,15 @@ import ReduxProvider from '@/Redux/storeProvider';
 import NavbarPage from './Navbar/index';
 import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
-import { Nunito } from 'next/font/google';
+// import { Nunito } from 'next/font/google';
 import { Suspense } from 'react';
 import Loading from './AddAlbum/loading';
 
 
-const nunito = Nunito({
-  subsets: ['latin'],
-  weight: ['300', '400', '600', '700'],
-});
+// const nunito = Nunito({
+//   subsets: ['latin'],
+//   weight: ['300', '400', '600', '700'],
+// });
 
 export default async function RootLayout({
   children,
@@ -28,7 +28,7 @@ export default async function RootLayout({
   return (
     <ReduxProvider>
       <html lang="en">
-        <body className={`${nunito.className} min-h-screen flex flex-col`}>
+        <body className={'min-h-screen flex flex-col'}>
           <Toaster position="top-center" />
           <Tooltip />
           <Suspense fallback={<Loading />}>
