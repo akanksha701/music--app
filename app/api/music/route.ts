@@ -5,11 +5,11 @@ import { getMusicWithPeaks } from '@/utils/getPeaks';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { AUDIO_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from './exports';
 import { db } from '@/lib/DbConnection/dbConnection';
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
 
 async function getAudioDetails(body:Record<string, string|Blob>) {
   const audio = (body.audio as Blob) || null;
