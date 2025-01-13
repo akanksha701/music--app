@@ -4,8 +4,8 @@ import { useGetAlbumByIdQuery } from '@/services/album';
 import { useGetMusicsOfArtistsQuery } from '@/services/music';
 import MusicList from '@/common/MusicList/MusicList';
 import { useSearchParams } from 'next/navigation';
-import { MusicData } from './types/types';
 import Loading from './loading';
+import { MusicData } from './types/types';
 import { IPrevData } from '@/common/types/types';
 
 const Index = () => {
@@ -14,11 +14,10 @@ const Index = () => {
   const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
   const [prevData, setPrevData] = useState<IPrevData | null>(null);
 
-  // Ensure albumId is defined before making queries
   const { data: musicData, isLoading: isMusicLoading } = useGetMusicsOfArtistsQuery(albumId || '', {
     skip: !albumId,
   });
-  
+
   const { data: albumByIdData, isLoading: isAlbumLoading } = useGetAlbumByIdQuery(albumId || '', {
     skip: !albumId,
   });
@@ -41,9 +40,8 @@ const Index = () => {
 
   if (isAlbumLoading || isMusicLoading) return <Loading />;
 
-  // Handle case where no music data is found
-  if (!musicData) {
-    return <div>No music data found.</div>;
+  if (!musicData || !albumByIdData) {
+    return <div>No music or album data found.</div>;
   }
 
   return (
