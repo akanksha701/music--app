@@ -1,10 +1,12 @@
-// import React from 'react';  
+import React from 'react';  
 // import AllGenereIndex from './Index';
-// const Page = () => {
+const Page = () => {
 
-//   return (
-//     <><AllGenereIndex/></>
-//   );
-// };
+  return (
+    <>
+      {/* <AllGenereIndex/> */}
+    </>
+  );
+};
 
-// export default Page;
+export default Page;

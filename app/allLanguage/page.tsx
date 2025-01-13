@@ -1,9 +1,9 @@
 import React from 'react';
-import AllLanguageIndex from './Index';
+// import AllLanguageIndex from './Index';
 const Page = () => {
   return (
     <>
-      <AllLanguageIndex />
+      {/* <AllLanguageIndex /> */}
     </>
   );
 };
