@@ -13,11 +13,11 @@ export const Index = async () => {
         <div className="grid grid-cols-2 gap-8 ">
           <div className=" text-6xl p-10 text-white font-semibold bg-purple-600 transform transition 
           duration-1000 hover:scale-105 bg-purple-500 rounded-md">
-            {data.aboutTitle}
+            {data?.aboutTitle || ''}
           </div>
           <div className="text-6xl bg-slate-200 rounded-md">
             <Image
-              src={data.aboutImage}
+              src={data?.aboutImage || ''}
               alt="Music App"
               width={600}
               height={400}
@@ -29,8 +29,8 @@ export const Index = async () => {
           {data.aboutDescription}
         </div>
         <CustomerSupport
-          CustomerServiceAndSupport={data.CustomerServiceAndSupport}
-          serviceTitle={data.serviceTitle}
+          CustomerServiceAndSupport={data?.CustomerServiceAndSupport || ''}
+          serviceTitle={data?.serviceTitle || ''}
         />
       </div>
     </div>
