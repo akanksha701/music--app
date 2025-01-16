@@ -18,9 +18,9 @@ const columns = [
 const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
-  const { data: languageData, error: isError, isLoading } = useGetLanguageQuery({ page, recordsPerPage });
+  const { data: languageData, error: isErrorLanguage, isLoading:isLanguagesLoading } = useGetLanguageQuery({ page, recordsPerPage });
 
-  if (!languageData || isError || isLoading) {
+  if (!languageData || isErrorLanguage || isLanguagesLoading) {
     return <></>;
   }
 
