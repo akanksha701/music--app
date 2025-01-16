@@ -18,9 +18,9 @@ const columns = [
 const Index = () => {
   const recordsPerPage = 5;
   const { page, setPage } = usePagination();
-  const { data: genreData } = useGetGenreQuery({ page, recordsPerPage });
+  const { data: genreData ,error:isGenreError,isLoading} = useGetGenreQuery({ page, recordsPerPage });
 
-  if (!genreData) {
+  if (!genreData || isGenreError || isLoading) {
     return <></>;
   }
 
