@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { FieldError, useForm } from 'react-hook-form';
 import { CalendarDate } from '@internationalized/date';
-import { IEditProfileProps, IUserDetails } from '../../types/types';
 import toast from 'react-hot-toast';
 import {
   useFetchUserProfileQuery,
@@ -15,6 +14,7 @@ import { setLoggedInUser } from '@/Redux/features/user/sessionSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '@/app/AddAlbum/loading';
 import { RootState } from '@/Redux/store';
+import { IEditProfileProps, IUserDetails } from '@/app/myprofile/types/types';
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;

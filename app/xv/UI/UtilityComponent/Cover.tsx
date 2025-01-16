@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { redirect } from 'next/navigation';
-
 export interface ICoverProps {
   data: { title?: string | null; description?: string | null };
 }
