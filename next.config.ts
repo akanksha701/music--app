@@ -5,6 +5,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  target: 'serverless',
   eslint: {
     ignoreDuringBuilds: false,
   },
