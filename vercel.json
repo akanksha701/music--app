@@ -4,6 +4,11 @@
         "NODE_ENV": "production"
       }
     },
-    "installCommand": "npm install --legacy-peer-deps"
+    "installCommand": "npm install --legacy-peer-deps",
+    "ignore": [
+    "node_modules/large-package/",
+    "unused-assets/",
+    "docs/"
+  ]
   }
   
