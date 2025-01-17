@@ -4,7 +4,7 @@ import { onAuthStateChanged } from '@/lib/firebase/auth';
 import { setAccessToken, setLoggedInUser } from '@/Redux/features/user/sessionSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { IUserDetails } from '@/app/xyz/types/types';
+import { IUserDetails } from '@/app/MyProfile/types/types';
 
 export function useUserSession(InitSession: string | null) {
   const [userUid, setUserUid] = useState<string |IUserDetails | null>(InitSession);
