@@ -7,8 +7,6 @@ import NavbarPage from './Navbar/index';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 // import { Nunito } from 'next/font/google';
 import { Suspense } from 'react';
-
-
 // const nunito = Nunito({
 //   subsets: ['latin'],
 //   weight: ['300', '400', '600', '700'],
