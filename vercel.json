@@ -1,20 +1,9 @@
 {
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
+    "build": {
+      "env": {
+        "NODE_ENV": "production"
+      }
     },
-    "commands": {
-      "install": "npm install --legacy-peer-deps",   
-      "build": "npm run build",                      
-      "dev": "npm run dev",                          
-      "prod": "npm run prod"                   
-    }
-  },
-  "installCommand": "npm install --legacy-peer-deps",  
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/$1"
-    }
-  ]
-}
+    "installCommand": "npm install --legacy-peer-deps"
+  }
+  
