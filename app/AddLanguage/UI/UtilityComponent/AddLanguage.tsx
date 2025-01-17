@@ -7,6 +7,7 @@ import NextTextArea from '@/common/inputs/Textarea';
 import toast from 'react-hot-toast';
 import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
+import { useRouter } from 'next/router';
 interface ILanguageFormData {
   name: string;
   description: string;
@@ -14,6 +15,7 @@ interface ILanguageFormData {
 }
 
 const AddLanguage = () => {
+  const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm<ILanguageFormData>();
   const onSubmit: SubmitHandler<ILanguageFormData> = async (data) => {
     try {
@@ -29,7 +31,9 @@ const AddLanguage = () => {
       }
     }
   };
-
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="min-h-screen bg-gray-100">
       <form
