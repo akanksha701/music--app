@@ -1,7 +1,7 @@
 'use client';
 
 import { removeSession } from '@/app/actions/auth';
-import { IUserDetails } from '@/app/MyProfile/types/types';
+import { IUserDetails } from '@/app/xyz/types/types';
 import { IItem } from '@/app/Navbar/types/types';
 import { signOutWithGoogle } from '@/lib/firebase/auth';
 import { RootState } from '@/Redux/store';

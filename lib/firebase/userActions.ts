@@ -1,7 +1,7 @@
 'use server'; 
 import mongoose from 'mongoose';
 import { db } from '../DbConnection/dbConnection';
-import { IUserDetails } from '@/app/MyProfile/types/types';
+import { IUserDetails } from '@/app/xyz/types/types';
 
 export async function createUser(user: IUserDetails) {
   try {
