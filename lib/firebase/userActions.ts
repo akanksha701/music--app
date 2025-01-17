@@ -1,5 +1,5 @@
 'use server'; 
-import { IUserDetails } from '@/app/MyProfile/types/types';
+import { IUserDetails } from '@/app/sdfv/types/types';
 import mongoose from 'mongoose';
 import { db } from '../DbConnection/dbConnection';
 

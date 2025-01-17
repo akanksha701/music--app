@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth'; 
-import { IUserDetails } from '@/app/MyProfile/types/types'; 
+import { IUserDetails } from '@/app/sdfv/types/types'; 
 import { saveUser } from '@/lib/auth';
 import { onAuthStateChanged } from '@/lib/firebase/auth';
 import { setAccessToken, setLoggedInUser } from '@/Redux/features/user/sessionSlice';

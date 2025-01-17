@@ -1,4 +1,4 @@
-import { IUserDetails } from '@/app/MyProfile/types/types';
+import { IUserDetails } from '@/app/sdfv/types/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface ISessionProps
