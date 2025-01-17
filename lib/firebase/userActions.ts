@@ -1,7 +1,7 @@
 'use server'; 
-import { IUserDetails } from '@/app/MyProfile/types/types';
 import mongoose from 'mongoose';
 import { db } from '../DbConnection/dbConnection';
+import { IUserDetails } from '@/app/MyProfile/types/types';
 
 export async function createUser(user: IUserDetails) {
   try {
@@ -47,6 +47,7 @@ export async function createArtist(userObjectId: string) {
   }
 }
 export async function checkIfUserExists(user: IUserDetails) {
+  console.log('inside',user);
   try {
     const existedUser = await db.collection('users').aggregate([
       { $match: { userId: user?.uid as string } },
@@ -86,7 +87,7 @@ export async function checkIfUserExists(user: IUserDetails) {
         }
       },
     ]).toArray();
-    if (!existedUser) {
+    if (!existedUser || existedUser.length===0) {
       const newUser = await createUser(user);
       return newUser;
     } else {
