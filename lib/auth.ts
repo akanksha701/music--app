@@ -2,7 +2,7 @@
 import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import { firebaseAuth } from './firebase/config';
 import { checkIfUserExists } from './firebase/userActions';
-import { IUserDetails } from '@/app/sdfv/types/types';
+import { IUserDetails } from '@/app/MyProfile/types/types';
 
 export async function onAuthStateChanged(
   firebaseAuth: unknown, callback: (authUser: User | null) => void) {
