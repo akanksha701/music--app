@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix"
-  },
+  "dev": "dotenv -e .env.local next dev",           
+  "build": "next build",                             
+  "start": "next start",                             
+  "lint": "next lint",                              
+  "lint:fix": "next lint --fix",                    
+  "prod": "dotenv -e .env.prod next dev",        
+  "build:prod": "dotenv -e .env.prod next build",    
+  "start:prod": "dotenv -e .env.prod next start"      
+},
   "engines": {
     "node": "22.x"
   },
@@ -73,6 +76,7 @@
     "@types/node": "^20.17.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.0.3",
     "tailwindcss": "^3.4.1",
