@@ -8,10 +8,8 @@ import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast'; 
 import { IAddLanguageFormData, IAddLanguageProps } from '../types/types';
 import { useAddLanguageMutation } from '@/services/languages';
-import { useRouter } from 'next/router';
 
 const AddLanguage = (props: IAddLanguageProps) => {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -42,9 +40,6 @@ const AddLanguage = (props: IAddLanguageProps) => {
       }
     }
   };
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
   return (
     <div className="text-black">
       <form
