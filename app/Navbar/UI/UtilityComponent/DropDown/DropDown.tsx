@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/Redux/store';
 
 const DropDown = () => {
-  const imageUrl = useSelector<RootState,string | undefined>((state) => state?.session?.loggedInUser?.imageUrl);
+  const imageUrl = useSelector<RootState, string | undefined>((state) => state?.session?.loggedInUser?.imageUrl);
   return (
     <>
       <Dropdown placement="bottom-end">
@@ -17,7 +17,7 @@ const DropDown = () => {
             color="secondary"
             name="Jason Hughes"
             size="sm"
-            src={imageUrl as string || ''}
+            src={imageUrl !== undefined? imageUrl : ''}
           />
         </DropdownTrigger>
         <DropDownMenu />
