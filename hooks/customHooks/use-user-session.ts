@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth'; 
-import { saveUser } from '@/lib/auth';
+// import { saveUser } from '@/lib/auth';
 import { onAuthStateChanged } from '@/lib/firebase/auth';
 import { setAccessToken, setLoggedInUser } from '@/Redux/features/user/sessionSlice';
 import { useEffect, useState } from 'react';
@@ -26,18 +26,18 @@ export function useUserSession(InitSession: string | null) {
           }
 
           // Split the display name into first and last names (if available)
-          const name = authUser?.displayName?.split(' ') || [];
-          const user: IUserDetails = {
-            uid: authUser.uid,
-            firstName: name[0] || '',
-            lastName: name[1] || '',
-            email: authUser.email || '',
-            imageUrl: authUser.photoURL || '', 
-          };
+          // const name = authUser?.displayName?.split(' ') || [];
+          // const user: IUserDetails = {
+          //   uid: authUser.uid,
+          //   firstName: name[0] || '',
+          //   lastName: name[1] || '',
+          //   email: authUser.email || '',
+          //   imageUrl: authUser.photoURL || '', 
+          // };
 
-          const userData = await saveUser(user);
-          setUserUid(userData as IUserDetails);
-          dispatch(setLoggedInUser(userData));
+          // const userData = await saveUser(user);
+          // setUserUid(userData as IUserDetails);
+          // dispatch(setLoggedInUser(userData));
 
         } catch (error) {
           console.error('Error handling user session:', error);
