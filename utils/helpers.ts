@@ -106,44 +106,95 @@ export async function uploadAudio(audio: File) {
     stream.end(Buffer.from(buffer));
   });
 }
-
 export const fetchApi = async (
   apiUrl: string,
   method: Method,
   body?: object | FormData // Accept FormData as body
 ) => {
   const url = new URL(apiUrl, process.env.APP_URL || 'http://localhost:3000');
-
   const isFormData = body instanceof FormData;
 
+  // Fetch access token from cookies
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get('accessToken'); 
+  const accessToken = cookieStore.get('accessToken');
+
+  // Construct headers
   const headers: HeadersInit = isFormData
     ? {}
     : { 'Content-Type': 'application/json' };
 
-  headers['Authorization'] = `Bearer ${accessToken?.value}`;
+  if (accessToken?.value) {
+    headers['Authorization'] = `Bearer ${accessToken.value}`;
+  }
+
   try {
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),
       body: isFormData ? body : JSON.stringify(body),
-      headers: headers,
+      headers,
     });
 
     if (!res.ok) {
-      const errorResponse = await res.json();
-      throw new Error(
-        `Error: ${res.status} ${res.statusText} - ${errorResponse.message || 'Unknown error'
-        }`
-      );
+      let errorMessage = 'Unknown error';
+      try {
+        const errorResponse = await res.json();
+        errorMessage = errorResponse.message || errorMessage;
+      } catch {
+        errorMessage = await res.text(); // Fallback for non-JSON error bodies
+      }
+      throw new Error(`Error: ${res.status} ${res.statusText} - ${errorMessage}`);
     }
 
-    const data = await res.json();
-    return data;
+    // Attempt to parse response as JSON
+    try {
+      const data = await res.json();
+      return data;
+    } catch {
+      return res.text(); // Fallback for non-JSON responses
+    }
   } catch (error) {
-    throw error;
+    console.error('Fetch API error:', error);
+    // throw new Error(`API request failed: ${error?.message}`);
   }
 };
+
+// export const fetchApi = async (
+//   apiUrl: string,
+//   method: Method,
+//   body?: object | FormData // Accept FormData as body
+// ) => {
+//   const url = new URL(apiUrl, process.env.APP_URL || 'http://localhost:3000');
+
+//   const isFormData = body instanceof FormData;
+
+//   const cookieStore = await cookies();
+//   const accessToken = cookieStore.get('accessToken'); 
+//   const headers: HeadersInit = isFormData
+//     ? {}
+//     : { 'Content-Type': 'application/json' };
+
+//   headers['Authorization'] = `Bearer ${accessToken?.value}`;
+//   try {
+//     const res = await fetch(url.toString(), {
+//       method: method.toUpperCase(),
+//       body: isFormData ? body : JSON.stringify(body),
+//       headers: headers,
+//     });
+
+//     if (!res.ok) {
+//       const errorResponse = await res.json();
+//       throw new Error(
+//         `Error: ${res.status} ${res.statusText} - ${errorResponse.message || 'Unknown error'
+//         }`
+//       );
+//     }
+
+//     const data = await res.json();
+//     return data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 const generateRandomKey = (length: number) => {
   return crypto.randomBytes(length).toString('hex').slice(0, length);
 };
