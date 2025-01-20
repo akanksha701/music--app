@@ -40,15 +40,12 @@ export default async function RootLayout({
         <body className="min-h-screen flex flex-col">
           <Toaster position="top-center" />
           <Tooltip />
-          <ErrorBoundary fallback={fallback}>
             <Suspense fallback={<Loading />}>
               <NavbarPage />
               <main className="flex-grow">{children}</main>
               <MusicPlayerContainer />
               {footerData ? <Footer data={footerData?.footerContent} /> : <></>}
             </Suspense>
-          </ErrorBoundary>
-
         </body>
       </html>
     </ReduxProvider>

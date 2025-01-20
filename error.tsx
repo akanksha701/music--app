@@ -1,8 +1,6 @@
-// components/ErrorBoundary.tsx
-
+'use client'
 import React, { useState, useEffect } from 'react';
 
-// Define the type of props: children and fallback component
 interface Props {
   children: React.ReactNode;
   fallback: React.ReactNode;  // The fallback UI when an error occurs
