@@ -6,7 +6,6 @@ import { getMarketingDetails } from '@/utils/apiRoutes';
 
 const Index = async () => {
   const data = await fetchApi(getMarketingDetails, Method.GET);
-  console.log('data',data);
   return (
     <>
       <Questions data={data?.questions} faqDescription={data?.faqDescription} />
