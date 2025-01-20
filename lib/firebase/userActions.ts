@@ -19,8 +19,8 @@ export async function createUser(user: IUserDetails) {
     if (newUser.acknowledged) {
       await createArtist(newUser?.insertedId.toString());
       return {
-        ...user, // Spread the user data
-        _id: newUser.insertedId, // Add the insertedId from MongoDB
+        ...user, 
+        _id: newUser.insertedId,
       };
     }
   } catch (error) {
