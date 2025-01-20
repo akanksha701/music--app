@@ -22,7 +22,7 @@ const sessionSlice = createSlice({
       state.accessToken = null;
     },
     setLoggedInUser: (state, action) => {
-      state.loggedInUser = action.payload;  
+      state.loggedInUser = JSON.parse(action.payload);  
     },
     clearLoggedInUser: (state) => {
       state.loggedInUser = null;  

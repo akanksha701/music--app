@@ -1,4 +1,4 @@
-'use server';
+'use server'; 
 import mongoose from 'mongoose';
 import { db } from '../DbConnection/dbConnection';
 import { IUserDetails } from '@/app/MyProfile/types/types';
@@ -19,8 +19,8 @@ export async function createUser(user: IUserDetails) {
     if (newUser.acknowledged) {
       await createArtist(newUser?.insertedId.toString());
       return {
-        ...user,
-        _id: newUser.insertedId,
+        ...user, // Spread the user data
+        _id: newUser.insertedId, // Add the insertedId from MongoDB
       };
     }
   } catch (error) {
@@ -86,23 +86,23 @@ export async function checkIfUserExists(user: IUserDetails) {
         }
       },
     ]).toArray();
-    if (!existedUser || existedUser.length === 0) {
+    if (!existedUser || existedUser.length===0) {
       const newUser = await createUser(user);
       return newUser;
     } else {
       const user = {
-        '_id': existedUser[0]?._id.toString(),
-        'userId': existedUser[0]?.userId,
-        'firstName': existedUser[0]?.firstName,
-        'lastName': existedUser[0]?.lastName,
-        'email': existedUser[0]?.email,
-        'imageUrl': existedUser[0]?.imageUrl,
-        'isActive': existedUser[0]?.isActive,
-        'isDeleted': existedUser[0]?.isDeleted,
-        'gender': existedUser[0]?.gender,
-        'artistId': existedUser[0]?.artistId
+        _id: existedUser[0]?._id.toString(),
+        userId: existedUser[0]?.userId,
+        firstName: existedUser[0]?.firstName,
+        lastName: existedUser[0]?.lastName,
+        email: existedUser[0]?.email,
+        imageUrl: existedUser[0]?.imageUrl,
+        isActive: existedUser[0]?.isActive,
+        isDeleted: existedUser[0]?.isDeleted,
+        gender: existedUser[0]?.gender,
+        artistId:existedUser[0]?.artistId
       };
-      return user;
+      return JSON.stringify(user);
     }
   } catch (error) {
     if (error instanceof Error) {
