@@ -74,7 +74,10 @@ const SmallGrid = ({ columns, data, label, moreBox, addBox }: ISmallGridProps) =
 
       Object.keys(editedRow || {}).forEach((key) => {
         if (key !== 'imageUrl') {
-          formData.append(key, editedRow![key as keyof IGenre] as string);
+          const value = editedRow ? editedRow[key as keyof IGenre] : undefined;
+          if (value !== undefined) {
+            formData.append(key, value as string);
+          }
         }
       });
 
@@ -180,7 +183,7 @@ const SmallGrid = ({ columns, data, label, moreBox, addBox }: ISmallGridProps) =
                           type='file'
                           onChange={(e) => {
                             setEditedRow({
-                              ...editedRow!,
+                              ...editedRow,
                               [key]: e?.target?.files?.[0],
                             });
                           }}
@@ -198,7 +201,7 @@ const SmallGrid = ({ columns, data, label, moreBox, addBox }: ISmallGridProps) =
                         value={editedRow?.[key as keyof IGenre] ? String(editedRow[key as keyof IGenre]) : ''}  // Ensure it's a string
                         onChange={(e) =>
                           setEditedRow({
-                            ...editedRow!,
+                            ...editedRow,
                             [key]: e.target.value,
                           })
                         }

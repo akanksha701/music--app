@@ -144,32 +144,33 @@ const MusicList = ({ data, MyselectedSongs, mode, prevData }: {
     setOpenDialog(false);
   };
 
-  const filterData = () => {
-    let filtered = data;
 
-    if (selectedGenre) {
-      filtered = filtered.filter((song) => song.genre === selectedGenre);
-    }
-
-    if (selectedLanguage) {
-      filtered = filtered.filter((song) => song.language === selectedLanguage);
-    }
-
-    if (searchQuery) {
-      filtered = filtered.filter(
-        (song) =>
-          song.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          song.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          song.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          song.language.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-    setFilteredData(filtered);
-  };
 
   useEffect(() => {
+    const filterData = () => {
+      let filtered = data;
+  
+      if (selectedGenre) {
+        filtered = filtered.filter((song) => song.genre === selectedGenre);
+      }
+  
+      if (selectedLanguage) {
+        filtered = filtered.filter((song) => song.language === selectedLanguage);
+      }
+  
+      if (searchQuery) {
+        filtered = filtered.filter(
+          (song) =>
+            song.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            song.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            song.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            song.language.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      setFilteredData(filtered);
+    };
     filterData();
-  }, [selectedGenre, selectedLanguage, searchQuery]);
+  }, [selectedGenre, selectedLanguage, searchQuery, data]);
 
   useEffect(() => {
     if (MyselectedSongs.length > 0 && rows) {
@@ -179,7 +180,7 @@ const MusicList = ({ data, MyselectedSongs, mode, prevData }: {
       setSelectionModel(MyselectedSongs);
       setSelectedSongs(initialSelectedRows);
     }
-  }, [MyselectedSongs]);
+  }, [MyselectedSongs, rows]);
 
   return (
     <div className="px-8 pb-8 flex flex-col">

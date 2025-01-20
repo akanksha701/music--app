@@ -48,56 +48,46 @@ const MusicPlayerContainer = () => {
   );
   const [toggleLike] = useToggleLikeMutation();
 
-  const createWaveSurfer = async () => {
-    const waveformElement = document.getElementById('waveform');
-    if (waveformElement && currentTrack) {
-      const ws = WaveSurfer.create({
-        container: waveformElement,
-        width: 600,
-        height: 33,
-        waveColor: '#abb6c1',
-        progressColor: '#5a17dd',
-        barRadius: 200,
-        cursorColor: 'transparent',
-        url: currentTrack?.audioUrl,
-        peaks: currentTrack?.peaks as Float32Array[] || [],
-      });
 
-      ws.on('ready', () => {
-        dispatch(setIsPlaying(true));
-        ws.setVolume(volume);
-        dispatch(
-          setCurrentTrack({
-            ...currentTrack,
-            duration: formatTime(ws.getDuration()),
-          })
-        );
-        if (currentTime > 0) {
-          ws.seekTo(currentTime / ws.getDuration());
 
-          ws.play();
-        } else {
-          ws.play();
-        }
-        dispatch(setWavesurferRef(ws as WritableDraft<WaveSurfer> | null));
-      });
-    }
-  };
 
-  const playerProgress = () => {
-    if (wavesurferRef) {
-      wavesurferRef.on('timeupdate', (time: number) => {
-        dispatch(
-          setSeekPercentage(
-            (wavesurferRef.getCurrentTime() / wavesurferRef.getDuration()) * 100
-          )
-        );
-        setCurrentTime(time);
-      });
-    }
-  };
 
   useEffect(() => {
+    const createWaveSurfer = async () => {
+      const waveformElement = document.getElementById('waveform');
+      if (waveformElement && currentTrack) {
+        const ws = WaveSurfer.create({
+          container: waveformElement,
+          width: 600,
+          height: 33,
+          waveColor: '#abb6c1',
+          progressColor: '#5a17dd',
+          barRadius: 200,
+          cursorColor: 'transparent',
+          url: currentTrack?.audioUrl,
+          peaks: currentTrack?.peaks as Float32Array[] || [],
+        });
+  
+        ws.on('ready', () => {
+          dispatch(setIsPlaying(true));
+          ws.setVolume(volume);
+          dispatch(
+            setCurrentTrack({
+              ...currentTrack,
+              duration: formatTime(ws.getDuration()),
+            })
+          );
+          if (currentTime > 0) {
+            ws.seekTo(currentTime / ws.getDuration());
+  
+            ws.play();
+          } else {
+            ws.play();
+          }
+          dispatch(setWavesurferRef(ws as WritableDraft<WaveSurfer> | null));
+        });
+      }
+    };
     if (currentTrack) {
       if (wavesurferRef) {
         wavesurferRef.destroy();
@@ -113,11 +103,23 @@ const MusicPlayerContainer = () => {
         dispatch(clearWavesurferRef());
       }
     };
-  }, [currentTrack?._id]);
+  }, [currentTrack?._id, wavesurferRef, dispatch,  currentTrack , currentTime, volume]);
 
   useEffect(() => {
+    const playerProgress = () => {
+      if (wavesurferRef) {
+        wavesurferRef.on('timeupdate', (time: number) => {
+          dispatch(
+            setSeekPercentage(
+              (wavesurferRef.getCurrentTime() / wavesurferRef.getDuration()) * 100
+            )
+          );
+          setCurrentTime(time);
+        });
+      }
+    };
     playerProgress();
-  }, [wavesurferRef]);
+  }, [wavesurferRef, dispatch, setCurrentTime]);
 
   useEffect(() => {
     if (isPlaying && wavesurferRef) {
@@ -125,7 +127,7 @@ const MusicPlayerContainer = () => {
     } else if (!isPlaying && wavesurferRef) {
       wavesurferRef.pause();
     }
-  }, [isPlaying]);
+  }, [isPlaying, wavesurferRef]);
 
   const handlePlayPause = useCallback(() => {
     if (wavesurferRef) {
@@ -139,7 +141,7 @@ const MusicPlayerContainer = () => {
       }
       dispatch(togglePlay());
     }
-  }, [isPlaying, wavesurferRef, currentTime]);
+  }, [isPlaying, wavesurferRef, currentTime, dispatch]);
 
   const handleLikeClick = async () => {
     if (currentTrack) {

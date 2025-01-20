@@ -40,7 +40,9 @@ export function useUserSession(InitSession: string | null) {
           dispatch(setLoggedInUser(userData));
 
         } catch (error) {
-          console.error('Error handling user session:', error);
+          if(error instanceof Error){
+            throw new Error('Error' , error);  
+          }
         }
       } else {
         setUserUid(null);

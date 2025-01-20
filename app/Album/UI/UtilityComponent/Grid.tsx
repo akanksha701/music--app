@@ -71,8 +71,8 @@ const AlbumGrid = ({ data, className }: IBoxTypes) => {
                     {/* Footer */}
                     <div className="w-full flex justify-between items-center px-4 py-2 pb-4">
                       <span className="text-sm text-gray-400 ">
-                        {item.musicIds!.length}{' '}
-                        {item.musicIds!.length === 1 ? 'song' : 'songs'}
+                        {item.musicIds?.length}{' '}
+                        {item.musicIds?.length === 1 ? 'song' : 'songs'}
                       </span>
                       <span className="text-sm text-[rgba(18, 18, 18, 1)] font-bold">
                         $  {item.Price}

@@ -1,7 +1,7 @@
 import { User, GoogleAuthProvider, signInWithPopup, onAuthStateChanged as _onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from './config';
 
-export function onAuthStateChanged(callback: (authUser: User | null) => void) {
+export function onAuthStateChanged(callback: (_authUser: User | null) => void) {
   return _onAuthStateChanged(firebaseAuth, callback);
 }
 
@@ -17,13 +17,17 @@ export async function signInWithGoogle() {
 
     return result.user.uid;
   } catch (error) {
-    console.error('Error signing in with Google', error);
+    if(error instanceof Error){
+      throw new Error('Error' , error);
+    }
   }
 }
 export async function signOutWithGoogle() {
   try {
     await firebaseAuth.signOut();
   } catch (error) {
-    console.error('Error signing out with Google', error);
+    if(error instanceof Error){
+      throw new Error('Error' , error);  
+    }
   }
 }

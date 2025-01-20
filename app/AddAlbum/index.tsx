@@ -18,7 +18,7 @@ const Index = () => {
   });
 
   useEffect(() => {
-    if (albumByIdData?.data || albumId || !isMusicError || !isAlbumError || (!isAlbumLoading && !isMusicLoading)) {
+    if (albumByIdData?.data || albumId) {
       setPrevData({
         albumDescription: albumByIdData?.data?.description,
         albumId: albumId || '',
@@ -33,7 +33,9 @@ const Index = () => {
     }
   }, [albumByIdData, albumId]);
 
-  if (isAlbumLoading || isMusicLoading || isMusicError) return <Loading />;
+  if (isAlbumLoading || isMusicLoading) return <Loading />;
+
+  if (isAlbumError || isMusicError) return <>Something went wrong</>;
 
   return (
     <div className="flex justify-center items-start min-h-screen pt-8">

@@ -6,8 +6,7 @@
     "plugin:@typescript-eslint/recommended"  // Optional: If you want a base set of TypeScript rules
   ],
   "rules": {
-    "no-console": "warn",
-    "no-unused-vars": "warn",
+    "no-console": "warn", 
     "eqeqeq": ["error", "always"],
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
@@ -34,7 +33,15 @@
       "warn",
       { "accessibility": "explicit" }
     ],
-    "@typescript-eslint/no-non-null-assertion": "warn"
+    "@typescript-eslint/no-non-null-assertion": "warn",
+    "@typescript-eslint/no-unused-vars": [
+      "warn", 
+      {
+        "argsIgnorePattern": "^_",  // Ignore unused arguments starting with _
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true  // Ignore unused variables starting with _
+      }
+    ]
   }
 }
 

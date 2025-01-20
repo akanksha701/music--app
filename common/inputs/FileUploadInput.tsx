@@ -15,7 +15,7 @@ const FileUploadInput = <T extends FieldValues>({
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    onChange: (selectedFile: File) => void
+    onChange: (_selectedFile: File) => void
   ) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
 

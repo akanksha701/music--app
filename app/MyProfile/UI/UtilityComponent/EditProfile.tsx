@@ -50,7 +50,7 @@ const EditProfile = (props: IEditProfileProps) => {
         setImage(user?.imageUrl as string);
       }
     }
-  }, [data,setImage,setValue]);
+  }, [data,setImage,setValue , userDetails]);
 
   useEffect(() => {
     setUserDetails();

@@ -67,7 +67,7 @@ const MusicListContainer = () => {
         dispatch(setCurrentList(songs));
       }
     }
-  }, [allSongsData]);
+  }, [allSongsData, dispatch, queryType]);
   // useEffect(() => {
   //   if (allSongsData && allSongsData.data) {
   //     const songs =
@@ -88,52 +88,7 @@ const MusicListContainer = () => {
     currentTrackRef.current = currentTrack;
   }, [currentTrack]);
 
-  const createWaveSurfers = (songs: IMusicProps[]) => {
-    if (songs && songs.length > 0) {
-      songs.map((song) => {
-        const waveformContainerId = `waveform_${song?._id}`;
-        const waveformContainer = document.getElementById(waveformContainerId);
-
-        if (!waveformContainer) return null;
-
-        if (!wavesurferRefs.current.has(song?._id as string)) {
-          const wavesurfer = WaveSurfer.create({
-            container: `#${waveformContainerId}`,
-            height: 33,
-            barRadius: 200,
-            waveColor: '#abb6c1',
-            progressColor: '#5a17dd',
-            cursorColor: 'transparent',
-            url: song.audioUrl,
-            peaks: song.peaks as Float32Array[]|| [],
-          });
-
-          wavesurferRefs.current.set(song?._id as string, wavesurfer);
-
-          const updatedSong = { ...song, duration: wavesurfer.getDuration() };
-
-          wavesurfer.on('interaction', (newTime: number) => {
-            dispatch(setCurrentTrack(updatedSong)); // Use the updated song here
-            const duration = wavesurfer.getDuration() || 1;
-            const seekPercentage = newTime / duration;
-
-            wavesurfer.seekTo(seekPercentage);
-
-            if (wavesurferRef) {
-              wavesurferRef.seekTo(seekPercentage);
-              wavesurferRef.seekTo(seekPercentage);
-            }
-
-            setCurrentTime(newTime);
-          });
-
-          return { song: updatedSong, wavesurfer };
-        }
-        return null; // Return null if instance already exists
-      });
-
-    }
-  };
+ 
 
   useEffect(() => {
     if (
@@ -153,13 +108,59 @@ const MusicListContainer = () => {
         wavesurfer.seekTo(seekPercentage);
       }
     });
-  }, [currentTime]);
+  }, [currentTime, currentTrack , wavesurferRef]);
 
   useEffect(() => {
+    const createWaveSurfers = (songs: IMusicProps[]) => {
+      if (songs && songs.length > 0) {
+        songs.map((song) => {
+          const waveformContainerId = `waveform_${song?._id}`;
+          const waveformContainer = document.getElementById(waveformContainerId);
+  
+          if (!waveformContainer) return null;
+  
+          if (!wavesurferRefs.current.has(song?._id as string)) {
+            const wavesurfer = WaveSurfer.create({
+              container: `#${waveformContainerId}`,
+              height: 33,
+              barRadius: 200,
+              waveColor: '#abb6c1',
+              progressColor: '#5a17dd',
+              cursorColor: 'transparent',
+              url: song.audioUrl,
+              peaks: song.peaks as Float32Array[]|| [],
+            });
+  
+            wavesurferRefs.current.set(song?._id as string, wavesurfer);
+  
+            const updatedSong = { ...song, duration: wavesurfer.getDuration() };
+  
+            wavesurfer.on('interaction', (newTime: number) => {
+              dispatch(setCurrentTrack(updatedSong)); // Use the updated song here
+              const duration = wavesurfer.getDuration() || 1;
+              const seekPercentage = newTime / duration;
+  
+              wavesurfer.seekTo(seekPercentage);
+  
+              if (wavesurferRef) {
+                wavesurferRef.seekTo(seekPercentage);
+                wavesurferRef.seekTo(seekPercentage);
+              }
+  
+              setCurrentTime(newTime);
+            });
+  
+            return { song: updatedSong, wavesurfer };
+          }
+          return null; // Return null if instance already exists
+        });
+  
+      }
+    };
     if (allSongs && allSongs.length > 0) {
       createWaveSurfers(allSongs);
     }
-  }, [allSongs]);
+  }, [allSongs, wavesurferRef, dispatch, setCurrentTime]);
 
   const handlePlayTrack = useCallback(
     (track: IMusicProps) => {
@@ -181,7 +182,7 @@ const MusicListContainer = () => {
         setCurrentTime(0);
       }
     },
-    [isPlaying, currentTrack?._id]
+    [isPlaying, currentTrack?._id , dispatch, setCurrentTime]
   );
 
   const handleLikeClick = async (musicId: string) => {

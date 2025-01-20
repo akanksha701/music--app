@@ -121,7 +121,7 @@ export interface IMenuProps {
   handleDelete?:Function
   data?:ILanguage[]
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  handleClick?:(value?: string | null, index?: number | null) => Promise<never>
+  handleClick?:(_value?: string | null, _index?: number | null) => Promise<never>
 }
 
 export type FormDataType = {
@@ -169,11 +169,10 @@ export interface ITableProps {
   message: string;
   columns: IColumn[];
   data: Record<string,string>[];
-  // eslint-disable-next-line no-unused-vars
-  handleEdit?: (id: string) => void;
+  handleEdit?: (_id: string) => void;
   paginationData?: IPagination;
   page: number;
-  setPage: (page: number) => void;
+  setPage: (_page: number) => void;
 }
 export interface IGridrops {
   columns: IColumn[];
