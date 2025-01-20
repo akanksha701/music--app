@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const imageUrl =
       image && image !== 'undefined'
         ? await saveFiles(image as Blob, GENRE_IMAGE_UPLOAD_DIR)
-        : '/genres/images/default.jpg'; // Replace with your default image URL.
+        : ''; 
 
     const newGenre = await db.collection('genres').insertOne({
       name: await capitalizeTitle(name.toString()),
