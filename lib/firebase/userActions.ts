@@ -102,7 +102,7 @@ export async function checkIfUserExists(user: IUserDetails) {
         gender: existedUser[0]?.gender,
         artistId:existedUser[0]?.artistId
       };
-      return JSON.stringify(user);
+      return user;
     }
   } catch (error) {
     if (error instanceof Error) {
