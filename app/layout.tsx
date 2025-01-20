@@ -7,7 +7,6 @@ import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Suspense } from 'react';
 import Loading from './Album/loading';
-import ErrorBoundary from '@/error';
 
 async function fetchFooterData() {
   try {
@@ -28,24 +27,24 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const footerData = await fetchFooterData();
-  const fallback = (
-    <div className="error-container">
-      <h1>Something went wrong</h1>
-      <p>Please try again later.</p>
-    </div>
-  );
+  // const fallback = (
+  //   <div className="error-container">
+  //     <h1>Something went wrong</h1>
+  //     <p>Please try again later.</p>
+  //   </div>
+  // );
   return (
     <ReduxProvider>
       <html lang="en">
         <body className="min-h-screen flex flex-col">
           <Toaster position="top-center" />
           <Tooltip />
-            <Suspense fallback={<Loading />}>
-              <NavbarPage />
-              <main className="flex-grow">{children}</main>
-              <MusicPlayerContainer />
-              {footerData ? <Footer data={footerData?.footerContent} /> : <></>}
-            </Suspense>
+          <Suspense fallback={<Loading />}>
+            <NavbarPage />
+            <main className="flex-grow">{children}</main>
+            <MusicPlayerContainer />
+            {footerData ? <Footer data={footerData?.footerContent} /> : <></>}
+          </Suspense>
         </body>
       </html>
     </ReduxProvider>
