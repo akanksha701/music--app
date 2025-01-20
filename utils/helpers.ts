@@ -135,6 +135,7 @@ export const fetchApi = async (
     });
 
     if (!res.ok) {
+      console.log('error');
       let errorMessage = 'Unknown error';
       try {
         const errorResponse = await res.json();
@@ -147,6 +148,7 @@ export const fetchApi = async (
 
     // Attempt to parse response as JSON
     try {
+      console.log('res.json()',res.json());
       const data = await res.json();
       return data;
     } catch {
