@@ -7,18 +7,18 @@ import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Suspense } from 'react';
 import Loading from './Album/loading';
+import ErrorBoundary from '@/error';
 
-// Helper function to fetch data
 async function fetchFooterData() {
   try {
-    const res = await fetch('http://localhost:3000/api/marketing', { cache: 'no-store' });  
+    const res = await fetch('http://localhost:3000/api/marketing', { cache: 'no-store' });
     if (!res.ok) {
       return null;
     }
     return res.json();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    return null;  
+    return null;
   }
 }
 
@@ -28,21 +28,27 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const footerData = await fetchFooterData();
-
+  const fallback = (
+    <div className="error-container">
+      <h1>Something went wrong</h1>
+      <p>Please try again later.</p>
+    </div>
+  );
   return (
     <ReduxProvider>
       <html lang="en">
         <body className="min-h-screen flex flex-col">
           <Toaster position="top-center" />
           <Tooltip />
-          <Suspense fallback={<Loading />}>
-            <NavbarPage />
-            <main className="flex-grow">{children}</main>
-            <MusicPlayerContainer />
-            {
-              footerData ? <Footer data={footerData?.footerContent} /> : <></>
-            }
-          </Suspense>
+          <ErrorBoundary fallback={fallback}>
+            <Suspense fallback={<Loading />}>
+              <NavbarPage />
+              <main className="flex-grow">{children}</main>
+              <MusicPlayerContainer />
+              {footerData ? <Footer data={footerData?.footerContent} /> : <></>}
+            </Suspense>
+          </ErrorBoundary>
+
         </body>
       </html>
     </ReduxProvider>

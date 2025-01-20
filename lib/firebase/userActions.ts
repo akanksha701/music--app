@@ -47,7 +47,6 @@ export async function createArtist(userObjectId: string) {
   }
 }
 export async function checkIfUserExists(user: IUserDetails) {
-  console.log('inside',user);
   try {
     const existedUser = await db.collection('users').aggregate([
       { $match: { userId: user?.uid as string } },
