@@ -45,11 +45,11 @@ async function getMusicPrimaryDetails(body:Record<string, string|Blob>) {
 
 export async function POST(req: Request) {
   try {
-    console.log("REQUEST",req);
+    console.log('REQUEST',req);
 
     const formData = await req.formData();
 
-    console.log("formData",formData);
+    console.log('formData',formData);
 
     // const body:Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
     // const albumIds = Array.isArray(body?.album)
