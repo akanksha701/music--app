@@ -131,7 +131,7 @@ const SmallGrid = ({ columns, data, label, moreBox, addBox }: ISmallGridProps) =
               style={{
                 backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0.45) 11%, 
               rgba(147, 146, 148, 0.45) 62%, rgba(110, 110, 110, 0.5) 78%),
-               url(${row.imageUrl || ''})`,
+               url(${process.env.APP_URL}/${row.imageUrl || ''})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
