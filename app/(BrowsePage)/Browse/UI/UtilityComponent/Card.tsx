@@ -3,9 +3,9 @@ import { IBoxTypes, IMusicProps } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/Redux/store';
 import { redirect } from 'next/navigation';
-import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '../../../../../Redux/features/musicPlayer/musicPlayerSlice';
-import { generateUrl } from '../../../../../utils/helpers';
 import MemoizedCard from './MemoizedCard';
+import { generateUrl } from '@/utils/helpers';
+import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from '@/Redux/features/musicPlayer/musicPlayerSlice';
 
 const Box = ({
   data,

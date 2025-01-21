@@ -21,7 +21,6 @@ const MemoizedCard = ({
     }
   }
 
-
   return <Card
     key={index}
     className={`bg-white text-black rounded-lg 
