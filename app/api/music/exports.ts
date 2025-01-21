@@ -1,5 +1,5 @@
 import path from 'path';
-export const LANGUAGE_IMAGE_UPLOAD_DIR = path.resolve('public/languages/images');
+export const LANGUAGE_IMAGE_UPLOAD_DIR = path.resolve('temp');
 export const IMAGE_UPLOAD_DIR = path.resolve('public/music/images');
 export const AUDIO_UPLOAD_DIR = path.resolve('public/music/audio');
 export const ALBUM_IMAGE_UPLOAD_DIR = path.resolve('public/albums/images');
