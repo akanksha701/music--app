@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { capitalizeTitle, saveFiles } from '@/utils/helpers'; 
+import { capitalizeTitle, saveFiles, uploadImage } from '@/utils/helpers'; 
 import mongoose from 'mongoose';
 import path from 'path';
 import fs from 'fs/promises';
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       name: await capitalizeTitle(name.toString()),
       description: description,
       Price: Number(price),
-      imageUrl: (image !== undefined) ? await saveFiles(image, ALBUM_IMAGE_UPLOAD_DIR) : DefaultUrl,
+      imageUrl: (image !== undefined) ? await uploadImage(image as File, ALBUM_IMAGE_UPLOAD_DIR) : DefaultUrl,
       Genre: Genres,
       Language: Languages,
       musicIds: Songs,

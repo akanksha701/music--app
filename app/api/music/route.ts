@@ -1,24 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { capitalizeTitle, getAudioDuration, saveFiles } from '@/utils/helpers';
+import { capitalizeTitle, getAudioDuration, uploadAudio, uploadImage } from '@/utils/helpers';
 import mongoose, { PipelineStage } from 'mongoose';
 import { getMusicWithPeaks } from '@/utils/getPeaks';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { AUDIO_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from './exports';
 import { db } from '@/lib/DbConnection/dbConnection';
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };
 
 async function getAudioDetails(body:Record<string, string|Blob>) {
-  const audio = (body.audio as Blob) || null;
-  const image = (body.image as Blob) || null;
-  const audioUrl = audio ? await saveFiles(audio, AUDIO_UPLOAD_DIR) : null;
+  const audio = (body.audio) || null;
+  const image = (body.image) || null;
+  const audioUrl = audio ? await uploadAudio(audio as File, AUDIO_UPLOAD_DIR) : null;
+  const imageUrl = audio ? await uploadImage(image as File, IMAGE_UPLOAD_DIR) : null;
   const peaks = await getMusicWithPeaks(audioUrl as string);
   const audioDetails = {
-    imageUrl: image ? await saveFiles(image, IMAGE_UPLOAD_DIR) : null,
-    audioUrl: audio ? await saveFiles(audio, AUDIO_UPLOAD_DIR) : null,
+    imageUrl: imageUrl,
+    audioUrl: audioUrl,
     peaks: peaks || [],
   };
   return audioDetails;
@@ -45,11 +41,8 @@ async function getMusicPrimaryDetails(body:Record<string, string|Blob>) {
 
 export async function POST(req: Request) {
   try {
-    console.log('REQUEST',req);
-
     const formData = await req.formData();
 
-    console.log('formData',formData);
 
     const body:Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
     const albumIds = Array.isArray(body?.album)
@@ -61,7 +54,6 @@ export async function POST(req: Request) {
       amount: Number(body.priceAmount || 0),
       currency: body.currency || 'USD',
     };
-    console.log('body.album', body.album);
 
     if (body.album) {
       const newMusic = await db.collection('musics').insertOne({

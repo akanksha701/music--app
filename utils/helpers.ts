@@ -82,7 +82,7 @@ export async function uploadImage(image: File,folderName:string) {
   });
 }
 
-export async function uploadAudio(audio: File) {
+export async function uploadAudio(audio: File,folderName:string) {
   if (audio.type !== 'audio/mpeg') {
     throw new Error('File must be an MP3 audio file.');
   }
@@ -92,13 +92,13 @@ export async function uploadAudio(audio: File) {
     const stream = cloudinary.v2.uploader.upload_stream(
       {
         resource_type: 'video', // 'video' is used for audio files in Cloudinary
-        upload_preset: process.env.NEXT_PUBLIC_UPLOAD_PRESET,
+        folder: folderName,
       },
       (error, result) => {
         if (error) {
           reject(error);
         } else {
-          resolve(result);
+          resolve(result?.secure_url);
         }
       }
     );
@@ -112,7 +112,7 @@ export const fetchApi = async (
   method: Method,
   body?: object | FormData // Accept FormData as body
 ) => {
-  const url = new URL(apiUrl, process.env.APP_URL);
+  const url = new URL(apiUrl, 'http://localhost:3000');
 
   const isFormData = body instanceof FormData;
 
@@ -124,11 +124,13 @@ export const fetchApi = async (
 
   headers['Authorization'] = `Bearer ${accessToken?.value}`;
   try {
+    console.log('-------',url.toString());
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),
       body: isFormData ? body : JSON.stringify(body),
       headers: headers,
     });
+    console.log('-------',res);
 
     if (!res.ok) {
       const errorResponse = await res.json();
