@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx" ,
+    "jsx": "react-jsx",
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,10 +23,24 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
     "baseUrl": "."
   },
-  "include": ["next-env.d.ts", "**/*.ts",  "**/*.tsx", ".next/types/**/*.ts", "types.d.ts", "src/app/music/[slug]", "eslint.config.js", "app/Pricing/index.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "node_modules/@types/react/index.d.ts",
+    ".next/types/**/*.ts",
+    "types.d.ts",
+    "src/app/music/[slug]",
+    "eslint.config.js",
+    "app/Pricing/index.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
