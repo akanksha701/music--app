@@ -54,7 +54,7 @@ export async function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export async function uploadImage(image: File,folderName:string) {
+export async function uploadImage(image: File, folderName: string) {
   cloudinary.v2.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -82,7 +82,7 @@ export async function uploadImage(image: File,folderName:string) {
   });
 }
 
-export async function uploadAudio(audio: File,folderName:string) {
+export async function uploadAudio(audio: File, folderName: string) {
   if (audio.type !== 'audio/mpeg') {
     throw new Error('File must be an MP3 audio file.');
   }
@@ -117,21 +117,18 @@ export const fetchApi = async (
   const isFormData = body instanceof FormData;
 
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get('accessToken'); 
+  const accessToken = cookieStore.get('accessToken');
   const headers: HeadersInit = isFormData
     ? {}
     : { 'Content-Type': 'application/json' };
 
   headers['Authorization'] = `Bearer ${accessToken?.value}`;
   try {
-    console.log('-------',url.toString());
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),
       body: isFormData ? body : JSON.stringify(body),
       headers: headers,
     });
-    console.log('-------',res);
-
     if (!res.ok) {
       const errorResponse = await res.json();
       throw new Error(
@@ -189,17 +186,17 @@ export const saveFiles = async (file: Blob, folderName: string) => {
   }
 };
 
-export async function getAudioDuration(audioBlob:Blob) {
+export async function getAudioDuration(audioBlob: Blob) {
   try {
     const arrayBuffer = await audioBlob.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
     const metadata = await parseBuffer(buffer);
 
-    const durationInSeconds: number|undefined = metadata.format.duration; // Duration is in seconds
+    const durationInSeconds: number | undefined = metadata.format.duration; // Duration is in seconds
 
-    const minutes = Math.floor(durationInSeconds as number/ 60);
-    const seconds = Math.floor(durationInSeconds as number% 60);
+    const minutes = Math.floor(durationInSeconds as number / 60);
+    const seconds = Math.floor(durationInSeconds as number % 60);
 
     const formattedDuration = `${minutes}:${seconds
       .toString()
