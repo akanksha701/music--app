@@ -2,7 +2,7 @@
     "build": {
       "env": {
         "PORT": "3000",
-        "APP_URL": "https://music-app-eight-gamma.vercel.app",
+        "APP_URL": "https://music-app-chi-lovat.vercel.app",
         "MONGODB_URI": "mongodb+srv://akanksha:root@cluster0.ent1u.mongodb.net/music-matter?retryWrites=true&w=majority&appName=Cluster0",
         "DB_NAME": "music-app",
         "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_YXB0LWJvYXItODguY2xlcmsuYWNjb3VudHMuYGV2JA",
