@@ -17,12 +17,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "baseUrl": ".", 
+    "baseUrl": "./",
     "paths": {
-      "@app/*": ["app/*"],
-      "@redux/*": ["redux/*"],
-      "@utils/*": ["utils/*"],
-      "@/*": ["./*"]
+      "*": ["*"]
     },
     "plugins": [
       {
