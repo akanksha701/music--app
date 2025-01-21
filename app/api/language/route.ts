@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { capitalizeTitle, saveFiles } from '@/utils/helpers'; 
+import { capitalizeTitle, saveFiles, uploadImage } from '@/utils/helpers'; 
 import path from 'path';
 import fs from 'fs/promises';
 import mongoose from 'mongoose';
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     const { name, description } = body;
     const image = body.image || null;
     const imageUrl = image && image !== 'undefined'
-      ? await saveFiles(image as Blob, LANGUAGE_IMAGE_UPLOAD_DIR)
+      ? await uploadImage(image as File, LANGUAGE_IMAGE_UPLOAD_DIR)
       : '/languages/images/default.jpg'; 
     const newLanguage = await db.collection('languages').insertOne({
       name: await capitalizeTitle(name.toString()),

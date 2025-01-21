@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { capitalizeTitle, saveFiles } from '@/utils/helpers';
+import { capitalizeTitle, saveFiles, uploadImage } from '@/utils/helpers';
 import mongoose from 'mongoose';
 import path from 'path';
 import fs from 'fs/promises';
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     const imageUrl =
       image && image !== 'undefined'
-        ? await saveFiles(image as Blob, GENRE_IMAGE_UPLOAD_DIR)
+        ? await uploadImage(image as File, GENRE_IMAGE_UPLOAD_DIR)
         : ''; 
 
     const newGenre = await db.collection('genres').insertOne({

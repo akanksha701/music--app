@@ -54,7 +54,7 @@ export async function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export async function uploadImage(image: File) {
+export async function uploadImage(image: File,folderName:string) {
   cloudinary.v2.config({
     cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -67,13 +67,13 @@ export async function uploadImage(image: File) {
     const stream = cloudinary.v2.uploader.upload_stream(
       {
         resource_type: 'auto',
-        upload_preset: process.env.NEXT_PUBLIC_UPLOAD_PRESET, // optional
+        folder: `assets/${folderName}`
       },
       (error, result) => {
         if (error) {
           reject(error);
         } else {
-          resolve(result);
+          resolve(result?.secure_url);
         }
       }
     );
