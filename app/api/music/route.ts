@@ -45,50 +45,57 @@ async function getMusicPrimaryDetails(body:Record<string, string|Blob>) {
 
 export async function POST(req: Request) {
   try {
-    const formData = await req.formData();
-    const body:Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
-    const albumIds = Array.isArray(body?.album)
-      ? body?.album.map((id) => (id))  
-      : [body?.album]; 
-    const musicDetails = await getMusicPrimaryDetails(body);
-    const audioDetails = await getAudioDetails(body);
-    const price = {
-      amount: Number(body.priceAmount || 0),
-      currency: body.currency || 'USD',
-    };
-    if (body.album) {
-      const newMusic = await db.collection('musics').insertOne({
-        musicDetails: musicDetails,
-        audioDetails: audioDetails,
-        playCount: 0,
-        price: price,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-      const updatedAlbum = await db
-        .collection('albums')
-        .updateMany(
-          { _id: { $in: albumIds } },
-          { $addToSet: { musicIds: newMusic.insertedId } }
-        );
+    console.log("REQUEST",req);
 
-      if (!updatedAlbum) {
-        return NextResponse.json({
-          status: 500,
-          message: 'An error occurred while creating new music.',
-        });
-      }
-      return NextResponse.json({
-        status: 200,
-        message: 'New music created successfully',
-        data: newMusic,
-      });
-    } else {
-      return NextResponse.json({
-        status: 400,
-        message: 'Album ID is required',
-      });
-    }
+    const formData = await req.formData();
+
+    console.log("formData",formData);
+
+    // const body:Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
+    // const albumIds = Array.isArray(body?.album)
+    //   ? body?.album.map((id) => (id))  
+    //   : [body?.album]; 
+    // const musicDetails = await getMusicPrimaryDetails(body);
+    // const audioDetails = await getAudioDetails(body);
+    // const price = {
+    //   amount: Number(body.priceAmount || 0),
+    //   currency: body.currency || 'USD',
+    // };
+    // console.log('body.album', body.album);
+
+    // if (body.album) {
+    //   const newMusic = await db.collection('musics').insertOne({
+    //     musicDetails: musicDetails,
+    //     audioDetails: audioDetails,
+    //     playCount: 0,
+    //     price: price,
+    //     createdAt: new Date(),
+    //     updatedAt: new Date(),
+    //   });
+    //   const updatedAlbum = await db
+    //     .collection('albums')
+    //     .updateMany(
+    //       { _id: { $in: albumIds } },
+    //       { $addToSet: { musicIds: newMusic.insertedId } }
+    //     );
+
+    //   if (!updatedAlbum) {
+    //     return NextResponse.json({
+    //       status: 500,
+    //       message: 'An error occurred while creating new music.',
+    //     });
+    //   }
+    //   return NextResponse.json({
+    //     status: 200,
+    //     message: 'New music created successfully',
+    //     data: newMusic,
+    //   });
+    // } else {
+    //   return NextResponse.json({
+    //     status: 400,
+    //     message: 'Album ID is required',
+    //   });
+    // }
   } catch (error) {
     return NextResponse.json({
       status: 500,
