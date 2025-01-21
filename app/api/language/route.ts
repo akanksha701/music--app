@@ -5,7 +5,6 @@ import fs from 'fs/promises';
 import mongoose from 'mongoose';
 import { LANGUAGE_IMAGE_UPLOAD_DIR } from '../music/exports';
 import { db } from '@/lib/DbConnection/dbConnection';
-import { messaging } from 'firebase-admin';
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
@@ -52,7 +51,6 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const body = Object.fromEntries(formData);
-    console.log('body',body);
     const { name, description } = body;
     const image = body.image || null;
     const imageUrl = image && image !== 'undefined'
