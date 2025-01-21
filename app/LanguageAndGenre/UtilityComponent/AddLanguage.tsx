@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { Button } from '@/components/ui/button';
 import React from 'react';
@@ -22,9 +23,9 @@ const AddLanguage = (props: IAddLanguageProps) => {
   const onSubmit = async (data: IAddLanguageFormData) => {
     props.handleCloseDialog();
     const formData = new FormData();
-    if (data.imageUrl?.length > 0) {
-      formData.append('image', data.imageUrl[0]);
-    }
+    // if (data.imageUrl?.length > 0) {
+    formData.append('image', data.imageUrl as any);
+    // }
 
     formData.append('name', data.name);
     formData.append('description', data.description);
