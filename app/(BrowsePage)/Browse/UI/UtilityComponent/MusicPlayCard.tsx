@@ -6,8 +6,8 @@ import { redirect } from 'next/navigation';
 import MemoizedMusicCard from './MemoizedMusicCard';
 import { RootState } from 'Redux/store';
 import { useMusic } from 'hooks/useMusic';
-import { generateUrl } from 'utils/helpers';
-import { setCurrentList, setCurrentSongIndex, setCurrentTrack } from 'Redux/features/musicPlayer/musicPlayerSlice';
+import { setCurrentList, setCurrentTrack, setCurrentSongIndex } from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import { generateUrl } from '@/utils/helpers';
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, message, handleLikeToggle } = props;

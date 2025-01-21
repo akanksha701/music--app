@@ -17,23 +17,30 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "baseUrl": "./",
-    "paths": {
-      "*": ["*"]
-    },
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "baseUrl": "."
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "node_modules/@types/react/index.d.ts",
     ".next/types/**/*.ts",
     "types.d.ts",
-    "eslint.config.js"
+    "src/app/music/[slug]",
+    "eslint.config.js",
+    "app/Pricing/index.tsx"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
