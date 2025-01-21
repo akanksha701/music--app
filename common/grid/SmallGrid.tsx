@@ -118,7 +118,6 @@ const SmallGrid = ({ columns, data, label, moreBox, addBox }: ISmallGridProps) =
     setCurrentRow(null);
     setEditedRow(null); // Reset editedRow
   };
-
   return (
     <>
       <div
