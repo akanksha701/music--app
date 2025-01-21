@@ -18,6 +18,9 @@ import { IEditProfileProps, IUserDetails } from '@/app/MyProfile/types/types';
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;
+  const loggedinUser = useSelector<RootState, IUserDetails | null>(
+    (state) => state?.session?.loggedInUser
+  );
   const [updateUserProfile] = useUpdateUserProfileMutation();
   const {
     register,
@@ -63,15 +66,19 @@ const EditProfile = (props: IEditProfileProps) => {
         imageUrl: image,
       }).unwrap();
       if (response.status === 200) {
-        const user = {
-          userId: data?.userId,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data?.emailAddresses,
-          imageUrl: image,
-          gender: data?.gender,
+        const user ={
+          '_id': loggedinUser?._id,
+          'userId': loggedinUser?.userId,
+          'firstName': data.firstName,
+          'lastName': data.lastName,
+          'email': data?.emailAddresses,
+          'imageUrl': image,
+          'isActive': true,
+          'isDeleted': false,
+          'gender':  data?.gender,
+          'artistId': loggedinUser?.artistId
         };
-        dispatch(setLoggedInUser(user));
+        dispatch(setLoggedInUser(JSON.stringify(user as IUserDetails)));
         toast.success('Profile updated successfully');
       }
     } catch (error) {

@@ -7,12 +7,16 @@ import { useSearchParams } from 'next/navigation';
 import { MusicData } from './types/types';
 import { IPrevData } from '@/common/types/types';
 import Loading from '../Album/loading';
+import { RootState } from '@/Redux/store';
+import { useSelector } from 'react-redux';
+import { IUserDetails } from '../MyProfile/types/types';
 const Index = () => {
   const searchParams = useSearchParams();
   const albumId = searchParams.get('albumId');
   const [selectedSongs, setSelectedSongs] = useState<string[]>([]);
   const [prevData, setPrevData] = useState<IPrevData | null>(null);
-  const { data: musicData, isLoading: isMusicLoading,error:isMusicError } = useGetMusicsOfArtistsQuery(albumId);
+  const loggedInUser = useSelector<RootState, IUserDetails | null>((state) => state?.session?.loggedInUser);
+  const { data: musicData, isLoading: isMusicLoading,error:isMusicError } = useGetMusicsOfArtistsQuery(loggedInUser?._id,{skip: !loggedInUser?._id});
   const { data: albumByIdData, isLoading: isAlbumLoading,error:isAlbumError } = useGetAlbumByIdQuery(albumId || '', {
     skip: !albumId,
   });

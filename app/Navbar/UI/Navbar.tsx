@@ -12,6 +12,7 @@ export default function NavbarPage({ session }:{  session: string | null; }) {
   if (!userSession) {
     return null;
   }
+
   return (
     <>
       <Navbar isBordered className="sticky top-0 z-10">
@@ -36,7 +37,7 @@ export default function NavbarPage({ session }:{  session: string | null; }) {
         </NavbarContent>
 
         <NavbarContent as="div" className="items-center " justify="end">
-          <DropDown  />
+          <DropDown/>
         </NavbarContent>
       </Navbar>
     </>
