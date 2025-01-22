@@ -1,26 +1,25 @@
 import decode from 'audio-decode';
 import path from 'path';
-import fs from 'fs';
 
 export const audioDirectory = path.join(process.cwd(), 'public');
 
-export async function decodeAudio(filepath: string) {
-  try {
-    const response = await fetch(
-      'http://localhost:3000/music/audio/cinematic-designed-sci-fi-whoosh-transition-nexawave-228295.mp3'
-    );
-    if (!response.ok) {
-      throw new Error(`Failed to fetch audio file: ${response.statusText}`);
-    }
+// export async function decodeAudio(filepath: string) {
+//   try {
+//     const response = await fetch(
+//       'http://localhost:3000/music/audio/cinematic-designed-sci-fi-whoosh-transition-nexawave-228295.mp3'
+//     );
+//     if (!response.ok) {
+//       throw new Error(`Failed to fetch audio file: ${response.statusText}`);
+//     }
 
-    const audioData = await response.arrayBuffer();
+//     const audioData = await response.arrayBuffer();
 
-    const decodedAudio = await decode(audioData); 
-    return decodedAudio;
-  } catch (error) {
-    throw new Error(`Cannot decode the audio file at ${filepath},${error}`);
-  }
-}
+//     const decodedAudio = await decode(audioData); 
+//     return decodedAudio;
+//   } catch (error) {
+//     throw new Error(`Cannot decode the audio file at ${filepath},${error}`);
+//   }
+// }
 
 export async function audioDecode(audioData: ArrayBuffer) {
   try {
@@ -50,7 +49,6 @@ export async function processAudioPeaks(
     }
   }
 
-  // Normalize the peaks
   const min = Math.min(...peaks);
   const max = Math.max(...peaks);
   return peaks.map((peak) => (peak - min) / (max - min));
@@ -62,12 +60,11 @@ export async function getAudioPeaks(
 ): Promise<number[]> {
   try {
     const response = await fetch(
-      `http://localhost:3000${filepath.split('public')[1]}`
+      `${filepath}`
     );
     if (!response.ok) {
       throw new Error(`Failed to fetch audio file: ${response.statusText}`);
     }
-
     const audioData = await response.arrayBuffer();
 
     const decodedAudio = await decode(audioData);
@@ -90,15 +87,9 @@ export async function getMusicWithPeaks(audioFileUrl: string) {
   ) {
     return [];
   }
-  const filepath = await path.join(audioDirectory, audioFileUrl);
-  if (typeof window === 'undefined') {
-    if (!fs.existsSync(filepath)) {
-      return [];
-    }
-  }
-
+ 
   try {
-    const peaks = await getAudioPeaks(filepath, 512);
+    const peaks = await getAudioPeaks(audioFileUrl, 512);
     return peaks;
   } catch (error) {
     throw new Error(`${error}`);
