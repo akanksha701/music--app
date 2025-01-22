@@ -32,6 +32,7 @@
   "include": [
     "app/**/*.ts",
     "app/**/*.tsx",
+    "app/(BrowsePage)/Browse/types/**/*.ts", 
     "next-env.d.ts",
     "pages/**/*.ts",
     "pages/**/*.tsx",
