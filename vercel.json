@@ -2,7 +2,7 @@
     "build": {
       "env": {
         "PORT": "3000",
-        "APP_URL": "https://music-app-chi-lovat.vercel.app",
+        "APP_URL": "https://music-matter.vercel.app",
         "MONGODB_URI": "mongodb+srv://akanksha:root@cluster0.ent1u.mongodb.net/music-matter?retryWrites=true&w=majority&appName=Cluster0",
         "DB_NAME": "music-app",
         "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_YXB0LWJvYXItODguY2xlcmsuYWNjb3VudHMuYGV2JA",
@@ -22,7 +22,7 @@
         "NEXT_PUBLIC_UPLOAD_PRESET": "upload_images",
         "RECORDS_PER_PAGE": "5",
         "APP_NAME": "SoundScape",
-        "NODE_ENV": "production",
+        "NODE_ENV": "development",
         "SIGNING_SECRET": "whsec_KUsEmw8R/lh6rzbJkCH3jHZGQiFCgkud",
         "TYPE": "service_account",
         "PROJECT_ID": "music-app-cd5ac",
