@@ -4,7 +4,7 @@ export const playlistApi = createApi({
   reducerPath: 'playlistApi',
   tagTypes: ['Playlists'],
 
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL  }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://music-app-red-pi.vercel.app'  }),
   endpoints: (builder) => ({
     getPlayLists: builder.query({
       query: () => 'api/playlists',

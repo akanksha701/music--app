@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const genreApi  = createApi({
   reducerPath: 'genreApi',
   tagTypes: ['Genres'],
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://music-app-red-pi.vercel.app' }),
   endpoints: (builder) => ({
     getGenre: builder.query({
       query: ({page,recordsPerPage}) => `api/genre?page=${page}&recordsPerPage=${recordsPerPage}`,

@@ -13,7 +13,7 @@ import { RootState } from '@/Redux/store';
 export const likeApi = createApi({
   reducerPath: 'likeApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.APP_URL,
+    baseUrl: 'https://music-app-red-pi.vercel.app',
     prepareHeaders: (headers, { getState }) => {
       let accessToken: string | null = (getState() as RootState).session
         .accessToken;
