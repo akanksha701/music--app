@@ -5,7 +5,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  exportTrailingSlash: true,
   reactStrictMode: true,
   experimental: {
     after:true,
