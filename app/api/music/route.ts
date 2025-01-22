@@ -63,6 +63,7 @@ export async function POST(req: Request) {
         price: price,
         createdAt: new Date(),
         updatedAt: new Date(),
+        isDeleted:false
       });
       const updatedAlbum = await db
         .collection('albums')
