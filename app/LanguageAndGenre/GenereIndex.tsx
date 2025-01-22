@@ -11,7 +11,7 @@ import { Column } from '@/common/types/types';
 
  
 
-const genereColumns = [
+const genereColumns:Column[] = [
   { header: 'Genre Name', accessor: 'name' },
   {
     header: 'Edit',
@@ -24,12 +24,14 @@ const  GenereIndex = () => {
  
   const recordsPerPage = 6;
   const { page} = usePagination();
-  const { data: genreData } = useGetGenreQuery({ page, recordsPerPage }); 
+  const { data: genreData , isLoading , isError} = useGetGenreQuery({ page, recordsPerPage }); 
  
-  if (!genreData) {
+  if (isLoading) {
     return <Loading/>;
-  }
- 
+  }  
+  if (isError) {
+    return <div>No Genre Found</div>;
+  }  
   
    
   return (
@@ -40,7 +42,7 @@ const  GenereIndex = () => {
 
         <SmallGrid
           label="genre"
-          columns={genereColumns as Column[]}
+          columns={genereColumns}
           data={genreData?.data}
           moreBox={<SeeMoreButton url={'/allGenre'}/>}
           addBox={<AddMoreButton label={'genre'}/>}

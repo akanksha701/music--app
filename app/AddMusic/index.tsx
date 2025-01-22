@@ -12,7 +12,7 @@ import { useGetMusicsByUserIdQuery } from '@/services/music';
 import { Input } from '@/components/ui/input';
 import { debounce } from 'lodash';
 import useSearch from '@/hooks/useSearch';
-import AddMusic from './UI/UtilityComponent/AddMusic';
+import AddMusic from './UI/UtilityComponent/Addmusic';
 
 const Index = () => {
   const { data: musicData } = useGetMusicsByUserIdQuery({ slug: '' });

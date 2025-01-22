@@ -13,3 +13,9 @@ export interface IAddLanguageFormData {
     description: string;
     imageUrl: FileList; 
   }
+
+export interface IAddGenreFormData {
+    name: string;
+    description: string;
+    imageUrl: FileList; 
+  }

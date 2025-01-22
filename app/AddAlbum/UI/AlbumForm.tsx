@@ -42,7 +42,7 @@ const AddAlbumForm = (props: IAddAlbumFormProps) => {
     const Tid = toast('Loading...');
     try {
       let Response;
-      if (defaultData.albumId) {
+      if (defaultData?.albumId) {
         formData.append('albumId', defaultData.albumId);
         Response = await updateAlbum({
           albumId: defaultData.albumId,

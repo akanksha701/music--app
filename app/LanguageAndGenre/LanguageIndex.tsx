@@ -16,10 +16,12 @@ const LanguageIndex = () => {
 
   const recordsPerPage = 6;
   const { page } = usePagination();
-  const { data: languageData } = useGetLanguageQuery({ page, recordsPerPage });
- 
-  if (!languageData) {
+  const { data: languageData, isLoading, isError } = useGetLanguageQuery({ page, recordsPerPage });
+  if (isLoading) {
     return <Loading/>;
+  }  
+  if (isError) {
+    return <div>No Language Found</div>;
   }  
 
   return (
