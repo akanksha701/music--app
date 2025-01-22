@@ -112,7 +112,7 @@ export const fetchApi = async (
   method: Method,
   body?: object | FormData // Accept FormData as body
 ) => {
-  const url = new URL(apiUrl, 'http://localhost:3000');
+  const url = new URL(apiUrl, 'https://music-app-red-pi.vercel.app');
 
   const isFormData = body instanceof FormData;
 
