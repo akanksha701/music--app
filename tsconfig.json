@@ -30,17 +30,15 @@
     "baseUrl": "."
   },
   "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "node_modules/@types/react/index.d.ts",
-    ".next/types/**/*.ts",
-    "types.d.ts",
-    "src/app/music/[slug]",
-    "eslint.config.js",
-    "app/Pricing/index.tsx"
+    "pages/**/*.ts",
+    "pages/**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next"
   ]
 }
