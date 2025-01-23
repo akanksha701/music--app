@@ -208,6 +208,7 @@ export interface MusicDocument {
   updatedAt: string; // ISO Date string
   artists? : string;
   liked?: boolean;
+  peaks?: Float32Array[];
 }
 
 
