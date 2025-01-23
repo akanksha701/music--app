@@ -40,7 +40,7 @@ const AddGenre = (props: IAddGenreProps) => {
         toast.error('unknown error occured');
       }
     }
-  }
+  };
 
   const onSubmit = async (data: IMusicProps) => createGenre(data);
 

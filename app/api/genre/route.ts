@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (newGenre) {
-      revalidatePath('/genre-list')
+      revalidatePath('/genre-list');
       return NextResponse.json({
         status: 200,
         message: 'New genre created successfully',
