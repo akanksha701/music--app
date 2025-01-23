@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import ButtonWithIcon from '@/common/buttons/ButtonWithIcon';
 interface IPricingPlan {
   title: string;

@@ -1,5 +1,4 @@
  
-import mongoose from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
 import { MusicDocument } from '@/common/types/types';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';

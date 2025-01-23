@@ -17,7 +17,7 @@ const AddGenre = (props: IAddGenreProps) => {
     control,
     formState: { errors },
   } = useForm({});
-  const [addGenre, { isLoading, isSuccess, isError, error }] = useAddGenreMutation();
+  const [addGenre] = useAddGenreMutation();
   const { data: allGenres, refetch } = useGetAllGenreQuery({});
   const createGenre = async (data: IMusicProps) => {
     const formData = new FormData();
