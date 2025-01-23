@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { GENRE_IMAGE_UPLOAD_DIR } from '../music/exports';
 import { db } from '@/lib/DbConnection/dbConnection';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(req: NextRequest) {
   try {
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (newGenre) {
+      revalidatePath('/genre-list')
       return NextResponse.json({
         status: 200,
         message: 'New genre created successfully',

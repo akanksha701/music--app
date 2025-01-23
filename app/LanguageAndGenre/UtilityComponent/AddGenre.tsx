@@ -10,22 +10,27 @@ import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
 import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
 import { IAddGenreProps } from '../types/types';
-const AddGenre = (props:IAddGenreProps) => {
+import { revalidatePath } from 'next/cache';
+import { useAddGenreMutation, useGetAllGenreQuery } from '@/services/genre';
+const AddGenre = (props: IAddGenreProps) => {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({});
-  const onSubmit = async (data: IMusicProps) => {
+  const [addGenre, { isLoading, isSuccess, isError, error }] = useAddGenreMutation();
+  const { data: allGenres, refetch } = useGetAllGenreQuery({});
+  const createGenre = async (data: IMusicProps) => {
     const formData = new FormData();
     formData.append('image', data.imageUrl as string);
     formData.append('name', data.name as string);
     formData.append('description', data.description as string);
     try {
-      const res = await fetchApi('/api/genre', Method.POST, formData);
-      if (res.status === 200) {
-        toast.success(res.message); 
+      const response = await addGenre(formData).unwrap();  
+      if (response.status===200) {
+        toast.success('Genre added successfully!');
+        refetch();
         props.handleCloseDialog();
       }
     } catch (error) {
@@ -35,7 +40,9 @@ const AddGenre = (props:IAddGenreProps) => {
         toast.error('unknown error occured');
       }
     }
-  };
+  }
+
+  const onSubmit = async (data: IMusicProps) => createGenre(data);
 
   return (
     <div className=" text-black">
