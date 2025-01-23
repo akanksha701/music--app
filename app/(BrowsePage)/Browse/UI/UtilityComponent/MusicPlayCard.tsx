@@ -8,7 +8,7 @@ import { RootState } from 'Redux/store';
 import { useMusic } from 'hooks/useMusic';
 import { setCurrentList, setCurrentTrack, setCurrentSongIndex } from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { generateUrl } from '@/utils/helpers';
-
+import NoDataFound from '@/common/NoDataFound/NoDataFound';
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, message, handleLikeToggle } = props;
   const dispatch = useDispatch();
@@ -30,21 +30,25 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
 
   return (
     <div className="p-4 sm:p-6 md:p-10">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-        {data &&
-          data.length > 0 &&
-          data.map((item, index) => (
-            <MemoizedMusicCard
-              key={index}
-              index={index}
-              item={item}
-              handleMusicClick={handleMusicClick}
-              handleLikeToggle={handleLikeToggle}
-              NAME={name}
-            />
-          ))}
-        <> {data.length === 0 && <p>{message}</p>}</>
-      </div>
+      {
+        data &&
+          data.length > 0 ?
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+            {
+              data.map((item, index) => (
+                <MemoizedMusicCard
+                  key={index}
+                  index={index}
+                  item={item}
+                  handleMusicClick={handleMusicClick}
+                  handleLikeToggle={handleLikeToggle}
+                  NAME={name}
+                />
+              ))}
+          </div>
+          :
+          <NoDataFound name={message?.toString() || ''} />
+      }
     </div>
   );
 };

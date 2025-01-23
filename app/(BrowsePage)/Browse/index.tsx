@@ -31,7 +31,7 @@ const Index = ({ initialData }: { initialData: IMusicDataResponse}) => {
         <MusicPlayCard
           data={data?.topHits?.data}
           name={TAGS.MUSIC}
-          message='Musics not found'
+          message='Musics'
           handleLikeToggle={(itemId) =>
             handleLikeToggle(itemId, TAGS.MUSIC, toggleLike, currentTrack as IMusicProps, dispatch)
           }
@@ -47,7 +47,7 @@ const Index = ({ initialData }: { initialData: IMusicDataResponse}) => {
             name={TAGS.ALBUMS}
             handleLikeToggle={(itemId) => handleLikeToggle(itemId, TAGS.ALBUMS, toggleLike)}
             showLikeIcon={true}
-            message='Albums not found'
+            message='Albums'
             className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'
           />
         )}
@@ -60,7 +60,7 @@ const Index = ({ initialData }: { initialData: IMusicDataResponse}) => {
         <MusicPlayCard
           data={data?.newReleases?.data?.data?.slice(0, 8)}
           name={TAGS.NEW_RELEASE}
-          message='New Releases not found'
+          message='New Releases '
           handleLikeToggle={(itemId) =>
             handleLikeToggle(itemId, TAGS.MUSIC, toggleLike, currentTrack as IMusicProps, dispatch)
           }
@@ -76,7 +76,7 @@ const Index = ({ initialData }: { initialData: IMusicDataResponse}) => {
             data={data.topGenres.data}
             handleLikeToggle={(itemId) => handleLikeToggle(itemId, TAGS.GENRE, toggleLike)}
             showLikeIcon={true}
-            message='Genres not found'
+            message='Genres'
             className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'
           />
         )}

@@ -3,9 +3,14 @@ import { IBoxTypes, IMusicProps } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { redirect } from 'next/navigation';
 import MemoizedCard from './MemoizedCard';
-import { setCurrentList, setCurrentTrack, setCurrentSongIndex } from '@/Redux/features/musicPlayer/musicPlayerSlice';
+import {
+  setCurrentList,
+  setCurrentTrack,
+  setCurrentSongIndex,
+} from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { generateUrl } from '@/utils/helpers';
 import { RootState } from '@/Redux/store';
+import NoDataFound from '@/common/NoDataFound/NoDataFound';
 
 const Box = ({
   data,
@@ -30,7 +35,6 @@ const Box = ({
     default:
       return '';
     }
-
   };
 
   const handleMusicClick = async (index: number, music: IMusicProps) => {
@@ -46,28 +50,29 @@ const Box = ({
     redirect(newUrl);
   };
 
-
   return (
     <>
-      <h2 className='text-2xl font-semibold mt-7'>{title}</h2>
-      <div className={className}>
-        {data && data.length > 0 ? (
-          data?.map((item, index) => {
+      <h2 className="text-2xl font-semibold mt-7">{title}</h2>
+      {data && data.length > 0 ? (
+        <div className={className}>
+          {data.map((item, index) => {
+            return (<>
+              <MemoizedCard
+                key={index}
+                index={index}
+                item={item}
+                handleMusicClick={handleMusicClick}
+                showLikeIcon={showLikeIcon}
+                handleLikeToggle={handleLikeToggle}
+                NAME={NAME}
+              />
+            </>);
+          })}
+        </div>
 
-            return (<MemoizedCard
-              key={index}
-              index={index}
-              item={item}
-              handleMusicClick={handleMusicClick}
-              showLikeIcon={showLikeIcon}
-              handleLikeToggle={handleLikeToggle}
-              NAME={NAME}
-            />);
-          })
-        ) : (
-          <p>{message}</p>
-        )}
-      </div>
+      ) : (
+        <NoDataFound name={message?.toString() || ''} />
+      )}
     </>
   );
 };
