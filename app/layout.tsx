@@ -7,10 +7,10 @@ import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Suspense } from 'react';
 import Loading from './Album/loading';
-
+console.log(process.env.APP_URL)
 async function fetchFooterData() {
   try {
-    const res = await fetch('http://localhost:3000/api/marketing', { cache: 'no-store' });
+    const res = await fetch(`${process.env.APP_URL}/api/marketing`, { cache: 'no-store' });
     if (!res.ok) {
       return null;
     }

@@ -34,8 +34,8 @@ const MusicPlayer = ({
           <Image
             src={currentTrack?.imageUrl || '/default-image.jpg'}
             alt="Track Image"
-            width={80}
-            height={80}
+            width={50}
+            height={50}
             className="rounded-md p-2"
           />
         </div>
