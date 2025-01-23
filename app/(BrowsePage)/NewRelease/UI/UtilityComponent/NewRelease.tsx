@@ -31,7 +31,7 @@ const NewRelease = () => {
         className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         name={TAGS.MUSIC}
         showLikeIcon={true}
-        message={'musics not found'}
+        message={'Musics'}
         handleLikeToggle={(itemId) =>
           handleLikeToggle(itemId, TAGS.MUSIC, toggleLike,currentTrack as IMusicProps,dispatch)}
       />

@@ -26,9 +26,6 @@ export default function PrimaryButton(buttonProps: IButtonProps) {
         />
       }
 
-
-
-
       <span className="text-lg">{name}</span>
     </Button>
 

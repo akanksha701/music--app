@@ -15,6 +15,7 @@ import VolumeIcon from './VolumeIcon';
 import PlayerLabel from './PlayerLabel';
 import Image from 'next/image';
 import { IMusicPlayerProps } from '../../types/types';
+import ButtonWithIcon from '@/common/buttons/ButtonWithIcon';
 const MusicPlayer = ({
   currentTrack,
   isMuted,
@@ -91,9 +92,10 @@ const MusicPlayer = ({
               color="white"
               className="cursor-pointer mx-2 text-gray-500"
             />
-            <button className="bg-vivid-orange rounded-full p-1 mx-2">
-              <GoDownload size={20} color="black" />
-            </button>
+            <ButtonWithIcon
+              className='w-6 h-6 text-black rounded-full bg-vivid-orange p-1 mx-2 '
+              icon={<GoDownload size={20} color="black" />}
+            />
             <FiShoppingCart
               size={24}
               color="white"

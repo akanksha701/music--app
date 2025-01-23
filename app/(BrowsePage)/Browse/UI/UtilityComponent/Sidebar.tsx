@@ -5,17 +5,16 @@ import { CgMusicNote } from 'react-icons/cg';
 import { BiSolidAlbum } from 'react-icons/bi';
 import { MdPodcasts } from 'react-icons/md';
 import { PiMicrophoneStageLight } from 'react-icons/pi';
-import { Button } from '@/components/ui/button';
 import { GoPlus } from 'react-icons/go';
 import { redirect, usePathname } from 'next/navigation';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
-
 import PrimaryButton from '@/common/buttons/PrimaryButton';
 import { useCreatePlayListMutation, useGetPlayListsQuery } from '@/services/playlists';
 import SecondaryButton from '@/common/buttons/SecondaryButton';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-
+import ButtonWithIcon from "@/common/buttons/ButtonWithIcon";
+import { IoAddCircleOutline } from 'react-icons/io5';
 const Browse = [
   { name: 'New Releases', label: 'NewRelease', route: '/NewRelease' },
   { name: 'Top Charts', label: 'TopCharts', route: '/TopCharts' },
@@ -40,16 +39,15 @@ const Sidebar = () => {
   const [createPlaylist] = useCreatePlayListMutation();
   const { data: Playlists } = useGetPlayListsQuery({});
 
-  const handleOpenDialog = () => setIsDialogOpen(true);
+  const handleOpenDialog = (event: React.MouseEvent<HTMLButtonElement>) => setIsDialogOpen(true);
+  const handleCloseDialog = (event: React.MouseEvent<HTMLButtonElement>) => setIsDialogOpen(false);
 
-  const handleCloseDialog = () => setIsDialogOpen(false);
-
-  const handleCreatePlaylist = async () => {
+  const handleCreatePlaylist = async (event: React.MouseEvent<HTMLButtonElement>) => {
     if (playlistName.trim()) {
       await createPlaylist({ name: playlistName, user: '675ab45ad8496e8fd5fb50db' });
       toast.success('Playlist created successfully!');
       setPlaylistName('');
-      handleCloseDialog();
+      handleCloseDialog(event);
     } else {
       alert('Please enter a playlist name');
     }
@@ -85,30 +83,13 @@ const Sidebar = () => {
           </div>
         ))}
       </div>
-
-      <Button
+      <ButtonWithIcon
         className={`border-1 border-electric-purple text-electric-purple 
-          rounded-full hover:bg-electric-purple hover:text-white`}
+        rounded-full hover:bg-electric-purple hover:text-white`}
         onClick={handleOpenDialog}
-      >
-        <GoPlus size={50} /> New Playlist
-      </Button>
-
-      {Playlists?.data?.length > 0 && (
-        <div className="my-2">
-          <p className="text-slate-600">Playlists</p>
-          {Playlists.data.map((item: {_id:string,name:string}, index: number) => (
-            <div key={index} className="flex items-center my-2  ">
-              <span className="ml-2 border-slate-300 rounded-md p-1 border-2">
-                <Link href={`/Playlist/${item._id}`}>
-                  <p className="cursor-pointer font-light">{item.name}</p>
-                
-                </Link>
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
+        icon={<GoPlus size={50} />}
+        text={'New Playlist'}
+      />
 
       <Dialog open={isDialogOpen} onClose={handleCloseDialog} fullWidth maxWidth="sm">
         <DialogTitle>Create a New Playlist</DialogTitle>
@@ -125,9 +106,24 @@ const Sidebar = () => {
           />
         </DialogContent>
         <DialogActions>
-          <SecondaryButton name='Cancel' onClick={() => handleCloseDialog()} type='button'  />
-            
-          <PrimaryButton onClick={handleCreatePlaylist} name="Create" />
+          <ButtonWithIcon
+            className={`border-1 border-electric-purple text-electric-purple 
+        rounded-full hover:bg-electric-purple hover:text-white`}
+            onClick={handleCloseDialog}
+            text={'Cancel'}
+          />
+          <ButtonWithIcon
+            className={`border-1 border-electric-purple text-electric-purple 
+        rounded-full hover:bg-electric-purple hover:text-white `}
+            onClick={handleCreatePlaylist}
+            text={'Create'}
+            icon={<IoAddCircleOutline
+              style={{
+                height: '1.8rem',
+                width: '1.8rem',
+              }}
+            />}
+          />
         </DialogActions>
       </Dialog>
     </div>

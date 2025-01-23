@@ -56,7 +56,7 @@ const Box = ({
       {data && data.length > 0 ? (
         <div className={className}>
           {data.map((item, index) => {
-            return (<>
+            return (<div key={index}>
               <MemoizedCard
                 key={index}
                 index={index}
@@ -66,7 +66,7 @@ const Box = ({
                 handleLikeToggle={handleLikeToggle}
                 NAME={NAME}
               />
-            </>);
+            </div>);
           })}
         </div>
 

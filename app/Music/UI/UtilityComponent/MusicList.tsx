@@ -9,6 +9,7 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { useSelector} from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 import { RootState } from '@/Redux/store';
+import ButtonWithIcon from '@/common/buttons/ButtonWithIcon';
 
 const MusicList = ({
   data,
@@ -85,9 +86,10 @@ const MusicList = ({
               color="white"
               className="cursor-pointer mx-2"
             />
-            <button className="bg-vivid-orange rounded-full p-1 mx-2">
-              <GoDownload size={20} color="black" />
-            </button>
+            <ButtonWithIcon
+              className='w-8 h-8 text-black rounded-full bg-vivid-orange p-1 mx-2 '
+              icon={<GoDownload size={20} color="black" />}
+            />
             <FiShoppingCart
               size={16}
               color="white"
