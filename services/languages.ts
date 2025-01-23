@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const languageApi = createApi({
   reducerPath: 'languageApi',
   tagTypes: ['Languages'],
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL ||'http://localhost:3000' }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL  }),
   endpoints: (builder) => ({
     getLanguage: builder.query({
       query: ({ page, recordsPerPage }) =>
