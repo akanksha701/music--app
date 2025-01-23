@@ -8,7 +8,6 @@ import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast';
 import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
 import { IAddGenreProps } from '../types/types';
-import { revalidatePath } from 'next/cache';
 import { useAddGenreMutation, useGetAllGenreQuery } from '@/services/genre';
 const AddGenre = (props: IAddGenreProps) => {
   const {
@@ -18,7 +17,8 @@ const AddGenre = (props: IAddGenreProps) => {
     formState: { errors },
   } = useForm({});
   const [addGenre] = useAddGenreMutation();
-  const { data: allGenres, refetch } = useGetAllGenreQuery({});
+  const { refetch } = useGetAllGenreQuery({});
+  
   const createGenre = async (data: IMusicProps) => {
     const formData = new FormData();
     formData.append('image', data.imageUrl as string);

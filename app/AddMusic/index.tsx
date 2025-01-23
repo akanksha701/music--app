@@ -13,14 +13,14 @@ import { Input } from '@/components/ui/input';
 import { debounce } from 'lodash';
 import useSearch from '@/hooks/useSearch';
 import Loading from '../loading';
-import AddMusic from './UI/UtilityComponent/Addmusic';
+import AddMusic from './UI/UtilityComponent/AddMusic';
 
 const Index = () => {
-  const { data: musicData, isLoading: musicLoading } = useGetMusicsByUserIdQuery({ slug: '' });
-  const { data: languageData, isLoading: languageLoading } = useGetLanguageQuery({});
-  const { data: artistData, isLoading: artistLoading } = useGetArtistsQuery({});
-  const { data: genreData, isLoading: genreLoading } = useGetGenreQuery({});
-  const { data: albumData, isLoading: albumLoading } = useGetAlbumsQuery({});
+  const { data: musicData,  } = useGetMusicsByUserIdQuery({ slug: '' });
+  const { data: languageData } = useGetLanguageQuery({});
+  const { data: artistData } = useGetArtistsQuery({});
+  const { data: genreData } = useGetGenreQuery({});
+  const { data: albumData } = useGetAlbumsQuery({});
   const { searchQuery, setSearchQuery } = useSearch();
 
   if (!languageData || !artistData || !genreData || !albumData || !musicData) {

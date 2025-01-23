@@ -8,11 +8,8 @@ import { PiMicrophoneStageLight } from 'react-icons/pi';
 import { GoPlus } from 'react-icons/go';
 import { redirect, usePathname } from 'next/navigation';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
-import PrimaryButton from '@/common/buttons/PrimaryButton';
 import { useCreatePlayListMutation, useGetPlayListsQuery } from '@/services/playlists';
-import SecondaryButton from '@/common/buttons/SecondaryButton';
 import toast from 'react-hot-toast';
-import Link from 'next/link';
 import ButtonWithIcon from '@/common/buttons/ButtonWithIcon';
 import { IoAddCircleOutline } from 'react-icons/io5';
 const Browse = [
@@ -39,15 +36,15 @@ const Sidebar = () => {
   const [createPlaylist] = useCreatePlayListMutation();
   const { data: Playlists } = useGetPlayListsQuery({});
 
-  const handleOpenDialog = (event: React.MouseEvent<HTMLButtonElement>) => setIsDialogOpen(true);
-  const handleCloseDialog = (event: React.MouseEvent<HTMLButtonElement>) => setIsDialogOpen(false);
+  const handleOpenDialog = () => setIsDialogOpen(true);
+  const handleCloseDialog = () => setIsDialogOpen(false);
 
   const handleCreatePlaylist = async (event: React.MouseEvent<HTMLButtonElement>) => {
     if (playlistName.trim()) {
       await createPlaylist({ name: playlistName, user: '675ab45ad8496e8fd5fb50db' });
       toast.success('Playlist created successfully!');
       setPlaylistName('');
-      handleCloseDialog(event);
+      handleCloseDialog();
     } else {
       alert('Please enter a playlist name');
     }
