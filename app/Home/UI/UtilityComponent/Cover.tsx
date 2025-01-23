@@ -32,9 +32,9 @@ const Cover = (props: ICoverProps) => {
           </h1>
           <p className="text-xl mb-8">{data?.description}</p>
           <ButtonWithIcon
-          onClick={() => redirect('/Browse')}
-          text='Start Listening Free'
-          className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100"
+            onClick={() => redirect('/Browse')}
+            text='Start Listening Free'
+            className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100"
 
           />
         </div>

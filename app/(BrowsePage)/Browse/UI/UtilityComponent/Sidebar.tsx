@@ -13,7 +13,7 @@ import { useCreatePlayListMutation, useGetPlayListsQuery } from '@/services/play
 import SecondaryButton from '@/common/buttons/SecondaryButton';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import ButtonWithIcon from "@/common/buttons/ButtonWithIcon";
+import ButtonWithIcon from '@/common/buttons/ButtonWithIcon';
 import { IoAddCircleOutline } from 'react-icons/io5';
 const Browse = [
   { name: 'New Releases', label: 'NewRelease', route: '/NewRelease' },

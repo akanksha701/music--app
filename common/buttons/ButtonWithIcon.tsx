@@ -1,5 +1,5 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { Button } from '@/components/ui/button';
 export interface IButtonWithIcon {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   icon?: React.ReactNode;
