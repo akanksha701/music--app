@@ -54,7 +54,6 @@ const MusicListContainer = (props: {
   );
   useEffect(() => {
     if (queryType === 'GenreSongs' && genreData) {
-      console.log(genreData , 'genreData');
       setAllSongsData(genreData.data);
     } else if (queryType === TAGS.ALBUM_SONGS && albumData) {
       setAllSongsData(albumData.data);
@@ -77,7 +76,6 @@ const MusicListContainer = (props: {
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
-  console.log(allSongsData);
   
   const allSongs = useSelector<RootState, IMusicProps[] | null>(
     (state) => state.musicPlayerSlice.currentList
@@ -139,7 +137,6 @@ const MusicListContainer = (props: {
 
   useEffect(() => {
     const createWaveSurfers = (songs: IMusicProps[]) => {
-      console.log(songs,'..');
       if (songs && songs.length > 0) {
         songs.map((song) => {
           const waveformContainerId = `waveform_${song?._id}`;
@@ -192,11 +189,9 @@ const MusicListContainer = (props: {
 
   const handlePlayTrack = useCallback(
     (track: IMusicProps) => {
-      console.log('reachhed');
       const wavesurfer = wavesurferRefs.current.get(
         currentTrack?._id as string
       );
-      console.log('wavesurfer',wavesurfer);
       if (currentTrack?._id === track._id) {
         if (isPlaying) {
           wavesurfer?.current?.pause();
