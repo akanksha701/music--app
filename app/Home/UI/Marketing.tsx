@@ -18,7 +18,7 @@ const Marketing = async () => {
   return (
     <>
       <div className="min-h-screen scroll-smooth">
-        <Cover data={data.coverTitle} />
+        <Cover data={data.coverTitle} appURL={process.env.APP_URL?.toString() || ''}/>
         <PopularTrackCoverPage
           data={data?.popularTrackVideos}
           users={data?.users}
@@ -39,7 +39,7 @@ const Marketing = async () => {
 
         <CategoryCard genreList={genre.data} title={data.categoryTitle} />
         <Artists artistsData={data.artistList} title={data.artistTitle} />
-        <Next />
+        <Next appURL={process.env.APP_URL?.toString() || ''}/>
         <Questions
           data={data?.questions.slice(0, 5)}
           faqDescription={data?.faqDescription}

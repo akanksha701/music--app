@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react'; 
+import React, { useMemo } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import ButtonWithIcon from '@/common/buttons/ButtonWithIcon';
 interface IPricingPlan {
   title: string;
   description: string;
@@ -60,10 +61,11 @@ const Plans = (props: IPlans) => {
                   </ul>
                 </CardContent>
                 <CardFooter className="p-4">
-                  <Button className="w-full bg-purple-600 text-white py-3 rounded-lg shadow-md 
-                  hover:bg-purple-700 transition-all duration-300 ease-in-out">
-                    Get Started
-                  </Button>
+                  <ButtonWithIcon
+                    className="w-full bg-purple-600 text-white py-3 rounded-lg shadow-md 
+                  hover:bg-purple-700 transition-all duration-300 ease-in-out"
+                    text='Get Started'
+                  />
                 </CardFooter>
               </Card>
             ))}
