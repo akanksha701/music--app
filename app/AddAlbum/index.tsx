@@ -27,23 +27,24 @@ const Index = () => {
   const { data: musicData, isLoading: isMusicLoading, error: isMusicError } = useGetMusicsOfArtistsQuery(artistId, { skip: !artistId });
   const { data: albumByIdData } = useGetAlbumByIdQuery(albumId || '', { skip: !albumId });
 
-  const updatePrevData = () => {
-    if (albumByIdData?.data) {
-      setPrevData({
-        albumDescription: albumByIdData.data.description,
-        albumId: albumId || '',
-        albumImage: albumByIdData.data.imageUrl,
-        albumMusicIds: albumByIdData.data.musicDetails,
-        albumName: albumByIdData.data.name,
-        albumPrice: albumByIdData.data.Price,
-      });
 
-      const songs = albumByIdData.data.musicDetails.map((song: MusicData) => song?._id);
-      setSelectedSongs(songs);
-    }
-  };
 
   useEffect(() => {
+    const updatePrevData = () => {
+      if (albumByIdData?.data) {
+        setPrevData({
+          albumDescription: albumByIdData.data.description,
+          albumId: albumId || '',
+          albumImage: albumByIdData.data.imageUrl,
+          albumMusicIds: albumByIdData.data.musicDetails,
+          albumName: albumByIdData.data.name,
+          albumPrice: albumByIdData.data.Price,
+        });
+  
+        const songs = albumByIdData.data.musicDetails.map((song: MusicData) => song?._id);
+        setSelectedSongs(songs);
+      }
+    };
     updatePrevData();
   }, [albumByIdData, albumId]);
 

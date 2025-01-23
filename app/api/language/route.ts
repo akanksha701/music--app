@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     const limit = recordsPerPage;
     const languageList = await db
       .collection('languages')
-      .find({})
+      .find({isDeleted : false})
       .skip(skip)
       .limit(limit).toArray();
     const totalLanguages = await db.collection('languages').countDocuments();
@@ -76,7 +76,6 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   } catch (error) {
-    console.log('error',error);
     return NextResponse.json(
       { error:error ,
         status: 500,message:error }
@@ -257,25 +256,24 @@ export async function DELETE(req: NextRequest) {
         { status: 404 }
       );
     }
-    if (existingLanguage.imageUrl && !existingLanguage.imageUrl.includes('default.jpg')) {
-      const imagePath = path.join(process.cwd(), 'public', existingLanguage.imageUrl); 
-      try {
-        await fs.unlink(imagePath); 
-      } catch (error) {
-        return NextResponse.json(
-          { error: error },
-          { status: 500 }
+    // if (existingLanguage.imageUrl && !existingLanguage.imageUrl.includes('default.jpg')) {
+    //   const imagePath = path.join(process.cwd(), 'public', existingLanguage.imageUrl); 
+    //   try {
+    //     await fs.unlink(imagePath); 
+    //   } catch (error) {
+    //     return NextResponse.json(
+    //       { error: error },
+    //       { status: 500 }
        
-        );
-      }
-    }
+    //     );
+    //   }
+    // }
     const updatedLanguage = await db.collection('languages').findOneAndUpdate(
       { _id: new mongoose.Types.ObjectId(id) },
       { $set: { isDeleted: true } }, 
       { returnDocument: 'after' } 
     );
-
-    if (!updatedLanguage?.value) {
+    if (!updatedLanguage) {
       return NextResponse.json(
         { error: 'Failed to mark as deleted' },
         { status: 500 }

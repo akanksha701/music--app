@@ -5,6 +5,7 @@ import { getMusicWithPeaks } from '@/utils/getPeaks';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { AUDIO_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from './exports';
 import { db } from '@/lib/DbConnection/dbConnection';
+import { ObjectId } from 'mongodb';
 
 async function getAudioDetails(body: Record<string, string | Blob>) {
   const audio = (body.audio) || null;
@@ -44,8 +45,8 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const body: Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
     const albumIds = Array.isArray(body?.album)
-      ? body?.album.map((id) => (id))
-      : [body?.album];
+      ? body.album.map((id) => new ObjectId(id))
+      : [new ObjectId(body.album)];
     const musicDetails = await getMusicPrimaryDetails(body);
     const audioDetails = await getAudioDetails(body);
     const price = {
