@@ -13,7 +13,7 @@ import { RootState } from '@/Redux/store';
 export const likeApi = createApi({
   reducerPath: 'likeApi',
   baseQuery: fetchBaseQuery({
-    baseUrl:  process.env.APP_URL||'http://localhost:3000',
+    baseUrl:  process.env.APP_URL,
     prepareHeaders: (headers, { getState }) => {
       let accessToken: string | null = (getState() as RootState).session
         .accessToken;
