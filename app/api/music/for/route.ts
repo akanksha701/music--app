@@ -25,13 +25,13 @@ export const GET = async (req: NextRequest) => {
     let filter = {};
     switch (type) {
     case 'genre':
-      filter = { 'musicDetails.genreId': new mongoose.Types.ObjectId(id) };
+      filter = { 'musicDetails.genreId': id };
       break;
     case 'playlist':
-      filter = { 'musicDetails.playlistId': new mongoose.Types.ObjectId(id) };
+      filter = { 'musicDetails.playlistId': id };
       break;
     case 'artistId':
-      filter = { 'musicDetails.artistId': new mongoose.Types.ObjectId(id) };
+      filter = { 'musicDetails.artistId': id };
       break;
     default:
       return NextResponse.json(
