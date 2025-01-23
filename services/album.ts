@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const albumApi = createApi({
   reducerPath: 'albumApi', 
   baseQuery: fetchBaseQuery({
-    baseUrl:  process.env.APP_URL||'http://localhost:3000',  
+    baseUrl:  process.env.APP_URL,  
     prepareHeaders: (headers, { getState }) => {
       let accessToken:string|null = (getState() as RootState).session.accessToken;
 

@@ -6,8 +6,6 @@ import { useForm } from 'react-hook-form';
 import NextTextArea from '@/common/inputs/Textarea';
 import FileUploadInput from '@/common/inputs/FileUploadInput';
 import toast from 'react-hot-toast';
-import { fetchApi } from '@/utils/helpers';
-import { Method } from '@/app/About/types/types';
 import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
 import { IAddGenreProps } from '../types/types';
 import { revalidatePath } from 'next/cache';

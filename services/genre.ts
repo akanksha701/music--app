@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const genreApi  = createApi({
   reducerPath: 'genreApi',
   tagTypes: ['Genres'],
-  baseQuery: fetchBaseQuery({ baseUrl:  process.env.APP_URL||'http://localhost:3000' }),
+  baseQuery: fetchBaseQuery({ baseUrl:  process.env.APP_URL }),
   endpoints: (builder) => ({
     getGenre: builder.query({
       query: ({page,recordsPerPage}) => `api/genre?page=${page}&recordsPerPage=${recordsPerPage}`,

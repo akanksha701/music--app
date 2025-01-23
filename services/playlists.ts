@@ -4,7 +4,7 @@ export const playlistApi = createApi({
   reducerPath: 'playlistApi',
   tagTypes: ['Playlists'],
 
-  baseQuery: fetchBaseQuery({ baseUrl:  process.env.APP_URL||'http://localhost:3000'  }),
+  baseQuery: fetchBaseQuery({ baseUrl:  process.env.APP_URL  }),
   endpoints: (builder) => ({
     getPlayLists: builder.query({
       query: () => 'api/playlists',
