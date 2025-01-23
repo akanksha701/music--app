@@ -21,7 +21,7 @@ const NewRelease = () => {
     queryParams: queryParams.toString(),
   });
 
-
+  console.log('newReleases',newReleases);
   
   return <> 
     <div className="mt-3">

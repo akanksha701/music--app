@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const musicApi = createApi({
   reducerPath: 'musicApi', 
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://music-app-red-pi.vercel.app' ,  
+    baseUrl: process.env.APP_URL||'http://localhost:3000' ,  
     prepareHeaders: (headers, { getState }) => {
       let accessToken:string|null = (getState() as RootState).session.accessToken;
 

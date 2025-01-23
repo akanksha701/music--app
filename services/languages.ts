@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const languageApi = createApi({
   reducerPath: 'languageApi',
   tagTypes: ['Languages'],
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://music-app-red-pi.vercel.app' }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.APP_URL ||'http://localhost:3000' }),
   endpoints: (builder) => ({
     getLanguage: builder.query({
       query: ({ page, recordsPerPage }) =>

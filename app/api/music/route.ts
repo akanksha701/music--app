@@ -6,7 +6,7 @@ import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { AUDIO_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from './exports';
 import { db } from '@/lib/DbConnection/dbConnection';
 
-async function getAudioDetails(body:Record<string, string|Blob>) {
+async function getAudioDetails(body: Record<string, string | Blob>) {
   const audio = (body.audio) || null;
   const image = (body.image) || null;
   const audioUrl = audio ? await uploadAudio(audio as File, AUDIO_UPLOAD_DIR) : null;
@@ -19,7 +19,7 @@ async function getAudioDetails(body:Record<string, string|Blob>) {
   };
   return audioDetails;
 }
-async function getMusicPrimaryDetails(body:Record<string, string|Blob>) {
+async function getMusicPrimaryDetails(body: Record<string, string | Blob>) {
   const audio = (body.audio as Blob) || null;
   const artistIds = body.artists
     ? body.artists
@@ -31,7 +31,7 @@ async function getMusicPrimaryDetails(body:Record<string, string|Blob>) {
     name: await capitalizeTitle(body?.name.toString()),
     description: body.description,
     genreId: body.genre,
-    languageId: body.language,
+    languageId: new mongoose.Types.ObjectId(body?.language.toString()),
     artistId: artistIds,
     releaseDate: new Date(),
     duration: (await getAudioDuration(audio)) || 0,
@@ -42,12 +42,10 @@ async function getMusicPrimaryDetails(body:Record<string, string|Blob>) {
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-
-
-    const body:Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
+    const body: Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
     const albumIds = Array.isArray(body?.album)
-      ? body?.album.map((id) => (id))  
-      : [body?.album]; 
+      ? body?.album.map((id) => (id))
+      : [body?.album];
     const musicDetails = await getMusicPrimaryDetails(body);
     const audioDetails = await getAudioDetails(body);
     const price = {
@@ -63,7 +61,7 @@ export async function POST(req: Request) {
         price: price,
         createdAt: new Date(),
         updatedAt: new Date(),
-        isDeleted:false
+        isDeleted: false
       });
       const updatedAlbum = await db
         .collection('albums')
@@ -126,8 +124,14 @@ export async function GET(req: NextRequest) {
         $lookup: {
           from: 'artists',
           localField: 'musicDetails.artistId',
-          foreignField: 'userId',
+          foreignField: '_id',
           as: 'artistDetails',
+        },
+      },
+      {
+        $unwind: {
+          path: '$artistDetails',
+          preserveNullAndEmptyArrays: true,
         },
       },
       {
@@ -136,12 +140,6 @@ export async function GET(req: NextRequest) {
           localField: 'musicDetails.languageId',
           foreignField: '_id',
           as: 'languageDetails',
-        },
-      },
-      {
-        $unwind: {
-          path: '$artistDetails',
-          preserveNullAndEmptyArrays: true,
         },
       },
       {
@@ -207,7 +205,6 @@ export async function GET(req: NextRequest) {
         },
       });
     }
-
     await aggregatePipeline.push(
       {
         $group: {
@@ -257,7 +254,6 @@ export async function GET(req: NextRequest) {
       .collection('musics')
       .aggregate(aggregatePipeline)
       .toArray();
-
     const totalPages = limit > 0 ? Math.ceil(totalRecords / limit) : 1;
 
     return NextResponse.json({
