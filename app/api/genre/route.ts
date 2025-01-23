@@ -17,12 +17,12 @@ export async function POST(req: NextRequest) {
     const imageUrl =
       image && image !== 'undefined'
         ? await uploadImage(image as File, GENRE_IMAGE_UPLOAD_DIR)
-        : ''; 
+        : '/genres/images/default-genre.avif'; 
 
     const newGenre = await db.collection('genres').insertOne({
       name: await capitalizeTitle(name.toString()),
       description: description,
-      imageUrl: imageUrl,
+      imageUrl: imageUrl ,
       isDeleted: false,
       createdAt: new Date(),
       updatedAt: new Date(),
