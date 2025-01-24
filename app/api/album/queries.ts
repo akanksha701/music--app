@@ -188,6 +188,7 @@ export const musicAggregationPipeline = (musicIds : string[], userUid : string |
       imageUrl: { $first: '$audioDetails.imageUrl' },
       audioUrl: { $first: '$audioDetails.audioUrl' },
       playCount: { $first: '$playCount' },
+      peaks: { $first: '$audioDetails.peaks' },
     },
   },
   {
