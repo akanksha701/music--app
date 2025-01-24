@@ -33,18 +33,10 @@ const MusicListContainer = () => {
     allSongsData = allMusicsQuery.data;
   }
 
-
-  // const { data: allSongsData, isLoading } =
-  //   queryType === TAGS.MUSIC
-  //     ? useGetTopHitsMusicsQuery(undefined)
-  //     : queryType === TAGS.NEW_RELEASE
-  //       ? useGetAllMusicsQuery({})
-  //       : { data: null, isLoading: false };
-
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
-  
+
   const allSongs = useSelector<RootState, IMusicProps[] | null>(
     (state) => state.musicPlayerSlice.currentList
   );
@@ -59,42 +51,23 @@ const MusicListContainer = () => {
     if (allSongsData && allSongsData.data) {
       let songs: IMusicProps[] = [];
       if (queryType === TAGS.MUSIC) {
-        songs = allSongsData.data; // Assuming the data is in a direct array form
+        songs = allSongsData.data;
       } else if (queryType === TAGS.NEW_RELEASE) {
-        songs = allSongsData.data?.data || []; // If `data` is wrapped inside another `data` object
+        songs = allSongsData.data?.data || [];
       }
       if (songs?.length > 0) {
         dispatch(setCurrentList(songs));
       }
     }
   }, [allSongsData, dispatch, queryType]);
-  // useEffect(() => {
-  //   if (allSongsData && allSongsData.data) {
-  //     const songs =
-  //       queryType === TAGS.MUSIC
-  //         ? allSongsData?.data
-  //         : queryType === TAGS.NEW_RELEASE
-  //           ? allSongsData?.data?.data
-  //           : [];
-
-  //     if (songs?.length > 0) {
-  //       dispatch(setCurrentList(songs));
-  //     }
-  //   }
-  // }, [allSongsData]);
   const currentTrackRef = useRef(currentTrack);
 
   useEffect(() => {
     currentTrackRef.current = currentTrack;
   }, [currentTrack]);
 
- 
-
   useEffect(() => {
-    if (
-      !currentTrack ||
-      !wavesurferRefs.current.has(currentTrack?._id as string)
-    )
+    if (!currentTrack || !wavesurferRefs.current.has(currentTrack?._id as string))
       return;
     const wavesurfer = wavesurferRefs.current.get(currentTrack?._id as string);
     const duration = wavesurfer.getDuration() || 1;
@@ -108,7 +81,18 @@ const MusicListContainer = () => {
         wavesurfer.seekTo(seekPercentage);
       }
     });
-  }, [currentTime, currentTrack , wavesurferRef]);
+
+  }, [currentTime, currentTrack, wavesurferRef]);
+
+
+  const handleWaveformReset = (trackId: string) => {
+    const previousWaveSurfer = wavesurferRefs.current.get(trackId);
+    if (previousWaveSurfer) {
+      setCurrentTime(0);
+      previousWaveSurfer.seekTo(0);
+      previousWaveSurfer.pause();
+    }
+  };
 
   useEffect(() => {
     const createWaveSurfers = (songs: IMusicProps[]) => {
@@ -116,9 +100,7 @@ const MusicListContainer = () => {
         songs.map((song) => {
           const waveformContainerId = `waveform_${song?._id}`;
           const waveformContainer = document.getElementById(waveformContainerId);
-  
           if (!waveformContainer) return null;
-  
           if (!wavesurferRefs.current.has(song?._id as string)) {
             const wavesurfer = WaveSurfer.create({
               container: `#${waveformContainerId}`,
@@ -128,39 +110,39 @@ const MusicListContainer = () => {
               progressColor: '#5a17dd',
               cursorColor: 'transparent',
               url: song.audioUrl,
-              peaks: song.peaks as Float32Array[]|| [],
+              peaks: song.peaks as Float32Array[] || [],
             });
-  
+
             wavesurferRefs.current.set(song?._id as string, wavesurfer);
-  
             const updatedSong = { ...song, duration: wavesurfer.getDuration() };
-  
+
             wavesurfer.on('interaction', (newTime: number) => {
-              dispatch(setCurrentTrack(updatedSong)); // Use the updated song here
+              if (currentTrackRef.current) {
+                const currentTrackId = currentTrackRef.current._id;
+                if (currentTrackId) {
+                  handleWaveformReset(currentTrackId);
+                }
+              }
+              dispatch(setCurrentTrack(updatedSong));
               const duration = wavesurfer.getDuration() || 1;
               const seekPercentage = newTime / duration;
-  
               wavesurfer.seekTo(seekPercentage);
-  
               if (wavesurferRef) {
                 wavesurferRef.seekTo(seekPercentage);
-                wavesurferRef.seekTo(seekPercentage);
               }
-  
               setCurrentTime(newTime);
             });
-  
             return { song: updatedSong, wavesurfer };
           }
-          return null; // Return null if instance already exists
+          return null;
         });
-  
+
       }
     };
     if (allSongs && allSongs.length > 0) {
       createWaveSurfers(allSongs);
     }
-  }, [allSongs, wavesurferRef, dispatch, setCurrentTime]);
+  }, [allSongs]);
 
   const handlePlayTrack = useCallback(
     (track: IMusicProps) => {
@@ -176,13 +158,17 @@ const MusicListContainer = () => {
           dispatch(setIsPlaying(true));
         }
       } else {
+        // eslint-disable-next-line no-lonely-if
+        if (currentTrack?._id) {
+          handleWaveformReset(currentTrack._id);
+        }
         dispatch(setCurrentTrack(track));
+        setCurrentTime(0);
         wavesurfer?.current?.play();
         dispatch(setIsPlaying(true));
-        setCurrentTime(0);
       }
     },
-    [isPlaying, currentTrack?._id , dispatch, setCurrentTime]
+    [isPlaying, currentTrack?._id, dispatch, setCurrentTime]
   );
 
   const handleLikeClick = async (musicId: string) => {
@@ -197,7 +183,7 @@ const MusicListContainer = () => {
     }
   };
 
-  
+
   if (!allSongs) {
     return null;
   }
