@@ -3,7 +3,7 @@ import React from 'react';
 import { useGetAllGenreQuery } from '@/services/genre';
 import { Breadcrumb } from '@/common/BreadCrumb/BreadCrumb';
 import SmallGrid from '@/common/grid/SmallGrid';
-import { AddMoreButton } from '../LanguageAndGenre/UtilityComponent/NavigateButton';
+import { AddMoreButton } from '../(ProfilePage)/LanguageAndGenre/UtilityComponent/NavigateButton';
 import Loading from './loading';
 import { Column } from '@/common/types/types';
 

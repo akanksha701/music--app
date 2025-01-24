@@ -5,14 +5,14 @@ import { useGetLanguageQuery } from '@/services/languages';
 import { useGetArtistsQuery } from '@/services/artists';
 import { useGetGenreQuery } from '@/services/genre';
 import { useGetAlbumsQuery } from '@/services/album';
-import HeadLine from '../(BrowsePage)/Browse/UI/UtilityComponent/HeadLine';
-import Box from '../(BrowsePage)/Browse/UI/UtilityComponent/Card';
-import { IMusicProps, TAGS } from '../(BrowsePage)/Browse/types/types';
+import HeadLine from '../../(BrowsePage)/Browse/UI/UtilityComponent/HeadLine';
+import Box from '../../(BrowsePage)/Browse/UI/UtilityComponent/Card';
+import { IMusicProps, TAGS } from '../../(BrowsePage)/Browse/types/types';
 import { useGetMusicsByUserIdQuery } from '@/services/music';
 import { Input } from '@/components/ui/input';
 import { debounce } from 'lodash';
 import useSearch from '@/hooks/useSearch';
-import Loading from '../loading';
+import Loading from '../../loading';
 import AddMusic from './UI/UtilityComponent/AddMusic';
 
 const Index = () => {

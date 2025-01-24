@@ -6,7 +6,7 @@ import NavbarPage from './Navbar/index';
 import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Suspense } from 'react';
-import Loading from './Album/loading';
+import Loading from './(ProfilePage)/Album/loading';
 async function fetchFooterData() {
   try {
     const res = await fetch(`${process.env.APP_URL}/api/marketing`, { cache: 'no-store' });

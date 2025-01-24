@@ -6,7 +6,7 @@ import MusicList from '@/common/MusicList/MusicList';
 import { useSearchParams } from 'next/navigation';
 import { MusicData } from './types/types';
 import { IPrevData } from '@/common/types/types';
-import Loading from '../Album/loading';
+import Loading from '../(ProfilePage)/Album/loading';
 import { useGetArtistsQuery } from '@/services/artists';
 
 const Index = () => {
