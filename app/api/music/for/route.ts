@@ -103,6 +103,7 @@ export const GET = async (req: NextRequest) => {
       {
         $addFields: {
           liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedMusics', []] }] },
+          peaks: '$audioDetails.peaks' ,
         },
       },
       {
@@ -142,6 +143,7 @@ export const GET = async (req: NextRequest) => {
         amount: doc.price?.amount,
         currency: doc.price?.currency,
       },
+      peaks:doc.peaks,
       isDeleted: doc.isDeleted,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,

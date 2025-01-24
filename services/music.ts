@@ -34,7 +34,7 @@ export const musicApi = createApi({
       query: (slug) => `api/music/${slug}`,  
     }),
     getMusicsByGenre : builder.query({
-      query: ({id , type}) => `api/music/for?type=${type}&id=${id}`,
+      query: ({id , type}) => `/api/music/for?type=${type}&id=${id}`,
     })
   }),
 });
