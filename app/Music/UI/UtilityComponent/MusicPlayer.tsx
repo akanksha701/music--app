@@ -16,6 +16,7 @@ import PlayerLabel from './PlayerLabel';
 import Image from 'next/image';
 import { IMusicPlayerProps } from '../../types/types';
 import ButtonWithIcon from '@/common/buttons/ButtonWithIcon';
+import { IconButton } from '@mui/material';
 const MusicPlayer = ({
   currentTrack,
   isMuted,
@@ -75,17 +76,42 @@ const MusicPlayer = ({
           <VolumeIcon isMuted={isMuted} handleClick={onMuteToggle} />
           <div className="flex flex-row mx-20">
             {currentTrack?.liked ? (
-              <FaHeart
-                size={24}
-                onClick={handleLikeClick}
-                className="text-red-500 cursor-pointer mx-2 transition-colors duration-300"
-              />
+              <IconButton color="primary"
+                sx={{
+                  position : 'relative',
+                  padding:'4px',  
+                  '.MuiTouchRipple-root': {
+                    '& span': {
+                      backgroundColor: 'rgb(239 68 68)',
+                      borderRadius: '50%',
+                    },
+                  },
+                }}>
+                <FaHeart
+                  size={24}
+                  onClick={handleLikeClick}
+                  className="text-red-500 cursor-pointer mx-2 transition-colors duration-300"
+                />
+              </IconButton>
             ) : (
-              <FaRegHeart
-                size={24}
-                onClick={handleLikeClick}
-                className="text-white cursor-pointer mx-2 transition-colors duration-300"
-              />
+              <IconButton color="primary"
+                sx={{
+                  position : 'relative',
+                  padding: '4px', 
+                  '.MuiTouchRipple-root': {
+                    '& span': {
+                      backgroundColor: 'rgb(239 68 68)',
+                      borderRadius: '50%',
+                   
+                    },
+                  },
+                }}>
+                <FaRegHeart
+                  size={24}
+                  onClick={handleLikeClick}
+                  className="text-white cursor-pointer mx-2 transition-colors duration-300"
+                />
+              </IconButton>
             )}
             <IoAddSharp
               size={24}
