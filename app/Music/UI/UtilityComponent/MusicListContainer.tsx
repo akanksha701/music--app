@@ -63,6 +63,12 @@ const MusicListContainer = () => {
   const currentTrackRef = useRef(currentTrack);
 
   useEffect(() => {
+    if (currentTrackRef.current) {
+      const currentTrackId = currentTrackRef.current._id;
+      if (currentTrackId) {
+        handleWaveformReset(currentTrackId);
+      }
+    }
     currentTrackRef.current = currentTrack;
   }, [currentTrack]);
 

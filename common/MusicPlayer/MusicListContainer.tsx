@@ -66,13 +66,6 @@ const MusicListContainer = (props: {
     }
   }, [genreData, albumData, topHitsData, newReleaseData, queryType]);
 
-  // const { data: allSongsData, isLoading } =
-  //   queryType === TAGS.MUSIC
-  //     ? useGetTopHitsMusicsQuery(undefined)
-  //     : queryType === TAGS.NEW_RELEASE
-  //       ? useGetAllMusicsQuery({})
-  //       : { data: null, isLoading: false };
-
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
@@ -93,20 +86,7 @@ const MusicListContainer = (props: {
       dispatch(setCurrentList(allSongsData));
     }
   }, [allSongsData, dispatch]);
-  // useEffect(() => {
-  //   if (allSongsData && allSongsData.data) {
-  //     const songs =
-  //       queryType === TAGS.MUSIC
-  //         ? allSongsData?.data
-  //         : queryType === TAGS.NEW_RELEASE
-  //           ? allSongsData?.data?.data
-  //           : [];
-
-  //     if (songs?.length > 0) {
-  //       dispatch(setCurrentList(songs));
-  //     }
-  //   }
-  // }, [allSongsData]);
+  
   const currentTrackRef = useRef(currentTrack);
 
   useEffect(() => {
