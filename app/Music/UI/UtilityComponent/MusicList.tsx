@@ -10,6 +10,7 @@ import { useSelector} from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 import { RootState } from '@/Redux/store';
 import ButtonWithIcon from '@/common/buttons/ButtonWithIcon';
+import { IconButton } from '@mui/material';
 
 const MusicList = ({
   data,
@@ -66,19 +67,43 @@ const MusicList = ({
             </p>
 
             {track?.liked ? (
-              <FaHeart
-                className="text-red-500 transition-colors duration-300"
-                onClick={() => {
-                  handleLikeClick(track._id as string);
-                }}
-              />
+
+              <IconButton color="primary"
+                sx={{
+                  '.MuiTouchRipple-root': {
+                    '& span': {
+                      backgroundColor: 'rgb(239 68 68)', 
+                      borderRadius: '50%', 
+
+                    },
+                  },
+                }}>
+                <FaHeart
+                  className="text-red-500 transition-colors duration-300"
+                  onClick={() => {
+                    handleLikeClick(track._id as string);
+                  }}
+                />
+              </IconButton>
+              
             ) : (
-              <FaRegHeart
-                className="text-red-500 transition-colors duration-300"
-                onClick={() => {
-                  handleLikeClick(track._id as string);
-                }}
-              />
+              <IconButton color="primary" 
+                sx={{
+                  '.MuiTouchRipple-root': {
+                    '& span': {
+                      backgroundColor: 'rgb(239 68 68)', 
+                      borderRadius: '50%', 
+                    },
+                  },
+                }}>
+                <FaRegHeart
+                  className="text-red-500 transition-colors duration-300"
+                  onClick={() => {
+                    handleLikeClick(track._id as string);
+                  }}
+                />
+              </IconButton>
+
             )}
 
             <IoAddSharp

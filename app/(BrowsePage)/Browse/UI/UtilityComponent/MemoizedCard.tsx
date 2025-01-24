@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { FaEllipsisH, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IMemoizedCard, IMusicProps } from '../../types/types';
 import React, { useState } from 'react';
+import { IconButton } from '@mui/material';
 
 const MemoizedCard = ({
   index,
@@ -32,7 +33,7 @@ const MemoizedCard = ({
           alt={item.name || ''}
           src={
             (item?.imageUrl as string) ||
-                        '/music/images/Audio Waves.png'
+            '/music/images/Audio Waves.png'
           }
           fill
           onClick={() => handleMusicClick(index, item as IMusicProps)}
@@ -43,16 +44,37 @@ const MemoizedCard = ({
         {showLikeIcon && (
           <button
             onClick={() => {
-              if(handleLikeToggle ){
+              if (handleLikeToggle) {
                 handleLikeState();
               }
             }}
             className='p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer'
           >
             {liked ? (
-              <FaHeart className='text-red-500 transition-colors duration-300' />
+              <IconButton className='w-8 h-8' color='primary'
+                sx={{
+                  '.MuiTouchRipple-root': {
+                    '& span': {
+                      backgroundColor: 'rgb(239 68 68)',
+                      borderRadius: '50%',
+                    },
+                  },
+                }}>
+
+
+                <FaHeart className='text-red-500 transition-colors duration-300' />
+              </IconButton>
             ) : (
-              <FaRegHeart className='text-gray-500 transition-colors duration-300' />
+              <IconButton className='w-8 h-8' color='primary'
+                sx={{
+                  '.MuiTouchRipple-root': {
+                    '& span': {
+                      backgroundColor: 'rgb(239 68 68)',
+                      borderRadius: '50%',
+                    },
+                  },
+                }}><FaRegHeart className='text-gray-500 transition-colors duration-300' /></IconButton>
+
             )}
           </button>
         )}
