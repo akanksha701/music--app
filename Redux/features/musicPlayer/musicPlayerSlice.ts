@@ -98,8 +98,6 @@ const musicPlayerSlice = createSlice({
     clearWavesurferRef(state) {
       state.wavesurferRef = null;
     },
-
-    // Additional actions can go here...
   },
 });
 
@@ -115,6 +113,7 @@ export const {
   setWavesurferRef,
   clearWavesurferRef,
   setSeekPercentage,
+  setVolume
 } = musicPlayerSlice.actions;
 
 export default musicPlayerSlice.reducer;

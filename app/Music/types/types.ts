@@ -17,6 +17,7 @@ export interface IMusicPlayerProps {
   onNextSong: () => void;
   onPreviousSong: () => void;
   volume: number;
+  setVolume: (newVolume: number) => void; 
   handlePlayTrack: (track: IMusicProps) => void;
 }
 

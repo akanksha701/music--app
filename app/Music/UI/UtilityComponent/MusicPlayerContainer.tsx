@@ -12,6 +12,7 @@ import {
   togglePlay,
   setWavesurferRef,
   clearWavesurferRef,
+  setVolume
 } from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { handleLikeToggle } from '@/hooks/useLike';
 import { useToggleLikeMutation } from '@/services/like';
@@ -47,13 +48,18 @@ const MusicPlayerContainer = () => {
     (state) => state.musicPlayerSlice.selectedMusicIndex
   );
   const [toggleLike] = useToggleLikeMutation();
-
+  const setVolumeofPlayer = (newVolume: number) => {
+    dispatch(setVolume(newVolume));
+    if (wavesurferRef && !isMuted) {
+      wavesurferRef.setVolume(newVolume); 
+    }
+  };
   const createWaveSurfer = async () => {
     const waveformElement = document.getElementById('waveform');
     if (waveformElement && currentTrack) {
       const ws = WaveSurfer.create({
         container: waveformElement,
-        width: 600,
+        width: 400,
         height: 33,
         waveColor: '#abb6c1',
         progressColor: '#5a17dd',
@@ -168,8 +174,10 @@ const MusicPlayerContainer = () => {
   };
 
   const playSong = (direction: 'next' | 'prev') => {
+    wavesurferRef?.pause();
+    wavesurferRef?.seekTo(0);
+    // wavesurferRef?.destroy();
     if (!currentTrack) return;
-    setCurrentTime(0);
     if (allSongs) {
       const currentIndex = allSongs.findIndex(
         (song) => song._id === currentTrack._id
@@ -206,6 +214,7 @@ const MusicPlayerContainer = () => {
       handlePlayTrack={handlePlayTrack}
       onNextSong={() => playSong('next')}
       onPreviousSong={() => playSong('prev')}
+      setVolume={setVolumeofPlayer}
     />
   );
 };
