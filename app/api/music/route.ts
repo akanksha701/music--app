@@ -1,17 +1,26 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { capitalizeTitle, getAudioDuration, uploadAudio, uploadImage } from '@/utils/helpers';
-import mongoose, { PipelineStage } from 'mongoose';
-import { getMusicWithPeaks } from '@/utils/getPeaks';
-import { auth } from '@/lib/firebase/firebaseAdmin/auth';
-import { AUDIO_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from './exports';
-import { db } from '@/lib/DbConnection/dbConnection';
-import { ObjectId } from 'mongodb';
+import { NextRequest, NextResponse } from "next/server";
+import {
+  capitalizeTitle,
+  getAudioDuration,
+  uploadAudio,
+  uploadImage,
+} from "@/utils/helpers";
+import mongoose, { PipelineStage } from "mongoose";
+import { getMusicWithPeaks } from "@/utils/getPeaks";
+import { auth } from "@/lib/firebase/firebaseAdmin/auth";
+import { AUDIO_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from "./exports";
+import { db } from "@/lib/DbConnection/dbConnection";
+import { ObjectId } from "mongodb";
 
 async function getAudioDetails(body: Record<string, string | Blob>) {
-  const audio = (body.audio) || null;
-  const image = (body.image) || null;
-  const audioUrl = audio ? await uploadAudio(audio as File, AUDIO_UPLOAD_DIR) : null;
-  const imageUrl = audio ? await uploadImage(image as File, IMAGE_UPLOAD_DIR) : null;
+  const audio = body.audio || null;
+  const image = body.image || null;
+  const audioUrl = audio
+    ? await uploadAudio(audio as File, AUDIO_UPLOAD_DIR)
+    : null;
+  const imageUrl = audio
+    ? await uploadImage(image as File, IMAGE_UPLOAD_DIR)
+    : null;
   const peaks = await getMusicWithPeaks(audioUrl as string);
   const audioDetails = {
     imageUrl: imageUrl,
@@ -24,9 +33,9 @@ async function getMusicPrimaryDetails(body: Record<string, string | Blob>) {
   const audio = (body.audio as Blob) || null;
   const artistIds = body.artists
     ? body.artists
-      .toString()
-      .split(',')
-      .map((id: string) => new mongoose.Types.ObjectId(id))
+        .toString()
+        .split(",")
+        .map((id: string) => new mongoose.Types.ObjectId(id))
     : [];
   const musicDetails = {
     name: await capitalizeTitle(body?.name.toString()),
@@ -43,56 +52,56 @@ async function getMusicPrimaryDetails(body: Record<string, string | Blob>) {
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const body: Record<string, string> = Object.fromEntries(formData) as Record<string, string>;
-    const albumIds = Array.isArray(body?.album)
-      ? body.album.map((id) => new ObjectId(id))
-      : [new ObjectId(body.album)];
+    const body: Record<string, string> = Object.fromEntries(formData) as Record<
+      string,
+      string
+    >;
     const musicDetails = await getMusicPrimaryDetails(body);
     const audioDetails = await getAudioDetails(body);
     const price = {
       amount: Number(body.priceAmount || 0),
-      currency: body.currency || 'USD',
+      currency: body.currency || "USD",
     };
 
     if (body.album) {
-      const newMusic = await db.collection('musics').insertOne({
+      const newMusic = await db.collection("musics").insertOne({
         musicDetails: musicDetails,
         audioDetails: audioDetails,
         playCount: 0,
         price: price,
         createdAt: new Date(),
         updatedAt: new Date(),
-        isDeleted: false
+        isDeleted: false,
       });
       const updatedAlbum = await db
-        .collection('albums')
+        .collection("albums")
         .updateMany(
-          { _id: { $in: albumIds } },
+          { _id: { $in: JSON.parse(body?.album) } },
           { $addToSet: { musicIds: newMusic.insertedId } }
         );
 
       if (!updatedAlbum) {
         return NextResponse.json({
           status: 500,
-          message: 'An error occurred while creating new music.',
+          message: "An error occurred while creating new music.",
         });
       }
       return NextResponse.json({
         status: 200,
-        message: 'New music created successfully',
+        message: "New music created successfully",
         data: newMusic,
       });
     } else {
       return NextResponse.json({
         status: 400,
-        message: 'Album ID is required',
+        message: "Album ID is required",
       });
     }
   } catch (error) {
     return NextResponse.json({
       status: 500,
-      message: 'An error occurred while creating new music.',
-      error: error instanceof Error ? error.message : 'Unknown error',
+      message: "An error occurred while creating new music.",
+      error: error instanceof Error ? error.message : "Unknown error",
     });
   }
 }
@@ -100,10 +109,10 @@ export async function POST(req: Request) {
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req?.url as string);
-    const page = await url?.searchParams?.get('page');
-    const recordsPerPage = await url?.searchParams?.get('recordsPerPage');
+    const page = await url?.searchParams?.get("page");
+    const recordsPerPage = await url?.searchParams?.get("recordsPerPage");
     const language: string | null =
-      (await url?.searchParams?.get('language')) || null;
+      (await url?.searchParams?.get("language")) || null;
 
     let currentPage = 1;
     let limit = 0;
@@ -115,57 +124,57 @@ export async function GET(req: NextRequest) {
 
     const skip = (currentPage - 1) * limit;
 
-    const totalRecords = await await db.collection('musics').countDocuments();
-    const authHeader: string | null = req.headers.get('Authorization');
-    const token = authHeader?.split(' ')[1];
+    const totalRecords = await await db.collection("musics").countDocuments();
+    const authHeader: string | null = req.headers.get("Authorization");
+    const token = authHeader?.split(" ")[1];
     const decodedToken = await auth.verifyIdToken(token as string);
     const user = await auth.getUser(decodedToken.uid);
     const aggregatePipeline: PipelineStage[] = [
       {
         $lookup: {
-          from: 'artists',
-          localField: 'musicDetails.artistId',
-          foreignField: '_id',
-          as: 'artistDetails',
+          from: "artists",
+          localField: "musicDetails.artistId",
+          foreignField: "_id",
+          as: "artistDetails",
         },
       },
       {
         $unwind: {
-          path: '$artistDetails',
+          path: "$artistDetails",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
-          from: 'languages',
-          localField: 'musicDetails.languageId',
-          foreignField: '_id',
-          as: 'languageDetails',
+          from: "languages",
+          localField: "musicDetails.languageId",
+          foreignField: "_id",
+          as: "languageDetails",
         },
       },
       {
         $unwind: {
-          path: '$languageDetails',
+          path: "$languageDetails",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
-          from: 'users',
-          localField: 'artistDetails.userId',
-          foreignField: '_id',
-          as: 'artists',
+          from: "users",
+          localField: "artistDetails.userId",
+          foreignField: "_id",
+          as: "artists",
         },
       },
       {
         $unwind: {
-          path: '$artists',
+          path: "$artists",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
-          from: 'users',
+          from: "users",
           pipeline: [
             {
               $match: { userId: user?.uid },
@@ -174,12 +183,12 @@ export async function GET(req: NextRequest) {
               $project: { likedMusics: 1 },
             },
           ],
-          as: 'loggedInUser',
+          as: "loggedInUser",
         },
       },
       {
         $unwind: {
-          path: '$loggedInUser',
+          path: "$loggedInUser",
           preserveNullAndEmptyArrays: true,
         },
       },
@@ -187,13 +196,13 @@ export async function GET(req: NextRequest) {
         $addFields: {
           fullArtistName: {
             $concat: [
-              { $ifNull: ['$artists.firstName', ''] },
-              ' ',
-              { $ifNull: ['$artists.lastName', ''] },
+              { $ifNull: ["$artists.firstName", ""] },
+              " ",
+              { $ifNull: ["$artists.lastName", ""] },
             ],
           },
           liked: {
-            $in: ['$_id', { $ifNull: ['$loggedInUser.likedMusics', []] }],
+            $in: ["$_id", { $ifNull: ["$loggedInUser.likedMusics", []] }],
           },
         },
       },
@@ -202,42 +211,42 @@ export async function GET(req: NextRequest) {
     if (language) {
       await aggregatePipeline.push({
         $match: {
-          'languageDetails.name': await language,
+          "languageDetails.name": await language,
         },
       });
     }
     await aggregatePipeline.push(
       {
         $group: {
-          _id: '$_id',
-          name: { $first: '$musicDetails.name' },
-          language: { $first: '$languageDetails.name' },
-          duration: { $first: '$musicDetails.duration' },
-          description: { $first: '$musicDetails.description' },
+          _id: "$_id",
+          name: { $first: "$musicDetails.name" },
+          language: { $first: "$languageDetails.name" },
+          duration: { $first: "$musicDetails.duration" },
+          description: { $first: "$musicDetails.description" },
           artists: {
-            $push: '$fullArtistName',
+            $push: "$fullArtistName",
           },
-          liked: { $first: '$liked' },
-          email: { $first: '$artists.email' },
-          price: { $first: '$price.amount' },
-          currency: { $first: '$price.currency' },
-          imageUrl: { $first: '$audioDetails.imageUrl' },
-          audioUrl: { $first: '$audioDetails.audioUrl' },
-          peaks: { $first: '$audioDetails.peaks' },
-          createdAt: { $first: '$createdAt' },
+          liked: { $first: "$liked" },
+          email: { $first: "$artists.email" },
+          price: { $first: "$price.amount" },
+          currency: { $first: "$price.currency" },
+          imageUrl: { $first: "$audioDetails.imageUrl" },
+          audioUrl: { $first: "$audioDetails.audioUrl" },
+          peaks: { $first: "$audioDetails.peaks" },
+          createdAt: { $first: "$createdAt" },
         },
       },
       {
         $addFields: {
           artists: {
             $reduce: {
-              input: '$artists',
-              initialValue: '',
+              input: "$artists",
+              initialValue: "",
               in: {
                 $cond: {
-                  if: { $eq: ['$$value', ''] },
-                  then: '$$this',
-                  else: { $concat: ['$$value', ', ', '$$this'] },
+                  if: { $eq: ["$$value", ""] },
+                  then: "$$this",
+                  else: { $concat: ["$$value", ", ", "$$this"] },
                 },
               },
             },
@@ -252,7 +261,7 @@ export async function GET(req: NextRequest) {
     }
 
     const musics = await db
-      .collection('musics')
+      .collection("musics")
       .aggregate(aggregatePipeline)
       .toArray();
     const totalPages = limit > 0 ? Math.ceil(totalRecords / limit) : 1;
@@ -264,11 +273,11 @@ export async function GET(req: NextRequest) {
         pagination:
           limit > 0
             ? {
-              currentPage,
-              totalPages,
-              totalRecords,
-              recordsPerPage: limit,
-            }
+                currentPage,
+                totalPages,
+                totalRecords,
+                recordsPerPage: limit,
+              }
             : undefined,
       },
     });
@@ -276,7 +285,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       status: 500,
       error: error,
-      message: 'Error occurred',
+      message: "Error occurred",
     });
   }
 }
