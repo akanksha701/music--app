@@ -158,6 +158,10 @@ const SmallGrid = ({ columns, data, label, moreBox, addBox }: ISmallGridProps) =
             </div>
           ))}
 
+      </div>
+      
+      <div className="div flex gap-6">
+        
         <div className=''>{addBox}</div>
         <div className=''>{moreBox}</div>
       </div>
