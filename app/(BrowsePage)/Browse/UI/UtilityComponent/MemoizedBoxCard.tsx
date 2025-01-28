@@ -22,7 +22,7 @@ const MemoizedBoxCard = ({
   });
 
   async function handleLikeState() {
-    const data = handleLikeToggle && await handleLikeToggle(item._id, NAME as string);
+    const data = handleLikeToggle?.(item._id, NAME as string);
     if (data) {
       setState((prev) => ({ ...prev, liked: !prev.liked }));
     }
@@ -57,16 +57,20 @@ const MemoizedBoxCard = ({
       </span>
       <div className="mt-4 w-full flex items-center justify-between space-x-2">
         {showLikeIcon && (
-          <button
-            onClick={() => {
-              if (handleLikeToggle) {
-                handleLikeState();
-              }
-            }}
-            className='p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer'
-          >
+          // <button
+          //   onClick={() => {
+          //     if (handleLikeToggle) {
+          //       handleLikeState();
+          //     }
+          //   }}
+          //   className='p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer'
+          // >
+          <>
+
             {state.liked ? (
-              <IconButton className='' color='primary'
+              <IconButton
+                className='p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer'
+                onClick={handleLikeState} color='primary'
                 sx={{
                   '.MuiTouchRipple-root': {
                     '& span': {
@@ -78,7 +82,10 @@ const MemoizedBoxCard = ({
                 <FaHeart size={18} className='text-red-500 transition-colors duration-300' />
               </IconButton>
             ) : (
-              <IconButton className='' color='primary'
+              <IconButton
+                onClick={handleLikeState}
+                className='p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer'
+                color='primary'
                 sx={{
                   '.MuiTouchRipple-root': {
                     '& span': {
@@ -90,7 +97,8 @@ const MemoizedBoxCard = ({
                 <FaRegHeart size={18} className='text-gray-500 transition-colors duration-300' />
               </IconButton>
             )}
-          </button>
+          </>
+          // </button>
         )}
         <div className="flex">
           {[1, 2, 3, 4, 5].map((star, index) => (

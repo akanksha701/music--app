@@ -1,10 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { TbHistory } from 'react-icons/tb';
-import { CgMusicNote } from 'react-icons/cg';
-import { BiSolidAlbum } from 'react-icons/bi';
-import { MdPodcasts } from 'react-icons/md';
-import { PiMicrophoneStageLight } from 'react-icons/pi';
+import { MdPodcasts, MdHistory, MdAlbum, MdMusicNote, MdMic } from 'react-icons/md';
 import { GoPlus } from 'react-icons/go';
 import { redirect, usePathname } from 'next/navigation';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
@@ -21,12 +17,18 @@ const Browse = [
   { name: 'Radio', label: 'Radio', route: '/Radio' },
 ];
 
+const iconStyle = {
+  fill: 'currentColor',
+  fontWeight: 'normal',
+  size: 25,
+};
+
 const Library = [
-  { name: 'History', icon: <TbHistory size={25} /> },
-  { name: 'Liked Songs', icon: <CgMusicNote size={25} /> },
-  { name: 'Albums', icon: <BiSolidAlbum size={25} /> },
-  { name: 'Podcasts', icon: <MdPodcasts size={25} /> },
-  { name: 'Artists', icon: <PiMicrophoneStageLight size={25} /> },
+  { name: 'History', icon: <MdHistory style={iconStyle} size={25} /> },
+  { name: 'Liked Songs', icon: <MdMusicNote style={iconStyle} size={25} /> },
+  { name: 'Albums', icon: <MdAlbum style={iconStyle} size={25} /> },
+  { name: 'Podcasts', icon: <MdPodcasts style={iconStyle} size={25} /> },
+  { name: 'Artists', icon: <MdMic style={iconStyle} size={25} /> },
 ];
 
 const Sidebar = () => {
@@ -51,17 +53,17 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="lg:flex flex-col p-8 sm:flex flex-col items-center justify-items-center my-2">
-      <div className="my-2">
-        <p className="text-slate-500">Browse</p>
+    <div className="lg:flex flex-col   sm:flex flex-col items-center justify-items-center">
+      <div className="m-6">
+        <p className="text-slate-500 m-4">Browse</p>
         {Browse.map((item, index) => {
           const isActive = pathname === item.route;
           return (
             <div
               key={index}
-              className={`${isActive ? 'text-purple-600' : 'text-black'} cursor-pointer hover:text-slate-600`}
+              className={`${isActive ? 'font-bold text-purple-600' : 'font-light text-black'} m-4 cursor-pointer hover:text-slate-600`}
             >
-              <p onClick={() => redirect(item.label)} className="cursor-pointer font-light my-2">
+              <p onClick={() => redirect(item.label)} className="cursor-pointer  my-2">
                 {item.name}
               </p>
             </div>
@@ -69,10 +71,10 @@ const Sidebar = () => {
         })}
       </div>
 
-      <div className="my-2">
-        <p className="text-slate-500">Library</p>
+      <div className="m-6">
+        <p className="text-slate-500 m-4">Library</p>
         {Library.map((item, index) => (
-          <div key={index} className="flex items-center my-2">
+          <div key={index} className="m-4 flex items-center">
             {item.icon}
             <span className="ml-2">
               <p className="cursor-pointer font-light">{item.name}</p>

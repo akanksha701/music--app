@@ -10,20 +10,26 @@ import { IMusicProps, IMusicDataResponse, TAGS } from './types/types';
 import { useToggleLikeMutation } from '@/services/like';
 import dynamic from 'next/dynamic';
 const SkeletonGrid = dynamic(() => import('./UI/UtilityComponent/SkeletonGrid'), { ssr: false });
-const Index = ({ initialData }: { initialData: IMusicDataResponse}) => {
-  const [data,setData] = useState(initialData);
+
+const Index = ({ initialData }: { initialData: IMusicDataResponse }) => {
+
+  const [data, setData] = useState(initialData);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const [toggleLike] = useToggleLikeMutation();
   const currentTrack = useSelector<RootState, IMusicProps | null>((state) => state.musicPlayerSlice.currentTrack);
+
+
   useEffect(() => {
     setData(initialData);
     if (initialData) setIsLoading(false);
   }, [initialData]);
+
+
   return (
     <div className='flex flex-col'>
       <HeadLine title='Top Hits' subTitle='2024' />
-      <hr className='w-full p-2 border-gray-600' />
+      <hr className=' p-2   border-gray-300' />
       {isLoading || !data.topHits.data ? (
         <SkeletonGrid count={10} />
       ) : (

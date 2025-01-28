@@ -11,7 +11,6 @@ import { generateUrl } from '@/utils/helpers';
 import NoDataFound from '@/common/NoDataFound/NoDataFound';
 import { ratingAction } from '@/app/actions/rating';
 import { IUserDetails } from '@/app/(ProfilePage)/MyProfile/types/types';
-import toast from 'react-hot-toast';
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, message, handleLikeToggle } = props;
@@ -36,7 +35,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
     return response;
   };
   return (
-    <div className="p-4 sm:p-6 md:p-10">
+    <>
       {
         data &&
           data.length > 0 ?
@@ -59,7 +58,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
           :
           <NoDataFound name={message?.toString() || ''} />
       }
-    </div>
+    </>
   );
 };
 

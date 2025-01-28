@@ -25,7 +25,7 @@ export interface IMusicProps {
   language?: string | null;
   duration?: string | number;
   description?: string;
-  averageRating?: number | null;
+  avgRating?: number | null;
   ratingByUser?: number | null;
   artists?: string;
   liked?: boolean;

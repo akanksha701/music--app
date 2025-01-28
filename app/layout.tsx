@@ -7,7 +7,7 @@ import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Suspense } from 'react';
 import Loading from './(ProfilePage)/Album/loading';
-import Modal from '@/common/modal/Modal';
+
 async function fetchFooterData() {
   try {
     const res = await fetch(`${process.env.APP_URL}/api/marketing`, { cache: 'no-store' });
@@ -15,7 +15,6 @@ async function fetchFooterData() {
       return null;
     }
     return res.json();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return null;
   }
@@ -27,23 +26,30 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const footerData = await fetchFooterData();
-  
   return (
     <ReduxProvider>
       <html lang="en">
-        <body className="min-h-screen flex flex-col">
+        <body className="bg-gray-100 text-gray-900">
           <Toaster position="top-center" />
           <Tooltip />
-          <Suspense fallback={<Loading />}>
-            <NavbarPage />
-            {/* <Modal title="My Modal Title" body="This is the content of the modal.">
-              <button >Open Modal2</button>
-            </Modal> */}
-            {/* <Modal/> */}
-            <main className="flex-grow">{children}</main>
-            <MusicPlayerContainer />
-            {footerData ? <Footer data={footerData?.footerContent} /> : <></>}
-          </Suspense>
+          <div className="flex flex-col min-h-screen">
+            <header className="sticky mx-20 top-0 z-50">
+              <NavbarPage />
+            </header>
+            <main className="flex flex-col min-h-screen">
+              <Suspense fallback={<Loading />}>{children}</Suspense>
+            </main>
+
+            <div className="fixed bottom-0 left-0 right-0 bg-gray-800">
+              <MusicPlayerContainer />
+            </div>
+
+            {footerData ? (
+              <footer className="bg-gray-200">
+                <Footer data={footerData?.footerContent} />
+              </footer>
+            ) : null}
+          </div>
         </body>
       </html>
     </ReduxProvider>

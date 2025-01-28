@@ -45,8 +45,8 @@ const NavItemList: React.FC = () => {
           <Button
             onClick={() => redirect('/Browse')}
             className={`${
-              pathname === '/Browse' ? 'text-purple-600' : 'text-black'
-            } cursor-pointer hidden sm:block`} // Hide on mobile
+              pathname === '/Browse' ? 'font-bold text-purple-600' : 'text-black'
+            } cursor-pointer hidden sm:block`} 
           >
             Browse
           </Button>
@@ -56,58 +56,27 @@ const NavItemList: React.FC = () => {
               <FaBars size={24} />
             </Button>
           </div>
-
-          {isMobileMenuOpen && (
-            <div className="sm:hidden flex flex-col mt-20">
-              <Button
-                onClick={() => redirect('/Browse')}
-                className={`${
-                  pathname === '/Browse' ? 'text-purple-600' : 'text-black'
-                } block px-4 py-2 text-sm`}
-              >
-                Browse
-              </Button>
-
-              {navItems.map((item: IItem) => {
-                const isActive = pathname === item.route;
-                return (
+        <div className=" flex space-x-4 ">
+          {navItems.map((item: IItem) => {
+            const isActive = pathname === item.route;
+            return (
+              <NavigationMenuItem key={item.route}>
+                <NavigationMenuLink asChild className='mx-6'>
                   <Button
-                    key={item.route}
                     onClick={() => redirect(item.route)}
-                    className={`${
-                      isActive ? 'text-purple-600' : 'text-black'
-                    } block px-4 py-2 text-sm`}
+                    className={`${isActive ? 'font-bold text-purple-600' : 'text-black'
+                      } cursor-pointer`}
                   >
                     {item.label}
                   </Button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Desktop Navigation Items */}
-          <div className="hidden sm:flex space-x-4 sm:space-x-8 px-4 sm:px-0">
-            {navItems.map((item: IItem) => {
-              const isActive = pathname === item.route;
-              return (
-                <NavigationMenuItem key={item.route}>
-                  <NavigationMenuLink asChild>
-                    <Button
-                      onClick={() => redirect(item.route)}
-                      className={`${
-                        isActive ? 'text-purple-600' : 'text-black'
-                      } cursor-pointer`}
-                    >
-                      {item.label}
-                    </Button>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              );
-            })}
-          </div>
-        </NavigationMenuList>
-      </NavigationMenu>
-    </div>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            );
+          })}
+        </div>
+      </NavigationMenuList>
+    </NavigationMenu>
+    </div >
   );
 };
 

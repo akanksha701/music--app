@@ -24,7 +24,7 @@ const Index = () => {
   return (
     <div className="">
       <div className="relative mx-10">
-        <hr className="w-full border-gray-600 my-2" />
+        <hr className="w-full border-gray-300 my-2" />
         <MenubarComponent 
           data={languageList?.data } 
           handleClick={handleClick as (value?: string | null, index?: number | null) => Promise<never>} />

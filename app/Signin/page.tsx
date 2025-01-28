@@ -23,7 +23,7 @@ export const Page = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    // <div className="flex items-center justify-center min-h-screen">
       <button
         onClick={handleSignIn}
         className="flex items-center px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 transition duration-300"
@@ -31,7 +31,7 @@ export const Page = () => {
         <FcGoogle className="mr-3 text-2xl" /> {/* Google icon */}
         Sign In with Google
       </button>
-    </div>
+    // </div>
   );
 };
 
