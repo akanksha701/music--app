@@ -25,16 +25,18 @@ export const ratingAction = async (
     const body = {
       userId,
       rating,
-      ...(type === TAGS.GENRE && { genreId: id }), 
-      ...([TAGS.MUSIC as string, TAGS.NEW_RELEASE].includes(type) && { musicId: id }), 
+      ...(type === TAGS.GENRE && { genreId: id }),
+      ...([TAGS.MUSIC as string, TAGS.NEW_RELEASE].includes(type) && { musicId: id }),
       ...(type === TAGS.ALBUMS && { albumId: id })
     };
-
-    const response = await fetchApi(apiUrl, Method.POST, body);
-    toast.success(response.message);
+    if (body?.userId) {
+      const response = await fetchApi(apiUrl, Method.POST, body);
+      toast.success(response.message);
+      return response;
+    }
 
   } catch (error) {
     toast.error((error as Error).message || 'An error occurred');
-    throw error; 
+    throw error;
   }
 };

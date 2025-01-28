@@ -21,9 +21,8 @@ export const likeApi = createApi({
       if (!accessToken) {
         accessToken = localStorage.getItem('accessToken');
       }
-
       if (accessToken) {
-        headers.set('Authorization', `Bearer ${accessToken}`);
+        headers.set('Authorization', `Bearer ${accessToken||''}`);
       }
 
       return headers;

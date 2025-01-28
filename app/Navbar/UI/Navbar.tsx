@@ -9,10 +9,6 @@ import { useUserSession } from '@/hooks/customHooks/use-user-session';
 
 export default function NavbarPage({ session }:{  session: string | null; }) {
   const userSession = useUserSession(session);
-  if (!userSession) {
-    return null;
-  }
-
   return (
     <>
       <Navbar isBordered className="sticky top-0 z-10">

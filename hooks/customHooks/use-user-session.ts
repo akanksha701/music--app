@@ -1,15 +1,16 @@
-import { User } from 'firebase/auth'; 
+import { User } from 'firebase/auth';
 import { saveUser } from '@/lib/auth';
 import { onAuthStateChanged } from '@/lib/firebase/auth';
 import { setAccessToken, setLoggedInUser } from '@/Redux/features/user/sessionSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { IUserDetails } from '@/app/MyProfile/types/types';
+import { IUserDetails } from '@/app/(ProfilePage)/MyProfile/types/types';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export function useUserSession(InitSession: string | null) {
-  const [userUid, setUserUid] = useState<string |IUserDetails | null>(InitSession);
+  const [userUid, setUserUid] = useState<string | IUserDetails | null>(InitSession);
   const dispatch = useDispatch();
-
   const setCookie = (name: string, value: string) => {
     document.cookie = `${name}=${value}; path=/; secure; samesite=strict`;
   };
@@ -24,25 +25,22 @@ export function useUserSession(InitSession: string | null) {
             await localStorage.setItem('accessToken', accessToken);
             setCookie('accessToken', accessToken);
           }
-
-          // Split the display name into first and last names (if available)
           const name = authUser?.displayName?.split(' ') || [];
           const user: IUserDetails = {
             uid: authUser.uid,
             firstName: name[0] || '',
             lastName: name[1] || '',
             email: authUser.email || '',
-            imageUrl: authUser.photoURL || '', 
+            imageUrl: authUser.photoURL || '',
           };
 
           const userData = await saveUser(user);
           setUserUid(userData as IUserDetails);
-          
           dispatch(setLoggedInUser(userData));
 
         } catch (error) {
-          if(error instanceof Error){
-            throw new Error('Error' , error);  
+          if (error instanceof Error) {
+            throw new Error('Error', error);
           }
         }
       } else {

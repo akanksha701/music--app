@@ -1,7 +1,7 @@
 'use client';
 
+import { IUserDetails } from '@/app/(ProfilePage)/MyProfile/types/types';
 import { removeSession } from '@/app/actions/auth';
-import { IUserDetails } from '@/app/MyProfile/types/types';
 import { IItem } from '@/app/Navbar/types/types';
 import { signOutWithGoogle } from '@/lib/firebase/auth';
 import { RootState } from '@/Redux/store';
@@ -38,10 +38,10 @@ const DropDownMenu: React.FC = () => {
   const name = useSelector<RootState, IUserDetails | null>(
     (state) => state?.session?.loggedInUser
   );
-
-  if (!userSession) {
-    return null;
-  }
+  console.log('userSession', userSession);
+  // if (!userSession) {
+  //   return null;
+  // }
 
   return (
     <DropdownMenu aria-label="Profile Actions" variant="flat">

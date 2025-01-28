@@ -1,21 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { db } from '@/lib/DbConnection/dbConnection';
+import { getloggedInUser } from '../user/route';
 
 export async function GET(req: NextRequest) {
   try {
-    const authHeader: string | null = req.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json(
-        {error: 'Unauthorized: No token provided' },
-        { status: 401 }
-      );
-    }
-    const token = authHeader?.split(' ')[1];
-    const decodedToken = await auth.verifyIdToken(token);
-    const user = await auth.getUser(decodedToken.uid);
+    const user =await getloggedInUser(req);
     const queryParams = req.nextUrl.searchParams;
-    const limit = parseInt(queryParams.get('limit') || '0', 10); 
+    const limit:number = parseInt(queryParams.get('limit') || '0', 10); 
     const genres = await db
       .collection('genres')
       .aggregate([
@@ -33,17 +24,26 @@ export async function GET(req: NextRequest) {
             preserveNullAndEmptyArrays: true,
           },
         },
+        // {
+        //   $lookup: {
+        //     from: 'users',
+        //     pipeline: [
+        //       {
+        //         $match: { userId: user?.uid },
+        //       },
+        //       {
+        //         $project: { likedGenres: 1 },
+        //       },
+        //     ],
+        //     as: 'loggedInUser',
+        //   },
+        // },
         {
           $lookup: {
             from: 'users',
-            pipeline: [
-              {
-                $match: { userId: user?.uid },
-              },
-              {
-                $project: { likedGenres: 1 },
-              },
-            ],
+            pipeline: user?.uid
+              ? [{ $match: { userId: user?.uid } }, { $project: { likedGenres: 1 } }]
+              : [],
             as: 'loggedInUser',
           },
         },
@@ -105,7 +105,7 @@ export async function GET(req: NextRequest) {
             liked: 1, // Ensure liked is included in the output
           },
         },
-        { $limit: limit },
+        // { $limit: limit },
         {
           $group: {
             _id: '$_id',
@@ -152,8 +152,7 @@ export async function GET(req: NextRequest) {
       .toArray();
     
     return NextResponse.json({ status: 200, data: genres });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    return NextResponse.json({ status: 500, message: 'Error occurred' });
+    return NextResponse.json({ status: 500,error:error, message: 'Error occurred' });
   }
 }

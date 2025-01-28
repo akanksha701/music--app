@@ -9,16 +9,17 @@ import { useMusic } from 'hooks/useMusic';
 import { setCurrentList, setCurrentTrack, setCurrentSongIndex } from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { generateUrl } from '@/utils/helpers';
 import NoDataFound from '@/common/NoDataFound/NoDataFound';
-import {  ratingAction } from '@/app/actions/rating';
+import { ratingAction } from '@/app/actions/rating';
 import { IUserDetails } from '@/app/(ProfilePage)/MyProfile/types/types';
+import toast from 'react-hot-toast';
+
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, message, handleLikeToggle } = props;
   const dispatch = useDispatch();
   const { setCurrentTime } = useMusic();
-  const currentTrack = useSelector<RootState, IMusicProps | null>(
-    (state) => state.musicPlayerSlice.currentTrack
-  );
+  const currentTrack = useSelector<RootState, IMusicProps | null>((state) => state.musicPlayerSlice.currentTrack);
   const user = useSelector<RootState, IUserDetails | null>((state) => state.session.loggedInUser);
+
   const handleMusicClick = async (index: number, music: IMusicProps) => {
     dispatch(setCurrentList(data));
     setCurrentTime(0);
@@ -30,12 +31,10 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
     redirect(newUrl);
   };
 
-  const handleRating = async(musicId:string,rating:number)=>
-  {
-    await ratingAction(user?._id?.toString() as string, musicId.toString() as string, rating,name as IRatingType);
+  const handleRating = async (musicId: string, rating: number) => {
+    const response = await ratingAction(user?._id?.toString() as string, musicId.toString() as string, rating, name as IRatingType);
+    return response;
   };
-
-
   return (
     <div className="p-4 sm:p-6 md:p-10">
       {
@@ -44,15 +43,17 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
             {
               data.map((item, index) => (
-                <MemoizedMusicCard
-                  key={index}
-                  index={index}
-                  item={item||{}}
-                  handleMusicClick={handleMusicClick}
-                  handleLikeToggle={handleLikeToggle}
-                  handleRating={handleRating}
-                  NAME={name}
-                />
+                <div key={index}>
+                  <MemoizedMusicCard
+                    key={index}
+                    index={index}
+                    item={item || {}}
+                    handleMusicClick={handleMusicClick}
+                    handleLikeToggle={handleLikeToggle}
+                    handleRating={handleRating}
+                    NAME={name}
+                  />
+                </div>
               ))}
           </div>
           :

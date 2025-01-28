@@ -5,36 +5,32 @@ import { fetchApi } from '@/utils/helpers';
 import { Method } from '@/app/About/types/types';
 import { getTopAlbums, getTopGenres, getTopHits, music } from '@/utils/apiRoutes';
 import { cookies } from 'next/headers';
+
 async function fetchUserId() {
   const cookieStore = await cookies();
-  const userID = cookieStore.get('user_session');
-  return userID;
+  const userCookie = cookieStore.get('user_session');
+  return userCookie ? userCookie.value : null; // Return the value if it exists, otherwise null
+}
+
+async function getData(userId: string | null) {
+  console.log('Fetching data for userId:', userId);
+  try {
+    const [topHits, topAlbums, newReleases, topGenres] = await Promise.all([
+      fetchApi(getTopHits, Method.GET),
+      fetchApi(getTopAlbums, Method.GET),
+      fetchApi(music, Method.GET),
+      fetchApi(getTopGenres + '?limit=8', Method.GET),
+    ]);
+
+    return { topHits, topAlbums, newReleases, topGenres };
+  } catch (error) {
+    return { topHits: [], topAlbums: [], newReleases: [], topGenres: [] };
+  }
 }
 
 const Page = async () => {
-  const getData = async () => {
-    try {
-      const userId = await fetchUserId();
-      if (!userId) throw new Error('User ID is missing');
-
-      const [topHits, topAlbums, newReleases, topGenres] = await Promise.all([
-        fetchApi(getTopHits + `?id=${userId}`, Method.GET),
-        fetchApi(getTopAlbums + `?id=${userId}`, Method.GET),
-        fetchApi(music + `?id=${userId}`, Method.GET),
-        fetchApi(getTopGenres + `?id=${userId}&limit=8`, Method.GET),
-      ]);
-
-      return { topHits, topAlbums, newReleases, topGenres };
-    
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      return { topHits: [], topAlbums: [], newReleases: [], topGenres: [] };
-    }
-  };
-  
-  const data = await getData();
- 
-
+  const userId = await fetchUserId(); 
+  const data = await getData(userId);
   return (
     <Browse
       initialData={{

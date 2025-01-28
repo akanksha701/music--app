@@ -7,6 +7,7 @@ import Footer from './Footer/Footer';
 import MusicPlayerContainer from './Music/UI/UtilityComponent/MusicPlayerContainer';
 import { Suspense } from 'react';
 import Loading from './(ProfilePage)/Album/loading';
+import Modal from '@/common/modal/Modal';
 async function fetchFooterData() {
   try {
     const res = await fetch(`${process.env.APP_URL}/api/marketing`, { cache: 'no-store' });
@@ -35,6 +36,10 @@ export default async function RootLayout({
           <Tooltip />
           <Suspense fallback={<Loading />}>
             <NavbarPage />
+            {/* <Modal title="My Modal Title" body="This is the content of the modal.">
+              <button >Open Modal2</button>
+            </Modal> */}
+            {/* <Modal/> */}
             <main className="flex-grow">{children}</main>
             <MusicPlayerContainer />
             {footerData ? <Footer data={footerData?.footerContent} /> : <></>}

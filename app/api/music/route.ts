@@ -5,24 +5,17 @@ import { getMusicWithPeaks } from '@/utils/getPeaks';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { AUDIO_UPLOAD_DIR, IMAGE_UPLOAD_DIR } from './exports';
 import { db } from '@/lib/DbConnection/dbConnection';
-
+import { getloggedInUser } from '../user/route';
 async function getAudioDetails(body: Record<string, string | Blob>) {
   const audio = body.audio || null;
   const image = body.image || null;
-  const audioUrl = audio
-    ? await uploadAudio(audio as File, AUDIO_UPLOAD_DIR)
-    : null;
-  const imageUrl = audio
-    ? await uploadImage(image as File, IMAGE_UPLOAD_DIR)
-    : null;
+  const audioUrl = audio? await uploadAudio(audio as File, AUDIO_UPLOAD_DIR): null;
+  const imageUrl = audio ? await uploadImage(image as File, IMAGE_UPLOAD_DIR): null;
   const peaks = await getMusicWithPeaks(audioUrl as string);
-  const audioDetails = {
-    imageUrl: imageUrl,
-    audioUrl: audioUrl,
-    peaks: peaks || [],
-  };
+  const audioDetails = {  imageUrl: imageUrl, audioUrl: audioUrl, peaks: peaks || []  };
   return audioDetails;
 }
+
 async function getMusicPrimaryDetails(body: Record<string, string | Blob>) {
   const audio = (body.audio as Blob) || null;
   const artistIds = body.artists
@@ -105,24 +98,16 @@ export async function GET(req: NextRequest) {
     const url = new URL(req?.url as string);
     const page = await url?.searchParams?.get('page');
     const recordsPerPage = await url?.searchParams?.get('recordsPerPage');
-    const language: string | null =
-      (await url?.searchParams?.get('language')) || null;
-
+    const language: string | null =(await url?.searchParams?.get('language')) || null;
     let currentPage = 1;
     let limit = 0;
-
     if (page && recordsPerPage) {
       currentPage = parseInt(page, 10);
       limit = parseInt(recordsPerPage, 10);
     }
-
     const skip = (currentPage - 1) * limit;
-
     const totalRecords = await await db.collection('musics').countDocuments();
-    const authHeader: string | null = req.headers.get('Authorization');
-    const token = authHeader?.split(' ')[1];
-    const decodedToken = await auth.verifyIdToken(token as string);
-    const user = await auth.getUser(decodedToken.uid);
+    const user =await getloggedInUser(req);
     const aggregatePipeline: PipelineStage[] = [
       {
         $lookup: {
@@ -162,17 +147,26 @@ export async function GET(req: NextRequest) {
       {
         $lookup: {
           from: 'users',
-          pipeline: [
-            {
-              $match: { userId: user?.uid },
-            },
-            {
-              $project: { likedMusics: 1 },
-            },
-          ],
+          pipeline: user?.uid
+            ? [{ $match: { userId: user?.uid } }, { $project: { likedMusics: 1 } }]
+            : [],
           as: 'loggedInUser',
         },
       },
+      // {
+      //   $lookup: {
+      //     from: 'users',
+      //     pipeline: [
+      //       {
+      //         $match: { userId: user?.uid },
+      //       },
+      //       {
+      //         $project: { likedMusics: 1 },
+      //       },
+      //     ],
+      //     as: 'loggedInUser',
+      //   },
+      // },
       {
         $unwind: {
           path: '$loggedInUser',

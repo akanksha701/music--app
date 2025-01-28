@@ -17,10 +17,9 @@ const Index = ({ initialData }: { initialData: IMusicDataResponse}) => {
   const [toggleLike] = useToggleLikeMutation();
   const currentTrack = useSelector<RootState, IMusicProps | null>((state) => state.musicPlayerSlice.currentTrack);
   useEffect(() => {
-    setData(data);
-    if (data) setIsLoading(false); 
-  }, [data]);
-  
+    setData(initialData);
+    if (initialData) setIsLoading(false);
+  }, [initialData]);
   return (
     <div className='flex flex-col'>
       <HeadLine title='Top Hits' subTitle='2024' />

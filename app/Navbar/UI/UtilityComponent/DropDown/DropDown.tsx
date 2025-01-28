@@ -10,15 +10,20 @@ const DropDown = () => {
   );
   if (!imageUrl) {
     return (
-      <Avatar
-        isBordered
-        as="button"
-        className="transition-transform"
-        color="secondary"
-        name="Jason Hughes"
-        size="sm"
-        src={'/images/profileIcon.jpeg'}
-      />
+      <Dropdown placement="bottom-end">
+        <DropdownTrigger>
+          <Avatar
+            isBordered
+            as="button"
+            className="transition-transform"
+            color="secondary"
+            name="Jason Hughes"
+            size="sm"
+            src={imageUrl !== undefined ? imageUrl : '/images/profileIcon.jpeg'}
+          />
+        </DropdownTrigger>
+        <DropDownMenu />
+      </Dropdown>
     );
   }
   return (

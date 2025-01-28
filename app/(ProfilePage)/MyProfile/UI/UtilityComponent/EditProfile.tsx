@@ -14,7 +14,7 @@ import { setLoggedInUser } from '@/Redux/features/user/sessionSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '@/app/AddAlbum/loading';
 import { RootState } from '@/Redux/store';
-import { IEditProfileProps, IUserDetails } from '@/app/MyProfile/types/types';
+import { IEditProfileProps, IUserDetails } from '../../types/types';
 
 const EditProfile = (props: IEditProfileProps) => {
   const { setImage, image } = props;

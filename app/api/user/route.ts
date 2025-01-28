@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary'; 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/firebase/firebaseAdmin/auth';
 import { db } from '@/lib/DbConnection/dbConnection';
 cloudinary.config({
@@ -7,6 +7,17 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+
+export async function getloggedInUser(req:NextRequest)
+{
+  const authHeader: string | null = req?.headers?.get('Authorization');
+  const token = authHeader ? authHeader?.split(' ')[1]:'';
+  const decodedToken = token  ? await auth.verifyIdToken(token as string) : '';
+  const user = decodedToken ? await auth?.getUser(decodedToken?.uid) : { uid: '' };
+  return user;
+}
+
 export async function GET(req: Request) {
   try {
     const authHeader: string|null = req.headers.get('Authorization');

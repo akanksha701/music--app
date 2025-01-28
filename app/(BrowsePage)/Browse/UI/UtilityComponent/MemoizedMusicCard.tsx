@@ -3,10 +3,13 @@ import { Card, CardBody } from '@nextui-org/react';
 import Image from 'next/image';
 import { FaEllipsisH, FaHeart, FaPlay, FaRegHeart, FaStar } from 'react-icons/fa';
 import { IMemoizedMusicCard } from '../../types/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
-import { Name } from '@/hooks/useSelectCard';
-
+import Modal from '@/common/modal/Modal';
+import { useSelector } from 'react-redux';
+import { IUserDetails } from '@/app/(ProfilePage)/MyProfile/types/types';
+import { RootState } from '@/Redux/store';
+import SignIn from '@/app/Signin/page';
 const MemoizedMusicCard = ({
   index,
   item,
@@ -15,12 +18,23 @@ const MemoizedMusicCard = ({
   handleRating,
   NAME
 }: IMemoizedMusicCard) => {
+  const loggedinUser = useSelector<RootState, IUserDetails | null>((state) => state?.session?.loggedInUser);
   const [state, setState] = useState({
     liked: item?.liked || false,
     rating: item?.ratingByUser || 0,
     hoverRating: item?.ratingByUser || 0,
     isRatingGiven: item?.isRatingGiven
   });
+
+  useEffect(() => {
+    setState({
+      liked: item?.liked || false,
+      rating: item?.ratingByUser || 0,
+      hoverRating: item?.ratingByUser || 0,
+      isRatingGiven: item?.isRatingGiven
+    });
+  }, [item]);
+
 
   const handleLikeState = async () => {
     const data = await handleLikeToggle?.(item._id as string, NAME as string);
@@ -29,9 +43,12 @@ const MemoizedMusicCard = ({
     }
   };
 
-  const handleRatingChange = (star: number) => {
-    setState((prev) => ({ ...prev, rating: star }));
-    handleRating?.(item._id as string, star,NAME as string);
+
+  const handleRatingChange = async (star: number) => {
+    const data = await handleRating?.(item._id as string, star, NAME as string);
+    if (data) {
+      setState((prev) => ({ ...prev, rating: star }));
+    }
   };
 
   const handleHoverRating = (star: number) => setState((prev) => ({ ...prev, hoverRating: star }));
@@ -65,32 +82,73 @@ const MemoizedMusicCard = ({
             {item.name}
           </span>
           <div className="mt-4 w-full flex items-center justify-between space-x-2">
-            {state.liked ? (
-              <IconButton color="primary" onClick={handleLikeState}>
-                <FaHeart size={18} className="text-red-500 transition-colors duration-300" />
-              </IconButton>
-            ) : (
-              <IconButton color="primary" onClick={handleLikeState}>
-                <FaRegHeart size={18} className="text-gray-500 transition-colors duration-300" />
-              </IconButton>
-            )}
-            <div className="flex" aria-disabled={state.isRatingGiven}>
-              {[1, 2, 3, 4, 5].map((star, index) => (
-                <button
-                  disabled={state.isRatingGiven}
-                  key={index}
-                  onMouseEnter={() => handleHoverRating(star)}
-                  onMouseLeave={resetHoverRating}
-                  onClick={() =>  handleRatingChange(star)}
-                  className="rounded-full focus:outline-none"
-                >
-                  <FaStar
-                    size={18}
-                    className={` transition-colors duration-300 ${(state.hoverRating || state.rating) >= star ? 'text-yellow-500' : 'text-gray-300'}`}
-                  />
-                </button>
-              ))}
-            </div>
+            {
+              loggedinUser ? <>
+                {state.liked ? (
+                  <IconButton color="primary" onClick={handleLikeState}>
+                    <FaHeart size={18} className="text-red-500 transition-colors duration-300" />
+                  </IconButton>
+                ) : (
+                  <IconButton color="primary" onClick={handleLikeState}>
+                    <FaRegHeart size={18} className="text-gray-500 transition-colors duration-300" />
+                  </IconButton>
+                )}
+              </> : <>
+                <Modal title="My Modal Title" body={<SignIn />}>
+                  {state.liked ? (
+                    <IconButton color="primary" onClick={handleLikeState}>
+                      <FaHeart size={18} className="text-red-500 transition-colors duration-300" />
+                    </IconButton>
+                  ) : (
+                    <IconButton color="primary" onClick={handleLikeState}>
+                      <FaRegHeart size={18} className="text-gray-500 transition-colors duration-300" />
+                    </IconButton>
+                  )}
+                </Modal>
+
+              </>
+            }
+            {
+              loggedinUser ?
+                <div className="flex" aria-disabled={state.isRatingGiven}>
+                  {[1, 2, 3, 4, 5].map((star, index) => (
+                    <button
+                      disabled={state.isRatingGiven}
+                      key={index}
+                      onMouseEnter={() => handleHoverRating(star)}
+                      onMouseLeave={resetHoverRating}
+                      onClick={() => handleRatingChange(star)}
+                      className="rounded-full focus:outline-none"
+                    >
+                      <FaStar
+                        size={18}
+                        className={` transition-colors duration-300 ${(state.hoverRating || state.rating) >= star ? 'text-yellow-500' : 'text-gray-300'}`}
+                      />
+                    </button>
+                  ))}
+                </div> :
+                <Modal title="My Modal Title" body={<SignIn />}>
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star, index) => (
+                      <button
+                        // disabled={state?.isRatingGiven}
+                        key={index}
+                        onMouseEnter={() => handleHoverRating(star)}
+                        onMouseLeave={resetHoverRating}
+                        onClick={() => handleRatingChange(star)}
+                        className="rounded-full focus:outline-none"
+                      >
+                        <FaStar
+                          size={18}
+                          className={` transition-colors duration-300 ${(state.hoverRating || state.rating) >= star ? 'text-yellow-500' : 'text-gray-300'}`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </Modal>
+            }
+
+
 
             <button className="p-2 rounded-full bg-transparent border-0 outline-none cursor-pointer">
               <FaEllipsisH className="w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors duration-300" />
@@ -104,4 +162,4 @@ const MemoizedMusicCard = ({
   );
 };
 
-export default React.memo(MemoizedMusicCard);
+export default MemoizedMusicCard;

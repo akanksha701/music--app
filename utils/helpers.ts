@@ -113,16 +113,13 @@ export const fetchApi = async (
   body?: object | FormData // Accept FormData as body
 ) => {
   const url = new URL(apiUrl,process.env.APP_URL);
-
   const isFormData = body instanceof FormData;
-
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken');
   const headers: HeadersInit = isFormData
     ? {}
     : { 'Content-Type': 'application/json' };
-
-  headers['Authorization'] = `Bearer ${accessToken?.value}`;
+  headers['Authorization'] = accessToken?.value ? `Bearer ${accessToken.value}` :'';
   try {
     const res = await fetch(url.toString(), {
       method: method.toUpperCase(),

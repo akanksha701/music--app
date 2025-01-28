@@ -1,13 +1,10 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@/lib/firebase/firebaseAdmin/auth';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/DbConnection/dbConnection';
+import { getloggedInUser } from '../user/route';
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const authHeader: string|null = req.headers.get('Authorization');
-    const token = authHeader?.split(' ')[1];
-    const decodedToken = await auth.verifyIdToken(token as string);
-    const user = await auth.getUser(decodedToken.uid);
+    const user =await getloggedInUser(req);
     const musics = await db
       .collection('musics')
       .aggregate([
@@ -43,17 +40,26 @@ export async function GET(req: Request) {
             as: 'artists',
           },
         },
+        // {
+        //   $lookup: {
+        //     from: 'users',
+        //     pipeline: [
+        //       {
+        //         $match: { userId: user?.uid },
+        //       },
+        //       {
+        //         $project: { likedMusics: 1 },
+        //       },
+        //     ],
+        //     as: 'loggedInUser',
+        //   },
+        // },
         {
           $lookup: {
             from: 'users',
-            pipeline: [
-              {
-                $match: { userId: user?.uid },
-              },
-              {
-                $project: { likedMusics: 1 },
-              },
-            ],
+            pipeline: user?.uid
+              ? [{ $match: { userId: user?.uid } }, { $project: { likedMusics: 1 } }]
+              : [],
             as: 'loggedInUser',
           },
         },
@@ -115,6 +121,7 @@ export async function GET(req: Request) {
             ratingByUser: { $first: '$ratingByUser.rating' },
             isRatingGiven: { $first: '$ratingGiven' },
             description: { $first: '$musicDetails.description' },
+            avgRating: { $first: '$musicDetails.rating' },
             duration: { $first: '$musicDetails.duration' },
             artists: {
               $push: {
@@ -158,7 +165,7 @@ export async function GET(req: Request) {
       .toArray();
     return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
-    return NextResponse.json({ status: 500,error:error, message: 'Error occurred' });
+    return NextResponse.json({ status: 500, error: error, message: 'Error occurred' });
   }
 }
 
