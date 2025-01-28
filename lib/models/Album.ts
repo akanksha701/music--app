@@ -24,13 +24,11 @@ const albumSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
-
     Label: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    Rating: {
+    rating: {
       type: Number,
       min: 0,
       max: 5,

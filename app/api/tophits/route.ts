@@ -64,7 +64,41 @@ export async function GET(req: Request) {
           },
         },
         {
+          $lookup: {
+            from: 'musicratings',
+            let: {
+              userIdo: '$loggedInUser._id',
+              musicIdo: '$_id'
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$userId', '$$userIdo'] }, // Match the userId
+                      { $eq: ['$musicId', '$$musicIdo'] }
+                    ]
+                  }
+                }
+              },
+              {
+                $project: { _id: 0, rating: 1 }
+              }
+            ],
+            as: 'ratingByUser'
+          }
+        },
+        {
+          $unwind: {
+            path: '$ratingByUser',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
           $addFields: {
+            ratingGiven: {
+              $gt: ['$ratingByUser.rating', 0]
+            },
             liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedMusics', []] }] }, // Ensure likedMusics is an array
           },
         },
@@ -78,6 +112,8 @@ export async function GET(req: Request) {
           $group: {
             _id: '$_id',
             name: { $first: '$musicDetails.name' },
+            ratingByUser: { $first: '$ratingByUser.rating' },
+            isRatingGiven: { $first: '$ratingGiven' },
             description: { $first: '$musicDetails.description' },
             duration: { $first: '$musicDetails.duration' },
             artists: {
@@ -120,7 +156,6 @@ export async function GET(req: Request) {
         },
       ])
       .toArray();
-  
     return NextResponse.json({ status: 200, data: musics });
   } catch (error) {
     return NextResponse.json({ status: 500,error:error, message: 'Error occurred' });

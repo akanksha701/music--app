@@ -1,8 +1,8 @@
 import React from 'react';
-import { IBoxTypes, IMusicProps } from '../../types/types';
+import { IBoxTypes, IMusicProps, IRatingType } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { redirect } from 'next/navigation';
-import MemoizedCard from './MemoizedCard';
+import MemoizedBoxCard from './MemoizedBoxCard';
 import {
   setCurrentList,
   setCurrentTrack,
@@ -11,6 +11,8 @@ import {
 import { generateUrl } from '@/utils/helpers';
 import { RootState } from '@/Redux/store';
 import NoDataFound from '@/common/NoDataFound/NoDataFound';
+import { ratingAction } from '@/app/actions/rating';
+import { IUserDetails } from '@/app/(ProfilePage)/MyProfile/types/types';
 
 const Box = ({
   data,
@@ -25,6 +27,8 @@ const Box = ({
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
+  const user = useSelector<RootState, IUserDetails | null>((state) => state.session.loggedInUser);
+
 
   const GetUrl = (item: IMusicProps) => {
     switch (NAME) {
@@ -49,7 +53,9 @@ const Box = ({
     const newUrl = await generateUrl('/Music', { type: NAME || '' });
     redirect(newUrl);
   };
-
+  const handleRating = async (musicId: string, rating: number) => {
+    await ratingAction(user?._id?.toString() as string, musicId.toString() as string, rating, NAME as IRatingType);
+  };
   return (
     <>
       <h2 className="text-2xl font-semibold mt-7">{title}</h2>
@@ -57,14 +63,16 @@ const Box = ({
         <div className={className}>
           {data.map((item, index) => {
             return (<div key={index}>
-              <MemoizedCard
+              <MemoizedBoxCard
                 key={index}
                 index={index}
                 item={item}
                 handleMusicClick={handleMusicClick}
                 showLikeIcon={showLikeIcon}
                 handleLikeToggle={handleLikeToggle}
+                handleRating={handleRating}
                 NAME={NAME}
+
               />
             </div>);
           })}

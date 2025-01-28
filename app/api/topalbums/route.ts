@@ -73,13 +73,49 @@ export async function GET(req:Request) {
           },
         },
         {
+          $lookup: {
+            from: 'musicratings',
+            let: {
+              userId: '$loggedInUser._id',
+              albumId: '$_id'
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$userId', '$$userId'] }, // Match the userId
+                      { $eq: ['$albumId', '$$albumId'] }
+                    ]
+                  }
+                }
+              },
+              {
+                $project: { _id: 0, rating: 1 }
+              }
+            ],
+            as: 'ratingByUser'
+          }
+        },
+        {
+          $unwind: {
+            path: '$ratingByUser',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
           $addFields: {
+            ratingGiven: {
+              $gt: ['$ratingByUser.rating', 0]
+            },
             liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedAlbums', []] }] }, 
           },
         },
         {
           $group: {
             _id: '$_id',
+            ratingByUser: { $first: '$ratingByUser.rating' },
+            isRatingGiven: { $first: '$ratingGiven' },
             name: { $first: '$name' },
             liked: { $first: '$liked' },
             imageUrl: { $first: '$imageUrl' },

@@ -54,13 +54,49 @@ export async function GET(req: NextRequest) {
           },
         },
         {
+          $lookup: {
+            from: 'musicratings',
+            let: {
+              userId: '$loggedInUser._id',
+              genreId: '$_id'
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ['$userId', '$$userId'] }, // Match the userId
+                      { $eq: ['$genreId', '$$genreId'] }
+                    ]
+                  }
+                }
+              },
+              {
+                $project: { _id: 0, rating: 1 }
+              }
+            ],
+            as: 'ratingByUser'
+          }
+        },
+        {
+          $unwind: {
+            path: '$ratingByUser',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
           $addFields: {
+            ratingGiven: {
+              $gt: ['$ratingByUser.rating', 0]
+            },
             liked: { $in: ['$_id', { $ifNull: ['$loggedInUser.likedGenres', []] }] }, // Liked logic from album pipeline
           },
         },
         {
           $project: {
             _id: 1,
+            ratingGiven:1,
+            ratingByUser:1,
             name: '$musicDetails.name',
             playCount: 1,
             genre: '$name',
@@ -73,6 +109,8 @@ export async function GET(req: NextRequest) {
         {
           $group: {
             _id: '$_id',
+            ratingByUser: { $first: '$ratingByUser.rating' },
+            isRatingGiven: { $first: '$ratingGiven' },
             name: { $first: '$genre' },
             imageUrl: { $first: '$imageUrl' },
             liked: { $first: '$liked' },
@@ -105,7 +143,9 @@ export async function GET(req: NextRequest) {
             totalPlayTime: 1,
             musics: 1,
             imageUrl: 1,
-            liked: 1, // Keep liked in the final projection
+            liked: 1, 
+            ratingByUser:1,
+            isRatingGiven:1
           },
         },
       ])

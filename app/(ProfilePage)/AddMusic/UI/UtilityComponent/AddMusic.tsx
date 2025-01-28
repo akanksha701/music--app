@@ -12,6 +12,7 @@ import { Method } from '@/app/About/types/types';
 import NextDatePicker from '@/common/inputs/DatePicker';
 import { IMusicProps } from '@/app/(BrowsePage)/Browse/types/types';
 import { useForm } from 'react-hook-form';
+import mongoose, { ObjectId } from 'mongoose';
 
 const AddMusic = (props: IAddMusicProps) => {
   const { genreList, languageList, artistList, albumList } = props;
@@ -23,15 +24,19 @@ const AddMusic = (props: IAddMusicProps) => {
   } = useForm({});
 
   const onSubmit = async (data: IMusicProps) => {
+    const albumIdsAsString = [data?.album].map(id => id?.toString());
     const formData = new FormData();
     formData.append('audio', data.audioUrl as string);
     formData.append('image', data.imageUrl as string);
     formData.append('name', data.name as string);
     formData.append('description', data.description as string);
     formData.append('language', data.language as string);
-    formData.append('genre', data.genre as string );
+    formData.append('genre', data.genre as string);
     formData.append('artists', data.artists as string);
-    formData.append('album', data.album as string);
+    const albumIds = albumIdsAsString
+      .filter((id) => mongoose.Types.ObjectId.isValid(id as string)) // Ensure the ID is valid
+      .map((id) => new mongoose.Types.ObjectId(id)); // Convert to ObjectId
+    formData.append('album', JSON.stringify(albumIds.map(id => id.toString())));
     try {
       const res = await fetchApi('/api/music', Method.POST, formData);
       if (res.status === 200) {

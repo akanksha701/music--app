@@ -5,8 +5,9 @@ export const TAGS = {
   ALBUMS: 'Album',
   TOP_ALBUMS: 'Top Albums',
   GENRE: 'Genres',
-  ALBUM_SONGS : 'AlbumSongs'
+  ALBUM_SONGS: 'AlbumSongs'
 } as const;
+export type IRatingType = 'Genres' | 'Musics' | 'Album' | 'NewReleases';
 
 export const LIST_NAME = {
   MUSIC: 'New Musics',
@@ -19,10 +20,13 @@ export const LIST_NAME = {
 
 export interface IMusicProps {
   _id?: string;
+  isRatingGiven?: boolean
   name?: string | null;
   language?: string | null;
   duration?: string | number;
   description?: string;
+  averageRating?: number | null;
+  ratingByUser?: number | null;
   artists?: string;
   liked?: boolean;
   email?: string | null;
@@ -33,8 +37,8 @@ export interface IMusicProps {
   peaks?: Float32Array[] | Float32Array | null;
   playCount?: number;
   createdAt?: string;
-  genre?:string,
-  album?:string,
+  genre?: string,
+  album?: string,
 }
 export interface IBoxTypes {
   data?: Array<{ _id: string; name: string; imageUrl?: string | null; liked: boolean }>;
@@ -54,21 +58,31 @@ export interface IMusicPlayCardProps {
 
 export interface IMemoizedCard {
   index: number;
-  item: { _id: string; name: string; imageUrl?: string | null; liked: boolean };
-  handleMusicClick: (index:number,music:IMusicProps) => void;
+  item: {
+    _id: string;
+    name: string;
+    imageUrl?: string | null;
+    liked: boolean,
+    ratingByUser?:number
+    isRatingGiven?:boolean
+    
+  };
+  handleMusicClick: (index: number, music: IMusicProps) => void;
   showLikeIcon?: boolean | undefined;
   handleLikeToggle?: (id: string, name: string) => void;
-  NAME:string | undefined;
+  handleRating?: (musicId: string, rating: number,name:string) => void;
+  NAME: string | undefined;
 }
 
 
 export interface IMemoizedMusicCard {
   index: number;
   item: IMusicProps;
-  handleMusicClick: (index:number,item:IMusicProps) => void;
+  handleMusicClick: (index: number, item: IMusicProps) => void;
   showLikeIcon?: boolean | undefined;
-  handleLikeToggle?: (id: string , name: string) => void;
-  NAME:string | undefined;
+  handleLikeToggle?: (id: string, name: string) => void;
+  handleRating?: (musicId: string, rating: number,name:string) => void;
+  NAME: string | undefined;
 }
 
 
@@ -81,10 +95,10 @@ export interface ITopHitsData {
   email: string | null;          // Optional email field, can be null
   imageUrl: string;              // URL to the image associated with the track
   liked: boolean;                // Whether the track is liked or not
-  name: string;      
-  placeCount:number;
-  peaks:Float32Array[],
-  _id:string            // Track name (e.g., "Despacito")
+  name: string;
+  placeCount: number;
+  peaks: Float32Array[],
+  _id: string            // Track name (e.g., "Despacito")
 }
 type Music = {
   _id: string;

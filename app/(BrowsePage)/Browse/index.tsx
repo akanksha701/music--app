@@ -43,7 +43,7 @@ const Index = ({ initialData }: { initialData: IMusicDataResponse}) => {
           <SkeletonGrid count={4} />
         ) : (
           <Box
-            data={data.topAlbums.data}
+            data={data?.topAlbums?.data}
             name={TAGS.ALBUMS}
             handleLikeToggle={(itemId) => handleLikeToggle(itemId, TAGS.ALBUMS, toggleLike)}
             showLikeIcon={true}

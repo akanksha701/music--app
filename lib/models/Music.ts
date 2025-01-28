@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-
 const musicSchema = new mongoose.Schema(
   {
     musicDetails: {
@@ -39,6 +38,12 @@ const musicSchema = new mongoose.Schema(
       duration: {
         type: String,
         required: [true, 'Duration is required'],
+      },
+      rating: {
+        type: Number,
+        min: 0,
+        max: 5,
+        default: 0, 
       },
     },
     audioDetails: {

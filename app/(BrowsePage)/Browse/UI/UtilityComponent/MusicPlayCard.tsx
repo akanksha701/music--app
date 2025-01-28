@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { IMusicPlayCardProps, IMusicProps } from '../../types/types';
+import { IMusicPlayCardProps, IMusicProps, IRatingType } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { redirect } from 'next/navigation';
 import MemoizedMusicCard from './MemoizedMusicCard';
@@ -9,6 +9,8 @@ import { useMusic } from 'hooks/useMusic';
 import { setCurrentList, setCurrentTrack, setCurrentSongIndex } from '@/Redux/features/musicPlayer/musicPlayerSlice';
 import { generateUrl } from '@/utils/helpers';
 import NoDataFound from '@/common/NoDataFound/NoDataFound';
+import {  ratingAction } from '@/app/actions/rating';
+import { IUserDetails } from '@/app/(ProfilePage)/MyProfile/types/types';
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { data, name, message, handleLikeToggle } = props;
   const dispatch = useDispatch();
@@ -16,7 +18,7 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const currentTrack = useSelector<RootState, IMusicProps | null>(
     (state) => state.musicPlayerSlice.currentTrack
   );
-
+  const user = useSelector<RootState, IUserDetails | null>((state) => state.session.loggedInUser);
   const handleMusicClick = async (index: number, music: IMusicProps) => {
     dispatch(setCurrentList(data));
     setCurrentTime(0);
@@ -27,6 +29,12 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
     const newUrl = await generateUrl('/Music', { type: name });
     redirect(newUrl);
   };
+
+  const handleRating = async(musicId:string,rating:number)=>
+  {
+    await ratingAction(user?._id?.toString() as string, musicId.toString() as string, rating,name as IRatingType);
+  };
+
 
   return (
     <div className="p-4 sm:p-6 md:p-10">
@@ -39,9 +47,10 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
                 <MemoizedMusicCard
                   key={index}
                   index={index}
-                  item={item}
+                  item={item||{}}
                   handleMusicClick={handleMusicClick}
                   handleLikeToggle={handleLikeToggle}
+                  handleRating={handleRating}
                   NAME={name}
                 />
               ))}
@@ -54,3 +63,4 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
 };
 
 export default MusicPlayCard;
+

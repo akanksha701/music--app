@@ -38,10 +38,10 @@ const Page = async () => {
   return (
     <Browse
       initialData={{
-        topHits: data.topHits || [],
-        topAlbums: data.topAlbums || [],
-        newReleases: data.newReleases || [],
-        topGenres: data.topGenres || [],
+        topHits: data?.topHits || [],
+        topAlbums: data?.topAlbums || [],
+        newReleases: data?.newReleases || [],
+        topGenres: data?.topGenres || [],
       }}
     />
   );
