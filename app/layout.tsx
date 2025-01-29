@@ -33,7 +33,7 @@ export default async function RootLayout({
           <Toaster position="top-center" />
           <Tooltip />
           <div className="flex flex-col min-h-screen">
-            <header className="sticky mx-20 top-0 z-50">
+            <header className="sticky  top-0 z-50">
               <NavbarPage />
             </header>
             <main className="flex flex-col min-h-screen">

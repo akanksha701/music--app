@@ -31,7 +31,6 @@ async function getData(userId: string | null) {
 const Page = async () => {
   const userId = await fetchUserId(); 
   const data = await getData(userId);
-  console.log('data', data)
   return (
     <Browse
       initialData={{

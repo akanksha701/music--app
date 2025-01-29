@@ -30,11 +30,11 @@ const EditProfile = (props: IEditProfileProps) => {
     formState: { errors },
   } = useForm({});
   const { data, isLoading } = useFetchUserProfileQuery(undefined);
-  const userDetails = useSelector<RootState , IUserDetails|null>((state) => state?.session?.loggedInUser);
+  const userDetails = useSelector<RootState, IUserDetails | null>((state) => state?.session?.loggedInUser);
   const dispatch = useDispatch();
   const setUserDetails = useCallback(async () => {
     {
-      const user = userDetails ? userDetails :data?.data;
+      const user = userDetails ? userDetails : data?.data;
       if (user) {
         const day =
           new Date(user.dateOfBirth).getDate() || new Date().getDate();
@@ -53,11 +53,11 @@ const EditProfile = (props: IEditProfileProps) => {
         setImage(user?.imageUrl as string);
       }
     }
-  }, [data,setImage,setValue , userDetails]);
+  }, [data, setImage, setValue, userDetails]);
 
   useEffect(() => {
     setUserDetails();
-  }, [data,setUserDetails]);
+  }, [data, setUserDetails]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -66,7 +66,7 @@ const EditProfile = (props: IEditProfileProps) => {
         imageUrl: image,
       }).unwrap();
       if (response.status === 200) {
-        const user ={
+        const user = {
           '_id': loggedinUser?._id,
           'userId': loggedinUser?.userId,
           'firstName': data.firstName,
@@ -75,7 +75,7 @@ const EditProfile = (props: IEditProfileProps) => {
           'imageUrl': image,
           'isActive': true,
           'isDeleted': false,
-          'gender':  data?.gender,
+          'gender': data?.gender,
           'artistId': loggedinUser?.artistId
         };
         dispatch(setLoggedInUser(JSON.stringify(user as IUserDetails)));
@@ -95,87 +95,93 @@ const EditProfile = (props: IEditProfileProps) => {
   }
   return (
     <>
-      <form onSubmit={onSubmit} className="divide-y divide-gray-200">
-        <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-          <div className="flex flex-col">
-            <NextInput
-              label="First Name"
-              id="firstName"
-              name="firstName"
-              register={register}
-              required
-              placeholder="Enter your first name"
-              errors={errors}
-              options={{ required: 'First name is required' }}
-            />
-          </div>
 
-          <div className="flex flex-col">
-            <NextInput
-              label="Last Name"
-              name="Last Name"
-              id="lastName"
-              register={register}
-              required
-              placeholder="Enter your last name"
-              errors={errors}
-              options={{ required: 'Last name is required' }}
-            />
+      <form onSubmit={onSubmit} className="w-full">
+        <div className="w-full py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+          <div className="flex flex-row gap-4">
+            <div className="flex-1">
+              <NextInput
+                label="First Name"
+                id="firstName"
+                name="firstName"
+                register={register}
+                required
+                placeholder="Enter your first name"
+                errors={errors}
+                options={{ required: 'First name is required' }}
+              />
+            </div>
+            <div className="flex-1">
+              <NextInput
+                label="Last Name"
+                id="lastName"
+                name="lastName"
+                register={register}
+                required
+                placeholder="Enter your last name"
+                errors={errors}
+                options={{ required: 'Last name is required' }}
+              />
+            </div>
           </div>
-
-          <div className="flex flex-col">
-            <NextInput
-              name="Email"
-              disabled={true}
-              label="Email"
-              id="emailAddresses"
-              type="email"
-              register={register}
-              required
-              placeholder="Enter your email address"
-              errors={errors}
-              options={{
-                required: 'Email is required',
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Invalid email address',
-                },
-              }}
-            />
+          <div className="flex flex-row gap-4">
+            <div className="flex-1">
+              <NextInput
+                label="Email"
+                id="email"
+                name="email"
+                type="email"
+                disabled
+                register={register}
+                required
+                placeholder="Enter your email address"
+                errors={errors}
+                options={{
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Invalid email address',
+                  },
+                }}
+              />
+            </div>
+            <div className="flex-1 my-2">
+              <NextDatePicker
+                name="dob"
+                label="Date of Birth"
+                register={register}
+                control={control}
+                rules={{ required: 'Date of birth is required' }}
+                error={errors.dob?.message as string}
+              />
+            </div>
           </div>
-
-          <div className="flex flex-col">
-            <NextDatePicker
-              name="dob"
-              label="Date of Birth"
-              register={register}
-              control={control}
-              rules={{ required: 'Date of birth is required' }}
-              error={errors.dob?.message as string}
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <SelectMenu
-              selectionMode={'multiple'}
-              name="gender"
-              placeholder="select gender"
-              label="Select Gender"
-              control={control}
-              rules={{ required: 'Gender is required' }}
-              error={errors?.gender?.message as FieldError}
-              items={[
-                { id: 'male', name: 'Male' },
-                { id: 'female', name: 'Female' },
-                { id: 'other', name: 'Other' },
-              ]}
-            />
+          <div className="flex flex-row gap-4">
+            <div className="flex-1">
+              <SelectMenu
+                selectionMode="single"
+                name="gender"
+                placeholder="Select gender"
+                label="Gender"
+                control={control}
+                rules={{ required: 'Gender is required' }}
+                error={errors?.gender?.message as FieldError}
+                items={[
+                  { id: 'male', name: 'Male' },
+                  { id: 'female', name: 'Female' },
+                  { id: 'other', name: 'Other' },
+                ]}
+              />
+            </div>
           </div>
         </div>
-        <div className="pt-4 flex items-center space-x-4">
+
+        {/* Submit Button */}
+        <div className="pt-4 flex items-center">
           <Button type="submit" name="Save" />
         </div>
       </form>
+
     </>
   );
 };

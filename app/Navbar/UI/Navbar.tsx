@@ -1,7 +1,11 @@
 'use client';
 import SoundScapeLogo from '@/public/images/SoundScapeLogo.png';
 import Image from 'next/image';
-import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+} from "@heroui/react";
 import DropDown from './UtilityComponent/DropDown/DropDown';
 import { redirect } from 'next/navigation';
 import NavItemList from './UtilityComponent/NavItemList';
@@ -13,7 +17,7 @@ export default function NavbarPage({ session }: { session: string | null; }) {
     <>
       <Navbar  >
         <NavbarBrand
-          className="flex items-center justify-start text-left cursor-pointer"
+          className=" flex items-center justify-start text-left cursor-pointer"
           onClick={() => redirect('/')}
         >
           <Image
@@ -25,10 +29,10 @@ export default function NavbarPage({ session }: { session: string | null; }) {
           />
           <p className="font-bold text-inherit">SoundScape</p>
         </NavbarBrand>
-        <NavbarContent className="flex gap-6">
+        <NavbarContent >
           <NavItemList />
         </NavbarContent>
-        <NavbarContent as="div" className="flex items-center gap-4" justify="end">
+        <NavbarContent  as="div" className="flex items-center" justify="end">
           <DropDown />
         </NavbarContent>
       </Navbar>

@@ -2,9 +2,9 @@
 import React from 'react';
 import { FieldError, FieldValues } from 'react-hook-form';
 import { INextInputProps } from '../types/types';
-import { Input as NextUIInput } from '@/components/ui/input';
-
-const NextInput = <T extends FieldValues>({
+// import { Input as NextUIInput } from '@/components/ui/input';
+import {Input as NextUIInput } from "@heroui/input";
+  const NextInput = <T extends FieldValues>({
   label,
   placeholder,
   required,
@@ -15,18 +15,14 @@ const NextInput = <T extends FieldValues>({
   disabled,
   options,
   className = '',
-  defaultValue, // New defaultValue prop
+  defaultValue, 
+
 }: INextInputProps<T> & { defaultValue?: string | number | undefined }) => {
   const hasError = errors[id] as FieldError;
   return (
-    <div className="mb-3">
-      {label && (
+    <div>
+      {/* {label && (
         <label
-          style={{
-            fontFamily: 'Montserrat, sans-serif',
-            fontWeight: '500',
-            fontSize: '14px',
-          }}
           htmlFor={id}
           className={`block mb-2 ${
             hasError ? 'text-red-500' : 'text-gray-900'
@@ -35,25 +31,26 @@ const NextInput = <T extends FieldValues>({
           {label}
           {required && <span className="text-red-500">*</span>}
         </label>
-      )}
+      )} */}
       <NextUIInput
         id={id}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        label={label}
         {...register(id as any, options)}
         placeholder={placeholder}
         type={type}
         disabled={disabled}
-        defaultValue={defaultValue} 
-        className={`p-2 border rounded-md shadow-sm w-full ${
-          hasError ? '' : 'border-green-300'
+        defaultValue={defaultValue as string} 
+        className={`p-2   w-full ${
+          hasError ? 'border-red-500' : 'border-green-300'
         } ${className}`}
-        style={{
-          outline: hasError ? '1px solid red' : 'none',
-        }}
+        // style={{
+        //   outline: hasError ? '1px solid red' : 'none',
+        // }}
+        color={hasError ? 'danger':'default'}
       />
-      {hasError && (
+      {/* {hasError && (
         <p className="text-red-500 text-sm mt-1">{hasError.message}</p>
-      )}
+      )} */}
     </div>
   );
 };

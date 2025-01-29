@@ -42,6 +42,7 @@ export interface IDatePickerType<T extends FieldValues> {
   name: Path<T>;       
   rules?: object;   
   error?: string;      
+  className?:string;
   register: UseFormRegister<T>; 
 }
 export interface INextInputProps<T extends FieldValues> {

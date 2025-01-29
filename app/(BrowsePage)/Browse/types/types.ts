@@ -65,6 +65,7 @@ export interface IMemoizedCard {
     liked: boolean,
     ratingByUser?:number
     isRatingGiven?:boolean
+    avgRating?:number
     
   };
   handleMusicClick: (index: number, music: IMusicProps) => void;

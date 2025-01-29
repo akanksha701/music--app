@@ -11,9 +11,26 @@ import {
 } from '@/components/ui/navigation-menu';
 import { FaBars } from 'react-icons/fa'; // Hamburger icon
 import { Button } from '@/components/ui/button';
-
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Link,
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  Avatar,
+} from "@heroui/react";
 const navItems: IItem[] = [
   {
+    label: 'Browse',
+    route: '/Browse',
+    key: '',
+  },
+  {
+
     label: 'Pricing',
     route: '/Pricing',
     key: '',
@@ -40,28 +57,13 @@ const NavItemList: React.FC = () => {
 
   return (
     <div className="w-full">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <Button
-            onClick={() => redirect('/Browse')}
-            className={`${
-              pathname === '/Browse' ? 'font-bold text-purple-600' : 'text-black'
-            } cursor-pointer hidden sm:block`} 
-          >
-            Browse
-          </Button>
-
-          <div className="sm:hidden flex items-center">
-            <Button className="text-black p-2" onClick={toggleMobileMenu}>
-              <FaBars size={24} />
-            </Button>
-          </div>
+      <NavbarContent>
         <div className=" flex space-x-4 ">
           {navItems.map((item: IItem) => {
             const isActive = pathname === item.route;
             return (
-              <NavigationMenuItem key={item.route}>
-                <NavigationMenuLink asChild className='mx-6'>
+              <NavbarItem key={item.route}>
+                <Link className='mx-6'>
                   <Button
                     onClick={() => redirect(item.route)}
                     className={`${isActive ? 'font-bold text-purple-600' : 'text-black'
@@ -69,13 +71,12 @@ const NavItemList: React.FC = () => {
                   >
                     {item.label}
                   </Button>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+                </Link>
+              </NavbarItem>
             );
           })}
         </div>
-      </NavigationMenuList>
-    </NavigationMenu>
+      </NavbarContent>
     </div >
   );
 };

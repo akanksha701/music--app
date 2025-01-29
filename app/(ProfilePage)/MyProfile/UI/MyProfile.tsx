@@ -32,7 +32,9 @@ const MyProfile = () => {
             <EditProfile setImage={setImage} image={image} />
           </div>
         </div>
+
       </div>
+
     </div>
   );
 };

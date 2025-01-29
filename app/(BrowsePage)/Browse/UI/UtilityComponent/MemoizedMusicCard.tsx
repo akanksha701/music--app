@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardBody } from '@nextui-org/react';
 import Image from 'next/image';
-import { FaEllipsisH, FaHeart, FaInfoCircle, FaPlay, FaRegHeart, FaStar } from 'react-icons/fa';
+import {  FaHeart, FaPlay, FaRegHeart, FaStar } from 'react-icons/fa';
 import { IMemoizedMusicCard } from '../../types/types';
 import React, { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
@@ -10,7 +10,8 @@ import { useSelector } from 'react-redux';
 import { IUserDetails } from '@/app/(ProfilePage)/MyProfile/types/types';
 import { RootState } from '@/Redux/store';
 import SignIn from '@/app/Signin/page';
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { AverageStarDisplay } from './AverageStarDisplay';
 const MemoizedMusicCard = ({
   index,
   item,
@@ -37,7 +38,8 @@ const MemoizedMusicCard = ({
   }, [item]);
 
 
-  const handleLikeState = async () => {
+  const handleLikeState = async (event: React.MouseEvent) => {
+    event.stopPropagation();
     const data = await handleLikeToggle?.(item._id as string, NAME as string);
     if (data) {
       setState((prev) => ({ ...prev, liked: !prev.liked }));
@@ -98,7 +100,7 @@ const MemoizedMusicCard = ({
               width={240}
               height={0}
               onClick={() => handleMusicClick(index, item)}
-              className="shadow-md object-cover w-full h-48"
+              className="object-cover w-full h-48"
             />
             <FaPlay
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -106,25 +108,13 @@ const MemoizedMusicCard = ({
           </div>
           <CardBody className="flex flex-col items-start w-full h-full pt-4">
             <div className="flex justify-between items-center w-full">
-              {/* Song name */}
               <span className="text-left font-semibold text-lg sm:text-xl">
                 {item.name}
               </span>
               <BsThreeDotsVertical className="text-gray-600 ml-2" />
             </div>
             <div className="flex items-center">
-              {/* Rating stars */}
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <FaStar
-                    key={i}
-                    size={16}
-                    className={i < Math.floor(item?.avgRating || 0) ? "text-yellow-500" : "text-gray-300"}
-                  />
-                ))}
-              </div>
-
-              {/* Average rating */}
+              <AverageStarDisplay avgRating={item?.avgRating as number} />
               <span className="text-gray-500 ml-2 text-sm">
                 {item.avgRating ? `${item.avgRating.toFixed(2)} / 5` : 'No ratings yet'}
               </span>

@@ -1,12 +1,14 @@
+const {heroui} = require('@heroui/theme');
 // tailwind.config.js
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { nextui } = require('@nextui-org/react');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './app/**/*.{js,ts,jsx,tsx,mdx}', // Add your app files
-    './components/**/*.{js,ts,jsx,tsx,mdx}', // Add your component files
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "// Add your app files\\\\n    './components/**/*.{js,ts,jsx,tsx,mdx}'",
+    "// Add your component files\\\\n    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'",
+    "./node_modules/@heroui/theme/dist/components/(date-picker|input|navbar|button|ripple|spinner|calendar|date-input|form|popover).js"
   ],
   darkMode: ['class', 'class'],
   theme: {
@@ -60,5 +62,5 @@ module.exports = {
   	}
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  plugins: [nextui(), require('tailwind-scrollbar')],
+  plugins: [nextui(),require('tailwind-scrollbar'),heroui()],
 };

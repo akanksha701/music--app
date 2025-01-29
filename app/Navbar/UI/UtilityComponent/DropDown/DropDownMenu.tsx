@@ -6,11 +6,10 @@ import { IItem } from '@/app/Navbar/types/types';
 import { signOutWithGoogle } from '@/lib/firebase/auth';
 import { RootState } from '@/Redux/store';
 import { useFetchUserProfileQuery } from '@/services/user';
-import { DropdownItem, DropdownMenu } from '@nextui-org/react';
+import { DropdownItem, DropdownMenu } from '@heroui/react';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { useSelector } from 'react-redux';
-
 const menus: IItem[] = [
   { label: 'My Profile', key: 'my_profile', route: '/MyProfile' },
   {
@@ -35,13 +34,7 @@ const DropDownMenu: React.FC = () => {
     deleteCookie('accessToken');
   };
 
-  const name = useSelector<RootState, IUserDetails | null>(
-    (state) => state?.session?.loggedInUser
-  );
-  console.log('userSession', userSession);
-  // if (!userSession) {
-  //   return null;
-  // }
+  const name = useSelector<RootState, IUserDetails | null>((state) => state?.session?.loggedInUser);
 
   return (
     <DropdownMenu aria-label="Profile Actions" variant="flat">

@@ -1,4 +1,4 @@
-import { DropdownItem } from '@nextui-org/react';
+import { DropdownItem } from '@heroui/react';
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { IDropDownItemProps, IItem } from '../types/types';

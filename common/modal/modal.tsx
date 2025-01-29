@@ -40,7 +40,7 @@ export const Modal = (props: IModalProps) => {
               <ButtonWithIcon
                 text='close'
                 onClick={handleClose}
-                 className="w-1/2 text-black  bg-vivid-orange "
+                className="w-1/2 text-black  bg-vivid-orange "
               />
               {/* <Button type="button" variant="secondary" onClick={handleClose} className="bg-gray-200 hover:bg-gray-300 text-gray-800">
                 Close

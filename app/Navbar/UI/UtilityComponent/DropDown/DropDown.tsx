@@ -1,4 +1,4 @@
-import { Avatar, Dropdown, DropdownTrigger } from '@nextui-org/react';
+import { Avatar, Dropdown, DropdownTrigger } from '@heroui/react';
 import React from 'react';
 import DropDownMenu from './DropDownMenu';
 import { useSelector } from 'react-redux';
@@ -8,41 +8,22 @@ const DropDown = () => {
   const imageUrl = useSelector<RootState, string | undefined>(
     (state) => state?.session?.loggedInUser?.imageUrl
   );
-  if (!imageUrl) {
-    return (
-      <Dropdown placement="bottom-end">
-        <DropdownTrigger>
-          <Avatar
-            isBordered
-            as="button"
-            className="transition-transform"
-            color="secondary"
-            name="Jason Hughes"
-            size="sm"
-            src={imageUrl !== undefined ? imageUrl : '/images/profileIcon.jpeg'}
-          />
-        </DropdownTrigger>
-        <DropDownMenu />
-      </Dropdown>
-    );
-  }
+
   return (
-    <>
-      <Dropdown placement="bottom-end">
-        <DropdownTrigger>
-          <Avatar
-            isBordered
-            as="button"
-            className="transition-transform"
-            color="secondary"
-            name="Jason Hughes"
-            size="sm"
-            src={imageUrl !== undefined ? imageUrl : '/images/profileIcon.jpeg'}
-          />
-        </DropdownTrigger>
-        <DropDownMenu />
-      </Dropdown>
-    </>
+    <Dropdown>
+      <DropdownTrigger>
+        <Avatar
+          isBordered
+          as="button"
+          className="transition-transform border-2 border-purple-500 rounded-full"
+          color="secondary"
+          name="Jason Hughes"
+          size="sm"
+          src={imageUrl || 'https://example.com/default-avatar.jpg'} // Use fallback if no imageUrl
+        />
+      </DropdownTrigger>
+      <DropDownMenu />
+    </Dropdown>
   );
 };
 
